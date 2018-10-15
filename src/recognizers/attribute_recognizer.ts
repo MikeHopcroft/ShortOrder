@@ -13,7 +13,7 @@ export interface AttributeToken extends Token {
 
 export type AttributeRecognizer = PatternRecognizer<Item>;
 
-export function CreateAttributeRecognizer(intentFile: string, debugMode = false): AttributeRecognizer {
+export function CreateAttributeRecognizer(intentFile: string, badWords: Set<string>, debugMode = false): AttributeRecognizer {
     const index = indexYamlFilename(intentFile);
 
     const tokenFactory = (id: PID, text: string): AttributeToken => {
@@ -21,6 +21,5 @@ export function CreateAttributeRecognizer(intentFile: string, debugMode = false)
         return { type: ATTRIBUTE, id, name, text };
     };
 
-    const badWords: string[] = [];
     return new PatternRecognizer(index, tokenFactory, badWords, debugMode);
 }

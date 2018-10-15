@@ -1,4 +1,4 @@
-export { applyProcessor, CompositeRecognizer } from './composite_recognizer';
+export { CompositeRecognizer } from './composite_recognizer';
 export { ATTRIBUTE, AttributeRecognizer, AttributeToken, CreateAttributeRecognizer } from './attribute_recognizer';
 export { ENTITY, CreateEntityRecognizer, EntityRecognizer, EntityToken } from './entity_recognizer';
 export { INTENT, CreateIntentRecognizer, IntentRecognizer, IntentToken } from './intent_recognizer';

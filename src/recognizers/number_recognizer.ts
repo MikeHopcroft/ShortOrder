@@ -1,8 +1,8 @@
 import {QUANTITY, QuantityToken} from './quantity_recognizer';
-import { Token, UNKNOWN } from '../tokenizer';
+import { Recognizer, Token, UNKNOWN } from '../tokenizer';
 import wordsToNumbers from 'words-to-numbers';
 
-export class NumberRecognizer {
+export class NumberRecognizer implements Recognizer {
     apply = (token: Token) => {
         const text = token.text;
         const withNumbers = wordsToNumbers(text);
@@ -49,4 +49,14 @@ export class NumberRecognizer {
             return tokens;
         }
     }
+
+    terms = () => {
+        // TODO: implement terms here.
+        return new Set<string>();
+    }
+
+    stemmer = (word:string):string => {
+        // NumberRecognizer does not stem.
+        return word;
+    }   
 }

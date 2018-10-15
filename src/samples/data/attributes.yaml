@@ -61,7 +61,7 @@ items:
   # 
 
   - pid: 201
-    name: CHIKEN(FRIED)
+    name: CHICKEN(FRIED)
     aliases:
       - fried
     

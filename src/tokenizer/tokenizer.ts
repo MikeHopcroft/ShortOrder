@@ -22,11 +22,11 @@ export class Tokenizer {
 
     postings: { [hash: number]: ID[] } = {};
 
-    badWords: string[] = [];
+    badWords: Set<string> = new Set<string>();
 
     hashedAdjectivesSet = new Set<HASH>();
 
-    constructor(badWords: string[], debugMode = false) {
+    constructor(badWords: Set<string>, debugMode = false) {
         this.badWords = badWords;
         this.badWords.forEach((term) => {
             const hash = this.hashTerm(this.stemTerm(term));

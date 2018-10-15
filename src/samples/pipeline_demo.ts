@@ -20,5 +20,5 @@ pipelineDemo(
     './src/samples/data/intents.yaml',
     './src/samples/data/attributes.yaml',
     './src/samples/data/quantifiers.yaml',
-    "I would like a Dakota burger with no onions extra pickles fries and a coke"
+    "I would like a medium a Dakota burger with no onions extra pickles fries and a coke"
 );

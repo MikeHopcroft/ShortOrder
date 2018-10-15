@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { PID, Token, TokenFactory, Tokenizer } from '.';
+import { PID, Recognizer, Token, TokenFactory, Tokenizer } from '.';
 import { copyArray, copyScalar } from '../utilities';
 
 export interface Item {
@@ -52,14 +52,17 @@ export function indexYamlFilename(filename: string): Index<Item> {
     return index;
 }
 
-export class PatternRecognizer<T extends Item> {
+export class PatternRecognizer<T extends Item> implements Recognizer {
     index: Index<T>;
     tokenizer: Tokenizer;
     tokenFactory: TokenFactory<Token>;
+    stemmer: (word:string) => string;
 
-    constructor(index: Index<T>, tokenFactory: TokenFactory<Token>, badWords: string[], debugMode = false) {
+    constructor(index: Index<T>, tokenFactory: TokenFactory<Token>, badWords: Set<string>, debugMode = false) {
         this.index = index;
         this.tokenizer = new Tokenizer(badWords, debugMode);
+        this.stemmer = this.tokenizer.stemTerm;
+        this.tokenFactory = tokenFactory;
 
         // Ingest index.
         let aliasCount = 0;
@@ -69,11 +72,10 @@ export class PatternRecognizer<T extends Item> {
                 aliasCount++;
             });
         });
+
         // TODO: print name of tokenizer here?
         console.log(`${Object.keys(this.index.items).length} items contributed ${aliasCount} aliases.`);
         console.log();
-
-        this.tokenFactory = tokenFactory;
     }
 
     apply = (token: Token) => {
@@ -81,5 +83,18 @@ export class PatternRecognizer<T extends Item> {
         const terms = token.text.split(' ');
 
         return this.tokenizer.tokenizeMatches(terms, path, this.tokenFactory);
+    }
+
+    terms = () => {
+        const terms = new Set<string>();
+        Object.entries(this.index.items).forEach(([pid, item]) => {
+            item.aliases.forEach(alias => {
+                const words = alias.split(' ');
+                words.forEach( word => {
+                    terms.add(word);
+                });
+            });
+        });
+        return terms;
     }
 }

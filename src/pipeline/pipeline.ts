@@ -1,9 +1,9 @@
 import { CompositeRecognizer } from '../recognizers';
-import { ATTRIBUTE, AttributeRecognizer, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
-import { ENTITY, CreateEntityRecognizer, EntityRecognizer, EntityToken } from '../recognizers';
-import { INTENT, CreateIntentRecognizer, IntentRecognizer, IntentToken } from '../recognizers';
-import { QUANTITY, CreateQuantityRecognizer, NumberRecognizer, QuantityRecognizer, QuantityToken } from '../recognizers';
-import { Token, UnknownToken, UNKNOWN } from '../tokenizer';
+import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
+import { ENTITY, CreateEntityRecognizer, EntityToken } from '../recognizers';
+import { INTENT, CreateIntentRecognizer, IntentToken } from '../recognizers';
+import { QUANTITY, CreateQuantityRecognizer, NumberRecognizer, QuantityToken } from '../recognizers';
+import { Recognizer, Token, UnknownToken, UNKNOWN } from '../tokenizer';
 
 
 type AnyToken = UnknownToken | AttributeToken | EntityToken | IntentToken | QuantityToken;
@@ -62,28 +62,42 @@ export function printTokens(tokens:Token[]) {
 }
 
 export class Pipeline {
-    attributeRecognizer: AttributeRecognizer;
-    entityRecognizer: EntityRecognizer;
-    intentRecognizer: IntentRecognizer;
-    numberRecognizer: NumberRecognizer;
-    quantityRecognizer: QuantityRecognizer;
+    attributeRecognizer: Recognizer;
+    entityRecognizer: Recognizer;
+    intentRecognizer: Recognizer;
+    numberRecognizer: Recognizer;
+    quantityRecognizer: Recognizer;
 
     compositeRecognizer: CompositeRecognizer;
 
     constructor(entityFile: string, intentsFile: string, attributesFile: string, quantifierFile: string) {
-        this.attributeRecognizer = CreateAttributeRecognizer(attributesFile);
-        this.entityRecognizer = CreateEntityRecognizer(entityFile);
-        this.intentRecognizer = CreateIntentRecognizer(intentsFile);   
+        this.intentRecognizer = CreateIntentRecognizer(intentsFile, new Set());
+
+        this.quantityRecognizer = CreateQuantityRecognizer(quantifierFile, new Set());
+
         this.numberRecognizer = new NumberRecognizer();
-        this.quantityRecognizer = CreateQuantityRecognizer(quantifierFile);
+
+        this.attributeRecognizer = CreateAttributeRecognizer(
+            attributesFile,
+            this.quantityRecognizer.terms());
+
+        const badWords = new Set([
+            ...this.intentRecognizer.terms(),
+            ...this.quantityRecognizer.terms(),
+            ...this.attributeRecognizer.terms()
+        ]);
+
+        this.entityRecognizer = CreateEntityRecognizer(
+            entityFile, 
+            badWords);
 
         this.compositeRecognizer = new CompositeRecognizer(
             [
-                this.entityRecognizer.apply,
-                this.attributeRecognizer.apply,
-                this.numberRecognizer.apply,
-                this.quantityRecognizer.apply,
-                this.intentRecognizer.apply
+                this.entityRecognizer,
+                this.attributeRecognizer,
+                this.numberRecognizer,
+                this.quantityRecognizer,
+                this.intentRecognizer
             ],
             false   // debugMode
         );

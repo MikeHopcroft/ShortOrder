@@ -1,8 +1,6 @@
-import { Token, UNKNOWN } from '../tokenizer';
+import { Recognizer, Token, UNKNOWN } from '../tokenizer';
 
-export type TokenStreamProcessor = (token: Token) => Token[];
-
-export function applyProcessor(processor: TokenStreamProcessor, tokens:Token[]) {
+function applyProcessor(processor: (token: Token) => Token[], tokens:Token[]) {
     const unflattened = tokens.map( (token) => {
         if (token.type === UNKNOWN) {
             return processor(token);
@@ -15,11 +13,11 @@ export function applyProcessor(processor: TokenStreamProcessor, tokens:Token[]) 
     return flattened;
 }
 
-export class CompositeRecognizer {
-    recognizers: TokenStreamProcessor[] = [];
+export class CompositeRecognizer implements Recognizer {
+    recognizers: Recognizer[] = [];
     debugMode: boolean;
 
-    constructor(recognizers: TokenStreamProcessor[], debugMode = false) {
+    constructor(recognizers: Recognizer[], debugMode = false) {
         this.recognizers = recognizers;
         this.debugMode = debugMode;
     }
@@ -34,7 +32,7 @@ export class CompositeRecognizer {
         }
 
         this.recognizers.forEach((processor, index) => {
-            result = applyProcessor(processor, result);
+            result = applyProcessor(processor.apply, result);
 
             if (this.debugMode) {
                 console.log(`=== PASS ${index} ===`);
@@ -44,5 +42,19 @@ export class CompositeRecognizer {
         });
 
         return result;
+    }
+
+    terms = () => {
+        const terms = new Set<string>();
+        this.recognizers.forEach(recognizer => {
+            recognizer.terms().forEach(term => {
+                terms.add(term);
+            });
+        });
+        return terms;
+    }
+
+    stemmer = (word:string):string => {
+        throw TypeError('CompositeRecognizer: stemmer not implemented.');
     }
 }

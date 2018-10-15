@@ -12,7 +12,7 @@ export interface QuantityToken extends Token {
 
 export type QuantityRecognizer = PatternRecognizer<Item>;
 
-export function CreateQuantityRecognizer(intentFile: string, debugMode = false): QuantityRecognizer {
+export function CreateQuantityRecognizer(intentFile: string, badWords: Set<string>, debugMode = false): QuantityRecognizer {
     const index = indexYamlFilename(intentFile);
 
     const tokenFactory = (id: PID, text: string): QuantityToken => {
@@ -20,6 +20,5 @@ export function CreateQuantityRecognizer(intentFile: string, debugMode = false):
         return { type: QUANTITY, text, value: Number(value) };
     };
 
-    const badWords: string[] = [];
     return new PatternRecognizer(index, tokenFactory, badWords, debugMode);
 }

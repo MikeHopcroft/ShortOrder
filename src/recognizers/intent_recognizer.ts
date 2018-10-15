@@ -13,7 +13,7 @@ export interface IntentToken extends Token {
 
 export type IntentRecognizer = PatternRecognizer<Item>;
 
-export function CreateIntentRecognizer(intentFile: string, debugMode = false): IntentRecognizer {
+export function CreateIntentRecognizer(intentFile: string, badWords: Set<string>, debugMode = false): IntentRecognizer {
     const index = indexYamlFilename(intentFile);
 
     const tokenFactory = (id: PID, text: string): IntentToken => {
@@ -21,6 +21,5 @@ export function CreateIntentRecognizer(intentFile: string, debugMode = false): I
         return { type: INTENT, id, name, text };
     };
 
-    const badWords: string[] = [];
     return new PatternRecognizer(index, tokenFactory, badWords, debugMode);
 }

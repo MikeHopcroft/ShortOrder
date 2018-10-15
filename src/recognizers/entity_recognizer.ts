@@ -13,20 +13,13 @@ export interface EntityToken extends Token {
 
 export type EntityRecognizer = PatternRecognizer<MenuItem>;
 
-export function CreateEntityRecognizer(entityFile: string, debugMode = false) {
+export function CreateEntityRecognizer(entityFile: string, badWords: Set<string>, debugMode = false) {
     const index = Menu.fromYamlFilename(entityFile);
 
     const tokenFactory = (pid:PID, text:string):EntityToken => {
         const name = index.items[pid].name;
         return {type: ENTITY, pid, name, text};
     };
-
-    // TODO: Pass these in as a parameter.
-    const badWords = [
-        'small', 'medium', 'large',
-        'chocolate', 'strawberry', 'vanilla',
-        'and'
-    ];
 
     return new PatternRecognizer(index, tokenFactory, badWords, debugMode);
 }

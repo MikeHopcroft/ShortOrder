@@ -22,7 +22,8 @@ function run(recognizer: EntityRecognizer, query:string) {
 
 
 export function ingestAndTest(menuFile: string, query: string) {
-    const recognizer = CreateEntityRecognizer(menuFile);
+    const badWords = new Set();
+    const recognizer = CreateEntityRecognizer(menuFile, badWords);
 
     run(recognizer, query);
 }

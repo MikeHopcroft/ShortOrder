@@ -205,7 +205,8 @@ export class RelevanceSuite {
 }
 
 export function runRelevanceTest(menuFile: string, testFile: string) {
-    const recognizer = CreateEntityRecognizer(menuFile);
+    const badWords = new Set();
+    const recognizer = CreateEntityRecognizer(menuFile, badWords);
 
     const suite = RelevanceSuite.fromYamlFilename(testFile);
     suite.run(recognizer);
