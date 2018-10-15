@@ -1,7 +1,7 @@
 import * as csv_sync from 'csv-parse/lib/sync';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { EntityRecognizer, ENTITY, EntityToken } from '../recognizers';
+import { CreateEntityRecognizer, ENTITY, EntityRecognizer, EntityToken } from '../recognizers';
 import { UNKNOWN, UnknownToken } from '../tokenizer';
 import { copyScalar } from '../utilities';
 
@@ -205,7 +205,7 @@ export class RelevanceSuite {
 }
 
 export function runRelevanceTest(menuFile: string, testFile: string) {
-    const recognizer = new EntityRecognizer(menuFile);
+    const recognizer = CreateEntityRecognizer(menuFile);
 
     const suite = RelevanceSuite.fromYamlFilename(testFile);
     suite.run(recognizer);

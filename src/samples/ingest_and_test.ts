@@ -1,4 +1,4 @@
-import { EntityRecognizer, ENTITY, EntityToken } from '../recognizers';
+import { CreateEntityRecognizer, ENTITY, EntityRecognizer, EntityToken } from '../recognizers';
 import { UNKNOWN, UnknownToken } from '../tokenizer';
 
 function run(recognizer: EntityRecognizer, query:string) {
@@ -22,7 +22,7 @@ function run(recognizer: EntityRecognizer, query:string) {
 
 
 export function ingestAndTest(menuFile: string, query: string) {
-    const recognizer = new EntityRecognizer(menuFile);
+    const recognizer = CreateEntityRecognizer(menuFile);
 
     run(recognizer, query);
 }

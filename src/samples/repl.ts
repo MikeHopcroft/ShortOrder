@@ -30,9 +30,10 @@ export function repl(
     }
 }
 
-repl(
-    './src/samples/data/menu.yaml',
-    './src/samples/data/intents.yaml',
-    './src/samples/data/attributes.yaml',
-    './src/samples/data/quantifiers.yaml',
-);
+export function runRepl() {
+    repl(
+        './src/samples/data/menu.yaml',
+        './src/samples/data/intents.yaml',
+        './src/samples/data/attributes.yaml',
+        './src/samples/data/quantifiers.yaml');
+}

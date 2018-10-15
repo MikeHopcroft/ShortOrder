@@ -1,4 +1,4 @@
-import { indexYamlFilename, PatternRecognizer } from './pattern_recognizer';
+import { indexYamlFilename, Item, PatternRecognizer } from '../tokenizer';
 import { PID, Token } from '../tokenizer';
 
 export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
@@ -11,7 +11,9 @@ export interface AttributeToken extends Token {
     name: string;
 }
 
-export function CreateAttributeRecognizer(intentFile: string, debugMode = false): PatternRecognizer {
+export type AttributeRecognizer = PatternRecognizer<Item>;
+
+export function CreateAttributeRecognizer(intentFile: string, debugMode = false): AttributeRecognizer {
     const index = indexYamlFilename(intentFile);
 
     const tokenFactory = (id: PID, text: string): AttributeToken => {

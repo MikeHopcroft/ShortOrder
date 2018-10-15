@@ -1,5 +1,4 @@
 import { Token, UNKNOWN } from '../tokenizer';
-import { appendFile } from 'fs';
 
 export type TokenStreamProcessor = (token: Token) => Token[];
 

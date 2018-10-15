@@ -1,9 +1,8 @@
 import { CompositeRecognizer } from '../recognizers';
-import { ATTRIBUTE, CreateAttributeRecognizer, AttributeToken } from '../recognizers';
-import { ENTITY, EntityRecognizer, EntityToken } from '../recognizers';
-import { INTENT, CreateIntentRecognizer, IntentToken } from '../recognizers';
-import { PatternRecognizer } from '../recognizers';
-import { QUANTITY, NumberRecognizer, CreateQuantityRecognizer, QuantityToken } from '../recognizers';
+import { ATTRIBUTE, AttributeRecognizer, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
+import { ENTITY, CreateEntityRecognizer, EntityRecognizer, EntityToken } from '../recognizers';
+import { INTENT, CreateIntentRecognizer, IntentRecognizer, IntentToken } from '../recognizers';
+import { QUANTITY, CreateQuantityRecognizer, NumberRecognizer, QuantityRecognizer, QuantityToken } from '../recognizers';
 import { Token, UnknownToken, UNKNOWN } from '../tokenizer';
 
 
@@ -57,23 +56,23 @@ export function printToken(t:Token) {
     console.log(`${name}: "${token.text}"`);
 }
 
-function printTokens(tokens:Token[]) {
+export function printTokens(tokens:Token[]) {
     tokens.forEach(printToken);
     console.log();
 }
 
 export class Pipeline {
-    attributeRecognizer: PatternRecognizer;
+    attributeRecognizer: AttributeRecognizer;
     entityRecognizer: EntityRecognizer;
-    intentRecognizer: PatternRecognizer;
+    intentRecognizer: IntentRecognizer;
     numberRecognizer: NumberRecognizer;
-    quantityRecognizer: PatternRecognizer;
+    quantityRecognizer: QuantityRecognizer;
 
     compositeRecognizer: CompositeRecognizer;
 
     constructor(entityFile: string, intentsFile: string, attributesFile: string, quantifierFile: string) {
         this.attributeRecognizer = CreateAttributeRecognizer(attributesFile);
-        this.entityRecognizer = new EntityRecognizer(entityFile);
+        this.entityRecognizer = CreateEntityRecognizer(entityFile);
         this.intentRecognizer = CreateIntentRecognizer(intentsFile);   
         this.numberRecognizer = new NumberRecognizer();
         this.quantityRecognizer = CreateQuantityRecognizer(quantifierFile);
@@ -92,10 +91,7 @@ export class Pipeline {
 
     processOneQuery(query:string, debugMode = false) {
         const input = {type: UNKNOWN, text: query};
-        // console.log(`"${query}"`);
-        // console.log();
         const tokens = this.compositeRecognizer.apply(input);
-        // printTokens(tokens);
         return tokens;
     }
 }

@@ -1,4 +1,4 @@
-import { Pipeline } from '../pipeline';
+import { Pipeline, printTokens } from '../pipeline';
 
 export function pipelineDemo(
     menuFile: string,
@@ -8,7 +8,11 @@ export function pipelineDemo(
     query: string
 ) {
     const pipeline = new Pipeline(menuFile, intentFile, attributesFile, quantifierFile);
-    pipeline.processOneQuery(query);
+    const tokens = pipeline.processOneQuery(query);
+
+    console.log(`"${query}"`);
+    console.log();
+    printTokens(tokens);
 }
 
 pipelineDemo(
@@ -16,7 +20,5 @@ pipelineDemo(
     './src/samples/data/intents.yaml',
     './src/samples/data/attributes.yaml',
     './src/samples/data/quantifiers.yaml',
-    // settings.SUBSET_MENU_FILE as string,
-    // settings.INTENT_MENU_FILE as string,
     "I would like a Dakota burger with no onions extra pickles fries and a coke"
 );

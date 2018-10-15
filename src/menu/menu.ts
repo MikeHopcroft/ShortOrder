@@ -1,13 +1,10 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { Decoder, at, array, object, number, string, boolean } from 'type-safe-json-decoder';
+import { Index, Item, PID } from '../tokenizer';
 import { copyArray, copyScalar } from '../utilities';
 
-// TODO: move PID to types package.
-export type PID = number;
-
-// tslint:disable-next-line:interface-name
-export interface MenuItem {
+export interface MenuItem extends Item {
     pid: PID;
     name: string;
     registerName: string;
@@ -32,7 +29,7 @@ function MenuItemFromYamlItem(item: any) {
     };
 }
 
-export class Menu {
+export class Menu extends Index<MenuItem> {
     items: { [index: number]: MenuItem } = {};
 
     // TODO: return IMenu?
@@ -76,14 +73,17 @@ export class Menu {
     }
 
     constructor(items: MenuItem[]) {
-        items.forEach((item) => {
-            if (item.pid in this.items) {
-                console.log(`Menu: skipping duplicate ${item.pid}`);
-            }
-            else {
-                this.items[item.pid] = item;
-            }
-        });
+        super();
+        items.forEach(this.addItem);
+    }
+
+    addItem = (item: MenuItem) => {
+        if (item.pid in this.items) {
+            console.log(`Menu: skipping duplicate ${item.pid}`);
+        }
+        else {
+            this.items[item.pid] = item;
+        }
     }
 
     length() {

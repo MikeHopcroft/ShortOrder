@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { PID, Token, TokenFactory, Tokenizer } from '../tokenizer';
+import { PID, Token, TokenFactory, Tokenizer } from '.';
 import { copyArray, copyScalar } from '../utilities';
 
 export interface Item {
@@ -9,10 +9,10 @@ export interface Item {
     aliases: string[];
 }
 
-export class Index {
+export class Index<T extends Item> {
     items: { [pid: number]: Item } = {};
 
-    addItem(item: Item) {
+    addItem = (item: T) => {
         if (this.items[item.pid] === undefined) {
             this.items[item.pid] = item;
         }
@@ -31,7 +31,7 @@ function ItemFromYamlItem(item: any): Item {
     };
 }
 
-export function indexYamlFilename(filename: string): Index {
+export function indexYamlFilename(filename: string): Index<Item> {
     // tslint:disable-next-line:no-any
     const yamlRoot: any = yaml.safeLoad(fs.readFileSync(filename, 'utf8'));
 
@@ -52,19 +52,26 @@ export function indexYamlFilename(filename: string): Index {
     return index;
 }
 
-export class PatternRecognizer {
-    index: Index;
+export class PatternRecognizer<T extends Item> {
+    index: Index<T>;
     tokenizer: Tokenizer;
     tokenFactory: TokenFactory<Token>;
 
-    constructor(index: Index, tokenFactory: TokenFactory<Token>, badWords: string[], debugMode = false) {
+    constructor(index: Index<T>, tokenFactory: TokenFactory<Token>, badWords: string[], debugMode = false) {
         this.index = index;
         this.tokenizer = new Tokenizer(badWords, debugMode);
+
+        // Ingest index.
+        let aliasCount = 0;
         Object.entries(this.index.items).forEach(([pid, item]) => {
             item.aliases.forEach(alias => {
                 this.tokenizer.addItem(item.pid, alias);
+                aliasCount++;
             });
         });
+        // TODO: print name of tokenizer here?
+        console.log(`${Object.keys(this.index.items).length} items contributed ${aliasCount} aliases.`);
+        console.log();
 
         this.tokenFactory = tokenFactory;
     }

@@ -1,6 +1,5 @@
-import { indexYamlFilename, PatternRecognizer } from './pattern_recognizer';
+import { indexYamlFilename, Item, PatternRecognizer } from '../tokenizer';
 import { PID, Token } from '../tokenizer';
-import { debug } from 'util';
 
 export const INTENT: unique symbol = Symbol('INTENT');
 export type INTENT = typeof INTENT;
@@ -12,7 +11,9 @@ export interface IntentToken extends Token {
     name: string;
 }
 
-export function CreateIntentRecognizer(intentFile: string, debugMode = false): PatternRecognizer {
+export type IntentRecognizer = PatternRecognizer<Item>;
+
+export function CreateIntentRecognizer(intentFile: string, debugMode = false): IntentRecognizer {
     const index = indexYamlFilename(intentFile);
 
     const tokenFactory = (id: PID, text: string): IntentToken => {
