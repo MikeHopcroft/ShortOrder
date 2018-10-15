@@ -1,0 +1,40 @@
+- priority: 1
+  suites: general
+  input: Hamburger with extra pickles
+  expected: Hamburger with extra pickles
+
+- priority: 1
+  suites: general
+  input: Uh yeah I'd like a pet chicken fries and a coke
+  expected: Uh yeah I'd like a pet chicken fries and a coke
+
+- priority: 1
+  suites: general
+  input: Uh yeah I'd like a pet chicken french fries and a coke
+  expected: Uh yeah I'd like a pet chicken french fries and a coke
+
+- priority: 1
+  suites: general
+  input: Can I get a cheeseburger with swiss
+  expected: Can I get a cheeseburger with swiss
+
+- priority: 1
+  suites: general
+  input: I'll have 2 6 piece wings
+  expected: I'll have 2 6 piece wings
+
+- priority: 1
+  suites: general
+  input: I'll have 5 dozen wings
+  expected: I'll have 5 dozen wings
+
+- priority: 1
+  suites: general
+  input: Get me a coffee with two creams and one sugar
+  expected: Get me a coffee with two creams and one sugar
+
+- priority: 1
+  suites: general
+  input: Large iced tea unsweet
+  expected: Large iced tea unsweet
+  

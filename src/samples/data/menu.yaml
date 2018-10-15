@@ -1,0 +1,749 @@
+items:
+
+  # 1-99: Burgers
+
+  - pid: 1
+    name: Hamburger
+    registerName: Hamburger
+    aliases:
+      - Hamburger
+    price: 1.69
+    standalone: true
+    defaults: [5000, 5200, 5201, 5202, 5203, 5204, 5205]
+    options: []
+    
+  - pid: 2
+    name: Cheeseburger
+    registerName: Cheeseburger
+    aliases:
+      - Cheeseburger
+    price: 1.99
+    standalone: true
+    defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
+    options: []
+  
+  - pid: 3
+    name: Big Apple Burger
+    registerName: Big Apple
+    aliases:
+      - Big Apple Burger
+      - Big Apple
+    price: 5.99
+    standalone: true
+    defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
+    options: []
+  
+  - pid: 4
+    name: Dakota Burger
+    registerName: Dakota
+    aliases:
+      - Dakota Burger
+      - Dakota
+    price: 5.99
+    standalone: true
+    defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
+    options: []
+  
+  - pid: 90
+    name: Beef Patty
+    registerName: Beef Patty
+    aliases:
+      - Beef
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  #
+  # 100-199: Chicken
+  #
+
+  # The Fried vs Grilled distinction in the Petaluma Chicken Sandwich
+  # might be a good candidate for an attribute on a single product.
+  # Currently, the grilled version has extra aliases for the case where
+  # neither Fried nor Grilled is specified.
+
+  - pid: 100
+    name: Grilled Petaluma Chicken Sandwich
+    registerName: Pet Chk Grilled
+    aliases: 
+      - Petaluma Chicken Sandwich Grilled
+      - Petaluma Chicken Grilled
+      - Petaluma Chicken
+      - Petaluma Grilled
+      - Petaluma
+      - Pet Chicken Grilled
+      - Pet Chicken
+      - Grilled Petaluma Chicken Sandwich
+      - Grilled Petaluma Chicken
+      - Grilled Petaluma
+      - Grilled Pet Chicken
+    price: 3.99
+    standalone: true
+    defaults: [5001, 190, 5200, 5202, 5203, 5207]
+    options: []
+
+  - pid: 101
+    name: Fried Petaluma Chicken Sandwich
+    registerName: Pet Chk Fried
+    aliases: 
+      - Petaluma Chicken Sandwich Fried
+      - Petaluma Chicken Fried
+      - Petaluma Fried
+      - Pet Chicken Fried
+      - Fried Petaluma Chicken Sandwich
+      - Fried Petaluma Chicken
+      - Fried Petaluma
+      - Fried Pet Chicken
+    price: 3.99
+    standalone: true
+    defaults: [5001, 191, 5200, 5202, 5203, 5208]
+    options: []
+
+  - pid: 190
+    name: Grilled Chicken Breast
+    registerName: Grilled Chk
+    aliases:
+      - Grilled Chicken
+      - Grilled
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  # NOTE: cannot include alias "Fried" here because, when stemmed, it collides
+  # with "Fries".
+  - pid: 191
+    name: Fried Chicken Breast
+    registerName: Fried Chk
+    aliases:
+      - Fried Chicken
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+
+
+  # 200-299: Fish
+  - pid: 200
+    name: Down East Fish Sandwich
+    registerName: Downn East Fish
+    aliases:
+      - Down East Fish Sandwich
+      - Down Easter
+    price: 3.99
+    standalone: true
+    defaults: [5000, 290, 5100, 5207]
+    options: []
+
+  - pid: 201
+    name: Northwest Sockeye Sandwich
+    registerName: NW Sockey
+    aliases:
+      - Northwest Sockeye Sandwich
+    price: 4.99
+    standalone: true
+    defaults: [5002, 291, 5201, 5202, 5203, 5207]
+    options: []
+
+  - pid: 290
+    name: Fried Cod Fillet
+    registerName: Cod Fillet
+    aliases:
+      - Fish Patty
+      - Cod Filet
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 291
+    name: Grilled Sockeye Fillet
+    registerName: Sockey
+    aliases:
+      - Grilled Sockeye Fillet
+      - Grilled Sockeye
+      - Sockeye Fillet
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+
+  # 300-399: Tacos, Burritos, Nachos, etc.
+  # 400-499: Fries
+
+  - pid: 400
+    name: Small French Fries
+    registerName: Sm Fries
+    aliases:
+      - Small French Fries
+      - Small Fries
+    price: 0.99
+    standalone: true
+    defaults: []
+    options: []
+
+  - pid: 401
+    name: Medium French Fries
+    registerName: Med Fries
+    aliases:
+      - Medium French Fries
+      - Medium Fries
+      - French Fries
+      - Fries
+    price: 1.29
+    standalone: true
+    defaults: []
+    options: []
+
+  - pid: 402
+    name: Large French Fries
+    registerName: Lg Fries
+    aliases:
+      - Large French Fries
+      - Large Fries
+    price: 1.79
+    standalone: true
+    defaults: []
+    options: []
+
+  - pid: 410
+    name: 6 Wings
+    registerName: 6 Wings
+    aliases:
+      - 6 Piece Chicken Wings
+      - 6 Chicken Wings
+      - 6 Wings
+    price: 5.99
+    standalone: true
+    defaults: []
+    options: []
+
+  - pid: 411
+    name: 12 Wings
+    registerName: 12 Wings
+    aliases:
+      - 12 Piece Chicken Wings
+      - 12 Chicken Wings
+      - 12 Wings
+      - Dozen Chicken Wings
+      - Dozen Wings
+      - Wings
+    price: 5.99
+    standalone: true
+    defaults: []
+    options: []
+
+
+  # 500-599: Salads
+  # 600-699: Desserts - shakes, soft server
+  # 1000-1099: Sodas
+  - pid: 1000
+    name: Small Coke
+    registerName: Sm Coke
+    aliases:
+      - Small Coke
+      - Small Coca Cola
+      - Small Cola
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1001
+    name: Medium Coke
+    registerName: Med Coke
+    aliases:
+      - Medium Coke
+      - Medium Coca Cola
+      - Medium Cola
+      - Coke
+      - Coca Cola
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1002
+    name: Large Coke
+    registerName: Lg Coke
+    aliases:
+      - Large Coke
+      - Large Coca Cola
+      - Large Cola
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1003
+    name: Small Diet Coke
+    registerName: Sm Diet Coke
+    aliases:
+      - Small Diet Coke
+      - Small Diet Coca Cola
+      - Small Diet Cola
+      - Small Diet
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1004
+    name: Medium Diet Coke
+    registerName: Med Diet Coke
+    aliases:
+      - Medium Diet Coke
+      - Medium Diet Coca Cola
+      - Medium Diet Cola
+      - Medium Diet
+      - Diet Coke
+      - Diet Coca Cola
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1005
+    name: Large Diet Coke
+    registerName: Lg Diet Coke
+    aliases:
+      - Large Diet Coke
+      - Large Diet Coca Cola
+      - Large Diet Cola
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  # Note, one might ask for a "Large Tea, no sugar."
+  # Currently, this would be handled as a modification,
+  #  rather than a separate product.
+  - pid: 1070
+    name: Small Unsweet Tea
+    registerName: Sm Unsweet Tea
+    aliases:
+      - Small Unsweet Iced Tea
+      - Small Unsweetened Iced Tea
+      - Small Iced Tea Unsweet
+      - Small Iced Tea Unsweetened
+      - Small Unsweet Tea
+      - Small Unsweetened Tea
+      - Small Tea Unsweet
+      - Small Tea Unsweetened
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1071
+    name: Medium Unsweet Tea
+    registerName: Med Unsweet Tea
+    aliases:
+      - Medium Unsweet Iced Tea
+      - Medium Unsweetened Iced Tea
+      - Medium Iced Tea Unsweet
+      - Medium Iced Tea Unsweetened
+      - Medium Unsweet Tea
+      - Medium Unsweetened Tea
+      - Medium Tea Unsweet
+      - Medium Tea Unsweetened
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1072
+    name: Large Unsweet Tea
+    registerName: Lg Unsweet Tea
+    aliases:
+      - Large Unsweet Iced Tea
+      - Large Unsweetened Iced Tea
+      - Large Iced Tea Unsweet
+      - Large Iced Tea Unsweetened
+      - Large Unsweet Tea
+      - Large Unsweetened Tea
+      - Large Tea Unsweet
+      - Large Tea Unsweetened
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1073
+    name: Small Sweet Tea
+    registerName: Sm Sweet Tea
+    aliases:
+      - Small Sweet Tea
+      - Small Iced Tea
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1074
+    name: Medium Sweet Tea
+    registerName: Med Sweet Tea
+    aliases:
+      - Medium Sweet Tea
+      - Medium Iced Tea
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1075
+    name: Large Sweet Tea
+    registerName: Lg Sweet Tea
+    aliases:
+      - Large Sweet Tea
+      - Large Iced Tea
+    price: 0
+    standalone: true
+    defaults: [1090]
+    options: []
+
+  - pid: 1090
+    name: Ice
+    registerName: Ice
+    aliases:
+      - Ice
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  # 1100-1199: Coffees
+
+  # Another good candidate for attributes
+  #   Size: small, medium, large
+  #   Caf: regualr, decaf, half-caf
+
+  - pid: 1100
+    name: Small Coffee
+    registerName: Sm Coffee
+    aliases:
+      - Small Coffee
+    price: 0
+    standalone: true
+    defaults: []
+    options: [1180, 1190, 1191, 1192, 1193, 1194, 1195]
+
+  - pid: 1101
+    name: Medium Coffee
+    registerName: Med Coffee
+    aliases:
+      - Medium Coffee
+      - Coffee
+    price: 0
+    standalone: true
+    defaults: []
+    options: [1180, 1190, 1191, 1192, 1193, 1194, 1195]
+
+  - pid: 1102
+    name: Large Coffee
+    registerName: Lg Coffee
+    aliases:
+      - Large Coffee
+    price: 0
+    standalone: true
+    defaults: []
+    options: [1180, 1190, 1191, 1192, 1193, 1194, 1195]
+
+  - pid: 1180
+    name: Sleeve
+    registerName: Sleeve
+    aliases:
+      - Sleeve
+      - Cozy
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 1190
+    name: Sugar
+    registerName: Sugar
+    aliases:
+      - Sugar
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 1191
+    name: Sweet N Low
+    registerName: Sweet N Low
+    aliases:
+      - Sweet N Low
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 1192
+    name: Equal
+    registerName: Equal
+    aliases:
+      - Equal
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 1193
+    name: Stevia
+    registerName: Stevia
+    aliases:
+      - Stevia
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 1194
+    name: Cream
+    registerName: Cream
+    aliases:
+      - Cream
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 1195
+    name: Half And Half
+    registerName: 1/2 + 1/2
+    aliases:
+      - Half And Half
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+
+  # 1200-1299: Espresso, Cappucino, Latte, Cortado, etc.
+  # 5000: Ingredients
+
+  - pid: 5000
+    name: Seasame Bun
+    registerName: Seasame Bun
+    aliases:
+      - Seasame Bun
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+  - pid: 5001
+    name: Whole Wheat Bun
+    registerName: Wheat Bun
+    aliases:
+      - Whole Wheat Bun
+    price: 0
+    standalone: true
+    defaults: []
+    options: []
+  - pid: 5002
+    name: Ancient Grains Bun
+    registerName: Ancient Bun
+    aliases:
+      - Ancient Grains Bun
+      - Crunchy Bun
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  # One argument for an ontological level is that the term, "cheese" may
+  # refer to any cheese (shredded or sliced, Swiss or American) in the context
+  # of "with no cheese". If every cheese includes the alias, "cheese" in order
+  # to match in the "no cheese" situation, a random cheese product will match.
+  # We have the same situation with Buns. The phrase "no bun" could refer to
+  # any of the bun types.
+
+  - pid: 5100
+    name: American Cheese Slice
+    registerName: American
+    aliases:
+      - American Cheese
+      - American
+      - Cheese
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 5101
+    name: Cheddar Cheese Slice
+    registerName: Cheddar
+    aliases:
+      - Cheddar Cheese
+      - Cheddar
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 5102
+    name: Swiss Cheese Slice
+    registerName: Swiss
+    aliases:
+      - Swiss Cheese
+      - Swiss
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 5103
+    name: Monterey Jack Cheese Slice
+    registerName: Jack
+    aliases:
+      - Monterey Jack Cheese
+      - Monterey Jack
+      - Jack
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 5200
+    name: Pickles
+    registerName: Pickles
+    aliases:
+      - Pickles
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+    
+  - pid: 5201
+    name: Sliced Red Onion
+    registerName: Red Onion
+    aliases:
+      - Red Onion
+      - Onion
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+    
+  - pid: 5202
+    name: Leaf Lettuce
+    registerName: Lettuce
+    aliases:
+      - Lettuce
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+    
+  - pid: 5203
+    name: Tomato Slice
+    registerName: Tomato
+    aliases:
+      - Tomato
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+    
+  - pid: 5204
+    name: Ketchup
+    registerName: Ketchup
+    aliases:
+      - Ketchup
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+    
+  - pid: 5205
+    name: Yellow Mustard
+    registerName: Mustard
+    aliases:
+      - Mustard
+      - Plain Mustard
+      - Yellow Mustard
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+    
+  - pid: 5206
+    name: Dijon Mustard
+    registerName: Dijon
+    aliases:
+      - Dijon Mustard
+      - Dijon
+      - Brown Mustard
+      - Spicy Mustard
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 5207
+    name: Tartar Sauce
+    registerName: Tartar
+    aliases:
+      - Tartar Sauce
+      - Tartar
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 5208
+    name: Mayonnaise
+    registerName: Mayonnaise
+    aliases:
+      - Mayonnaise
+      - Mayo
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+
+  - pid: 5209
+    name: Sriracha Mayonnaise
+    registerName: Sriracha Mayo
+    aliases:
+      - Sriracha Mayonnaise
+      - Sriracha Mayo
+      - Sriracha
+    price: 0
+    standalone: false
+    defaults: []
+    options: []
+    
+    
+  # 6000: Meals, combos, and deals.
+
+  # Eventually, items like combos will have choices, e.g. choice of drink.
+
+  - pid: 6000
+    name: Surf N Turf
+    registerName: Surf N Turf
+    aliases:
+      - Surf N Turf Combo
+      - Surf And Turf Combo
+      - Surf N Turf
+      - Surf And Turf
+    price: 7.99
+    standalone: false
+    defaults: [2, 200, 1002]
+    options: []
+  
+  # 7000: Special handling
+  - pid: 7000
+    name: Well Done
+    registerName: Well Done
+    aliases:
+      - Well Done
+    price: 0
+    standalone: false
+    defaults: []
+    options: []

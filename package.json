@@ -1,0 +1,47 @@
+{
+  "name": "shortorder",
+  "version": "0.0.1",
+  "description": "A natural language conversational agent for ordering and organizing items from a catalog.",
+  "main": "build/src/index.js",
+  "types": "build/src/index.d.ts",
+  "files": [
+    "build/src"
+  ],
+  "author": "Michael Hopcroft",
+  "license": "MIT",
+  "keywords": [],
+  "scripts": {
+    "test": "mocha",
+    "check": "gts check",
+    "clean": "gts clean",
+    "compile": "tsc -p .",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run check"
+  },
+  "devDependencies": {
+    "gts": "^0.8.0",
+    "mocha": "^5.2.0",
+    "typescript": "~2.8.0"
+  },
+  "dependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/csv-parse": "^1.1.11",
+    "@types/dotenv": "^4.0.3",
+    "@types/js-yaml": "^3.11.2",
+    "@types/mocha": "^5.2.5",
+    "@types/murmurhash": "0.0.0",
+    "@types/node": "^10.11.4",
+    "@types/readline-sync": "^1.4.3",
+    "chai": "^4.2.0",
+    "csv": "^4.0.0",
+    "dotenv": "^6.0.0",
+    "js-yaml": "^3.12.0",
+    "murmurhash": "0.0.2",
+    "readline-sync": "^1.4.9",
+    "snowball-stemmers": "^0.6.0",
+    "type-safe-json-decoder": "^0.2.0",
+    "words-to-numbers": "^1.5.1"
+  }
+}

@@ -1,0 +1,121 @@
+items:
+
+  #
+  # Shake flavors
+  #
+
+  # ISSUE: these might overlap with soft-serve flavors.
+
+  - pid: 1
+    name: FLAVOR(CHOCOLATE)
+    aliases:
+      - chocolate
+
+  - pid: 2
+    name: FLAVOR(STRAWBERRY)
+    aliases:
+      - strawberry
+
+  - pid: 3
+    name: FLAVOR(VANILLA)
+    aliases:
+      - vanilla
+
+  - pid: 4
+    name: FLAVOR(PUMPKIN_SPICE)
+    aliases:
+      - pumpkin spice
+      - pumpkin
+
+  #
+  # Sizes
+  #
+
+  # ISSUE: is it ok to combine coffee sizes with french fry and drink sizes?
+  - pid: 100
+    name: SIZE(SMALL)
+    aliases:
+      - small
+      - tall
+
+  - pid: 101
+    name: SIZE(medium)
+    aliases:
+      - medium
+      - grande
+
+  - pid: 102
+    name: SIZE(LARGE)
+    aliases:
+      - large
+      - grande
+
+  # Partial match of "extra" to "extra large" conflicts with "extra" quantity intent.
+  - pid: 103
+    name: SIZE(EXTRA_LARGE)
+    aliases:
+      - extra large
+
+  #
+  # Chicken preparation
+  # 
+
+  - pid: 201
+    name: CHIKEN(FRIED)
+    aliases:
+      - fried
+    
+  - pid: 202
+    name: CHICKEN(GRILLED)
+    aliases:
+      - grilled
+
+  #
+  # Caf/Decaf
+  #
+
+  - pid: 300
+    name: CAFFEINE(REGULAR)
+    aliases:
+      - caf
+      - caffinated
+      - full caf
+      - full caffeine
+      - regular
+
+  - pid: 301
+    name: CAFFEINE(DECAF)
+    aliases:
+      - decaf
+      - decaffeinated
+
+  - pid: 302
+    name: CAFFEINE(HALF_CAF)
+    aliases:
+      - half caf
+      - split shot
+
+  #
+  # Milk
+  #
+
+  - pid: 400
+    name: MILK(FAT_FREE)
+    aliases:
+      - fat free
+      - zero percent
+      - skinny
+      - nonfat
+
+  - pid: 401
+    name: MILK(TWO_PERCENT)
+    aliases:
+      - two percent
+
+  # ISSUE: "whole" and "regular" seem like they might overlap with other things.
+  - pid: 402
+    name: MILK(WHOLE)
+    aliases:
+      - whole
+      - full fat
+      - regular

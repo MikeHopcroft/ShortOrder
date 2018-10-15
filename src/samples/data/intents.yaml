@@ -1,0 +1,208 @@
+items:
+
+  - pid: 100000
+    name: SALUTATION
+    aliases:
+      - greetings
+      - hi
+      - hello
+      - hey
+
+  - pid: 100001
+    name: ADD_TO_ORDER
+    aliases:
+      - I'd like
+      - I would like
+      - I'll have
+      - I will have
+      - I'll take
+      - I will take
+      - I'll get
+      - I will get
+      - I'll do
+      - I will do
+      - I want
+      - I wanna
+      - I need
+      - get me
+      - give me
+      - could I please have
+      - could I have
+      - could I please get
+      - could I get
+      - can I just get
+      - may I get
+      - may I please get
+      - may I have
+      - may I please have
+      - can I do
+      - set me up with
+      - please set me up with
+      - hook me up with
+      - we want
+      - we'd like
+      - we would like
+      - we'll have
+      - we will have
+      - we need
+
+  - pid: 100002
+    name: CONJUNCTION
+    aliases:
+      - and
+      - and then
+      - also
+      - with
+
+  # ISSUE: "yeah" is a separator and also an affirmative answer.
+  # ISSUE: not sure about "I don't know" and "one more".
+  - pid: 100003
+    name: SEPERATORS
+    aliases:
+      - yeah
+      - um
+      - ah
+      - oh
+      - please
+      - I don't know
+      - one more
+
+  # ISSUE: "change" might also indicate the RESTATE intent.
+  - pid: 100006
+    name: SUBSTITUTE
+    aliases:
+      - instead of
+      - change
+      - swap
+      - replace
+      - substitute
+
+  - pid: 100007
+    name: CANCEL_LAST_ITEM
+    aliases:
+      - actually
+      - forget
+      - undo
+      - stop
+
+  - pid: 100008
+    name: RESTATE
+    aliases:
+      - make that
+      - make one
+      - make one of
+      - can you make that
+
+  # ISSUE: "cancel" could indicate the CANCEL_ORDER intent.
+  - pid: 100009
+    name: REMOVE_ITEM
+    aliases:
+      - lose the
+      - remove the
+      - drop the
+      - skip the
+      - cancel the
+
+  # ISSUE: really want patterns here to capture the distinction between
+  # "one", "both", "all", etc.
+  - pid: 100010
+    name: PREPOSITIONS
+    aliases:
+      - make one
+      - make one of them
+      - make both
+      - make both of them
+      - make all of them
+
+  - pid: 100011
+    name: CANCEL_ORDER
+    aliases:
+      - cancel
+      - quit
+      - start over
+
+  # ISSUE: No subjects like "I", "We".
+  - pid: 100012
+    name: NEED_MORE_TIME
+    aliases:
+      - wait
+      - hold on
+      - hang on
+      - a sec
+      - a second
+      - a minute
+      - a moment
+      - one sec
+      - one second
+      - one minute
+      - one moment
+      - give me a sec
+      - give me a second
+      - give me a moment
+      - give me a minute
+      - need a sec
+      - need a second
+      - need a moment
+      - need a minute
+      - just a sec
+      - just a second
+      - just a moment
+      - just a minute
+      - more time
+      - need more time
+
+  # ISSUE: not sure about "okay". Also, okay is an AFFIRMATIVE_ANSWER
+  - pid: 100013
+    name: END_OF_ORDER
+    aliases:
+      - I'm done
+      - I'm good
+      - I'm ready
+      - I'm fine
+      # ISSUE: "you" is a partial match to "thank you".
+      - thank you
+      - thanks
+      - that's it
+      - that's all
+      - that's everything
+      - that'll be it
+      - that will be it
+      - that'll do it
+      - that will do it
+      - that should be it
+      - bye
+      - okay
+
+  - pid: 100014
+    name: ANSWER_AFFIRMATIVE
+    aliases:
+      - yeah
+      - yes
+      - yes please
+      - yep
+      - yup
+      - okay
+      - alright
+      - you got it
+      - you gotcha
+      - you betcha
+      - affirmative
+      - super
+      - fine
+      - that'll be fine
+      - that will be fine
+      - great
+      - that'll be great
+      - that will be great
+
+  - pid: 100015
+    name: ANSWER_NEGATIVE
+    aliases:
+      - no
+      - naw
+      - nope
+      - definitely not
+      - never
+      - I don't think so
+
+

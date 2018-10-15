@@ -1,0 +1,34 @@
+import { EntityRecognizer, ENTITY, EntityToken } from '../recognizers';
+import { UNKNOWN, UnknownToken } from '../tokenizer';
+
+function run(recognizer: EntityRecognizer, query:string) {
+    const input = { type:UNKNOWN, text: query };
+    const tokens = recognizer.apply(input);
+
+    const observed = tokens.map( t => {
+        const token = t as (EntityToken | UnknownToken);
+        if (token.type === ENTITY) {
+            const entity = token.name.replace(/\s/g, '_').toUpperCase();
+            return `[${entity}(${token.pid})]`;
+        }
+        else {
+            return token.text;
+        }
+    }).join(' ');
+
+    console.log(`Returned: "${observed}"`);
+    console.log();
+}
+
+
+export function ingestAndTest(menuFile: string, query: string) {
+    const recognizer = new EntityRecognizer(menuFile);
+
+    run(recognizer, query);
+}
+
+ingestAndTest(
+    './src/samples/data/menu.yaml',
+    'Dakota burger with extra swiss cheese'
+);
+
