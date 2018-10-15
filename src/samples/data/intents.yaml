@@ -5,8 +5,10 @@ items:
     aliases:
       - greetings
       - hi
+      - hi there
       - hello
       - hey
+      - hey there
 
   - pid: 100001
     name: ADD_TO_ORDER
@@ -181,6 +183,7 @@ items:
       - yes please
       - yep
       - yup
+      - ok        # ISSUE: don't know if speech-to-text returns 'ok' or 'okay'
       - okay
       - alright
       - you got it

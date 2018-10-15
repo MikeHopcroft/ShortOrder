@@ -1,0 +1,5 @@
+{
+    "mochaExplorer.timeout": 200000,
+    "mochaExplorer.logpanel": true,
+    "mochaExplorer.files": "build/test/**/*.js"
+}

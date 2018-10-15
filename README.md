@@ -34,14 +34,14 @@ After tokenization, a parser might be able to group the tokens into a tree that 
 ShortOrder is currently in the earliest stages of development, so documentation is
 sparse or nonexistant, and the code stability is uneven.
 
-If you are interested in taking a look, you can fork the repo on GitHub or install
+If you are interested in taking a look, you can clone the repo on GitHub or install
 ShortOrder with npm.
 
 ~~~
 npm install shortorder
 ~~~
 
-As of commit XXXXXX, there are two working samples, based on a ficticious restaurant. You can find the definition files for the menu, intents, attributes, and quantifiers at
+As of [commit 85b7def2](https://github.com/MikeHopcroft/ShortOrder/commit/85b7def29e060f5c58c32b0643edf1769aa833dd), there are two working samples, based on a ficticious restaurant. You can find the definition files for the menu, intents, attributes, and quantifiers at
 * `src\samples\data\menu.yaml`
 * `src\samples\data\intents.yaml`
 * `src\samples\data\attributes.yaml`
