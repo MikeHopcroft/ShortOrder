@@ -6,7 +6,7 @@ import { PID, Tokenizer } from '../../src/tokenizer';
 describe('Tokenizer', () => {
     describe('#addItem', () => {
         it('should add item text to `this.items` and PIDs to `this.pids`', () => {
-            const badWords: string[] = [];
+            const badWords = new Set([]);
             const tokenizer = new Tokenizer(badWords);
             const items:Array<[PID, string]> = [
                 [1, 'one'],
@@ -24,7 +24,7 @@ describe('Tokenizer', () => {
         });
 
         it('should apply MurmurHash3 with seed value of 0.', () => {
-            const badWords: string[] = [];
+            const badWords = new Set([]);
             const tokenizer = new Tokenizer(badWords);
             const input = 'small unsweeten ice tea';
             tokenizer.addItem(1, input);
@@ -34,7 +34,7 @@ describe('Tokenizer', () => {
         });
 
         it('should build posting lists.', () => {
-            const badWords: string[] = [];
+            const badWords = new Set([]);
             const tokenizer = new Tokenizer(badWords);
 
             // DESIGN NOTE: the terms 'a'..'f' are known to stem to themselves.
@@ -82,7 +82,7 @@ describe('Tokenizer', () => {
 
     describe('#stemTerm', () => {
         it('should apply the Snowball English Stemmer', () => {
-            const badWords: string[] = [];
+            const badWords = new Set([]);
             const tokenizer = new Tokenizer(badWords);
             const input = 'sauce chocolate milkshake hamburger value cheese creamy';
             const terms = input.split(' ');

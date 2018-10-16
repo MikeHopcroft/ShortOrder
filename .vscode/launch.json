@@ -43,7 +43,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Junk",
-            "program": "${workspaceFolder}/build/src/samples/junk.js",
+            "program": "${workspaceFolder}/build/src/junk.js",
             "outputCapture": "std"
         },
         {

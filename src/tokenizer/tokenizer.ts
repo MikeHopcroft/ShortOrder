@@ -241,14 +241,22 @@ export class Tokenizer {
         // if (nonAdjectiveCount === 0) {
         //     score = -1;
         // }
+
+        // Exclude matches that are all badwords, except those that match every word in the prefix.
+        // As long as "Fried" and "Fries" stem to the same word, this prevents a collision
+        // between the entity, "Fries" and the attribute, "Fried". Using a lemmatizer
+        // instead of a stemmer could also help here.
         const adjectiveFactor = (commonTerms.size - commonAdjectives.size) / commonTerms.size;
-        if (commonTerms.size === commonAdjectives.size) {
+        if (commonTerms.size === commonAdjectives.size && commonTerms.size !== prefix.length) {
             score = -1;
         }
 
         // if (score <= 0.25) {
         //     score = -1;
         // }
+        if (score <= 0.01) {
+            score = -1;
+        }
 
         if (this.debugMode) {
             const queryText = query.map(this.decodeTerm).join(' ');

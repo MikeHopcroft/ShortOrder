@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { PID, Recognizer, Token, TokenFactory, Tokenizer } from '.';
+import { generateAliases, PID, Recognizer, Token, TokenFactory, Tokenizer } from '.';
 import { copyArray, copyScalar } from '../utilities';
 
 export interface Item {
@@ -67,9 +67,13 @@ export class PatternRecognizer<T extends Item> implements Recognizer {
         // Ingest index.
         let aliasCount = 0;
         Object.entries(this.index.items).forEach(([pid, item]) => {
-            item.aliases.forEach(alias => {
-                this.tokenizer.addItem(item.pid, alias);
-                aliasCount++;
+            item.aliases.forEach(aliasPattern => {
+                // console.log(aliasPattern);
+                for (const alias of generateAliases(aliasPattern)) {
+                    // console.log(`  ${alias}`);
+                    this.tokenizer.addItem(item.pid, alias);
+                    aliasCount++;
+                }              
             });
         });
 

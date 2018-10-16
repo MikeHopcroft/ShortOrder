@@ -67,17 +67,22 @@ items:
     name: Grilled Petaluma Chicken Sandwich
     registerName: Pet Chk Grilled
     aliases: 
-      - Petaluma Chicken Sandwich Grilled
-      - Petaluma Chicken Grilled
-      - Petaluma Chicken
-      - Petaluma Grilled
-      - Petaluma
-      - Pet Chicken Grilled
-      - Pet Chicken
-      - Grilled Petaluma Chicken Sandwich
-      - Grilled Petaluma Chicken
-      - Grilled Petaluma
-      - Grilled Pet Chicken
+      - "Petaluma [Chicken,] [Sandwich,] [Grilled,]"
+      - "[Grilled,] Petaluma [Chicken,] [Sandwich,]"
+      - "Pet Chicken [Sandwich,] [Grilled,]"
+      - "[Grilled,] Pet Chicken [Sandwich,]"
+      - "Chicken Sandwich [Grilled,]"
+      # - Petaluma Chicken Sandwich Grilled
+      # - Petaluma Chicken Grilled
+      # - Petaluma Chicken
+      # - Petaluma Grilled
+      # - Petaluma
+      # - Pet Chicken Grilled
+      # - Pet Chicken
+      # - Grilled Petaluma Chicken Sandwich
+      # - Grilled Petaluma Chicken
+      # - Grilled Petaluma
+      # - Grilled Pet Chicken
     price: 3.99
     standalone: true
     defaults: [5001, 190, 5200, 5202, 5203, 5207]
@@ -87,14 +92,18 @@ items:
     name: Fried Petaluma Chicken Sandwich
     registerName: Pet Chk Fried
     aliases: 
-      - Petaluma Chicken Sandwich Fried
-      - Petaluma Chicken Fried
-      - Petaluma Fried
-      - Pet Chicken Fried
-      - Fried Petaluma Chicken Sandwich
-      - Fried Petaluma Chicken
-      - Fried Petaluma
-      - Fried Pet Chicken
+      - "Petaluma [Chicken,] [Sandwich,] Fried"
+      - "Fried Petaluma [Chicken,] [Sandwich,]"
+      - "Pet Chicken [Sandwich,] Fried"
+      - "Fried [Pet,] Chicken [Sandwich,]"
+      # - Petaluma Chicken Sandwich Fried
+      # - Petaluma Chicken Fried
+      # - Petaluma Fried
+      # - Pet Chicken Fried
+      # - Fried Petaluma Chicken Sandwich
+      # - Fried Petaluma Chicken
+      # - Fried Petaluma
+      # - Fried Pet Chicken
     price: 3.99
     standalone: true
     defaults: [5001, 191, 5200, 5202, 5203, 5208]
@@ -178,8 +187,9 @@ items:
     name: Small French Fries
     registerName: Sm Fries
     aliases:
-      - Small French Fries
-      - Small Fries
+      - "Small [French,] Fries"
+      # - Small French Fries
+      # - Small Fries
     price: 0.99
     standalone: true
     defaults: []
@@ -189,10 +199,11 @@ items:
     name: Medium French Fries
     registerName: Med Fries
     aliases:
-      - Medium French Fries
-      - Medium Fries
-      - French Fries
-      - Fries
+      - "[Medium,] [French,] Fries"
+      # - Medium French Fries
+      # - Medium Fries
+      # - French Fries
+      # - Fries
     price: 1.29
     standalone: true
     defaults: []
@@ -202,8 +213,9 @@ items:
     name: Large French Fries
     registerName: Lg Fries
     aliases:
-      - Large French Fries
-      - Large Fries
+      - "Large [French,] Fries"
+      # - Large French Fries
+      # - Large Fries
     price: 1.79
     standalone: true
     defaults: []
