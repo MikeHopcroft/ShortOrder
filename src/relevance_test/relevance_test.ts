@@ -121,7 +121,7 @@ export class TestCase {
             const token = t as (EntityToken | UnknownToken);
             if (token.type === ENTITY) {
                 const entity = token.name.replace(/\s/g, '_').toUpperCase();
-                return `[${entity}(${token.pid})]`;
+                return `[${entity},${token.pid}]`;
             }
             else {
                 return token.text;
@@ -205,7 +205,7 @@ export class RelevanceSuite {
 }
 
 export function runRelevanceTest(menuFile: string, testFile: string) {
-    const badWords = new Set();
+    const badWords = new Set(['small', 'medium', 'large', 'chocolate', 'vanilla']);
     const recognizer = CreateEntityRecognizer(menuFile, badWords);
 
     const suite = RelevanceSuite.fromYamlFilename(testFile);
