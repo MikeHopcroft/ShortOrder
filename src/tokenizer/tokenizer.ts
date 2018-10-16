@@ -24,13 +24,13 @@ export class Tokenizer {
 
     badWords: Set<string> = new Set<string>();
 
-    hashedAdjectivesSet = new Set<HASH>();
+    hashedBadWordsSet = new Set<HASH>();
 
     constructor(badWords: Set<string>, debugMode = false) {
         this.badWords = badWords;
         this.badWords.forEach((term) => {
             const hash = this.hashTerm(this.stemTerm(term));
-            this.hashedAdjectivesSet.add(hash);
+            this.hashedBadWordsSet.add(hash);
         });
 
         this.debugMode = debugMode;
@@ -77,7 +77,7 @@ export class Tokenizer {
             if (edge.label < 0) {
                 rewritten.push(terms[termIndex++]);
             }
-            // TODO: EXPERIMENT 1: filter out adjectives.
+            // TODO: EXPERIMENT 1: filter out badwords.
             else {
                 const text = `[${terms.slice(termIndex, termIndex + edge.length).join(" ")}]`;
                 rewritten.push(text);
@@ -94,7 +94,7 @@ export class Tokenizer {
             if (edge.label < 0) {
                 rewritten.push(terms[termIndex++]);
             }
-            // TODO: EXPERIMENT 1: filter out adjectives.
+            // TODO: EXPERIMENT 1: filter out badwords.
             else {
                 // TODO: Where does toUpperCase and replacing spaces with underscores go?
                 const name = pidToName(this.pids[edge.label]);
@@ -198,8 +198,8 @@ export class Tokenizer {
         return new Set([...a].filter(x => b.has(x)));
     }
 
-    commonAdjectives(commonTerms: Set<HASH>) {
-        return new Set([...commonTerms].filter(x => this.hashedAdjectivesSet.has(x)));
+    commonBadWords(commonTerms: Set<HASH>) {
+        return new Set([...commonTerms].filter(x => this.hashedBadWordsSet.has(x)));
     }
 
     score(query: number[], prefix: number[]) {
@@ -219,26 +219,26 @@ export class Tokenizer {
         const lengthFactor = rightmostA + 1;
 
         // This approach doesn't work because the match can contain trailing garbage.
-        // Really need to count common terms that are not adjectives.
+        // Really need to count common terms that are not badwords.
         // TODO: fix matcher to not return trailing garbage. Example:
         //   query: 'large and add a Petaluma Chicken'
         //   prefix: 'large sprite;
         //   match: 'large and' instead of 'large'
         // 
-        // const nonAdjectiveCount = match.reduce((count, term) => {
-        //     if (this.hashedAdjectivesSet.has(term)) {
+        // const nonBadWordCount = match.reduce((count, term) => {
+        //     if (this.hashedBadWordsSet.has(term)) {
         //         return count;
         //     }
         //     else {
         //         return count + 1;
         //     }
         // }, 0);
-        // const adjectiveFactor = nonAdjectiveCount/match.length;
+        // const badWordFactor = nonBadWordCount / match.length;
         const commonTerms = this.commonTerms(query, prefix);
-        const commonAdjectives = this.commonAdjectives(commonTerms);
+        const commonBadWords = this.commonBadWords(commonTerms);
 
         let score = matchFactor * commonFactor * positionFactor * lengthFactor;
-        // if (nonAdjectiveCount === 0) {
+        // if (nonBadWordCount === 0) {
         //     score = -1;
         // }
 
@@ -246,8 +246,8 @@ export class Tokenizer {
         // As long as "Fried" and "Fries" stem to the same word, this prevents a collision
         // between the entity, "Fries" and the attribute, "Fried". Using a lemmatizer
         // instead of a stemmer could also help here.
-        const adjectiveFactor = (commonTerms.size - commonAdjectives.size) / commonTerms.size;
-        if (commonTerms.size === commonAdjectives.size && commonTerms.size !== prefix.length) {
+        const badWordFactor = (commonTerms.size - commonBadWords.size) / commonTerms.size;
+        if (commonTerms.size === commonBadWords.size && commonTerms.size !== prefix.length) {
             score = -1;
         }
 
@@ -262,7 +262,7 @@ export class Tokenizer {
             const queryText = query.map(this.decodeTerm).join(' ');
             const prefixText = prefix.map(this.decodeTerm).join(' ');
             const matchText = match.map(this.decodeTerm).join(' ');
-            console.log(`      score=${score} mf=${matchFactor}, cf=${commonFactor}, pf=${positionFactor}, lf=${lengthFactor}, af=${adjectiveFactor}`);
+            console.log(`      score=${score} mf=${matchFactor}, cf=${commonFactor}, pf=${positionFactor}, lf=${lengthFactor}, ff=${badWordFactor}`);
             console.log(`      length=${match.length}, cost=${cost}, left=${leftmostA}, right=${rightmostA}`);
             console.log(`      query="${queryText}"`);
             console.log(`      prefix="${prefixText}"`);
