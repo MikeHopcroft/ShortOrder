@@ -26,8 +26,7 @@ items:
     name: Big Apple Burger
     registerName: Big Apple
     aliases:
-      - Big Apple Burger
-      - Big Apple
+      - "Big Apple [Burger,]"
     price: 5.99
     standalone: true
     defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
@@ -37,8 +36,7 @@ items:
     name: Dakota Burger
     registerName: Dakota
     aliases:
-      - Dakota Burger
-      - Dakota
+      - "Dakota [Burger,]"
     price: 5.99
     standalone: true
     defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
@@ -72,17 +70,6 @@ items:
       - "Pet Chicken [Sandwich,] [Grilled,]"
       - "[Grilled,] Pet Chicken [Sandwich,]"
       - "Chicken Sandwich [Grilled,]"
-      # - Petaluma Chicken Sandwich Grilled
-      # - Petaluma Chicken Grilled
-      # - Petaluma Chicken
-      # - Petaluma Grilled
-      # - Petaluma
-      # - Pet Chicken Grilled
-      # - Pet Chicken
-      # - Grilled Petaluma Chicken Sandwich
-      # - Grilled Petaluma Chicken
-      # - Grilled Petaluma
-      # - Grilled Pet Chicken
     price: 3.99
     standalone: true
     defaults: [5001, 190, 5200, 5202, 5203, 5207]
@@ -96,14 +83,6 @@ items:
       - "Fried Petaluma [Chicken,] [Sandwich,]"
       - "Pet Chicken [Sandwich,] Fried"
       - "Fried [Pet,] Chicken [Sandwich,]"
-      # - Petaluma Chicken Sandwich Fried
-      # - Petaluma Chicken Fried
-      # - Petaluma Fried
-      # - Pet Chicken Fried
-      # - Fried Petaluma Chicken Sandwich
-      # - Fried Petaluma Chicken
-      # - Fried Petaluma
-      # - Fried Pet Chicken
     price: 3.99
     standalone: true
     defaults: [5001, 191, 5200, 5202, 5203, 5208]
@@ -114,7 +93,6 @@ items:
     registerName: Grilled Chk
     aliases:
       - Grilled Chicken
-      - Grilled
     price: 0
     standalone: false
     defaults: []
@@ -139,7 +117,7 @@ items:
     name: Down East Fish Sandwich
     registerName: Down East Fish
     aliases:
-      - Down East Fish Sandwich
+      - "Down East [Fish,] [Sandwich,]"
       - Down Easter
     price: 3.99
     standalone: true
@@ -150,7 +128,7 @@ items:
     name: Northwest Sockeye Sandwich
     registerName: NW Sockey
     aliases:
-      - Northwest Sockeye Sandwich
+      - "[Northwest,] Sockeye [Sandwich,]"
     price: 4.99
     standalone: true
     defaults: [5002, 291, 5201, 5202, 5203, 5207]
@@ -171,8 +149,7 @@ items:
     name: Grilled Sockeye Fillet
     registerName: Sockey
     aliases:
-      - Grilled Sockeye Fillet
-      - Grilled Sockeye
+      - "Grilled Sockeye [Fillet,]"
       - Sockeye Fillet
     price: 0
     standalone: false
@@ -188,8 +165,6 @@ items:
     registerName: Sm Fries
     aliases:
       - "Small [French,] Fries"
-      # - Small French Fries
-      # - Small Fries
     price: 0.99
     standalone: true
     defaults: []
@@ -200,10 +175,6 @@ items:
     registerName: Med Fries
     aliases:
       - "[Medium,] [French,] Fries"
-      # - Medium French Fries
-      # - Medium Fries
-      # - French Fries
-      # - Fries
     price: 1.29
     standalone: true
     defaults: []
@@ -214,8 +185,6 @@ items:
     registerName: Lg Fries
     aliases:
       - "Large [French,] Fries"
-      # - Large French Fries
-      # - Large Fries
     price: 1.79
     standalone: true
     defaults: []
@@ -225,24 +194,18 @@ items:
     name: 6 Wings
     registerName: 6 Wings
     aliases:
-      - 6 Piece Chicken Wings
-      - 6 Chicken Wings
-      - 6 Wings
+      - "6 [Piece,] [Chicken,] Wings"
     price: 5.99
     standalone: true
     defaults: []
     options: []
 
+  # NOTE: Default wing quanity is a dozen.
   - pid: 411
     name: 12 Wings
     registerName: 12 Wings
     aliases:
-      - 12 Piece Chicken Wings
-      - 12 Chicken Wings
-      - 12 Wings
-      - Dozen Chicken Wings
-      - Dozen Wings
-      - Wings
+      - "[12,12 Piece,Dozen,] [Chicken,] Wings"
     price: 5.99
     standalone: true
     defaults: []
@@ -256,9 +219,7 @@ items:
     name: Small Coke
     registerName: Sm Coke
     aliases:
-      - Small Coke
-      - Small Coca Cola
-      - Small Cola
+      - "Small [Coke,Coca Cola,Cola]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -268,11 +229,7 @@ items:
     name: Medium Coke
     registerName: Med Coke
     aliases:
-      - Medium Coke
-      - Medium Coca Cola
-      - Medium Cola
-      - Coke
-      - Coca Cola
+      - "[Medium,] [Coke,Coca Cola,Cola]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -282,9 +239,7 @@ items:
     name: Large Coke
     registerName: Lg Coke
     aliases:
-      - Large Coke
-      - Large Coca Cola
-      - Large Cola
+      - "Large [Coke,Coca Cola,Cola]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -294,10 +249,7 @@ items:
     name: Small Diet Coke
     registerName: Sm Diet Coke
     aliases:
-      - Small Diet Coke
-      - Small Diet Coca Cola
-      - Small Diet Cola
-      - Small Diet
+      - "Small Diet [Coke,Coca Cola,Cola,]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -307,12 +259,7 @@ items:
     name: Medium Diet Coke
     registerName: Med Diet Coke
     aliases:
-      - Medium Diet Coke
-      - Medium Diet Coca Cola
-      - Medium Diet Cola
-      - Medium Diet
-      - Diet Coke
-      - Diet Coca Cola
+      - "[Medium,] Diet [Coke,Coca Cola,Cola,]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -322,9 +269,7 @@ items:
     name: Large Diet Coke
     registerName: Lg Diet Coke
     aliases:
-      - Large Diet Coke
-      - Large Diet Coca Cola
-      - Large Diet Cola
+      - "Large Diet [Coke,Coca Cola,Cola,]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -337,14 +282,8 @@ items:
     name: Small Unsweet Tea
     registerName: Sm Unsweet Tea
     aliases:
-      - Small Unsweet Iced Tea
-      - Small Unsweetened Iced Tea
-      - Small Iced Tea Unsweet
-      - Small Iced Tea Unsweetened
-      - Small Unsweet Tea
-      - Small Unsweetened Tea
-      - Small Tea Unsweet
-      - Small Tea Unsweetened
+      - "Small [Unsweet,Unsweetened] [Iced,] Tea"
+      - "Small [Iced,] Tea [Unsweet,Unsweetened]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -354,14 +293,8 @@ items:
     name: Medium Unsweet Tea
     registerName: Med Unsweet Tea
     aliases:
-      - Medium Unsweet Iced Tea
-      - Medium Unsweetened Iced Tea
-      - Medium Iced Tea Unsweet
-      - Medium Iced Tea Unsweetened
-      - Medium Unsweet Tea
-      - Medium Unsweetened Tea
-      - Medium Tea Unsweet
-      - Medium Tea Unsweetened
+      - "[Medium,] [Unsweet,Unsweetened] [Iced,] Tea"
+      - "[Medium,] [Iced,] Tea [Unsweet,Unsweetened]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -371,14 +304,8 @@ items:
     name: Large Unsweet Tea
     registerName: Lg Unsweet Tea
     aliases:
-      - Large Unsweet Iced Tea
-      - Large Unsweetened Iced Tea
-      - Large Iced Tea Unsweet
-      - Large Iced Tea Unsweetened
-      - Large Unsweet Tea
-      - Large Unsweetened Tea
-      - Large Tea Unsweet
-      - Large Tea Unsweetened
+      - "Large [Unsweet,Unsweetened] [Iced,] Tea"
+      - "Large [Iced,] Tea [Unsweet,Unsweetened]"
     price: 0
     standalone: true
     defaults: [1090]
