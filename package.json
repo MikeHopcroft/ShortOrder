@@ -1,5 +1,5 @@
 {
-  "name": "short-order",
+  "name": "shortorder",
   "version": "0.0.2",
   "description": "A natural language conversational agent for ordering and organizing items from a catalog.",
   "main": "build/src/index.js",
