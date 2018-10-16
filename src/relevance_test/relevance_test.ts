@@ -1,4 +1,3 @@
-import * as csv_sync from 'csv-parse/lib/sync';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { Recognizer, UNKNOWN } from '../tokenizer';
@@ -147,29 +146,6 @@ export class TestCase {
 
 export class RelevanceSuite {
     private tests: TestCase[] = [];
-
-    static fromCsvFile(filename: string) {
-        const input = fs.readFileSync(filename).toString();
-        const rows: string[][] = csv_sync(input, {
-            skip_empty_lines: true,
-            relax_column_count: true
-        });
-
-        const tests = rows.map((row, index) => {
-            const priority = row[0];
-            const suites: string[] = row[1].split(' ');
-            const input = row[2];
-
-            let expected = '';
-            if (row.length > 3) {
-                expected = row[3];
-            }
-
-            return new TestCase(index, priority, suites, input, expected);
-        });
-
-        return new RelevanceSuite(tests);
-    }
 
     static fromYamlFilename(filename: string) {
         // tslint:disable-next-line:no-any
