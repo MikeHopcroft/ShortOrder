@@ -1,9 +1,9 @@
 import * as csv_sync from 'csv-parse/lib/sync';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { CreateEntityRecognizer, ENTITY, EntityRecognizer, EntityToken } from '../recognizers';
-import { UNKNOWN, UnknownToken } from '../tokenizer';
+import { Recognizer, UNKNOWN } from '../tokenizer';
 import { copyScalar } from '../utilities';
+import { Pipeline, tokenToString } from '../pipeline';
 
 export class Result {
     test: TestCase;
@@ -17,12 +17,12 @@ export class Result {
     }
 }
 
-interface TestCounts {
+export interface TestCounts {
     passCount: number;
     runCount: number;
 }
 
-class AggregatedResults {
+export class AggregatedResults {
     priorities: { [priority: string]: TestCounts } = {};
     suites: { [suite: string]: TestCounts } = {};
     results: Result[] = [];
@@ -90,6 +90,18 @@ class AggregatedResults {
 
         console.log(`Overall: ${this.passCount}/${this.results.length}`);
     }
+
+    rebase() {
+        const baseline = this.results.map(result => {
+            return {
+                'priority': result.test.priority,
+                'suites': result.test.suites.join(' '),
+                'input': result.test.input,
+                'expected': result.observed
+            };
+        });
+        return baseline;
+    }
 }
 
 export class TestCase {
@@ -113,20 +125,11 @@ export class TestCase {
         this.expected = expected;
     }
 
-    run(recognizer: EntityRecognizer) {
-        const input = { type:UNKNOWN, text: this.input };
+    run(recognizer: Recognizer) {
+        const input = { type: UNKNOWN, text: this.input };
         const tokens = recognizer.apply(input);
 
-        const observed = tokens.map( t => {
-            const token = t as (EntityToken | UnknownToken);
-            if (token.type === ENTITY) {
-                const entity = token.name.replace(/\s/g, '_').toUpperCase();
-                return `[${entity},${token.pid}]`;
-            }
-            else {
-                return token.text;
-            }
-        }).join(' ');
+        const observed = tokens.map(tokenToString).join(' ');
 
         const passed = (this.expected === observed);
 
@@ -193,7 +196,7 @@ export class RelevanceSuite {
         this.tests = tests;
     }
 
-    run(recognizer: EntityRecognizer) {
+    run(recognizer: Recognizer) {
         const aggregator = new AggregatedResults();
 
         this.tests.forEach((test) => {
@@ -201,13 +204,25 @@ export class RelevanceSuite {
         });
 
         aggregator.print();
+
+        return aggregator;
     }
 }
 
-export function runRelevanceTest(menuFile: string, testFile: string) {
-    const badWords = new Set(['small', 'medium', 'large', 'chocolate', 'vanilla']);
-    const recognizer = CreateEntityRecognizer(menuFile, badWords);
+export function runRelevanceTest(
+    entityFile: string,
+    intentsFile: string,
+    attributesFile: string,
+    quantifierFile: string,
+    testFile: string
+): AggregatedResults {
+    const pipeline = new Pipeline(
+        entityFile,
+        intentsFile,
+        attributesFile,
+        quantifierFile
+    );
 
     const suite = RelevanceSuite.fromYamlFilename(testFile);
-    suite.run(recognizer);
+    return suite.run(pipeline.compositeRecognizer);
 }

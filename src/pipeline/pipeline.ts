@@ -14,22 +14,22 @@ export function tokenToString(t:Token) {
     switch (token.type) {
         case ATTRIBUTE:
             const attribute = token.name.replace(/\s/g, '_').toUpperCase();
-            name = `ATTRIBUTE:${attribute}(${token.id})`;
+            name = `[ATTRIBUTE:${attribute},${token.id}]`;
             break;
         case ENTITY:
             const entity = token.name.replace(/\s/g, '_').toUpperCase();
-            name = `ENTITY:${entity}(${token.pid})`;
+            name = `[ENTITY:${entity},${token.pid}]`;
             break;
         case INTENT:
-            name = `INTENT:${token.name}`;
+            name = `[INTENT:${token.name}]`;
             break;
         case QUANTITY:
-            name = `QUANTITY(${token.value})`;
+            name = `[QUANTITY:${token.value}]`;
             break;
         default:
-            name = 'UNKNOWN';
+            name = `[UNKNOWN:${token.text}]`;
     }
-    return `[${name}]`;
+    return name;
 }
 
 export function printToken(t:Token) {

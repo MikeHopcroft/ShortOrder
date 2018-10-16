@@ -12,6 +12,7 @@ items:
       - remove the
       - skip the
       - drop the
+      - hold the
 
   - pid: 1
     name: "1"
@@ -29,7 +30,9 @@ items:
     name: "2"
     aliases:
       - double
-      - couple of
+      # ISSUE: The term "of" is a partial match for "couple of".
+      # Potential error in "Make one of them large".
+      - couple
 
   - pid: 3
     name: "3"
