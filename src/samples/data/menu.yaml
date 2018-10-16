@@ -315,8 +315,7 @@ items:
     name: Small Sweet Tea
     registerName: Sm Sweet Tea
     aliases:
-      - Small Sweet Tea
-      - Small Iced Tea
+      - "Small [Sweet,Iced] Tea"
     price: 0
     standalone: true
     defaults: [1090]
@@ -326,8 +325,7 @@ items:
     name: Medium Sweet Tea
     registerName: Med Sweet Tea
     aliases:
-      - Medium Sweet Tea
-      - Medium Iced Tea
+      - "[Medium,] [Sweet,Iced] Tea"
     price: 0
     standalone: true
     defaults: [1090]
@@ -337,8 +335,7 @@ items:
     name: Large Sweet Tea
     registerName: Lg Sweet Tea
     aliases:
-      - Large Sweet Tea
-      - Large Iced Tea
+      - "Large [Sweet,Iced] Tea"
     price: 0
     standalone: true
     defaults: [1090]
@@ -374,8 +371,7 @@ items:
     name: Medium Coffee
     registerName: Med Coffee
     aliases:
-      - Medium Coffee
-      - Coffee
+      - "[Medium,] Coffee"
     price: 0
     standalone: true
     defaults: []
@@ -412,6 +408,8 @@ items:
     defaults: []
     options: []
 
+    # ISSUE: Not sure whether speech-to-text will give us 'N', 'en', or 'and'
+    # for 'Sweet N Low'.
   - pid: 1191
     name: Sweet N Low
     registerName: Sweet N Low
@@ -488,7 +486,7 @@ items:
     name: Ancient Grains Bun
     registerName: Ancient Bun
     aliases:
-      - Ancient Grains Bun
+      - "Ancient Grains [Bun,]"
       - Crunchy Bun
     price: 0
     standalone: false
@@ -506,8 +504,7 @@ items:
     name: American Cheese Slice
     registerName: American
     aliases:
-      - American Cheese
-      - American
+      - "American [Cheese,]"
       - Cheese
     price: 0
     standalone: false
@@ -518,8 +515,7 @@ items:
     name: Cheddar Cheese Slice
     registerName: Cheddar
     aliases:
-      - Cheddar Cheese
-      - Cheddar
+      - "Cheddar [Cheese,]"
     price: 0
     standalone: false
     defaults: []
@@ -529,8 +525,7 @@ items:
     name: Swiss Cheese Slice
     registerName: Swiss
     aliases:
-      - Swiss Cheese
-      - Swiss
+      - "Swiss [Cheese,]"
     price: 0
     standalone: false
     defaults: []
@@ -540,9 +535,7 @@ items:
     name: Monterey Jack Cheese Slice
     registerName: Jack
     aliases:
-      - Monterey Jack Cheese
-      - Monterey Jack
-      - Jack
+      - "[Monterey,] Jack [Cheese.]"
     price: 0
     standalone: false
     defaults: []
@@ -562,8 +555,7 @@ items:
     name: Sliced Red Onion
     registerName: Red Onion
     aliases:
-      - Red Onion
-      - Onion
+      - "[Red,] Onion"
     price: 0
     standalone: false
     defaults: []
@@ -603,9 +595,7 @@ items:
     name: Yellow Mustard
     registerName: Mustard
     aliases:
-      - Mustard
-      - Plain Mustard
-      - Yellow Mustard
+      - "[Plain,Yellow,American,] Mustard"
     price: 0
     standalone: false
     defaults: []
@@ -615,10 +605,8 @@ items:
     name: Dijon Mustard
     registerName: Dijon
     aliases:
-      - Dijon Mustard
+      - "[Dijon,Brown,Spicy] Mustard"
       - Dijon
-      - Brown Mustard
-      - Spicy Mustard
     price: 0
     standalone: false
     defaults: []
@@ -628,8 +616,7 @@ items:
     name: Tartar Sauce
     registerName: Tartar
     aliases:
-      - Tartar Sauce
-      - Tartar
+      - "Tartar [Sauce,]"
     price: 0
     standalone: false
     defaults: []
@@ -650,9 +637,7 @@ items:
     name: Sriracha Mayonnaise
     registerName: Sriracha Mayo
     aliases:
-      - Sriracha Mayonnaise
-      - Sriracha Mayo
-      - Sriracha
+      - "Sriracha [Mayonnaise,Mayo,]"
     price: 0
     standalone: false
     defaults: []
@@ -663,14 +648,13 @@ items:
 
   # Eventually, items like combos will have choices, e.g. choice of drink.
 
+    # ISSUE: Not sure whether speech-to-text will give us 'N', 'en', or 'and'
+    # for 'Surf N Turf'.
   - pid: 6000
     name: Surf N Turf
     registerName: Surf N Turf
     aliases:
-      - Surf N Turf Combo
-      - Surf And Turf Combo
-      - Surf N Turf
-      - Surf And Turf
+      - "Surf [N,And] Turf [Combo,] [Meal,]"
     price: 7.99
     standalone: false
     defaults: [2, 200, 1002]
