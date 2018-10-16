@@ -132,13 +132,13 @@ export class TestCase {
 
         const passed = (this.expected === observed);
 
-        if (!passed) {
-            console.log('Failed:');
-            console.log(`  "${this.input}"`);
-            console.log(`  "${observed}"`);
-            console.log(`  "${this.expected}"`);
-            console.log('');
-        }
+        // if (!passed) {
+        //     console.log('Failed:');
+        //     console.log(`  "${this.input}"`);
+        //     console.log(`  "${observed}"`);
+        //     console.log(`  "${this.expected}"`);
+        //     console.log('');
+        // }
 
         return new Result(this, observed, passed);
     }
