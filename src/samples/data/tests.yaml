@@ -58,4 +58,11 @@
   suites: bugreport
   input: can I have two hamburgers
   expected: "[INTENT:ADD_TO_ORDER] [QUANTITY:2] [ENTITY:HAMBURGER,1]"
+
+- priority: 1
+  suites: bugreport
+  input: Can I get a coffee I'd also like two hamburgers
+  expected: >-
+    [INTENT:ADD_TO_ORDER] [QUANTITY:1] [ENTITY:MEDIUM_COFFEE,1101]
+    [INTENT:ADD_TO_ORDER] [QUANTITY:2] [ENTITY:HAMBURGER,1]
   

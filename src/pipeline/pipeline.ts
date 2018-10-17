@@ -75,17 +75,20 @@ export class Pipeline {
         intentsFile: string,
         attributesFile: string,
         quantifierFile: string,
-        stemmer: StemmerFunction = Tokenizer.defaultStemTerm
+        stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
+        debugMode = false
     ) {
         this.intentRecognizer = CreateIntentRecognizer(
             intentsFile,
             new Set(),
-            stemmer);
+            stemmer,
+            debugMode);
 
         this.quantityRecognizer = CreateQuantityRecognizer(
             quantifierFile,
             new Set(),
-            stemmer);
+            stemmer,
+            debugMode);
 
         this.numberRecognizer = new NumberRecognizer();
 
@@ -97,7 +100,8 @@ export class Pipeline {
         this.attributeRecognizer = CreateAttributeRecognizer(
             attributesFile,
             attributeBadWords,
-            stemmer);
+            stemmer,
+            debugMode);
 
         const entityBadWords = new Set([
             ...this.intentRecognizer.terms(),
@@ -108,7 +112,8 @@ export class Pipeline {
         this.entityRecognizer = CreateEntityRecognizer(
             entityFile,
             entityBadWords,
-            stemmer);
+            stemmer,
+            debugMode);
 
         this.compositeRecognizer = new CompositeRecognizer(
             [
@@ -118,7 +123,7 @@ export class Pipeline {
                 this.quantityRecognizer,
                 this.intentRecognizer
             ],
-            false   // debugMode
+            debugMode
         );
     }
 

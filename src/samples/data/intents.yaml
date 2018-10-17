@@ -107,6 +107,8 @@ items:
 
   # ISSUE: really want patterns here to capture the distinction between
   # "one", "both", "all", etc.
+  # ISSUE: these patterns that start with 'make' collide with the restate
+  # patterns. Perhaps we want to key off of the 'one of them' part.
   - pid: 100010
     name: PREPOSITIONS
     aliases:
@@ -179,7 +181,7 @@ items:
     name: ANSWER_AFFIRMATIVE
     aliases:
       - yeah
-      - yes
+      - "yes"
       - yes please
       - yep
       - yup
@@ -201,7 +203,7 @@ items:
   - pid: 100015
     name: ANSWER_NEGATIVE
     aliases:
-      - no
+      - "no"
       - naw
       - nope
       - definitely not
