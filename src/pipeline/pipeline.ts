@@ -77,11 +77,16 @@ export class Pipeline {
 
         this.numberRecognizer = new NumberRecognizer();
 
+        const attributeBadWords = new Set([
+            ...this.quantityRecognizer.terms(),
+            ...this.numberRecognizer.terms()
+        ]);
+
         this.attributeRecognizer = CreateAttributeRecognizer(
             attributesFile,
-            this.quantityRecognizer.terms());
+            attributeBadWords);
 
-        const badWords = new Set([
+        const entityBadWords = new Set([
             ...this.intentRecognizer.terms(),
             ...this.quantityRecognizer.terms(),
             ...this.attributeRecognizer.terms()
@@ -89,7 +94,7 @@ export class Pipeline {
 
         this.entityRecognizer = CreateEntityRecognizer(
             entityFile, 
-            badWords);
+            entityBadWords);
 
         this.compositeRecognizer = new CompositeRecognizer(
             [

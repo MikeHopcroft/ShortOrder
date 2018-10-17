@@ -4,7 +4,7 @@
   expected: '[ENTITY:HAMBURGER,1] [QUANTITY:1] [QUANTITY:1] [ENTITY:PICKLES,5200]'
 
 
-# This is a case where the stemmer causes confusion between 'fries' and 'fried'.
+# ISSEU: This is a case where the stemmer causes confusion between 'fries' and 'fried'.
 - priority: 1
   suites: general
   input: Uh yeah I'd like a pet chicken fries and a coke
@@ -29,11 +29,11 @@
     [ENTITY:SWISS_CHEESE_SLICE,5102]
 - priority: 1
   suites: general
-  input: I'll have 2 6 piece wings
+  input: I'll have two six piece wings
   expected: '[INTENT:ADD_TO_ORDER] [QUANTITY:2] [ENTITY:6_WINGS,410]'
 - priority: 1
   suites: general
-  input: I'll have 5 dozen wings
+  input: I'll have five dozen wings
   expected: '[INTENT:ADD_TO_ORDER] [QUANTITY:5] [ENTITY:12_WINGS,411]'
 
 - priority: 1

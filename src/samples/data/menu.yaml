@@ -190,22 +190,26 @@ items:
     defaults: []
     options: []
 
+  # NOTE: number of wings must be expressed as 'six', not '6', as this is the
+  # form produced by the speech-to-text algorithm.
   - pid: 410
     name: 6 Wings
     registerName: 6 Wings
     aliases:
-      - "6 [Piece,] [Chicken,] Wings"
+      - "six [Piece,] [Chicken,] Wings"
     price: 5.99
     standalone: true
     defaults: []
     options: []
 
   # NOTE: Default wing quanity is a dozen.
+  # NOTE: number of wings must be expressed as 'twelve', not '12', as this is the
+  # form produced by the speech-to-text algorithm.
   - pid: 411
     name: 12 Wings
     registerName: 12 Wings
     aliases:
-      - "[12,12 Piece,Dozen,] [Chicken,] Wings"
+      - "[twelve,twelve Piece,Dozen,] [Chicken,] Wings"
     price: 5.99
     standalone: true
     defaults: []

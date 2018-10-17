@@ -22,5 +22,5 @@ pipelineDemo(
     './src/samples/data/quantifiers.yaml',
 //    'chicken sandwich with fries'
 //    'chicken sandwich with fries'     // Broken - bug is the "fries" is on badwords list.
-    "I would like a medium a Dakota burger with no onions extra pickles fries and a coke"
+    "I would like a medium a Dakota burger with no onions extra pickles fries and twenty three cokes"
 );

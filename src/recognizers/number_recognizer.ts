@@ -1,62 +1,84 @@
-import {QUANTITY, QuantityToken} from './quantity_recognizer';
+import { QUANTITY } from './quantity_recognizer';
 import { Recognizer, Token, UNKNOWN } from '../tokenizer';
+import { PeekableSequence } from '../utilities';
 import wordsToNumbers from 'words-to-numbers';
 
 export class NumberRecognizer implements Recognizer {
+    lexicon: Set<string> = new Set([
+        'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen',
+        'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety',
+        'hundred', 'thousand', 'million', 'trillion'
+    ]);
+
+    private parseNumberSequence(sequence: PeekableSequence<string>): Token {
+        const terms: string[] = [];
+        while (!sequence.atEOF()) {
+            if (this.lexicon.has(sequence.peek())) {
+                terms.push(sequence.get());
+            }
+            else {
+                break;
+            }
+        }
+
+        if (terms.length === 0) {
+            throw TypeError('parseNumberSequence: expected a number.');
+        }
+
+        const text = terms.join(' ');
+        const value = wordsToNumbers(text);
+        if (typeof (value) !== 'number') {
+            // TODO: consider logging an error and then returning the unknown token.
+            throw TypeError('parseNumberSequence: expected a number.');
+        }
+        return { type: QUANTITY, text, value } as Token;
+    }
+
+    private parseTextSequence(sequence: PeekableSequence<string>): Token {
+        const terms: string[] = [];
+        while (!sequence.atEOF()) {
+            if (!this.lexicon.has(sequence.peek())) {
+                terms.push(sequence.get());
+            }
+            else {
+                break;
+            }
+        }
+
+        if (terms.length === 0) {
+            throw TypeError('parseTextSequence: expected a word.');
+        }
+
+        const text = terms.join(' ');
+        return { type: UNKNOWN, text };
+    }
+
+    private parseSequence(sequence: PeekableSequence<string>): Token[] {
+        const tokens: Token[] = [];
+        while (!sequence.atEOF()) {
+            if (this.lexicon.has(sequence.peek())) {
+                tokens.push(this.parseNumberSequence(sequence));
+            }
+            else {
+                tokens.push(this.parseTextSequence(sequence));
+            }
+        }
+        return tokens;
+    }
+
     apply = (token: Token) => {
         const text = token.text;
-        const withNumbers = wordsToNumbers(text);
-        if (withNumbers == null) {
-            // There are no numbers in this string.
-            // Fall through to next step.
-            return [token];
-        }
-        else if (typeof (withNumbers) === 'number') {
-            // The entire string was converted into a single number.
-            // Just return the token.
-            return [{ type: QUANTITY, text, value: withNumbers }];
-        }
-        else {
-            // The numbers have been inlined into the string.
-            // Need to convert numbers to tokens.
-            const terms = withNumbers.split(' ');
-
-            const tokens: Token[] = [];
-            terms.forEach((term, index) => {
-                const value = Number(term);
-                if (!isNaN(value)) {
-                    // TODO: Verify behavior with negatives, decimal points, etc.
-                    tokens.push({type: QUANTITY, text: term, value} as Token);
-                }
-                else {
-                    // This term was not identified as a numeber. Pass it through as
-                    // an UNKNOWN token.
-                    if (tokens.length === 0 || tokens[tokens.length - 1].type !== UNKNOWN) {
-                        // We can't merge this term into the previous token because
-                        // we're either creating the first token, or we're in a
-                        // situation where the previous token is somethign other
-                        //  than UNKNOWN.
-                        tokens.push({type: UNKNOWN, text: term});
-                    }
-                    else {
-                        // The previous token was UNKNONW, so just append the current
-                        // term's text.
-                        const text = `${tokens[tokens.length - 1].text} ${terms[index]}`;
-                        tokens[tokens.length - 1] = { type: UNKNOWN, text };
-                    }
-                }    
-            });
-            return tokens;
-        }
+        const terms = text.split(' ');
+        return this.parseSequence(new PeekableSequence(terms[Symbol.iterator]()));
     }
 
     terms = () => {
-        // TODO: implement terms here.
-        return new Set<string>();
+        return this.lexicon;
     }
 
-    stemmer = (word:string):string => {
-        // NumberRecognizer does not stem.
+    stemmer = (word: string): string => {
+        // DESIGN NOTE: NumberRecognizer does not stem.
         return word;
-    }   
+    }
 }
