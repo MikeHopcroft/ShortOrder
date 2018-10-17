@@ -23,16 +23,19 @@
     [ENTITY:GRILLED_PETALUMA_CHICKEN_SANDWICH,100]
     [ENTITY:MEDIUM_FRENCH_FRIES,401] [INTENT:CONJUNCTION] [QUANTITY:1]
     [ENTITY:MEDIUM_COKE,1001]
+
 - priority: 1
   suites: general
   input: Can I get a cheeseburger with swiss
   expected: >-
     [INTENT:ADD_TO_ORDER] [QUANTITY:1] [ENTITY:CHEESEBURGER,2] [QUANTITY:1]
     [ENTITY:SWISS_CHEESE_SLICE,5102]
+
 - priority: 1
   suites: general
   input: I'll have two six piece wings
   expected: '[INTENT:ADD_TO_ORDER] [QUANTITY:2] [ENTITY:6_WINGS,410]'
+
 - priority: 1
   suites: general
   input: I'll have five dozen wings
@@ -45,8 +48,14 @@
     [INTENT:ADD_TO_ORDER] [QUANTITY:1] [ENTITY:MEDIUM_COFFEE,1101] [QUANTITY:1]
     [QUANTITY:2] [ENTITY:CREAM,1194] [INTENT:CONJUNCTION]
     [QUANTITY:1] [ENTITY:SUGAR,1190]
+    
 - priority: 1
   suites: general
   input: Large iced tea unsweet
   expected: '[ENTITY:LARGE_UNSWEET_TEA,1072]'
 
+- priority: 1
+  suites: bugreport
+  input: can I have two hamburgers
+  expected: "[INTENT:ADD_TO_ORDER] [QUANTITY:2] [ENTITY:HAMBURGER,1]"
+  
