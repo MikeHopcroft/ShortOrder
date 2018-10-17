@@ -20,7 +20,7 @@ pipelineDemo(
     './src/samples/data/intents.yaml',
     './src/samples/data/attributes.yaml',
     './src/samples/data/quantifiers.yaml',
-//    'chicken sandwich with fries'
+    'chicken sandwich with fries'
 //    'chicken sandwich with fries'     // Broken - bug is the "fries" is on badwords list.
-    "I would like a medium a Dakota burger with no onions extra pickles fries and twenty three cokes"
+//    "I would like a medium a Dakota burger with no onions extra pickles fries and twenty three cokes"
 );

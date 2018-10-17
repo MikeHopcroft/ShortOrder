@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { Recognizer, UNKNOWN } from '../tokenizer';
+import { Recognizer, StemmerFunction, Tokenizer, UNKNOWN } from '../tokenizer';
 import { copyScalar } from '../utilities';
 import { Pipeline, tokenToString } from '../pipeline';
 
@@ -190,13 +190,16 @@ export function runRelevanceTest(
     intentsFile: string,
     attributesFile: string,
     quantifierFile: string,
-    testFile: string
+    testFile: string,
+    stemmer: StemmerFunction = Tokenizer.defaultStemTerm
+
 ): AggregatedResults {
     const pipeline = new Pipeline(
         entityFile,
         intentsFile,
         attributesFile,
-        quantifierFile
+        quantifierFile,
+        stemmer
     );
 
     const suite = RelevanceSuite.fromYamlFilename(testFile);

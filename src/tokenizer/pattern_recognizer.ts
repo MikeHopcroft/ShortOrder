@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { generateAliases, PID, Recognizer, Token, TokenFactory, Tokenizer } from '.';
+import { generateAliases, PID, Recognizer, StemmerFunction, Token, TokenFactory, Tokenizer } from '.';
 import { copyArray, copyScalar } from '../utilities';
 
 export interface Item {
@@ -56,11 +56,17 @@ export class PatternRecognizer<T extends Item> implements Recognizer {
     index: Index<T>;
     tokenizer: Tokenizer;
     tokenFactory: TokenFactory<Token>;
-    stemmer: (word:string) => string;
+    stemmer: (word: string) => string;
 
-    constructor(index: Index<T>, tokenFactory: TokenFactory<Token>, badWords: Set<string>, debugMode = false) {
+    constructor(
+        index: Index<T>,
+        tokenFactory: TokenFactory<Token>,
+        badWords: Set<string>,
+        stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
+        debugMode = false
+    ) {
         this.index = index;
-        this.tokenizer = new Tokenizer(badWords, debugMode);
+        this.tokenizer = new Tokenizer(badWords, stemmer, debugMode);
         this.stemmer = this.tokenizer.stemTerm;
         this.tokenFactory = tokenFactory;
 
@@ -73,7 +79,7 @@ export class PatternRecognizer<T extends Item> implements Recognizer {
                     // console.log(`  ${alias}`);
                     this.tokenizer.addItem(item.pid, alias);
                     aliasCount++;
-                }              
+                }
             });
         });
 
@@ -94,7 +100,7 @@ export class PatternRecognizer<T extends Item> implements Recognizer {
         Object.entries(this.index.items).forEach(([pid, item]) => {
             item.aliases.forEach(alias => {
                 const words = alias.split(' ');
-                words.forEach( word => {
+                words.forEach(word => {
                     terms.add(word);
                 });
             });

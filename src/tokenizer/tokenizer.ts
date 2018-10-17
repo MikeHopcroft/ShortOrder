@@ -3,12 +3,19 @@ import { Edge, findBestPath } from './best_path';
 import { v3 } from 'murmurhash';
 import { Token, TokenFactory, UNKNOWN } from './tokens';
 import { HASH, ID, PID } from './types';
-import { newStemmer, Stemmer } from 'snowball-stemmers';
+import { newStemmer, Stemmer as SnowballStemmer } from 'snowball-stemmers';
+
+export type StemmerFunction = (term: string) => string;
 
 export class Tokenizer {
     debugMode = true;
 
-    stemmer = newStemmer('english');
+    static snowballStemmer = newStemmer('english');
+    
+    // Function that stems a term.
+    stemTerm: StemmerFunction;
+
+    // Murmurhash seed.
     seed = 0;
 
     items: string[] = [];
@@ -26,8 +33,13 @@ export class Tokenizer {
 
     hashedBadWordsSet = new Set<HASH>();
 
-    constructor(badWords: Set<string>, debugMode = false) {
+    constructor(
+        badWords: Set<string>,
+        stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
+        debugMode = false
+    ) {
         this.badWords = badWords;
+        this.stemTerm = stemmer;
         this.badWords.forEach((term) => {
             const hash = this.hashTerm(this.stemTerm(term));
             this.hashedBadWordsSet.add(hash);
@@ -43,8 +55,11 @@ export class Tokenizer {
     ///////////////////////////////////////////////////////////////////////////
 
     // Arrow function to allow use in map.
-    stemTerm = (term: string): string => {
-        return this.stemmer.stem(term.toLowerCase());
+    static defaultStemTerm = (term: string): string => {
+        // if (term.toLowerCase() === 'fries' || term.toLowerCase() === 'fried') {
+        //     return term.toLowerCase();
+        // }
+        return Tokenizer.snowballStemmer.stem(term.toLowerCase());
     }
 
     // Arrow function to allow use in map.

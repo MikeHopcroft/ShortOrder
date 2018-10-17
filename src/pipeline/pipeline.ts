@@ -3,12 +3,12 @@ import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recogni
 import { ENTITY, CreateEntityRecognizer, EntityToken } from '../recognizers';
 import { INTENT, CreateIntentRecognizer, IntentToken } from '../recognizers';
 import { QUANTITY, CreateQuantityRecognizer, NumberRecognizer, QuantityToken } from '../recognizers';
-import { Recognizer, Token, UnknownToken, UNKNOWN } from '../tokenizer';
+import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from '../tokenizer';
 
 
 type AnyToken = UnknownToken | AttributeToken | EntityToken | IntentToken | QuantityToken;
 
-export function tokenToString(t:Token) {
+export function tokenToString(t: Token) {
     const token = t as AnyToken;
     let name: string;
     switch (token.type) {
@@ -32,7 +32,7 @@ export function tokenToString(t:Token) {
     return name;
 }
 
-export function printToken(t:Token) {
+export function printToken(t: Token) {
     const token = t as AnyToken;
     let name: string;
     switch (token.type) {
@@ -56,7 +56,7 @@ export function printToken(t:Token) {
     console.log(`${name}: "${token.text}"`);
 }
 
-export function printTokens(tokens:Token[]) {
+export function printTokens(tokens: Token[]) {
     tokens.forEach(printToken);
     console.log();
 }
@@ -70,10 +70,22 @@ export class Pipeline {
 
     compositeRecognizer: CompositeRecognizer;
 
-    constructor(entityFile: string, intentsFile: string, attributesFile: string, quantifierFile: string) {
-        this.intentRecognizer = CreateIntentRecognizer(intentsFile, new Set());
+    constructor(
+        entityFile: string,
+        intentsFile: string,
+        attributesFile: string,
+        quantifierFile: string,
+        stemmer: StemmerFunction = Tokenizer.defaultStemTerm
+    ) {
+        this.intentRecognizer = CreateIntentRecognizer(
+            intentsFile,
+            new Set(),
+            stemmer);
 
-        this.quantityRecognizer = CreateQuantityRecognizer(quantifierFile, new Set());
+        this.quantityRecognizer = CreateQuantityRecognizer(
+            quantifierFile,
+            new Set(),
+            stemmer);
 
         this.numberRecognizer = new NumberRecognizer();
 
@@ -84,7 +96,8 @@ export class Pipeline {
 
         this.attributeRecognizer = CreateAttributeRecognizer(
             attributesFile,
-            attributeBadWords);
+            attributeBadWords,
+            stemmer);
 
         const entityBadWords = new Set([
             ...this.intentRecognizer.terms(),
@@ -93,8 +106,9 @@ export class Pipeline {
         ]);
 
         this.entityRecognizer = CreateEntityRecognizer(
-            entityFile, 
-            entityBadWords);
+            entityFile,
+            entityBadWords,
+            stemmer);
 
         this.compositeRecognizer = new CompositeRecognizer(
             [
@@ -108,8 +122,8 @@ export class Pipeline {
         );
     }
 
-    processOneQuery(query:string, debugMode = false) {
-        const input = {type: UNKNOWN, text: query};
+    processOneQuery(query: string, debugMode = false) {
+        const input = { type: UNKNOWN, text: query };
         const tokens = this.compositeRecognizer.apply(input);
         return tokens;
     }

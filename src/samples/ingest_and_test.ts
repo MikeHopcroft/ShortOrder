@@ -30,6 +30,7 @@ export function ingestAndTest(menuFile: string, query: string) {
 
 ingestAndTest(
     './src/samples/data/menu.yaml',
-    'Dakota burger with extra swiss cheese'
+    "Uh yeah I'd like a pet chicken fries and a coke"
+    // 'Dakota burger with extra swiss cheese'
 );
 

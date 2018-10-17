@@ -1,5 +1,5 @@
 import { indexYamlFilename, Item, PatternRecognizer } from '../tokenizer';
-import { PID, Token } from '../tokenizer';
+import { PID, StemmerFunction, Token, Tokenizer } from '../tokenizer';
 
 export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
 export type ATTRIBUTE = typeof ATTRIBUTE;
@@ -13,7 +13,11 @@ export interface AttributeToken extends Token {
 
 export type AttributeRecognizer = PatternRecognizer<Item>;
 
-export function CreateAttributeRecognizer(intentFile: string, badWords: Set<string>, debugMode = false): AttributeRecognizer {
+export function CreateAttributeRecognizer(
+    intentFile: string,
+    badWords: Set<string>,
+    stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
+    debugMode = false): AttributeRecognizer {
     const index = indexYamlFilename(intentFile);
 
     const tokenFactory = (id: PID, text: string): AttributeToken => {
@@ -21,5 +25,5 @@ export function CreateAttributeRecognizer(intentFile: string, badWords: Set<stri
         return { type: ATTRIBUTE, id, name, text };
     };
 
-    return new PatternRecognizer(index, tokenFactory, badWords, debugMode);
+    return new PatternRecognizer(index, tokenFactory, badWords, stemmer, debugMode);
 }
