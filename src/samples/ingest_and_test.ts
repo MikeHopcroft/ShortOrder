@@ -28,10 +28,10 @@ export function ingestAndTest(menuFile: string, query: string) {
     run(recognizer, query);
 }
 
-ingestAndTest(
-    './src/samples/data/menu.yaml',
-    'can I have two hamburgers'
-    // "Uh yeah I'd like a pet chicken fries and a coke"
-    // 'Dakota burger with extra swiss cheese'
-);
+// ingestAndTest(
+//     './src/samples/data/menu.yaml',
+//     'can I have two hamburgers'
+//     // "Uh yeah I'd like a pet chicken fries and a coke"
+//     // 'Dakota burger with extra swiss cheese'
+// );
 

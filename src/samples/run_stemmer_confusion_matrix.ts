@@ -17,8 +17,8 @@ export function stemmerConfusionDemo(
     stemmerConfusionMatrix(pipeline.compositeRecognizer, Tokenizer.defaultStemTerm);
 }
 
-stemmerConfusionDemo(
-    './src/samples/data/menu.yaml',
-    './src/samples/data/intents.yaml',
-    './src/samples/data/attributes.yaml',
-    './src/samples/data/quantifiers.yaml');
+// stemmerConfusionDemo(
+//     './src/samples/data/menu.yaml',
+//     './src/samples/data/intents.yaml',
+//     './src/samples/data/attributes.yaml',
+//     './src/samples/data/quantifiers.yaml');

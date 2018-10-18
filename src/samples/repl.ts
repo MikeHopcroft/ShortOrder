@@ -37,6 +37,3 @@ export function runRepl() {
         './src/samples/data/attributes.yaml',
         './src/samples/data/quantifiers.yaml');
 }
-
-runRepl();
-
