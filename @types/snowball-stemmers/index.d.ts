@@ -1,5 +1,7 @@
-export declare class Stemmer {
-    stem(term: string): string;
-}
+declare module 'snowball-stemmers' {
+    export class Stemmer {
+        stem(term: string): string;
+    }
 
-export declare function newStemmer(locale: string): Stemmer;
+    export function newStemmer(locale: string): Stemmer;
+}
