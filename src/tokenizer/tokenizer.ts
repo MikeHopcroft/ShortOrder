@@ -3,7 +3,7 @@ import { Edge, findBestPath } from './best_path';
 import { v3 } from 'murmurhash';
 import { Token, TokenFactory, UNKNOWN } from './tokens';
 import { HASH, ID, PID } from './types';
-import { newStemmer, Stemmer as SnowballStemmer } from '../snowball-stemmers';
+import { newStemmer, Stemmer as SnowballStemmer } from 'snowball-stemmers';
 
 export type StemmerFunction = (term: string) => string;
 
