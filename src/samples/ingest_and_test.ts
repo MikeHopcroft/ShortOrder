@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { CreateEntityRecognizer, ENTITY, EntityRecognizer, EntityToken } from '../recognizers';
 import { UNKNOWN, UnknownToken } from '../tokenizer';
 
@@ -29,7 +30,7 @@ export function ingestAndTest(menuFile: string, query: string) {
 }
 
 ingestAndTest(
-    './src/samples/data/menu.yaml',
+    path.join(__dirname, './data/menu.yaml'),
     'can I have two hamburgers'
     // "Uh yeah I'd like a pet chicken fries and a coke"
     // 'Dakota burger with extra swiss cheese'

@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { Pipeline, printTokens } from '../pipeline';
 
 export function pipelineDemo(
@@ -24,10 +25,10 @@ export function pipelineDemo(
 }
 
 pipelineDemo(
-    './src/samples/data/menu.yaml',
-    './src/samples/data/intents.yaml',
-    './src/samples/data/attributes.yaml',
-    './src/samples/data/quantifiers.yaml',
+    path.join(__dirname, './data/menu.yaml'),
+    path.join(__dirname, './data/intents.yaml'),
+    path.join(__dirname, './data/attributes.yaml'),
+    path.join(__dirname, './data/quantifiers.yaml'),
     'can I have two hamburgers',
     // 'chicken sandwich with fries',
     // 'chicken sandwich with fries' ,    // Broken - bug is the "fries" is on badwords list.

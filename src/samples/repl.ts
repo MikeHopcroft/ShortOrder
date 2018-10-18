@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { Pipeline, printToken, tokenToString } from '../pipeline';
 import * as readlineSync from 'readline-sync';
 
@@ -32,10 +33,10 @@ export function repl(
 
 export function runRepl() {
     repl(
-        './src/samples/data/menu.yaml',
-        './src/samples/data/intents.yaml',
-        './src/samples/data/attributes.yaml',
-        './src/samples/data/quantifiers.yaml');
+        path.join(__dirname, './data/menu.yaml'),
+        path.join(__dirname, './data/intents.yaml'),
+        path.join(__dirname, './data/attributes.yaml'),
+        path.join(__dirname, './data/quantifiers.yaml'));
 }
 
 runRepl();

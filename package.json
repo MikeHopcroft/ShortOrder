@@ -18,25 +18,29 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "posttest": "npm run check",
+    "postcompile": "copyfiles src/samples/data/*.yaml build"
   },
   "devDependencies": {
-    "gts": "^0.8.0",
-    "mocha": "^5.2.0",
-    "typescript": "~2.8.0",
     "@types/chai": "^4.1.6",
     "@types/dotenv": "^4.0.3",
     "@types/js-yaml": "^3.11.2",
     "@types/mocha": "^5.2.5",
     "@types/murmurhash": "0.0.0",
     "@types/node": "^10.11.4",
+    "@types/number-to-words": "^1.2.0",
     "@types/readline-sync": "^1.4.3",
-    "chai": "^4.2.0"
+    "chai": "^4.2.0",
+    "copyfiles": "^2.1.0",
+    "gts": "^0.8.0",
+    "mocha": "^5.2.0",
+    "typescript": "~2.8.0"
   },
   "dependencies": {
     "dotenv": "^6.0.0",
     "js-yaml": "^3.12.0",
     "murmurhash": "0.0.2",
+    "number-to-words": "^1.2.4",
     "readline-sync": "^1.4.9",
     "snowball-stemmers": "^0.6.0",
     "type-safe-json-decoder": "^0.2.0",

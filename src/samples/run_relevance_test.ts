@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { runRelevanceTest, RelevanceSuite } from '../relevance_test';
 import { Tokenizer } from '../tokenizer';
 
@@ -11,9 +12,9 @@ function hackedStemmer(term: string): string {
 }
 
 runRelevanceTest(
-    './src/samples/data/menu.yaml',
-    './src/samples/data/intents.yaml',
-    './src/samples/data/attributes.yaml',
-    './src/samples/data/quantifiers.yaml',
-    './src/samples/data/tests.yaml',
+    path.join(__dirname, './data/menu.yaml'),
+    path.join(__dirname, './data/intents.yaml'),
+    path.join(__dirname, './data/attributes.yaml'),
+    path.join(__dirname, './data/quantifiers.yaml'),
+    path.join(__dirname, './data/tests.yaml'),
     hackedStemmer);
