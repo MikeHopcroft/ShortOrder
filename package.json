@@ -1,6 +1,6 @@
 {
   "name": "short-order",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A natural language conversational agent for ordering and organizing items from a catalog.",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
@@ -19,7 +19,8 @@
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run check",
-    "postcompile": "copyfiles src/samples/data/*.yaml build"
+    "postcompile": "copyfiles src/samples/data/*.yaml build",
+    "postinstall": "npm install file:@types/snowball-stemmers"
   },
   "devDependencies": {
     "@types/chai": "^4.1.6",
@@ -37,7 +38,6 @@
     "typescript": "~2.8.0"
   },
   "dependencies": {
-    "@types/snowball-stemmers": "file:@types/snowball-stemmers",
     "dotenv": "^6.0.0",
     "js-yaml": "^3.12.0",
     "murmurhash": "0.0.2",
