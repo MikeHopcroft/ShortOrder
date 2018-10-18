@@ -11,6 +11,10 @@ function checkEnv(key:string) {
         return value;
     }
     else {
-        throw new Error(`Environment variable ${key} undefined.`);
+        // TODO: consider a better solution here. Cannot throw because this
+        // code runs when the module is imported.
+        console.log(`Environment variable ${key} undefined.`);
+        return value;
+//        throw new Error(`Environment variable ${key} undefined.`);
     }
 }
