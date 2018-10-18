@@ -1,5 +1,5 @@
 export { pipelineDemo } from './pipeline_demo';
-export { ingestAndTest } from './ingest_and_test';
-export { } from './run_relevance_test';
-export { repl, runRepl } from './repl';
+export { relevanceDemo } from './relevance_demo';
+export { stemmerConfusionDemo } from './stemmer_confusion_demo';
+export { repl, replDemo } from './repl_demo';
 

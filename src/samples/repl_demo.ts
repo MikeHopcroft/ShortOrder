@@ -31,7 +31,7 @@ export function repl(
     }
 }
 
-export function runRepl() {
+export function replDemo() {
     repl(
         path.join(__dirname, './data/menu.yaml'),
         path.join(__dirname, './data/intents.yaml'),
@@ -39,5 +39,5 @@ export function runRepl() {
         path.join(__dirname, './data/quantifiers.yaml'));
 }
 
-runRepl();
+// replDemo();
 

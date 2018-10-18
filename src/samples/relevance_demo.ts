@@ -11,10 +11,12 @@ function hackedStemmer(term: string): string {
     return Tokenizer.defaultStemTerm(lowercase);
 }
 
-runRelevanceTest(
-    path.join(__dirname, './data/menu.yaml'),
-    path.join(__dirname, './data/intents.yaml'),
-    path.join(__dirname, './data/attributes.yaml'),
-    path.join(__dirname, './data/quantifiers.yaml'),
-    path.join(__dirname, './data/tests.yaml'),
-    hackedStemmer);
+export function relevanceDemo() {
+    runRelevanceTest(
+        path.join(__dirname, './data/menu.yaml'),
+        path.join(__dirname, './data/intents.yaml'),
+        path.join(__dirname, './data/attributes.yaml'),
+        path.join(__dirname, './data/quantifiers.yaml'),
+        path.join(__dirname, './data/tests.yaml'),
+        hackedStemmer);
+}
