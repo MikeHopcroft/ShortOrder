@@ -3,6 +3,8 @@ node_modules/
 junk*
 .env
 *.tgz
+.DS_Store
+
 
 
 
