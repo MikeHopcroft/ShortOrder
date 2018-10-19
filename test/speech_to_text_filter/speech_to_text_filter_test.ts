@@ -28,6 +28,10 @@ describe('speechToTextFiler', () => {
         assert.equal(speechToTextFilter('a 23 b 4 c'), "a twenty three b four c");
     });
 
+    it('should convert Arabic numerals to text without commas.', () => {
+        assert.equal(speechToTextFilter('a 1050 b'), "a one thousand fifty b");
+    });
+
     it('should replace certain abbreviations and colloquialisms.', () => {
         assert.equal(speechToTextFilter('okay dr 1/2 1/4 oz lb'), "ok doctor half quarter ounce pound");
     });

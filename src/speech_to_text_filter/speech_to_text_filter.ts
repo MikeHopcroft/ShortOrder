@@ -29,7 +29,10 @@ export function speechToTextFilter(input: string): string {
 
     const e = words.map( word => {
         if (/^\d+$/.test(word)) {
-            return numberToWords.toWords(Number(word)).replace('-', ' ');
+            const x = numberToWords.toWords(Number(word));
+            const y = x.replace('-', ' ');
+            const z = y.replace(',', '');
+            return z;
         }
         else {
             return word;
