@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { Pipeline, printToken, tokenToString } from '../pipeline';
 import * as readlineSync from 'readline-sync';
+import {speechToTextFilter} from '../../src/speech_to_text_filter';
 
 export function repl(
     menuFile: string,
@@ -24,7 +25,17 @@ export function repl(
 
         console.log();
 
-        const tokens = pipeline.processOneQuery(line);
+        const text = speechToTextFilter(line);
+        if (text !== line) {
+            console.log('********************************************************');
+            console.log('PLEASE NOTE: your input has been modified to be more');
+            console.log('like the output of a speech-to-text system.');
+            console.log(`your input: "${line}"`);
+            console.log(`modified:   "${text}"`);
+            console.log('********************************************************');
+        }
+
+        const tokens = pipeline.processOneQuery(text);
         tokens.forEach(printToken);
 
         console.log();

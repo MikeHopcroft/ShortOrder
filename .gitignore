@@ -2,5 +2,7 @@ build/
 node_modules/
 junk*
 .env
+*.tgz
+
 
 
