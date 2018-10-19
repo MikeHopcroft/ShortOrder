@@ -1,16 +1,15 @@
 {
   "name": "short-order",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "A natural language conversational agent for ordering and organizing items from a catalog.",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
-    "build/src",
-    "@types/"
+    "build/src"
   ],
   "author": "Michael Hopcroft",
   "license": "MIT",
-  "keywords": [],
+  "keywords": [ "nlp" ],
   "scripts": {
     "test": "mocha",
     "check": "gts check",
