@@ -22,13 +22,26 @@ function* generateAliasesHelper(prefix:string, options:string[][]):IterableItera
 }
 
 export function* generateAliases(query:string) {
-    const m = /(\[[^\]]*\])|([^\[]*)/g;
+    const m = /(\[[^\]]*\])|(\([^\)]*\))|([^\[^\()]*)/g;
 
-    const matches = query.match(m);
+    // Remove leading, trailing, and consecutive spaces.
+    const query2 = query.replace(/\s+/g,' ').trim();
+
+    // Throw on comma before ] and ).
+    if (query2.search(/(,\])|(,\))/g) !== -1) {
+        throw TypeError(`generateAliases: illegal trailing comma in "${query}".`);
+    }
+
+    const matches = query2.match(m);
 
     if (matches !== null) {
         const options = matches.map(match => {
             if (match.startsWith('[')) {
+                // Selects an option or leaves blank
+                return [...match.slice(1, -1).split(','), ''];
+            }
+            else if (match.startsWith('(')) {
+                // Must select from one of the options
                 return match.slice(1, -1).split(',');
             }
             else {
