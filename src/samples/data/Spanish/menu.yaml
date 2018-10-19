@@ -26,7 +26,7 @@ items:
     name: Hamburguesa Gran Manzana
     registerName: Big Apple
     aliases:
-      - "Big Apple [Burger,]"
+      - "Big Apple [Burger]"
     price: 5.99
     standalone: true
     defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
@@ -36,7 +36,7 @@ items:
     name: Hamburguesa Dakota
     registerName: Dakota
     aliases:
-      - "Dakota [Burger,]"
+      - "Dakota [Burger]"
     price: 5.99
     standalone: true
     defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
@@ -64,12 +64,10 @@ items:
   - pid: 100
     name: Sandwich de Pollo Grillado Petaluma
     registerName: Pet Chk Grilled
-    aliases: 
-      - "Petaluma [Chicken,] [Sandwich,] [Grilled,]"
-      - "[Grilled,] Petaluma [Chicken,] [Sandwich,]"
-      - "Pet Chicken [Sandwich,] [Grilled,]"
-      - "[Grilled,] Pet Chicken [Sandwich,]"
-      - "Chicken Sandwich [Grilled,]"
+    aliases:
+      - "[Sandwich] [de] [Pollo] [Grillado] Petaluma"
+      - "[Sandwich] [de] Pollo Grillado"
+
     price: 3.99
     standalone: true
     defaults: [5001, 190, 5200, 5202, 5203, 5207]
@@ -78,11 +76,9 @@ items:
   - pid: 101
     name: Sandwich de Pollo Frito Petaluma
     registerName: Pet Chk Fried
-    aliases: 
-      - "Petaluma [Chicken,] [Sandwich,] Fried"
-      - "Fried Petaluma [Chicken,] [Sandwich,]"
-      - "Pet Chicken [Sandwich,] Fried"
-      - "Fried [Pet,] Chicken [Sandwich,]"
+    aliases:
+      - "[Sandwich] [de] [Pollo] Frito Petaluma"
+      - "[Sandwich] [de] Pollo Frito [Petaluma]"
     price: 3.99
     standalone: true
     defaults: [5001, 191, 5200, 5202, 5203, 5208]
@@ -100,6 +96,7 @@ items:
 
   # NOTE: cannot include alias "Fried" here because, when stemmed, it collides
   # with "Fries".
+  # NOTE: Pollo Frito collides with an alias for "Sandwich de Pollo Frito Petaluma"
   - pid: 191
     name: Pechuga de Pollo Frito
     registerName: Fried Chk
@@ -117,7 +114,7 @@ items:
     name: Down East Fish Sandwich
     registerName: Down East Fish
     aliases:
-      - "Down East [Fish,] [Sandwich,]"
+      - "Down East [Fish] [Sandwich]"
       - Down Easter
     price: 3.99
     standalone: true
@@ -128,7 +125,7 @@ items:
     name: Northwest Sockeye Sandwich
     registerName: NW Sockey
     aliases:
-      - "[Northwest,] Sockeye [Sandwich,]"
+      - "[Northwest] Sockeye [Sandwich]"
     price: 4.99
     standalone: true
     defaults: [5002, 291, 5201, 5202, 5203, 5207]
@@ -149,7 +146,7 @@ items:
     name: Grilled Sockeye Fillet
     registerName: Sockey
     aliases:
-      - "Grilled Sockeye [Fillet,]"
+      - "Grilled Sockeye [Fillet]"
       - Sockeye Fillet
     price: 0
     standalone: false
@@ -175,7 +172,7 @@ items:
     name: Papas Fritas medianas
     registerName: Med Fries
     aliases:
-      - Papas [Fritas,] Medianas
+      - Papas [Fritas] [Medianas]
     price: 1.29
     standalone: true
     defaults: []
@@ -185,7 +182,7 @@ items:
     name: Papas Fritas Grandes
     registerName: Lg Fries
     aliases:
-      - "Papas [Fritas,] Grandes"
+      - "Papas [Fritas] Grandes"
     price: 1.79
     standalone: true
     defaults: []
@@ -197,9 +194,9 @@ items:
     name: 6 Alitas
     registerName: 6 Wings
     aliases:
-      - "Seis [Piezas,] [Pollo,] Alitas"
-      - "Seis [Alitas,] Alas"
-      - "[Alas, Alitas] de Seis"
+      - "Seis [Piezas] [Pollo] Alitas"
+      - "Seis [Alitas] Alas"
+      - "(Alas, Alitas) de Seis"
     price: 5.99
     standalone: true
     defaults: []
@@ -212,9 +209,9 @@ items:
     name: 12 Alitas
     registerName: 12 Wings
     aliases:
-      - "Doce [Piezas,] [Pollo,] Alitas"
-      - "Doce [Alitas,] Alas"
-      - "[Alas, Alitas] de Doce"
+      - "Doce [Piezas] [Pollo] Alitas"
+      - "Doce [Alitas] Alas"
+      - "(Alas, Alitas) de Doce"
     price: 5.99
     standalone: true
     defaults: []
@@ -228,7 +225,7 @@ items:
     name: Coca Cola Pequeña
     registerName: Sm Coke
     aliases:
-      - "[Coke,Coca Cola,Cola] Pequeña"
+      - "(Coke,Coca Cola,Cola) Pequeña"
     price: 0
     standalone: true
     defaults: [1090]
@@ -238,8 +235,8 @@ items:
     name: Coca Cola Mediana
     registerName: Med Coke
     aliases:
-      -  "[Coke,Coca Cola,Cola] Mediana"
-      -  "[Coke,Coca Cola,Cola] Regular"
+      -  "(Coke,Coca Cola,Cola) [Mediana]"
+      -  "(Coke,Coca Cola,Cola) [Regular]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -249,7 +246,7 @@ items:
     name: Coca Cola Grande
     registerName: Lg Coke
     aliases:
-      - "[Coke,Coca Cola,Cola] Grande"
+      - "(Coke,Coca Cola,Cola) Grande"
     price: 0
     standalone: true
     defaults: [1090]
@@ -259,7 +256,7 @@ items:
     name: Coca Cola Pequeña Diet
     registerName: Sm Diet Coke
     aliases:
-      - "[Coke,Coca Cola,Cola] Pequeña Diet"
+      - "(Coke,Coca Cola,Cola) [Pequeña] Diet"
     price: 0
     standalone: true
     defaults: [1090]
@@ -269,10 +266,10 @@ items:
     name: Coca cola
     registerName: Med Diet Coke
     aliases:
-      - "[Coke,Coca Cola,Cola] Mediana Diet"
-      - "[Coke,Coca Cola,Cola] Diet Mediana"
-      - "[Coke,Coca Cola,Cola] Mediana Light"
-      - "[Coke,Coca Cola,Cola] Light Mediana"
+      - "(Coke,Coca Cola,Cola) [Mediana] Diet"
+      - "(Coke,Coca Cola,Cola) Diet [Mediana]"
+      - "(Coke,Coca Cola,Cola) [Mediana] Light"
+      - "(Coke,Coca Cola,Cola) Light [Mediana]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -282,10 +279,10 @@ items:
     name: Coca Cola Diet Grande
     registerName: Lg Diet Coke
     aliases:
-      - "[Coke,Coca Cola,Cola] Grande Diet"
-      - "[Coke,Coca Cola,Cola] Diet Grande"
-      - "[Coke,Coca Cola,Cola] Grande Light"
-      - "[Coke,Coca Cola,Cola] Light Grande"
+      - "(Coke,Coca Cola,Cola) Grande Diet"
+      - "(Coke,Coca Cola,Cola) Diet Grande"
+      - "(Coke,Coca Cola,Cola) Grande Light"
+      - "(Coke,Coca Cola,Cola) Light Grande"
     price: 0
     standalone: true
     defaults: [1090]
@@ -293,15 +290,12 @@ items:
 
   # Note, one might ask for a "Large Tea, no sugar."
   # Currently, this would be handled as a modification,
-  #  rather than a separate product.
+  # rather than a separate product.
   - pid: 1070
     name: Te Sin Edulcorar Pequeño
     registerName: Sm Unsweet Tea
     aliases:
-      - "Te pequeño sin edulcorar"
-      - "Te pequeño sin edulcorantes"
-      - "Te pequeño sin azucar"
-      - "Te pequeño sin azucares"
+      - "Te pequeño sin (edulcorar,edulcorantes,azucar,azucares)"
     price: 0
     standalone: true
     defaults: [1090]
@@ -311,10 +305,7 @@ items:
     name: Te Sin Edulcorar Mediano
     registerName: Med Unsweet Tea
     aliases:
-      - "Te mediano sin edulcorar"
-      - "Te mediano sin edulcorantes"
-      - "Te mediano sin azucar"
-      - "Te mediano sin azucares"
+      - "Te [mediano] sin (edulcorar,edulcorantes,azucar,azucares)"
     price: 0
     standalone: true
     defaults: [1090]
@@ -324,10 +315,7 @@ items:
     name: Te Sin Edulcorar Grande
     registerName: Lg Unsweet Tea
     aliases:
-      - "Te Grande sin edulcorar"
-      - "Te Grande sin edulcorantes"
-      - "Te Grande sin azucar"
-      - "Te Grande sin azucares"
+      - "Te Grande sin (edulcorar,edulcorantes,azucar,azucares)"
     price: 0
     standalone: true
     defaults: [1090]
@@ -337,7 +325,7 @@ items:
     name: Te Dulce Pequeño
     registerName: Sm Sweet Tea
     aliases:
-      - "Te [Dulce,Helado] Pequeño"
+      - "Te (Dulce,Helado) Pequeño"
     price: 0
     standalone: true
     defaults: [1090]
@@ -347,7 +335,7 @@ items:
     name: Te Dulce Mediano
     registerName: Med Sweet Tea
     aliases:
-       - "Te [Dulce,Helado] Mediano"
+       - "Te (Dulce,Helado) [Mediano]"
     price: 0
     standalone: true
     defaults: [1090]
@@ -357,7 +345,7 @@ items:
     name: Te Dulce Grande
     registerName: Lg Sweet Tea
     aliases:
-       - "Te [Dulce,Helado] Grande"
+       - "Te (Dulce,Helado) Grande"
     price: 0
     standalone: true
     defaults: [1090]
@@ -383,9 +371,8 @@ items:
     name: Café Pequeño
     registerName: Sm Coffee
     aliases:
-      - Café pequeño
-      - Cafe pequeño
-      - Café corto
+      - "(Café,Cafe) pequeño"
+      - "(Café,Cafe) corto"
     price: 0
     standalone: true
     defaults: []
@@ -395,7 +382,7 @@ items:
     name: Café Mediano
     registerName: Med Coffee
     aliases:
-      - "Café Mediano"
+      - "(Café,Cafe) [Mediano]"
     price: 0
     standalone: true
     defaults: []
@@ -405,8 +392,7 @@ items:
     name: Café Largo
     registerName: Lg Coffee
     aliases:
-      - Café Largo
-      - Cafe Largo
+      - "(Café,Cafe) Largo"
     price: 0
     standalone: true
     defaults: []
@@ -483,7 +469,7 @@ items:
     registerName: 1/2 + 1/2
     aliases:
       - Mitad y Mitad
-      - [Café, Cafe,] Cortado
+      - "[Café, Cafe] Cortado"  # ISSUE: is this correct?
     price: 0
     standalone: false
     defaults: []
@@ -536,7 +522,7 @@ items:
     name: Feta de Queso Americano
     registerName: American
     aliases:
-      - Queso Americano
+      - "[Queso] Americano"
       - Queso
     price: 0
     standalone: false
@@ -547,8 +533,7 @@ items:
     name: Feta de Queso Cheddar
     registerName: Cheddar
     aliases:
-      - Queso Cheddar
-      - Cheddar
+      - "[Queso] Cheddar"
     price: 0
     standalone: false
     defaults: []
@@ -558,7 +543,7 @@ items:
     name: Feta de Queso Suizo
     registerName: Swiss
     aliases:
-      - Queso Suizo
+      - "[Queso] Suizo"
     price: 0
     standalone: false
     defaults: []
@@ -568,7 +553,7 @@ items:
     name: Feta de Queso Monterey Jack
     registerName: Jack
     aliases:
-      - Queso Monterey Jack
+      - "[Queso] [Monterey] Jack"
     price: 0
     standalone: false
     defaults: []
@@ -588,7 +573,7 @@ items:
     name: Fetas de Cebolla Morada
     registerName: Red Onion
     aliases:
-      - "Cebolla [Morada, ]"
+      - "Cebolla [Morada]"    # ISSUE: is this pattern correct?
     price: 0
     standalone: false
     defaults: []
@@ -629,7 +614,7 @@ items:
     name: Mostaza
     registerName: Mustard
     aliases:
-      - "Mostaza"
+      - Mostaza
     price: 0
     standalone: false
     defaults: []
@@ -639,7 +624,7 @@ items:
     name: Mostaza de Dijon
     registerName: Dijon
     aliases:
-      - "Mostaza [Dijon, Picante]"
+      - "Mostaza (Dijon, Picante)"
       - Dijon
     price: 0
     standalone: false
@@ -650,7 +635,7 @@ items:
     name: Salsa Tártara
     registerName: Tartar
     aliases:
-      - Salsa Tártara
+      - "[Salsa] Tártara"
     price: 0
     standalone: false
     defaults: []
@@ -671,7 +656,8 @@ items:
     name: Mayonesa con Sriracha
     registerName: Sriracha Mayo
     aliases:
-      - "Mayonesa con Sriracha"
+      - Mayonesa con Sriracha
+      - Sriracha
     price: 0
     standalone: false
     defaults: []
@@ -688,7 +674,7 @@ items:
     name: Surf N Turf
     registerName: Surf N Turf
     aliases:
-      - "Surf [N,And] Turf [Combo,] [Meal,]"
+      - "Surf [N,And] Turf [Combo] [Meal]"
     price: 7.99
     standalone: false
     defaults: [2, 200, 1002]
