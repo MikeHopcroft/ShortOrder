@@ -1,4 +1,4 @@
-# ShortOrder
+# ShortOrder [![Build Status](https://travis-ci.com/MikeHopcroft/ShortOrder.svg?branch=master)](https://travis-ci.com/MikeHopcroft/ShortOrder)
 
 ShortOrder is an exerimental natural language conversational agent intended for domains with a fixed vocabulary of entities and a small number of intents. Uses might include ordering food from a restaurant or organizing your song collection.
 
