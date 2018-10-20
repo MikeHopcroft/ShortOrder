@@ -18,7 +18,6 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run check",
     "postcompile": "copyfiles src/samples/data/**/*.yaml build"
   },
   "devDependencies": {
