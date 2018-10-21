@@ -9,7 +9,9 @@
   ],
   "author": "Michael Hopcroft",
   "license": "MIT",
-  "keywords": [ "nlp" ],
+  "keywords": [
+    "nlp"
+  ],
   "scripts": {
     "test": "mocha",
     "check": "gts check",
@@ -37,7 +39,6 @@
   },
   "dependencies": {
     "@types/snowball-stemmers": "^0.6.0",
-    "dotenv": "^6.0.0",
     "js-yaml": "^3.12.0",
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
