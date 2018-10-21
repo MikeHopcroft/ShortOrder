@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { generateAliases, PID, Recognizer, StemmerFunction, Token, TokenFactory, Tokenizer } from '.';
 import { copyArray, copyScalar } from '../utilities';
@@ -31,9 +30,9 @@ function ItemFromYamlItem(item: any): Item {
     };
 }
 
-export function indexYamlFilename(filename: string): Index<Item> {
+export function indexFromYamlString(yamlText: string): Index<Item> {
     // tslint:disable-next-line:no-any
-    const yamlRoot: any = yaml.safeLoad(fs.readFileSync(filename, 'utf8'));
+    const yamlRoot: any = yaml.safeLoad(yamlText);
 
     if (typeof (yamlRoot) !== 'object') {
         throw TypeError('Inent: expected a top-level object with items array.');
@@ -85,7 +84,6 @@ export class PatternRecognizer<T extends Item> implements Recognizer {
 
         // TODO: print name of tokenizer here?
         console.log(`${Object.keys(this.index.items).length} items contributed ${aliasCount} aliases.`);
-        console.log();
     }
 
     apply = (token: Token) => {

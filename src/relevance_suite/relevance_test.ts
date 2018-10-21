@@ -1,8 +1,8 @@
-import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { Recognizer, StemmerFunction, Tokenizer, UNKNOWN } from '../tokenizer';
-import { copyScalar } from '../utilities';
-import { Pipeline, tokenToString } from '../pipeline';
+import { Recognizer, Token, UNKNOWN } from '../../src/tokenizer';
+import { copyScalar } from '../../src/utilities';
+
+export type TokenToString = (token: Token) => string;
 
 export class Result {
     test: TestCase;
@@ -61,7 +61,14 @@ export class AggregatedResults {
     }
 
     print() {
-        console.log('Failing tests:');
+        if (this.results.find( result => !result.passed)) {
+            console.log('Failing tests:');
+        }
+        else {
+            console.log('All tests passed.');
+            console.log();
+        }
+
 
         this.results.forEach((result => {
             if (!result.passed) {
@@ -124,21 +131,13 @@ export class TestCase {
         this.expected = expected;
     }
 
-    run(recognizer: Recognizer) {
+    run(recognizer: Recognizer, tokenToString: TokenToString) {
         const input = { type: UNKNOWN, text: this.input };
         const tokens = recognizer.apply(input);
 
         const observed = tokens.map(tokenToString).join(' ');
 
         const passed = (this.expected === observed);
-
-        // if (!passed) {
-        //     console.log('Failed:');
-        //     console.log(`  "${this.input}"`);
-        //     console.log(`  "${observed}"`);
-        //     console.log(`  "${this.expected}"`);
-        //     console.log('');
-        // }
 
         return new Result(this, observed, passed);
     }
@@ -147,9 +146,9 @@ export class TestCase {
 export class RelevanceSuite {
     private tests: TestCase[] = [];
 
-    static fromYamlFilename(filename: string) {
+    static fromYamlString(yamlText: string) {
         // tslint:disable-next-line:no-any
-        const yamlTests = yaml.safeLoad(fs.readFileSync(filename, 'utf8'));
+        const yamlTests = yaml.safeLoad(yamlText);
 
         if (!Array.isArray(yamlTests)) {
             throw TypeError('RelevanceTest: expected an array of tests.');
@@ -172,11 +171,11 @@ export class RelevanceSuite {
         this.tests = tests;
     }
 
-    run(recognizer: Recognizer) {
+    run(recognizer: Recognizer, tokenToString: TokenToString) {
         const aggregator = new AggregatedResults();
 
         this.tests.forEach((test) => {
-            aggregator.recordResult(test.run(recognizer));
+            aggregator.recordResult(test.run(recognizer, tokenToString));
         });
 
         aggregator.print();
@@ -185,23 +184,3 @@ export class RelevanceSuite {
     }
 }
 
-export function runRelevanceTest(
-    entityFile: string,
-    intentsFile: string,
-    attributesFile: string,
-    quantifierFile: string,
-    testFile: string,
-    stemmer: StemmerFunction = Tokenizer.defaultStemTerm
-
-): AggregatedResults {
-    const pipeline = new Pipeline(
-        entityFile,
-        intentsFile,
-        attributesFile,
-        quantifierFile,
-        stemmer
-    );
-
-    const suite = RelevanceSuite.fromYamlFilename(testFile);
-    return suite.run(pipeline.compositeRecognizer);
-}

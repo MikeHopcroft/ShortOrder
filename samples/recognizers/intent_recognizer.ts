@@ -1,5 +1,6 @@
-import { indexYamlFilename, Item, PatternRecognizer } from '../tokenizer';
-import { PID, StemmerFunction, Token, Tokenizer } from '../tokenizer';
+import * as fs from 'fs';
+import { indexFromYamlString, Item, PatternRecognizer } from '../../src/tokenizer';
+import { PID, StemmerFunction, Token, Tokenizer } from '../../src/tokenizer';
 
 export const INTENT: unique symbol = Symbol('INTENT');
 export type INTENT = typeof INTENT;
@@ -19,7 +20,7 @@ export function CreateIntentRecognizer(
     stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
     debugMode = false
 ): IntentRecognizer {
-    const index = indexYamlFilename(intentFile);
+    const index = indexFromYamlString(fs.readFileSync(intentFile, 'utf8'));
 
     const tokenFactory = (id: PID, text: string): IntentToken => {
         const name = index.items[id].name;

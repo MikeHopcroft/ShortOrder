@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { Pipeline, printTokens } from '../pipeline';
-import { stemmerConfusionMatrix } from '../stemmer_confusion_matrix';
-import { Tokenizer } from '../tokenizer';
+import { Pipeline, printTokens } from './pipeline';
+import { stemmerConfusionMatrix } from '../src/stemmer_confusion_matrix';
+import { Tokenizer } from '../src/tokenizer';
 
 export function stemmerConfusionDemo() {
     const pipeline = new Pipeline(
@@ -13,5 +13,3 @@ export function stemmerConfusionDemo() {
 
     stemmerConfusionMatrix(pipeline.compositeRecognizer, Tokenizer.defaultStemTerm);
 }
-
-// stemmerConfusionDemo();

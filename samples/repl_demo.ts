@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { Pipeline, printToken, tokenToString } from '../pipeline';
+import { Pipeline, printToken, tokenToString } from './pipeline';
 import * as readlineSync from 'readline-sync';
-import {speechToTextFilter} from '../../src/speech_to_text_filter';
+import {speechToTextFilter} from './speech_to_text_filter';
 
 export function repl(
     menuFile: string,

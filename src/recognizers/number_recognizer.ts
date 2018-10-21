@@ -1,7 +1,15 @@
-import { QUANTITY } from './quantity_recognizer';
 import { Recognizer, Token, UNKNOWN } from '../tokenizer';
 import { PeekableSequence } from '../utilities';
 import wordsToNumbers from 'words-to-numbers';
+
+export const QUANTITY: unique symbol = Symbol('QUANTITY');
+export type QUANTITY = typeof QUANTITY;
+
+export interface QuantityToken extends Token {
+    type: QUANTITY;
+    text: string;
+    value: number;
+}
 
 export class NumberRecognizer implements Recognizer {
     lexicon: Set<string> = new Set([

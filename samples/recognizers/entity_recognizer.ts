@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from '../menu';
-import { PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from '../tokenizer';
+import { PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from '../../src/tokenizer';
 
 export const ENTITY: unique symbol = Symbol('ENTITY');
 export type ENTITY = typeof ENTITY;

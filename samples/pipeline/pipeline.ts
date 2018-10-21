@@ -1,9 +1,10 @@
-import { CompositeRecognizer } from '../recognizers';
+import { CompositeRecognizer, NumberRecognizer, QUANTITY, QuantityToken } from '../../src/recognizers';
+import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from '../../src/tokenizer';
+
 import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
 import { ENTITY, CreateEntityRecognizer, EntityToken } from '../recognizers';
 import { INTENT, CreateIntentRecognizer, IntentToken } from '../recognizers';
-import { QUANTITY, CreateQuantityRecognizer, NumberRecognizer, QuantityToken } from '../recognizers';
-import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from '../tokenizer';
+import { CreateQuantityRecognizer } from '../recognizers';
 
 
 type AnyToken = UnknownToken | AttributeToken | EntityToken | IntentToken | QuantityToken;

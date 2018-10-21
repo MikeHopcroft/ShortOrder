@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import 'mocha';
 
-import {speechToTextFilter} from '../../src/speech_to_text_filter';
+import {speechToTextFilter} from '../../samples/speech_to_text_filter';
 
 describe('speechToTextFiler', () => {
     it('should convert & to text.', () => {
