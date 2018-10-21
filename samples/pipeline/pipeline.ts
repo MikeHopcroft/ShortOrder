@@ -1,10 +1,11 @@
-import { CompositeRecognizer, NumberRecognizer, QUANTITY, QuantityToken } from '../../src/recognizers';
+import { CompositeRecognizer, NumberRecognizer } from '../../src/recognizers';
 import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from '../../src/tokenizer';
 
 import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
 import { ENTITY, CreateEntityRecognizer, EntityToken } from '../recognizers';
 import { INTENT, CreateIntentRecognizer, IntentToken } from '../recognizers';
-import { CreateQuantityRecognizer } from '../recognizers';
+import { QUANTITY, CreateQuantityRecognizer, QuantityToken } from '../recognizers';
+import { CreateNumberRecognizer } from '../recognizers';
 
 
 type AnyToken = UnknownToken | AttributeToken | EntityToken | IntentToken | QuantityToken;
@@ -91,7 +92,7 @@ export class Pipeline {
             stemmer,
             debugMode);
 
-        this.numberRecognizer = new NumberRecognizer();
+        this.numberRecognizer = CreateNumberRecognizer();
 
         const attributeBadWords = new Set([
             ...this.quantityRecognizer.terms(),

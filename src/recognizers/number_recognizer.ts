@@ -1,28 +1,25 @@
-import { Recognizer, Token, UNKNOWN } from '../tokenizer';
+import { Recognizer, Token, TokenFactory, UNKNOWN } from '../tokenizer';
 import { PeekableSequence } from '../utilities';
 import wordsToNumbers from 'words-to-numbers';
 
-export const QUANTITY: unique symbol = Symbol('QUANTITY');
-export type QUANTITY = typeof QUANTITY;
-
-export interface QuantityToken extends Token {
-    type: QUANTITY;
-    text: string;
-    value: number;
-}
-
 export class NumberRecognizer implements Recognizer {
-    lexicon: Set<string> = new Set([
+    static lexicon: Set<string> = new Set([
         'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
         'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen',
         'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety',
         'hundred', 'thousand', 'million', 'trillion'
     ]);
 
+    tokenFactory: TokenFactory<Token>;
+
+    constructor(tokenFactory: TokenFactory<Token>) {
+        this.tokenFactory = tokenFactory;
+    }
+
     private parseNumberSequence(sequence: PeekableSequence<string>): Token {
         const terms: string[] = [];
         while (!sequence.atEOF()) {
-            if (this.lexicon.has(sequence.peek())) {
+            if (NumberRecognizer.lexicon.has(sequence.peek())) {
                 terms.push(sequence.get());
             }
             else {
@@ -40,13 +37,13 @@ export class NumberRecognizer implements Recognizer {
             // TODO: consider logging an error and then returning the unknown token.
             throw TypeError('parseNumberSequence: expected a number.');
         }
-        return { type: QUANTITY, text, value } as Token;
+        return this.tokenFactory(value, text);
     }
 
     private parseTextSequence(sequence: PeekableSequence<string>): Token {
         const terms: string[] = [];
         while (!sequence.atEOF()) {
-            if (!this.lexicon.has(sequence.peek())) {
+            if (!NumberRecognizer.lexicon.has(sequence.peek())) {
                 terms.push(sequence.get());
             }
             else {
@@ -65,7 +62,7 @@ export class NumberRecognizer implements Recognizer {
     private parseSequence(sequence: PeekableSequence<string>): Token[] {
         const tokens: Token[] = [];
         while (!sequence.atEOF()) {
-            if (this.lexicon.has(sequence.peek())) {
+            if (NumberRecognizer.lexicon.has(sequence.peek())) {
                 tokens.push(this.parseNumberSequence(sequence));
             }
             else {
@@ -82,7 +79,7 @@ export class NumberRecognizer implements Recognizer {
     }
 
     terms = () => {
-        return this.lexicon;
+        return NumberRecognizer.lexicon;
     }
 
     stemmer = (word: string): string => {

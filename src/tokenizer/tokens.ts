@@ -13,5 +13,4 @@ export interface UnknownToken extends Token {
     text: string;
 }
 
-export type TokenFactory<T> = (pid:PID, text:string) => T;
-
+export type TokenFactory<T> = (pid: PID, text: string) => T;
