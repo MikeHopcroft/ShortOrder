@@ -60,7 +60,7 @@ export class AggregatedResults {
         }
     }
 
-    print() {
+    print(showPassedCases = false) {
         if (this.results.find( result => !result.passed)) {
             console.log('Failing tests:');
         }
@@ -71,7 +71,7 @@ export class AggregatedResults {
 
 
         this.results.forEach((result => {
-            if (!result.passed) {
+            if (!result.passed || showPassedCases) {
                 const suites = result.test.suites.join(' ');
                 const passFail = result.passed ? "PASSED" : "FAILED";
                 console.log(`${result.test.id} ${suites} - ${passFail}`);
@@ -171,14 +171,14 @@ export class RelevanceSuite {
         this.tests = tests;
     }
 
-    run(recognizer: Recognizer, tokenToString: TokenToString) {
+    run(recognizer: Recognizer, tokenToString: TokenToString, showPassedCases = false) {
         const aggregator = new AggregatedResults();
 
         this.tests.forEach((test) => {
             aggregator.recordResult(test.run(recognizer, tokenToString));
         });
 
-        aggregator.print();
+        aggregator.print(showPassedCases);
 
         return aggregator;
     }

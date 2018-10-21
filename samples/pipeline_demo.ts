@@ -17,9 +17,4 @@ export function pipelineDemo(query: string, debugMode = false) {
     printTokens(tokens);
 }
 
-// pipelineDemo(
-//     'can I have two hamburgers',
-//     // 'chicken sandwich with fries',
-//     // 'chicken sandwich with fries' ,    // Broken - bug is the "fries" is on badwords list.
-//     // "I would like a medium a Dakota burger with no onions extra pickles fries and twenty three cokes",
-//     true);
+pipelineDemo('can I have two hamburgers');

@@ -13,3 +13,5 @@ export function stemmerConfusionDemo() {
 
     stemmerConfusionMatrix(pipeline.compositeRecognizer, Tokenizer.defaultStemTerm);
 }
+
+stemmerConfusionDemo();

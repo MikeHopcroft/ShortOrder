@@ -15,6 +15,7 @@ export function repl(
     console.log();
 
     const pipeline = new Pipeline(menuFile, intentFile, attributesFile, quantifierFile);
+    console.log();
 
     while (true) {
         const line = readlineSync.question('% ');
@@ -50,5 +51,5 @@ export function replDemo() {
         path.join(__dirname, './data/quantifiers.yaml'));
 }
 
-// replDemo();
+replDemo();
 
