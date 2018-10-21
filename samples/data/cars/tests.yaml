@@ -1,0 +1,34 @@
+- priority: 1
+  suites: general
+  input: convertable with tinted windows and fuzzy dice
+  expected: ""
+
+- priority: 1
+  suites: general
+  input: I'd like a four door sedan with moon roof trailer hitch and tinted windows
+  expected: ""
+
+- priority: 1
+  suites: general
+  input: Give me the monster truck jacked with knobbies glass packs open headers and an air freshener
+  expected: ""
+
+- priority: 1
+  suites: general
+  input: I want a blue convertable four on the floor no undercoat no warranty
+  expected: ""
+
+- priority: 1
+  suites: general
+  input: Can I have a silver four door sedan with leather interior and a dump truck
+  expected: ""
+
+- priority: 1
+  suites: general
+  input: I'll take the school bus actually make that the dump truck
+  expected: ""
+
+- priority: 1
+  suites: general
+  input: I'd like two blue sedans one of them jacked with slicks and the other a low rider with moonroof
+  expected: ""

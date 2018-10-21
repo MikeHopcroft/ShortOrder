@@ -59,6 +59,17 @@ export function relevanceDemoSpanish(showPassedCases = false) {
         hackedStemmer);
 }
 
+export function relevanceDemoCars(showPassedCases = false) {
+    runRelevanceTest(
+        path.join(__dirname, './data/cars/cars.yaml'),
+        path.join(__dirname, './data/intents.yaml'),
+        path.join(__dirname, './data/attributes.yaml'),
+        path.join(__dirname, './data/quantifiers.yaml'),
+        path.join(__dirname, './data/cars/tests.yaml'),
+        showPassedCases,
+        hackedStemmer);
+}
+
 relevanceDemo(true);
 
 

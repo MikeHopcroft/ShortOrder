@@ -25,6 +25,7 @@ items:
       - more
       - extra
       - with
+      - the
 
   - pid: 2
     name: "2"

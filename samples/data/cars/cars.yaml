@@ -1,0 +1,435 @@
+items:
+
+  #
+  # 1-99: Vehicles
+  #
+  - pid: 1
+    name: Red Two Door Convertable Sedan
+    aliases:
+      - "[Red] [Two Door] Convertable [Sedan]"
+
+  - pid: 2
+    name: Red Two Door Sedan
+    aliases:
+      - "Red [Two Door] Sedan"
+
+  - pid: 3
+    name: Red Four Door Convertable Sedan
+    aliases:
+      - Red Four Door Convertable Sedan
+
+  - pid: 4
+    name: Red Four Door Sedan
+    aliases:
+      - Red Four Door Sedan
+
+  - pid: 5
+    name: Blue Two Door Convertable Sedan
+    aliases:
+      - "Blue [Two Door] Convertable [Sedan]"
+
+  - pid: 6
+    name: Blue Two Door Sedan
+    aliases:
+      - "Blue [Two Door] Sedan"
+
+  - pid: 7
+    name: Blue Four Door Convertable Sedan
+    aliases:
+      - "Blue Four Door Convertable [Sedan]"
+
+  - pid: 8
+    name: Blue Four Door Sedan
+    aliases:
+      - Blue Four Door Sedan
+
+  - pid: 9
+    name: Silver Two Door Convertable Sedan
+    aliases:
+      - "Silver [Two Door] Convertable [Sedan]"
+
+  - pid: 10
+    name: Silver Two Door Sedan
+    aliases:
+      - Silver Two Door Sedan
+
+  - pid: 11
+    name: Silver Four Door Convertable Sedan
+    aliases:
+      - "Silver Four Door Convertable [Sedan]"
+
+  - pid: 12
+    name: Silver Four Door Sedan
+    aliases:
+      - "[Silver] [Four Door] Sedan"
+
+  - pid: 13
+    name: White Two Door Convertable Sedan
+    aliases:
+      - "White [Two Door] Convertable [Sedan]"
+
+  - pid: 14
+    name: White Two Door Sedan
+    aliases:
+      - White Two Door Sedan
+
+  - pid: 15
+    name: White Four Door Convertable Sedan
+    aliases:
+      - "White Four Door Convertable [Sedan]"
+
+  - pid: 16
+    name: White Four Door Sedan
+    aliases:
+      - "White [Four Door] Sedan"
+
+  - pid: 17
+    name: Black Two Door Convertable Sedan
+    aliases:
+      - "Black [Two Door] Convertable [Sedan]"
+
+  - pid: 18
+    name: Black Two Door Sedan
+    aliases:
+      - Black Two Door Sedan
+
+  - pid: 19
+    name: Black Four Door Convertable Sedan
+    aliases:
+      - "Black Four Door Convertable [Sedan]"
+
+  - pid: 20
+    name: Black Four Door Sedan
+    aliases:
+      - "Black [Four Door] Sedan"
+
+  - pid: 21
+    name: Red 2 Ton Pickup Truck
+    aliases:
+      - "[Red] [2 Ton] Pickup [Truck]"
+      - "[Red] [2 Ton] Truck"
+
+  - pid: 22
+    name: Yellow 2 Ton Pickup Truck
+    aliases:
+      - "Yellow [2 Ton] (Pickup,Truck,Pickup Truck)"
+
+  - pid: 23
+    name: White 2 Ton Pickup Truck
+    aliases:
+      - "White [2 Ton] (Pickup,Truck,Pickup Truck)"
+
+  - pid: 24
+    name: Red Station Wagon
+    aliases:
+      - "Red [Station] Wagon"
+
+  - pid: 25
+    name: Blue Station Wagon
+    aliases:
+      - "Blue [Station] Wagon"
+
+  - pid: 26
+    name: Silver Station Wagon
+    aliases:
+      - "Silver [Station] Wagon"
+
+  - pid: 27
+    name: White Station Wagon
+    aliases:
+      - "[White] [Station] Wagon"
+
+  - pid: 28
+    name: Black Station Wagon
+    aliases:
+      - "Black [Station] Wagon"
+
+  - pid: 29
+    name: Red Monster Truck
+    aliases:
+      - Red Monster Truck
+
+  - pid: 30
+    name: Gold Monster Truck
+    aliases:
+      - "[Gold] Monster Truck"
+
+  - pid: 31
+    name: Black Monster Truck
+    aliases:
+      - Black Monster Truck
+
+  - pid: 32
+    name: Yellow School Bus
+    aliases:
+      - "[Yellow] [School] Bus"
+
+  - pid: 33
+    name: Grey Dump Truck
+    aliases:
+      - "[Gray] Dump Truck"
+
+  #
+  # 1000-1099 - Wheels and tires
+  #
+  - pid: 1000
+    name: alloy rims
+    aliases:
+      - alloy rims
+
+  - pid: 1001
+    name: white wall tires
+    aliases:
+      - white wall tires
+      - white walls
+
+  - pid: 1002
+    name: snow tires
+    aliases:
+      - snow tires
+
+  - pid: 1003
+    name: studded snow tires
+    aliases:
+      - studded snow tires
+
+  - pid: 1004
+    name: knobby tires
+    aliases:
+      - knobby tires
+      - knobbies
+
+  - pid: 1005
+    name: spinners
+    aliases:
+      - spinners
+
+  - pid: 1006
+    name: racing slicks
+    aliases:
+      - "[racing] slicks"
+   
+  #
+  # 1100-1199 - Engine and powertrain
+  #
+  - pid: 1100
+    name: mega diesel engine
+    aliases:
+      - "[mega] diesel [engine]"
+
+  - pid: 1101
+    name: fuel injection
+    aliases:
+      - fuel injection
+      - injected
+
+  - pid: 1102
+    name: turbo charger
+    aliases:
+      - "turbo [charger]"
+
+  - pid: 1103
+    name: super charger
+    aliases:
+      - super charger
+  
+  #
+  # 1200-1299 - Mods and kits
+  #
+  - pid: 1200
+    name: lift kit
+    aliases:
+      - lift kit
+      - lifted
+      - "jacked [up]"
+
+  - pid: 1201
+    name: low rider kit
+    aliases:
+      - "low (ride,rider) [kit]"
+
+  - pid: 1202
+    name: spoiler
+    aliases:
+      - "spoiler [kit]"
+      - "wing [kit]"
+
+  - pid: 1203
+    name: open headers
+    aliases:
+      - open headers
+
+  - pid: 1204
+    name: glass packs
+    aliases:
+      - glass packs
+
+  - pid: 1205
+    name: tinted windows
+    aliases:
+      - "tinted [windows]"
+
+  - pid: 1206
+    name: chain steering wheel
+    aliases:
+      - chain steering wheel 
+
+  #
+  # 1300-1399 - Factory Options
+  #
+  - pid: 1300
+    name: four speed manual transmissions
+    aliases:
+      - "four speed [manual] [transmission]"
+      - four on the floor
+      - "stick [shift]"
+  
+  - pid: 1301
+    name: six speed automatic transmissions
+    aliases:
+      - "[six speed] automatic [transmission]"
+      - "six speed [transmission,tranny]"
+
+  - pid: 1302
+    name: moon roof
+    aliases:
+      - moon roof
+      
+  - pid: 1303
+    name: tow package
+    aliases:
+      - "tow [package,kit]"
+      - trailer hitch
+   
+  - pid: 1304
+    name: under coat
+    aliases:
+      - "(under coat,undercoat,undercoating)"
+      - rust proofing
+
+  - pid: 1305
+    name: clear coat
+    aliases:
+      - clear coat
+
+  #
+  # 1400-1499 - Lighting
+  #
+  - pid: 1400
+    name: fog lights
+    aliases:
+      - fog lights
+
+  - pid: 1401
+    name: under body lighting
+    aliases:
+      - "[purple] (under body,underbody) (lighting,light) [kit]"
+  
+  #
+  # 1500-1599 - Audio
+  #
+  - pid: 1500
+    name: thousand watt stereo
+    aliases:
+      - "[thousand watt] stereo"
+      
+  - pid: 1501
+    name: eight track
+    aliases:
+      - eight track
+
+  - pid: 1502
+    name: cassette
+    aliases:
+      - "cassette [player]"
+
+  - pid: 1503
+    name: sub woofers
+    aliases:
+      - "[sub] woofers"
+
+  - pid: 1504
+    name: sub sub woofers
+    aliases:
+      - sub sub woofers
+
+  #
+  # 1600-1699 Accssories
+  #
+  - pid: 1600
+    name: fuzzy dice
+    aliases: 
+      - "[fuzzy] dice"
+      
+  - pid: 1601
+    name: pine scented air freshener
+    aliases:
+      - "[pine scented] air freshener"
+      - pine tree
+
+  - pid: 1602
+    name: sun glasses
+    aliases:
+      - sun glasses
+      - shades
+
+  - pid: 1603
+    name: driving gloves
+    aliases:
+      - "[driving] gloves"
+      
+  - pid: 1604
+    name: floor mats
+    aliases:
+      - "[floor] mats"
+
+  - pid: 1605
+    name: radar detector
+    aliases:
+      - radar detector
+
+  - pid: 1606
+    name: mud flaps
+    aliases:
+      - mud flaps
+
+  #
+  # 1700-1799 Interiors
+  #
+  - pid: 1700
+    name: leather interior
+    registerName: leather
+    aliases:
+      - "leather [interior]"
+
+  - pid: 1701
+    name: bucket seats
+    registerName: buckets
+    aliases:
+      - bucket seats
+
+  - pid: 1702
+    name: seat covers
+    aliases:
+      - seat covers
+
+  - pid: 1703
+    name: leather steering wheel cover
+    aliases:
+      - "leather steering wheel [cover]"
+
+  #
+  # 1800-1899 - Warranties
+  #
+  - pid: 1800
+    name: extended warranty
+    aliases:
+      - "[extended] warranty"
+
+  - pid: 1801
+    name: as is
+    aliases:
+      - as is
+      - buyer beware
+      - caveat emptor
+

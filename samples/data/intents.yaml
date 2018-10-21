@@ -117,6 +117,8 @@ items:
       - make both
       - make both of them
       - make all of them
+      - the other
+      - one of them
 
   - pid: 100011
     name: CANCEL_ORDER
