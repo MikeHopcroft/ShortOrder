@@ -4,7 +4,7 @@ import * as readlineSync from 'readline-sync';
 import {speechToTextFilter} from './speech_to_text_filter';
 
 export function repl(
-    menuFile: string,
+    catlogFile: string,
     intentFile: string,
     attributesFile: string,
     quantifierFile: string
@@ -14,7 +14,7 @@ export function repl(
     console.log('A blank line exits.');
     console.log();
 
-    const pipeline = new Pipeline(menuFile, intentFile, attributesFile, quantifierFile);
+    const pipeline = new Pipeline(catlogFile, intentFile, attributesFile, quantifierFile);
     console.log();
 
     while (true) {
