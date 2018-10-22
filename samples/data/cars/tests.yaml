@@ -1,8 +1,8 @@
 - priority: 1
   suites: general
-  input: convertable with tinted windows and fuzzy dice
+  input: convertible with tinted windows and fuzzy dice
   expected: >-
-    [ENTITY:RED_TWO_DOOR_CONVERTABLE_SEDAN,1] [QUANTITY:1]
+    [ENTITY:RED_TWO_DOOR_CONVERTIBLE_SEDAN,1] [QUANTITY:1]
     [ENTITY:TINTED_WINDOWS,1205] [INTENT:CONJUNCTION] [ENTITY:FUZZY_DICE,1600]
 - priority: 1
   suites: general
@@ -23,10 +23,10 @@
     [QUANTITY:1] [ENTITY:PINE_SCENTED_AIR_FRESHENER,1601]
 - priority: 1
   suites: general
-  input: I want a blue convertable four on the floor no undercoat no warranty
+  input: I want a blue convertible four on the floor no undercoat no warranty
   expected: >-
     [INTENT:ADD_TO_ORDER] [QUANTITY:1]
-    [ENTITY:BLUE_TWO_DOOR_CONVERTABLE_SEDAN,5]
+    [ENTITY:BLUE_TWO_DOOR_CONVERTIBLE_SEDAN,5]
     [ENTITY:FOUR_SPEED_MANUAL_TRANSMISSIONS,1300] [QUANTITY:0]
     [ENTITY:UNDER_COAT,1304] [QUANTITY:0] [ENTITY:EXTENDED_WARRANTY,1800]
 - priority: 1

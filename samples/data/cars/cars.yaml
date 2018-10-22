@@ -4,9 +4,9 @@ items:
   # 1-99: Vehicles
   #
   - pid: 1
-    name: Red Two Door Convertable Sedan
+    name: Red Two Door convertible Sedan
     aliases:
-      - "[Red] [Two Door] Convertable [Sedan]"
+      - "[Red] [Two Door] Convertible [Sedan]"
 
   - pid: 2
     name: Red Two Door Sedan
@@ -14,9 +14,9 @@ items:
       - "Red [Two Door] Sedan"
 
   - pid: 3
-    name: Red Four Door Convertable Sedan
+    name: Red Four Door Convertible Sedan
     aliases:
-      - Red Four Door Convertable Sedan
+      - Red Four Door Convertible Sedan
 
   - pid: 4
     name: Red Four Door Sedan
@@ -24,9 +24,9 @@ items:
       - Red Four Door Sedan
 
   - pid: 5
-    name: Blue Two Door Convertable Sedan
+    name: Blue Two Door Convertible Sedan
     aliases:
-      - "Blue [Two Door] Convertable [Sedan]"
+      - "Blue [Two Door] Convertible [Sedan]"
 
   - pid: 6
     name: Blue Two Door Sedan
@@ -34,9 +34,9 @@ items:
       - "Blue [Two Door] Sedan"
 
   - pid: 7
-    name: Blue Four Door Convertable Sedan
+    name: Blue Four Door Convertible Sedan
     aliases:
-      - "Blue Four Door Convertable [Sedan]"
+      - "Blue Four Door Convertible [Sedan]"
 
   - pid: 8
     name: Blue Four Door Sedan
@@ -44,9 +44,9 @@ items:
       - Blue Four Door Sedan
 
   - pid: 9
-    name: Silver Two Door Convertable Sedan
+    name: Silver Two Door Convertible Sedan
     aliases:
-      - "Silver [Two Door] Convertable [Sedan]"
+      - "Silver [Two Door] Convertible [Sedan]"
 
   - pid: 10
     name: Silver Two Door Sedan
@@ -54,9 +54,9 @@ items:
       - Silver Two Door Sedan
 
   - pid: 11
-    name: Silver Four Door Convertable Sedan
+    name: Silver Four Door Convertible Sedan
     aliases:
-      - "Silver Four Door Convertable [Sedan]"
+      - "Silver Four Door Convertible [Sedan]"
 
   - pid: 12
     name: Silver Four Door Sedan
@@ -64,9 +64,9 @@ items:
       - "[Silver] [Four Door] Sedan"
 
   - pid: 13
-    name: White Two Door Convertable Sedan
+    name: White Two Door Convertible Sedan
     aliases:
-      - "White [Two Door] Convertable [Sedan]"
+      - "White [Two Door] Convertible [Sedan]"
 
   - pid: 14
     name: White Two Door Sedan
@@ -74,9 +74,9 @@ items:
       - White Two Door Sedan
 
   - pid: 15
-    name: White Four Door Convertable Sedan
+    name: White Four Door Convertible Sedan
     aliases:
-      - "White Four Door Convertable [Sedan]"
+      - "White Four Door Convertible [Sedan]"
 
   - pid: 16
     name: White Four Door Sedan
@@ -84,9 +84,9 @@ items:
       - "White [Four Door] Sedan"
 
   - pid: 17
-    name: Black Two Door Convertable Sedan
+    name: Black Two Door Convertible Sedan
     aliases:
-      - "Black [Two Door] Convertable [Sedan]"
+      - "Black [Two Door] Convertible [Sedan]"
 
   - pid: 18
     name: Black Two Door Sedan
@@ -94,9 +94,9 @@ items:
       - Black Two Door Sedan
 
   - pid: 19
-    name: Black Four Door Convertable Sedan
+    name: Black Four Door Convertible Sedan
     aliases:
-      - "Black Four Door Convertable [Sedan]"
+      - "Black Four Door Convertible [Sedan]"
 
   - pid: 20
     name: Black Four Door Sedan
