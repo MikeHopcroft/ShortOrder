@@ -3,7 +3,7 @@ import { Pipeline, printTokens } from './pipeline';
 import { stemmerConfusionMatrix } from '../src/stemmer_confusion_matrix';
 import { Tokenizer } from '../src/tokenizer';
 
-export function stemmerConfusionDemo() {
+function stemmerConfusionDemo() {
     const pipeline = new Pipeline(
         path.join(__dirname, './data/menu.yaml'),
         path.join(__dirname, './data/intents.yaml'),

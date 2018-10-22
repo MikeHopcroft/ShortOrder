@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Pipeline, printTokens } from './pipeline';
 
-export function pipelineDemo(query: string, debugMode = false) {
+function pipelineDemo(query: string, debugMode = false) {
     const pipeline = new Pipeline(
         path.join(__dirname, './data/menu.yaml'),
         path.join(__dirname, './data/intents.yaml'),

@@ -56,21 +56,21 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch relevance_test",
-            "program": "${workspaceFolder}/build/samples/relevance_demo.js",
+            "name": "Launch relevance_demo_english",
+            "program": "${workspaceFolder}/build/samples/relevance_demo_english.js",
             "outputCapture": "std"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch relevance_test_spanish",
+            "name": "Launch relevance_demo_spanish",
             "program": "${workspaceFolder}/build/samples/relevance_demo_spanish.js",
             "outputCapture": "std"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch relevance_test_cars",
+            "name": "Launch relevance_demo_cars",
             "program": "${workspaceFolder}/build/samples/relevance_demo_cars.js",
             "outputCapture": "std"
         },

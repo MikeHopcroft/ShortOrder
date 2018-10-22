@@ -294,6 +294,7 @@ items:
     name: moon roof
     aliases:
       - moon roof
+      - moonroof
       
   - pid: 1303
     name: tow package
