@@ -1,5 +1,5 @@
 export { generateAliases } from './alias_generator'; 
-export { Index, indexFromYamlString, Item, PatternRecognizer } from './pattern_recognizer';
+export { Item, itemMapFromYamlString, PatternRecognizer } from './pattern_recognizer';
 export { Recognizer } from './recognizer';
 export * from './tokenizer';
 export * from './tokens';

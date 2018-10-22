@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { indexFromYamlString, Item, PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from '../../src/tokenizer';
+import { itemMapFromYamlString, Item, PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from '../../src/tokenizer';
 
 export const ENTITY: unique symbol = Symbol('ENTITY');
 export type ENTITY = typeof ENTITY;
@@ -18,12 +18,17 @@ export function CreateEntityRecognizer(
     badWords: Set<string>,
     stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
     debugMode = false) {
-    const index = indexFromYamlString(fs.readFileSync(entityFile, 'utf8'));
+    const items = itemMapFromYamlString(fs.readFileSync(entityFile, 'utf8'));
 
-    const tokenFactory = (pid: PID, text: string): EntityToken => {
-        const name = index.items[pid].name;
-        return { type: ENTITY, pid, name, text };
+    const tokenFactory = (id: PID, text: string): EntityToken => {
+        const item = items.get(id);
+
+        let name = "UNKNOWN";
+        if (item) {
+            name = item.name;
+        }
+        return { type: ENTITY, pid: id, name, text };
     };
 
-    return new PatternRecognizer(index, tokenFactory, badWords, stemmer, debugMode);
+    return new PatternRecognizer(items, tokenFactory, badWords, stemmer, debugMode);
 }

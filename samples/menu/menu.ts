@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { Decoder, array, object, number, string, boolean } from 'type-safe-json-decoder';
-import { Index, Item, PID } from '../../src/tokenizer';
+import { Item, PID } from '../../src/tokenizer';
 import { copyArray, copyScalar } from '../../src/utilities';
 
 export interface MenuItem extends Item {
@@ -29,7 +29,7 @@ function MenuItemFromYamlItem(item: any) {
     };
 }
 
-export class Menu extends Index<MenuItem> {
+export class Menu extends Map<PID,MenuItem> {
     items: { [index: number]: MenuItem } = {};
 
     // TODO: return IMenu?

@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { indexFromYamlString, Item, PatternRecognizer } from '../../src/tokenizer';
+import { itemMapFromYamlString, Item, PatternRecognizer } from '../../src/tokenizer';
 import { PID, StemmerFunction, Token, Tokenizer } from '../../src/tokenizer';
 
 export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
@@ -20,12 +20,17 @@ export function CreateAttributeRecognizer(
     stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
     debugMode = false
 ): AttributeRecognizer {
-    const index = indexFromYamlString(fs.readFileSync(attributeFile, 'utf8'));
+    const items = itemMapFromYamlString(fs.readFileSync(attributeFile, 'utf8'));
 
     const tokenFactory = (id: PID, text: string): AttributeToken => {
-        const name = index.items[id].name;
+        const item = items.get(id);
+
+        let name = "UNKNOWN";
+        if (item) {
+            name = item.name;
+        }
         return { type: ATTRIBUTE, id, name, text };
     };
 
-    return new PatternRecognizer(index, tokenFactory, badWords, stemmer, debugMode);
+    return new PatternRecognizer(items, tokenFactory, badWords, stemmer, debugMode);
 }

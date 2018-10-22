@@ -8,21 +8,8 @@ export interface Item {
     aliases: string[];
 }
 
-export class Index<T extends Item> {
-    items: { [pid: number]: Item } = {};
-
-    addItem = (item: T) => {
-        if (this.items[item.pid] === undefined) {
-            this.items[item.pid] = item;
-        }
-        else {
-            throw TypeError(`Index.addItem: found duplicate pid in item ${item}`);
-        }
-    }
-}
-
 // tslint:disable-next-line:no-any
-function ItemFromYamlItem(item: any): Item {
+function itemFromYamlItem(item: any): Item {
     return {
         pid: copyScalar<number>(item, 'pid', 'number'),
         name: copyScalar<string>(item, 'name', 'string'),
@@ -30,60 +17,63 @@ function ItemFromYamlItem(item: any): Item {
     };
 }
 
-export function indexFromYamlString(yamlText: string): Index<Item> {
+export function itemMapFromYamlString(yamlText: string): Map<PID, Item> {
     // tslint:disable-next-line:no-any
     const yamlRoot: any = yaml.safeLoad(yamlText);
 
     if (typeof (yamlRoot) !== 'object') {
-        throw TypeError('Inent: expected a top-level object with items array.');
+        throw TypeError('itemsFromYamlString: expected a top-level object with items array.');
     }
 
     const yamlItems = yamlRoot['items'] as Item[];
     if (yamlItems === undefined || !Array.isArray(yamlRoot.items)) {
-        throw TypeError('Intent: expected items array.');
+        throw TypeError('itemsFromYamlString: expected items array.');
     }
 
-    const index = new Index();
-    yamlItems.forEach(item => {
-        index.addItem(ItemFromYamlItem(item));
-    });
+    const map = new Map<PID, Item>();
+    for (const item of yamlItems) {
+        if (map.has(item.pid)) {
+            throw TypeError(`itemsFromYamlString: found duplicate pid in item ${item}`);
+        }
+        else {
+            map.set(item.pid, item);
+        }
+    }
 
-    return index;
+    return map;
 }
 
 export class PatternRecognizer<T extends Item> implements Recognizer {
-    index: Index<T>;
+    items: Map<PID, T>;
     tokenizer: Tokenizer;
     tokenFactory: TokenFactory<Token>;
     stemmer: (word: string) => string;
 
     constructor(
-        index: Index<T>,
+        items: Map<PID, T>,
         tokenFactory: TokenFactory<Token>,
         badWords: Set<string>,
         stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
         debugMode = false
     ) {
-        this.index = index;
+        this.items = items;
         this.tokenizer = new Tokenizer(badWords, stemmer, debugMode);
         this.stemmer = this.tokenizer.stemTerm;
         this.tokenFactory = tokenFactory;
 
         // Ingest index.
         let aliasCount = 0;
-        Object.entries(this.index.items).forEach(([pid, item]) => {
-            item.aliases.forEach(aliasPattern => {
-                // console.log(aliasPattern);
+        for (const [pid, item] of this.items) {
+            for (const aliasPattern of item.aliases) {
                 for (const alias of generateAliases(aliasPattern)) {
-                    // console.log(`  ${alias}`);
                     this.tokenizer.addItem(item.pid, alias);
                     aliasCount++;
                 }
-            });
-        });
+            }
+        }
 
         // TODO: print name of tokenizer here?
-        console.log(`${Object.keys(this.index.items).length} items contributed ${aliasCount} aliases.`);
+        console.log(`${this.items.size} items contributed ${aliasCount} aliases.`);
     }
 
     apply = (token: Token) => {
@@ -95,14 +85,14 @@ export class PatternRecognizer<T extends Item> implements Recognizer {
 
     terms = () => {
         const terms = new Set<string>();
-        Object.entries(this.index.items).forEach(([pid, item]) => {
-            item.aliases.forEach(alias => {
+        for (const [pid, item] of this.items) {
+            for (const alias of item.aliases) {
                 const words = alias.split(' ');
-                words.forEach(word => {
+                for (const word of words) {
                     terms.add(word);
-                });
-            });
-        });
+                }
+            }
+        }
         return terms;
     }
 }

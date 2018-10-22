@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { indexFromYamlString, Item, PatternRecognizer } from '../../src/tokenizer';
+import { itemMapFromYamlString, Item, PatternRecognizer } from '../../src/tokenizer';
 import { PID, StemmerFunction, Tokenizer, Token } from '../../src/tokenizer';
 
 export const QUANTITY: unique symbol = Symbol('QUANTITY');
@@ -19,12 +19,17 @@ export function CreateQuantityRecognizer(
     stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
     debugMode = false
 ): QuantityRecognizer {
-    const index = indexFromYamlString(fs.readFileSync(quantityFile, 'utf8'));
+    const items = itemMapFromYamlString(fs.readFileSync(quantityFile, 'utf8'));
 
     const tokenFactory = (id: PID, text: string): QuantityToken => {
-        const value = index.items[id].name;
+        const item = items.get(id);
+
+        let value = "UNKNOWN";
+        if (item) {
+            value = item.name;
+        }
         return { type: QUANTITY, text, value: Number(value) };
     };
 
-    return new PatternRecognizer(index, tokenFactory, badWords, stemmer, debugMode);
+    return new PatternRecognizer(items, tokenFactory, badWords, stemmer, debugMode);
 }
