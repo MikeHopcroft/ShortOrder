@@ -37,6 +37,8 @@ describe('speechToTextFiler', () => {
     });
 
     it('should handle multiple substitutions.', () => {
-        assert.equal(speechToTextFilter('Can I get 1/4 lb of buffer and a 1/2 gallon of 2% milk?'), "Can I get quarter pound of buffer and a half gallon of two percent milk");
+        assert.equal(speechToTextFilter(
+            'Can I get 1/4 lb of butter and a 1/2 gallon of 2% milk?'),
+            "Can I get quarter pound of butter and a half gallon of two percent milk");
     });
 });

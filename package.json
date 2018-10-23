@@ -12,6 +12,7 @@
   "keywords": [
     "nlp"
   ],
+  "repository": "https://github.com/MikeHopcroft/ShortOrder",
   "scripts": {
     "test": "mocha",
     "check": "gts check",
