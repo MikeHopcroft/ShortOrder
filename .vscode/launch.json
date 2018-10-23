@@ -78,14 +78,14 @@
             "type": "node",
             "request": "launch",
             "name": "Launch pipeline_demo",
-            "program": "${workspaceFolder}/build/src/samples/pipeline_demo.js",
+            "program": "${workspaceFolder}/build/samples/pipeline_demo.js",
             "outputCapture": "std"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch REPL",
-            "program": "${workspaceFolder}/build/src/samples/repl.js",
+            "program": "${workspaceFolder}/build/samples/repl.js",
             "outputCapture": "std"
         }
     ]

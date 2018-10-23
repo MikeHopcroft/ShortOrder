@@ -104,7 +104,7 @@ items:
     name: Fried Chicken Breast
     registerName: Fried Chk
     aliases:
-      - Fried Chicken
+      - Fried Chicken [Breast]
     price: 0
     standalone: false
     defaults: []

@@ -17,4 +17,7 @@ function pipelineDemo(query: string, debugMode = false) {
     printTokens(tokens);
 }
 
-pipelineDemo('can I have two hamburgers');
+//const a = 'i want a chicken sandwich and some fries i want a big apple burger fried chicken breast and salmon';
+const a = 'fried chicken breast';
+pipelineDemo(a);
+// pipelineDemo('can I have two hamburgers');
