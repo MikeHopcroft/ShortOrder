@@ -2,7 +2,9 @@
 
 **short-order** is an exerimental natural language conversational agent intended for domains with a fixed vocabulary of entities and a small number of intents. Uses might include ordering food from a restaurant or organizing your song collection.
 
-The first stage of development is a set of tokenizers that detect entities, intents, and quantities. As an example, consider the following utterance, which would typically come from a speech-to-text system:
+It is based on a pattern-driven NLP tokenizer from the companion [token-flow project](https://github.com/MikeHopcroft/TokenFlow).
+
+As an example, consider the following utterance, which would typically come from a speech-to-text system:
 
 ~~~
 I would like a Dakota burger with no onions extra pickles fries and a coke
@@ -10,7 +12,7 @@ I would like a Dakota burger with no onions extra pickles fries and a coke
 
 In this example, the utterance has no commas, since they were not provided by the speech-to-text process.
 
-Using ShortOrder, this text might be tokenized as
+Using [token-flow](https://github.com/MikeHopcroft/TokenFlow), this text might be tokenized as
 
 ~~~
 [ADD_TO_ORDER] [QUANTITY(1)] [DAKOTA_BURGER(pid=4)] [QUANTITY(0)]
@@ -19,7 +21,7 @@ Using ShortOrder, this text might be tokenized as
 [MEDIUM_COKE(1001)]
 ~~~
 
-After tokenization, a parser might be able to group the tokens into a tree that reflects the speaker's intent:
+After tokenization, the short-order parser might be able to group the tokens into a tree that reflects the speaker's intent:
 ~~~
 [ADD_TO_ORDER]
     [QUANTITY(1)] [DAKOTA_BURGER(pid=4)]            // Burger, standalone menu item.
@@ -31,7 +33,7 @@ After tokenization, a parser might be able to group the tokens into a tree that 
 
 ## Try It Out
 
-ShortOrder is currently in the earliest stages of development, so documentation is
+short-order is currently in the earliest stages of development, so documentation is
 sparse or nonexistant, and the code stability is uneven.
 
 If you are interested in taking a look, you can clone the repo on GitHub or install
@@ -41,20 +43,20 @@ If you are interested in taking a look, you can clone the repo on GitHub or inst
 npm install shortorder
 ~~~
 
-As of [commit 3166f1e2](https://github.com/MikeHopcroft/ShortOrder/commit/3166f1e21cf96fed8d0fbe56aeb4f38841b62fd6), there are a number of working samples, based on a ficticious restaurant.
+As of [commit 3166f1e2](https://github.com/MikeHopcroft/ShortOrder/commit/3166f1e21cf96fed8d0fbe56aeb4f38841b62fd6), there are a number of working samples, based on a ficticious restaurant and an imaginary car dealership.
 
 These samples are not included in the [short-order npm package](https://www.npmjs.com/package/short-order). To use them, you must
 clone the [repo from GitHub](https://github.com/MikeHopcroft/ShortOrder).
 
 You can find the definition files for the menu, intents, attributes, and quantifiers at
-* `samples\data\menu.yaml`
-* `samples\data\intents.yaml`
-* `samples\data\attributes.yaml`
-* `samples\data\quantifiers.yaml`
+* `samples/data/restaurant-en/menu.yaml`
+* `samples/data/restaurant-en/intents.yaml`
+* `samples/data/restaurant-en/attributes.yaml`
+* `samples/data/restaurant-en/quantifiers.yaml`
 
 ### Relevance Test Sample
 
-This sample runs a suite of test utterances through the tokenization pipeline. The test utterances can be found at `samples\data\tests.yaml`.
+This sample runs a suite of test utterances through the tokenization pipeline. The test utterances can be found at `samples/data/restaurant-en/tests.yaml`.
 
 If you've cloned the repo, you can build and run the sample as follows:
 
@@ -267,7 +269,7 @@ In some cases, the stemmer can stem words with different meanings to the same te
 One can check for these problems in their `menu.json`, `quantifiers.json`, and `intents.json` files by producing a stemmer confusion matrix.
 
 ~~~
-node build\samples\stemmer_confusion_demo.js
+node build/samples/stemmer_confusion_demo.js
 
 14 items contributed 143 aliases.
 5 items contributed 22 aliases.
@@ -304,5 +306,18 @@ function hackedStemmer(term: string): string {
 }
 ~~~
 
-## Tokenizer Design Notes
+## Conversational Agent Design Notes
+
+Here's a very brief roadmap for the project.
+* Write a the tokenizer. Code currently resides in the [token-flow](https://github.com/MikeHopcroft/TokenFlow) project.
+* Implement that menu data structure with rules for the hierarchical composition of menu items,
+default ingrediants, optional ingrediants, substitutions, combos, specials, etc.
+* Implement a general menu item attribute system, so that one can ask for a `"small latte"`
+and then say `"make it a double"`.
+* Implement an intent parser for adding items, customizing items, making substitutions,
+removing items, etc.
+* Integrate intent parser into a conversational agent that takes the order,
+while asking clarifying questions and offering to upsell.
+* Implement a sample bot that uses the conversational agent.
+
 
