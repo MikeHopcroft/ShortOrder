@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { Decoder, array, object, number, string, boolean } from 'type-safe-json-decoder';
 import { Item, PID } from 'token-flow';
@@ -32,10 +31,7 @@ function MenuItemFromYamlItem(item: any) {
 export class Menu extends Map<PID,MenuItem> {
     items: { [index: number]: MenuItem } = {};
 
-    // TODO: return IMenu?
-    static fromJsonFilename(filename: string): Menu {
-        const json = fs.readFileSync(filename, 'utf8');
-
+    static fromJsonString(json: string): Menu {
         const menuItemsDecoder: Decoder<MenuItem[]> =
             array(
                 object(
@@ -54,9 +50,9 @@ export class Menu extends Map<PID,MenuItem> {
         return new Menu(items);
     }
 
-    static fromYamlFilename(filename: string): Menu {
+    static fromYamlText(yamlText: string): Menu {
         // tslint:disable-next-line:no-any
-        const yamlMenu: any = yaml.safeLoad(fs.readFileSync(filename, 'utf8'));
+        const yamlMenu: any = yaml.safeLoad(yamlText);
 
         if (typeof (yamlMenu) !== 'object') {
             throw TypeError('Menu: expected a top-level object with items array.');
