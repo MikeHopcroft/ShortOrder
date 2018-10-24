@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Pipeline } from './pipeline';
+import { Pipeline } from '../src/pipeline';
 import { stemmerConfusionMatrix } from 'token-flow';
 import { Tokenizer } from 'token-flow';
 

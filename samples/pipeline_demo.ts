@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Pipeline, printTokens } from './pipeline';
+import { Pipeline, printTokens } from '../src/pipeline';
 
 function pipelineDemo(query: string, debugMode = false) {
     const pipeline = new Pipeline(

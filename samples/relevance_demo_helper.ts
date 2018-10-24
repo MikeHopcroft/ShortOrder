@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { Pipeline, tokenToString } from './pipeline';
+import { Pipeline, tokenToString } from '../src/pipeline';
 import { AggregatedResults, RelevanceSuite } from 'token-flow';
 import { StemmerFunction, Tokenizer } from 'token-flow';
 
