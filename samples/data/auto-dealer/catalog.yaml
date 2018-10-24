@@ -169,6 +169,14 @@ items:
     aliases:
       - "[Gray] Dump Truck"
 
+  - pid: 34
+    name: Black Half Ton Pickup Truck
+    aliases:
+      - "[Black] Half Ton (Pickup Truck,Truck)"
+      - "[Black] Half Ton Truck"
+
+
+
   #
   # 1000-1099 - Wheels and tires
   #
@@ -434,3 +442,39 @@ items:
       - buyer beware
       - caveat emptor
 
+  #
+  # 1900-1999: Financing
+  #
+
+  # ISSUE: speech-to-text probably returns "A P R" instead of "APR"
+  - pid: 1900
+    name: zero percent
+    aliases:
+      - zero percent [apr]
+      - no money down
+      - financing
+
+  - pid: 1901
+    name: cash
+    aliases:
+      - cash
+      - check
+
+  #
+  # 2000-2099: Examples of stemmer problems
+  #
+  - pid: 2000
+    name: customer organizer folder
+    aliases:
+      - "customer organizer [folder]"
+
+  - pid: 2001
+    name: custom organ horn
+    aliases:
+      - "custom organ [horn]"
+
+  - pid: 2003
+    name: lift gate
+    aliases:
+      - lift gate
+      

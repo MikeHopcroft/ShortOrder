@@ -5,10 +5,10 @@ import { Tokenizer } from 'token-flow';
 
 function stemmerConfusionDemo() {
     const pipeline = new Pipeline(
-        path.join(__dirname, './data/menu.yaml'),
-        path.join(__dirname, './data/intents.yaml'),
-        path.join(__dirname, './data/attributes.yaml'),
-        path.join(__dirname, './data/quantifiers.yaml'),
+        path.join(__dirname, './data/restaurant-en/menu.yaml'),
+        path.join(__dirname, './data/restaurant-en/intents.yaml'),
+        path.join(__dirname, './data/restaurant-en/attributes.yaml'),
+        path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
         undefined);
 
     stemmerConfusionMatrix(pipeline.compositeRecognizer, Tokenizer.defaultStemTerm);

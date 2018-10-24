@@ -3,11 +3,11 @@ import { runRelevanceTest } from './relevance_demo_helper';
 
 function relevanceDemoCars(showPassedCases = false) {
     const suite = runRelevanceTest(
-        path.join(__dirname, './data/cars/catalog.yaml'),
-        path.join(__dirname, './data/intents.yaml'),
-        path.join(__dirname, './data/attributes.yaml'),
-        path.join(__dirname, './data/quantifiers.yaml'),
-        path.join(__dirname, './data/cars/tests.yaml'),
+        path.join(__dirname, './data/auto-dealer/catalog.yaml'),
+        path.join(__dirname, './data/auto-dealer/intents.yaml'),
+        path.join(__dirname, './data/auto-dealer/attributes.yaml'),
+        path.join(__dirname, './data/auto-dealer/quantifiers.yaml'),
+        path.join(__dirname, './data/auto-dealer/tests.yaml'),
         showPassedCases);
     return suite;    
 }

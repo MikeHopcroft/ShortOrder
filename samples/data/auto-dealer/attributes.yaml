@@ -1,0 +1,116 @@
+items:
+
+  #
+  # 1-99: Colors
+  #
+  - pid: 1
+    name: COLOR(RED)
+    aliases:
+      - red
+  - pid: 2
+    name: COLOR(BLUE)
+    aliases:
+      - "[midnight] blue"
+  - pid: 3
+    name: COLOR(SILVER)
+    aliases:
+      - "[metallic] silver"
+  - pid: 4
+    name: COLOR(WHITE)
+    aliases:
+      - white
+  - pid: 5
+    name: COLOR(BLACK)
+    aliases:
+      - black
+  - pid: 6
+    name: COLOR(YELLOW)
+    aliases:
+      - yellow
+  - pid: 7
+    name: COLOR(GRAY)
+    aliases:
+      - gray
+  - pid: 8
+    name: COLOR(GOLD)
+    aliases:
+      - "[metallic] gold"
+
+  #
+  # 100-199: Tire types
+  #
+  - pid: 100
+    name: TIRE(STUDDED)
+    aliases:
+      - studded
+  - pid: 101
+    name: TIRE(KNOBBY)
+    aliases:
+      - knobby
+  - pid: 102
+    name: TIRE(SNOW)
+    aliases:
+      - snow
+  - pid: 103
+    name: TIRE(SLICK)
+    aliases:
+      - slicks
+  - pid: 104
+    name: TIRE(WHITE_WALL)
+    aliases:
+      - white walls
+
+  #
+  # 200-299: Transmission types
+  #
+  - pid: 200
+    name: TRANSMISSION(MANUAL)
+    aliases:
+      - standard
+      - manual
+      - stick
+      - four speed
+      - four on the floor
+  - pid: 201
+    name: TRANSMISSION(AUTOMATIC)
+    aliases:
+      - automatic
+      - six speed
+
+  #
+  # 300-399: Air freshener scents
+  #
+  - pid: 300
+    name: AIR_FRESHENER(PINE)
+    aliases:
+      - "pine [tree]"
+      - evergreen
+  - pid: 301
+    name: AIR_FRESHENER(BUBBLE_GUM)
+    aliases:
+      - "bubble [gum]"
+  - pid: 302
+    name: AIR_FRESHENER(STRAWBERRY)
+    aliases:
+      - strawberry
+  - pid: 303
+    name: AIR_FRESHENER(MINT)
+    aliases:
+      - mint
+      - wintergreen
+  - pid: 304
+    name: AIR_FRESHENER(VANILLA)
+    aliases:
+      - vanilla
+  - pid: 305
+    name: AIR_FRESHENER(NEW_CAR)
+    aliases:
+      - new car
+  - pid: 306
+    name: AIR_FRESHENER(PUMPKIN)
+    aliases:
+      - "pumpkin [spice]"
+  - pid: 307
+    name: AIR_FRESHENER(ORGANIC)
+    aliases:
+      - "organic"
