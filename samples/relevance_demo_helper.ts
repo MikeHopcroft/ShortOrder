@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { Pipeline, tokenToString } from './pipeline';
-import { AggregatedResults, RelevanceSuite } from '../src/relevance_suite';
-import { StemmerFunction, Tokenizer } from '../src/tokenizer';
+import { AggregatedResults, RelevanceSuite } from 'token-flow';
+import { StemmerFunction, Tokenizer } from 'token-flow';
 
 export function runRelevanceTest(
     entityFile: string,

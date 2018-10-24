@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import { itemMapFromYamlString, Item, PatternRecognizer } from '../../src/tokenizer';
-import { PID, StemmerFunction, Token, Tokenizer } from '../../src/tokenizer';
+import { itemMapFromYamlString, Item, PatternRecognizer } from 'token-flow';
+import { PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
 
 export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
 export type ATTRIBUTE = typeof ATTRIBUTE;

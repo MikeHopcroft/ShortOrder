@@ -1,5 +1,5 @@
-import { CompositeRecognizer, NumberRecognizer } from '../../src/recognizers';
-import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from '../../src/tokenizer';
+import { CompositeRecognizer } from 'token-flow';
+import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from 'token-flow';
 
 import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
 import { ENTITY, CreateEntityRecognizer, EntityToken } from '../recognizers';
@@ -108,6 +108,7 @@ export class Pipeline {
         const entityBadWords = new Set([
             ...this.intentRecognizer.terms(),
             ...this.quantityRecognizer.terms(),
+            ...this.numberRecognizer.terms(),
             ...this.attributeRecognizer.terms()
         ]);
 

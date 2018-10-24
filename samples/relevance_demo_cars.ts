@@ -1,6 +1,5 @@
 import * as path from 'path';
 import { runRelevanceTest } from './relevance_demo_helper';
-import { Tokenizer } from '../src/tokenizer';
 
 function relevanceDemoCars(showPassedCases = false) {
     const suite = runRelevanceTest(

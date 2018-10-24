@@ -25,7 +25,7 @@ export function speechToTextFilter(input: string): string {
     // Collapse multiple spaces.
     const d = c.replace(/\s+/g, ' ').trim();
 
-    const words = d.split(' ');
+    const words = d.split(/\s+/);
 
     const e = words.map( word => {
         if (/^\d+$/.test(word)) {

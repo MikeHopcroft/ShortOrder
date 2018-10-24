@@ -1,4 +1,4 @@
-import { NumberRecognizer } from '../../src/recognizers';
+import { NumberRecognizer } from 'token-flow';
 import { QUANTITY, QuantityToken } from './quantity_recognizer';
 
 export function CreateNumberRecognizer(): NumberRecognizer {

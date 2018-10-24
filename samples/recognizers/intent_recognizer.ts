@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import { itemMapFromYamlString, Item, PatternRecognizer } from '../../src/tokenizer';
-import { PID, StemmerFunction, Token, Tokenizer } from '../../src/tokenizer';
+import { itemMapFromYamlString, Item, PatternRecognizer } from 'token-flow';
+import { PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
 
 export const INTENT: unique symbol = Symbol('INTENT');
 export type INTENT = typeof INTENT;

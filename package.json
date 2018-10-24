@@ -45,6 +45,7 @@
     "number-to-words": "^1.2.4",
     "readline-sync": "^1.4.9",
     "snowball-stemmers": "^0.6.0",
+    "token-flow": "file:../tokenflow/token-flow-0.0.18.tgz",
     "type-safe-json-decoder": "^0.2.0",
     "words-to-numbers": "^1.5.1"
   }

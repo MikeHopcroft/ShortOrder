@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { Decoder, array, object, number, string, boolean } from 'type-safe-json-decoder';
-import { Item, PID } from '../../src/tokenizer';
-import { copyArray, copyScalar } from '../../src/utilities';
+import { Item, PID } from 'token-flow';
+import { copyArray, copyScalar } from 'token-flow';
 
 export interface MenuItem extends Item {
     pid: PID;
