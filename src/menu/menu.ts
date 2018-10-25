@@ -28,6 +28,12 @@ function MenuItemFromYamlItem(item: any) {
     };
 }
 
+// ISSUE: Why does Menu need to extend Map<PID, MenuItem>? Who uses this functionality?
+// I think the Map<> requirement is imposed by CreateEntityRecognizer, which uses the
+// map for the token factory. PatternRecognizer doesn't seem to care.
+//
+// TODO: EntityRecognizer should probably use Menu instead of Map<PID, Item>
+// BUG BUG: Menu doesn't seem to load anything into its parent's Map.
 export class Menu extends Map<PID,MenuItem> {
     items: { [index: number]: MenuItem } = {};
 

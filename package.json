@@ -32,6 +32,7 @@
     "@types/node": "^10.11.4",
     "@types/number-to-words": "^1.2.0",
     "@types/readline-sync": "^1.4.3",
+    "@types/snowball-stemmers": "^0.6.0",
     "chai": "^4.2.0",
     "copyfiles": "^2.1.0",
     "gts": "^0.8.0",
@@ -39,7 +40,7 @@
     "typescript": "~2.8.0"
   },
   "dependencies": {
-    "@types/snowball-stemmers": "^0.6.0",
+    "ajv": "^6.5.4",
     "js-yaml": "^3.12.0",
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",

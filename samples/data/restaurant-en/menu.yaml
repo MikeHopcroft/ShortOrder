@@ -6,11 +6,13 @@ items:
     name: Hamburger
     registerName: Hamburger
     aliases:
+      - Burger
       - Hamburger
     price: 1.69
     standalone: true
     defaults: [5000, 5200, 5201, 5202, 5203, 5204, 5205]
-    options: []
+    # NOTE: option 5206 should really be a substitution for default 5205.
+    options: [5100, 5101, 5102, 5103, 5206, 5207, 5208, 5209, 7000]
     
   - pid: 2
     name: Cheeseburger

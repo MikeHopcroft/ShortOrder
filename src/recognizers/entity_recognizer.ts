@@ -1,5 +1,8 @@
 import * as fs from 'fs';
-import { itemMapFromYamlString, Item, PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
+import * as yaml from 'js-yaml';
+import { Item, PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
+
+import { Catalog, CatalogItems, ItemDescription } from '../catalog';
 
 export const ENTITY: unique symbol = Symbol('ENTITY');
 export type ENTITY = typeof ENTITY;
@@ -17,11 +20,13 @@ export function CreateEntityRecognizer(
     entityFile: string,
     badWords: Set<string>,
     stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
-    debugMode = false) {
-    const items = itemMapFromYamlString(fs.readFileSync(entityFile, 'utf8'));
+    debugMode = false
+) {
+    const catalogItems = yaml.safeLoad(fs.readFileSync(entityFile, 'utf8')) as CatalogItems;
+    const catalog = new Catalog(catalogItems);
 
     const tokenFactory = (id: PID, text: string): EntityToken => {
-        const item = items.get(id);
+        const item = catalog.get(id);
 
         let name = "UNKNOWN";
         if (item) {
@@ -30,5 +35,5 @@ export function CreateEntityRecognizer(
         return { type: ENTITY, pid: id, name, text };
     };
 
-    return new PatternRecognizer(items, tokenFactory, badWords, stemmer, debugMode);
+    return new PatternRecognizer(catalog.map, tokenFactory, badWords, stemmer, debugMode);
 }

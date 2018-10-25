@@ -310,7 +310,7 @@ function hackedStemmer(term: string): string {
 
 Here's a very brief roadmap for the project.
 * Write a the tokenizer. Code currently resides in the [token-flow](https://github.com/MikeHopcroft/TokenFlow) project.
-* Implement that menu data structure with rules for the hierarchical composition of menu items,
+* Implement a menu/catalog data structure with rules for the hierarchical composition of menu items,
 default ingrediants, optional ingrediants, substitutions, combos, specials, etc.
 * Implement a general menu item attribute system, so that one can ask for a `"small latte"`
 and then say `"make it a double"`.
