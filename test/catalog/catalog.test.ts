@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import 'mocha';
 
-import { ItemDescription, PID, IsChoiceOf, IsComponentOf, IsDefaultOf, IsOptionOf, IsSubstitutionOf } from '../../src/catalog';
+import { IsChoiceOf, IsComponentOf, IsDefaultOf, IsOptionOf, IsSubstitutionOf, ItemDescription, PID } from '../../src/catalog';
 
 const anyPrice = 0.99;
 const anyDefaultQuantity = 1;
