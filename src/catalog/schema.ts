@@ -1,10 +1,53 @@
 import * as AJV from 'ajv';
-import { CatalogItems } from './interfaces';
+import { CatalogItems, IndexableItemCollection } from './interfaces';
+
+// Schema generated with typescript-json-schema:
+//   typescript-json-schema tsconfig.json IndexableItemCollection --required
+
+const indexableItemCollectionSchema = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "IndexableItem": {
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "aliases",
+                "name",
+                "pid"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "items": {
+            "items": {
+                "$ref": "#/definitions/IndexableItem"
+            },
+            "type": "array"
+        }
+    },
+    "required": [
+        "items"
+    ],
+    "type": "object"
+};
 
 // Schema generated with typescript-json-schema:
 //   typescript-json-schema tsconfig.json CatalogItems --required
 
-const schema = {
+const catalogItemSchema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
         "ChoiceDescription": {
@@ -153,13 +196,23 @@ const schema = {
 };
 
 const ajv = new AJV();
-const validator = ajv.compile(schema);
+const catalogItemsValidator = ajv.compile(catalogItemSchema);
+const indexableItemCollectionValidator = ajv.compile(indexableItemCollectionSchema);
 
-export function validateCatalogItemsSchema(catalog: CatalogItems) {
-    if (!validator(catalog)) {
-        const message = 'catalogFromYamlText: yaml data does not conform to schema.';
+export function validateCatalogItems(catalog: CatalogItems) {
+    if (!catalogItemsValidator(catalog)) {
+        const message = 'validateCatalogItems: yaml data does not conform to schema.';
         console.log(message);
-        console.log(validator.errors);
+        console.log(catalogItemsValidator.errors);
+        throw TypeError(message);
+    }
+}
+
+export function validateIndexableItemsCollection(collection: IndexableItemCollection) {
+    if (!indexableItemCollectionValidator(collection)) {
+        const message = 'validateIndexableItemsCollection: yaml data does not conform to schema.';
+        console.log(message);
+        console.log(indexableItemCollectionValidator.errors);
         throw TypeError(message);
     }
 }

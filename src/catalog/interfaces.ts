@@ -46,11 +46,21 @@ export interface SubstitutionDescription {
     price: number;              // Price for this substitution.
 }
 
-// note; ItemDescription shouldn't be a kitchensink of properties
-export interface ItemDescription {
+export interface IndexableItem {
+    pid: PID;
     name: string;
     aliases: string[];
+}
+
+export interface IndexableItemCollection {
+    items: IndexableItem[];
+}
+
+// note; ItemDescription shouldn't be a kitchensink of properties
+export interface ItemDescription extends IndexableItem {
     pid: PID;
+    name: string;
+    aliases: string[];
     price: number;
     composition: {
         defaults: ComponentDescription[];

@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { Item, PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
 
-import { Catalog, CatalogItems, ItemDescription } from '../catalog';
+import { Catalog, CatalogItems, ItemDescription, validateCatalogItems } from '../catalog';
 
 export const ENTITY: unique symbol = Symbol('ENTITY');
 export type ENTITY = typeof ENTITY;
@@ -23,6 +23,7 @@ export function CreateEntityRecognizer(
     debugMode = false
 ) {
     const catalogItems = yaml.safeLoad(fs.readFileSync(entityFile, 'utf8')) as CatalogItems;
+    validateCatalogItems(catalogItems);
     const catalog = new Catalog(catalogItems);
 
     const tokenFactory = (id: PID, text: string): EntityToken => {

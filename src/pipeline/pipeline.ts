@@ -1,7 +1,7 @@
 import { CompositeRecognizer } from 'token-flow';
 import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from 'token-flow';
 
-import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recognizers'
+import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
 import { ENTITY, CreateEntityRecognizer, EntityToken } from '../recognizers';
 import { INTENT, CreateIntentRecognizer, IntentToken } from '../recognizers';
 import { QUANTITY, CreateQuantityRecognizer, QuantityToken } from '../recognizers';
