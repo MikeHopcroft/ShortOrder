@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import { itemMapFromYamlString, Item, PatternRecognizer } from 'token-flow';
-import { PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
+import { CompositeToken, PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
 
 export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
 export type ATTRIBUTE = typeof ATTRIBUTE;
 
-export interface AttributeToken extends Token {
+export interface AttributeToken extends CompositeToken {
     type: ATTRIBUTE;
-    text: string;
+    children: Token[];
     id: PID;
     name: string;
 }
@@ -16,21 +16,21 @@ export type AttributeRecognizer = PatternRecognizer<Item>;
 
 export function CreateAttributeRecognizer(
     attributeFile: string,
-    badWords: Set<string>,
+    downstreamWords: Set<string>,
     stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
     debugMode = false
 ): AttributeRecognizer {
     const items = itemMapFromYamlString(fs.readFileSync(attributeFile, 'utf8'));
 
-    const tokenFactory = (id: PID, text: string): AttributeToken => {
+    const tokenFactory = (id: PID, children: Token[]): AttributeToken => {
         const item = items.get(id);
 
         let name = "UNKNOWN";
         if (item) {
             name = item.name;
         }
-        return { type: ATTRIBUTE, id, name, text };
+        return { type: ATTRIBUTE, id, name, children };
     };
 
-    return new PatternRecognizer(items, tokenFactory, badWords, stemmer, debugMode);
+    return new PatternRecognizer(items, tokenFactory, downstreamWords, stemmer, false, true, debugMode);
 }

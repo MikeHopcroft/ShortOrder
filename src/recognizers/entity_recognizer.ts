@@ -1,15 +1,12 @@
 import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import { Item, PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
-
-import { Catalog, CatalogItems, ItemDescription, validateCatalogItems } from '../catalog';
+import { CompositeToken, itemMapFromYamlString, Item, PatternRecognizer, PID, StemmerFunction, Token, Tokenizer } from 'token-flow';
 
 export const ENTITY: unique symbol = Symbol('ENTITY');
 export type ENTITY = typeof ENTITY;
 
-export interface EntityToken extends Token {
+export interface EntityToken extends CompositeToken {
     type: ENTITY;
-    text: string;
+    children: Token[];
     pid: PID;
     name: string;
 }
@@ -18,23 +15,20 @@ export type EntityRecognizer = PatternRecognizer<Item>;
 
 export function CreateEntityRecognizer(
     entityFile: string,
-    badWords: Set<string>,
+    downstreamWords: Set<string>,
     stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
-    debugMode = false
-) {
-    const catalogItems = yaml.safeLoad(fs.readFileSync(entityFile, 'utf8')) as CatalogItems;
-    validateCatalogItems(catalogItems);
-    const catalog = new Catalog(catalogItems);
+    debugMode = false) {
+    const items = itemMapFromYamlString(fs.readFileSync(entityFile, 'utf8'));
 
-    const tokenFactory = (id: PID, text: string): EntityToken => {
-        const item = catalog.get(id);
+    const tokenFactory = (id: PID, children: Token[]): EntityToken => {
+        const item = items.get(id);
 
         let name = "UNKNOWN";
         if (item) {
             name = item.name;
         }
-        return { type: ENTITY, pid: id, name, text };
+        return { type: ENTITY, pid: id, name, children };
     };
 
-    return new PatternRecognizer(catalog.map, tokenFactory, badWords, stemmer, debugMode);
+    return new PatternRecognizer(items, tokenFactory, downstreamWords, stemmer, false, false, debugMode);
 }
