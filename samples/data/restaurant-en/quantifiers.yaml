@@ -3,29 +3,20 @@ items:
   - pid: 0
     name: "0"
     aliases:
-      - no
+      - "no"
       - without
-      - with no
+      - with (no,zero)
+      - (drop,hold,lose,remove,skip) the
       - zero
-      - with zero
-      - lose the
-      - remove the
-      - skip the
-      - drop the
-      - hold the
 
   - pid: 1
     name: "1"
     aliases:
-      - a
-      - an
+      - "[with] (a,an,extra,more,some,the)"
       - add
-      - just a
-      - some
-      - more
-      - extra
+      # NOTE: "just a" collides with "just a sec"
+      # - just a
       - with
-      - the
 
   - pid: 2
     name: "2"
