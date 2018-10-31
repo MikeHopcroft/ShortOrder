@@ -1,7 +1,7 @@
 - priority: 1
   suites: general
   input: Hamburger with extra pickles
-  expected: '[ENTITY:HAMBURGER,1] [QUANTITY:1] [QUANTITY:1] [ENTITY:PICKLES,5200]'
+  expected: '[ENTITY:HAMBURGER,1] [QUANTITY:1] [ENTITY:PICKLES,5200]'
 
 
 # ISSUE: This is a case where the stemmer causes confusion between 'fries' and 'fried'.
@@ -11,7 +11,7 @@
   suites: general
   input: Uh yeah I'd like a pet chicken fries and a coke
   expected: >-
-    [WORD:Uh] [SEPERATORS] [ADD_TO_ORDER] [QUANTITY:1]
+    [SEPERATOR] [SEPERATOR] [ADD_TO_ORDER] [QUANTITY:1]
     [ENTITY:GRILLED_PETALUMA_CHICKEN_SANDWICH,100] [ENTITY:MEDIUM_FRENCH_FRIES,401]
     [CONJUNCTION] [QUANTITY:1] [ENTITY:MEDIUM_COKE,1001]
 
@@ -19,7 +19,7 @@
   suites: general
   input: Uh yeah I'd like a pet chicken french fries and a coke
   expected: >-
-    [WORD:Uh] [SEPERATORS] [ADD_TO_ORDER] [QUANTITY:1]
+    [SEPERATOR] [SEPERATOR] [ADD_TO_ORDER] [QUANTITY:1]
     [ENTITY:GRILLED_PETALUMA_CHICKEN_SANDWICH,100]
     [ENTITY:MEDIUM_FRENCH_FRIES,401] [CONJUNCTION] [QUANTITY:1]
     [ENTITY:MEDIUM_COKE,1001]
