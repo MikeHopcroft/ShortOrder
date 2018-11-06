@@ -1,13 +1,17 @@
 import { CatalogItems, ItemDescription, PID } from './interfaces';
+// import { Type } from 'js-yaml';
 
-export class Catalog implements CatalogItems {
-    items: ItemDescription[];
+// TODO: No neet to implement CatalogItems.
+export class Catalog { 
+    // implements CatalogItems {
+    // TODO: don't really need to store items - just the map.
+    // items: ItemDescription[];
     map = new Map<PID, ItemDescription>();
 
     constructor(catalogItems: CatalogItems) {
-        this.items = catalogItems.items;
+        // this.items = catalogItems.items;
 
-        for (const item of this.items) {
+        for (const item of catalogItems.items) {
             if (this.map.has(item.pid)) {
                 throw TypeError(`Catalog: encountered duplicate pid ${item.pid}.`);
             }
@@ -16,41 +20,48 @@ export class Catalog implements CatalogItems {
     }
 
     has = this.map.has;
-    get = this.map.get;
 
+    // TODO: modify get to throw if not available.
+    get(pid: PID) {
+        const item = this.map.get(pid);
+        if (!item) {
+            throw TypeError(`Catalog.get(): cannot find pid=${pid}`);
+        }
+        return item;
+    }
 
-    static IsDefaultOf(child: ItemDescription, parent: ItemDescription): boolean {
+    static IsDefaultOf(pid: PID, parent: ItemDescription): boolean {
         return parent.composition.defaults.find( component =>
-            component.pid === child.pid
+            component.pid === pid
         ) !== undefined;
     }
 
-    static IsChoiceOf(child: ItemDescription, parent: ItemDescription): boolean {
+    static IsChoiceOf(pid: PID, parent: ItemDescription): boolean {
         for (const choice of parent.composition.choices) {
-            if (choice.alternatives.find( alternative => child.pid === alternative)) {
+            if (choice.alternatives.find( alternative => pid === alternative)) {
                 return true;
             }
         }
         return false;
     }
 
-    static IsOptionOf(child: ItemDescription, parent: ItemDescription): boolean {
+    static IsOptionOf(pid: PID, parent: ItemDescription): boolean {
         return parent.composition.options.find( option =>
-            option.pid === child.pid
+            option.pid === pid
         ) !== undefined;
     }
 
-    static IsSubstitutionOf(child: ItemDescription, parent: ItemDescription): boolean {
+    static IsSubstitutionOf(pid: PID, parent: ItemDescription): boolean {
         return parent.composition.substitutions.find( substitution =>
-            substitution.replaceWith === child.pid
+            substitution.replaceWith === pid
         ) !== undefined;
     }
 
-    static IsComponentOf(child: ItemDescription, parent: ItemDescription) {
-        return Catalog.IsDefaultOf(child, parent)
-            || Catalog.IsChoiceOf(child, parent)
-            || Catalog.IsOptionOf(child, parent)
-            || Catalog.IsSubstitutionOf(child, parent);
+    static IsComponentOf(pid: PID, parent: ItemDescription) {
+        return Catalog.IsDefaultOf(pid, parent)
+            || Catalog.IsChoiceOf(pid, parent)
+            || Catalog.IsOptionOf(pid, parent)
+            || Catalog.IsSubstitutionOf(pid, parent);
     }
 
     static isStandalone(item: ItemDescription) {

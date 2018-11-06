@@ -1,4 +1,4 @@
-import { ItemDescription, PID } from '../catalog';
+import { ItemDescription, PID, Catalog } from '../catalog';
 import { reverse } from 'dns';
 
 // TODO
@@ -166,19 +166,82 @@ export class CartOps {
         return { items: [...cart.items, item]};
     }
 
-    static removeItems(cart: Cart, predicate: (item: ItemInstance) => boolean): Cart {
+    static removeItem(cart: Cart, predicate: (item: ItemInstance) => boolean): Cart {
         return { items: cart.items.filter(predicate) };
     }
 
-    static modifyNewestItem(cart: Cart, modifier: (item: ItemInstance) => ItemInstance): Cart {
+    // TODO: consistent policy of indicating changes were made. Option to return undefined?
+    static modifyNewestMatchingItem(cart: Cart, modifier: (item: ItemInstance) => ItemInstance | undefined): Cart {
         // TODO: copy remaining items after first modification.
         const reversed = cart.items.slice().reverse();
-        const modified = reversed.map(modifier).reverse();
-        return { items: modified };
+        // const modified = reversed.map(modifier).reverse();
+        // return { items: modified };
+        let changed = false;
+        const modifiedItems: ItemInstance[] = [];
+        for (const originalItem of reversed) {
+            if (changed) {
+                modifiedItems.push(originalItem);
+            }
+            else {
+                const modifiedItem = modifier(originalItem);
+                if (modifiedItem) {
+                    changed = true;
+                    modifiedItems.push(modifiedItem);
+                }
+                else {
+                    modifiedItems.push(originalItem);
+                }
+            }
+        }
+
+        if (changed) {
+            modifiedItems.reverse();
+            return { ...cart, items: modifiedItems };
+        }
+        else {
+            return cart;
+        }
     }
 
-    static tryRemoveComponent(child: PID, parent: ItemInstance) {
+    static tryRemoveComponent(pid: PID, parent: ItemInstance, pd: ItemDescription): ItemInstance | undefined {
+        // First, see if item has component as default.
+        //   Remove from default if not already removed
+        // Next, see if component has been added as an option.
+        //   Cancel addition
+        // Next, see if it has been added as a substitution.
+        //   Cancel substitution
+        //   Also remove default
+        // Next, see if it has been added as a choice.
 
+        // TODO: handle CUSTOM modification.
+
+        // Filter out additions, substitutions, choices, notes, etc. for this PID.
+        // If this PID is a default and there is not already a remove, remove.
+        let changed = false;
+        let filtered = parent.modifications.filter( (item) => {
+            const foundOne = (item.type === ModificationType.REMOVE) ||
+                (item.type === ModificationType.CUSTOM) ||
+                (item.pid !== pid);
+            changed = changed || foundOne;
+            return foundOne; 
+        });
+
+        // If the item being removed is a default and hasn't been removed already,
+        // remove it now.
+        if (Catalog.IsDefaultOf(pid, pd) && !filtered.find( (item) =>
+            item.type === ModificationType.REMOVE && item.pid === pid
+        )) {
+            changed = true;
+            filtered = [...filtered, { type: ModificationType.REMOVE, pid }];
+        }
+
+        // TODO: Is it ok to modify the cart, even if nothing changed?
+        if (changed) {
+            return { ...parent, modifications: filtered };
+        }
+        else {
+            return undefined;
+        }
     }
 }
 
