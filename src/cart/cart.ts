@@ -152,13 +152,24 @@ export interface Cart {
 //
 // Sample function implementations
 //
-function CreateItemInstance(description: ItemDescription): ItemInstance {
-    return {
-        pid: description.pid,
-        quantity: 1,
-        modifications: []
-    };
+export class CartOps {
+    static createItemInstance(description: ItemDescription, quantity: number): ItemInstance {
+        return {
+            pid: description.pid,
+            quantity,
+            modifications: []
+        };
+    }
+
+    static addItem(cart: Cart, item: ItemInstance): Cart {
+        return { items: [...cart.items, item]};
+    }
+
+    static removeItems(cart: Cart, predicate: (item: ItemInstance) => boolean): Cart {
+        return { items: cart.items.filter(predicate) };
+    }
 }
+
 
 function CanItemAddComponent(item: ItemInstance, component: ItemDescription): boolean {
     return false;

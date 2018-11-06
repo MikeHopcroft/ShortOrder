@@ -150,11 +150,15 @@ const catalogItemSchema = {
                 },
                 "price": {
                     "type": "number"
+                },
+                "isStandalone": {
+                    "type": "boolean"
                 }
             },
             "required": [
                 "aliases",
                 "composition",
+                "isStandalone",
                 "name",
                 "pid",
                 "price"

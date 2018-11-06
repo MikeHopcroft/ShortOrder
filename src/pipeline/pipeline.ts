@@ -9,7 +9,7 @@ import { CreateNumberRecognizer } from '../recognizers';
 // import { FixupRecognizer } from '../recognizers';
 
 
-type AnyToken =
+export type AnyToken =
     AttributeToken |
     EntityToken |
     IntentToken |

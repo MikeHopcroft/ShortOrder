@@ -17,39 +17,43 @@ export class Catalog implements CatalogItems {
 
     has = this.map.has;
     get = this.map.get;
-}
 
-export function IsDefaultOf(child: ItemDescription, parent: ItemDescription): boolean {
-    return parent.composition.defaults.find( component =>
-        component.pid === child.pid
-    ) !== undefined;
-}
 
-export function IsChoiceOf(child: ItemDescription, parent: ItemDescription): boolean {
-    for (const choice of parent.composition.choices) {
-        if (choice.alternatives.find( alternative => child.pid === alternative)) {
-            return true;
-        }
+    static IsDefaultOf(child: ItemDescription, parent: ItemDescription): boolean {
+        return parent.composition.defaults.find( component =>
+            component.pid === child.pid
+        ) !== undefined;
     }
-    return false;
-}
 
-export function IsOptionOf(child: ItemDescription, parent: ItemDescription): boolean {
-    return parent.composition.options.find( option =>
-        option.pid === child.pid
-    ) !== undefined;
-}
+    static IsChoiceOf(child: ItemDescription, parent: ItemDescription): boolean {
+        for (const choice of parent.composition.choices) {
+            if (choice.alternatives.find( alternative => child.pid === alternative)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-export function IsSubstitutionOf(child: ItemDescription, parent: ItemDescription): boolean {
-    return parent.composition.substitutions.find( substitution =>
-        substitution.replaceWith === child.pid
-    ) !== undefined;
-}
+    static IsOptionOf(child: ItemDescription, parent: ItemDescription): boolean {
+        return parent.composition.options.find( option =>
+            option.pid === child.pid
+        ) !== undefined;
+    }
 
-export function IsComponentOf(child: ItemDescription, parent: ItemDescription) {
-    return IsDefaultOf(child, parent)
-        || IsChoiceOf(child, parent)
-        || IsOptionOf(child, parent)
-        || IsSubstitutionOf(child, parent);
-}
+    static IsSubstitutionOf(child: ItemDescription, parent: ItemDescription): boolean {
+        return parent.composition.substitutions.find( substitution =>
+            substitution.replaceWith === child.pid
+        ) !== undefined;
+    }
 
+    static IsComponentOf(child: ItemDescription, parent: ItemDescription) {
+        return Catalog.IsDefaultOf(child, parent)
+            || Catalog.IsChoiceOf(child, parent)
+            || Catalog.IsOptionOf(child, parent)
+            || Catalog.IsSubstitutionOf(child, parent);
+    }
+
+    static isStandalone(item: ItemDescription) {
+        return item.isStandalone;
+    }
+}
