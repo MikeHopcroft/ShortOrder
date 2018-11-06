@@ -1,4 +1,5 @@
 import { ItemDescription, PID } from '../catalog';
+import { reverse } from 'dns';
 
 // TODO
 //   Finalize Catalog interfaces.
@@ -167,6 +168,17 @@ export class CartOps {
 
     static removeItems(cart: Cart, predicate: (item: ItemInstance) => boolean): Cart {
         return { items: cart.items.filter(predicate) };
+    }
+
+    static modifyNewestItem(cart: Cart, modifier: (item: ItemInstance) => ItemInstance): Cart {
+        // TODO: copy remaining items after first modification.
+        const reversed = cart.items.slice().reverse();
+        const modified = reversed.map(modifier).reverse();
+        return { items: modified };
+    }
+
+    static tryRemoveComponent(child: PID, parent: ItemInstance) {
+
     }
 }
 

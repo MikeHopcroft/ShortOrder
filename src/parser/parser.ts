@@ -1,6 +1,8 @@
 import { AnyToken, ATTRIBUTE, AttributeToken, ENTITY, EntityToken, QUANTITY, QuantityToken, INTENT, IntentToken} from '..';
 import { Cart, CartOps, Catalog } from '..';
 import { PeekableSequence, Token } from 'token-flow';
+import { ItemDescription } from '../catalog';
+import { ItemInstance } from '../cart';
 
 // TODO: MultipleEntityToken, MultipleAttributeToken
 
@@ -73,6 +75,16 @@ class Parser {
                 // This item is a component of another item.
                 // We're probably adding or removing it from an item already in the cart.
                 // Look in cart for most recently added item.
+                CartOps.modifyNewestItem(cart, (item: ItemInstance): ItemInstance => {
+                    const parent = this.catalog.get(item.pid);
+                    if (parent && Catalog.IsComponentOf(description, parent)) {
+
+                    }
+                    else {
+                        // We've already made our modification, so just return this item.
+                        return item;
+                    }
+                });
             }
         }
         else {
