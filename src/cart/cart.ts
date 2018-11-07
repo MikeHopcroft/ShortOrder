@@ -1,5 +1,4 @@
 import { ItemDescription, PID, Catalog } from '../catalog';
-import { reverse } from 'dns';
 
 // TODO
 //   Finalize Catalog interfaces.
@@ -163,26 +162,29 @@ export class CartOps {
     }
 
     static addItem(cart: Cart, item: ItemInstance): Cart {
-        return { items: [...cart.items, item]};
+        // TODO: also try adding choice to item in cart.
+        return { items: [...cart.items, item] };
     }
 
     static removeItem(cart: Cart, predicate: (item: ItemInstance) => boolean): Cart {
+        // ISSUE: this removes all instances of item.
+        // TODO: also try removing choice from item in cart.
         return { items: cart.items.filter(predicate) };
     }
 
     // TODO: consistent policy of indicating changes were made. Option to return undefined?
-    static modifyNewestMatchingItem(cart: Cart, modifier: (item: ItemInstance) => ItemInstance | undefined): Cart {
-        // TODO: copy remaining items after first modification.
-        const reversed = cart.items.slice().reverse();
-        // const modified = reversed.map(modifier).reverse();
-        // return { items: modified };
+    static tryModifyNewestMatchingItem(cart: Cart, modifier: (item: ItemInstance) => ItemInstance | undefined): Cart {
         let changed = false;
         const modifiedItems: ItemInstance[] = [];
+        const reversed = cart.items.slice().reverse();
         for (const originalItem of reversed) {
             if (changed) {
+                // After changing one modification, copy all remaining
+                // modifications, unchanged.
                 modifiedItems.push(originalItem);
             }
             else {
+                // Attempt to modify this item.
                 const modifiedItem = modifier(originalItem);
                 if (modifiedItem) {
                     changed = true;
@@ -203,41 +205,114 @@ export class CartOps {
         }
     }
 
-    static tryRemoveComponent(pid: PID, parent: ItemInstance, pd: ItemDescription): ItemInstance | undefined {
-        // First, see if item has component as default.
-        //   Remove from default if not already removed
-        // Next, see if component has been added as an option.
-        //   Cancel addition
-        // Next, see if it has been added as a substitution.
-        //   Cancel substitution
-        //   Also remove default
-        // Next, see if it has been added as a choice.
-
-        // TODO: handle CUSTOM modification.
-
-        // Filter out additions, substitutions, choices, notes, etc. for this PID.
-        // If this PID is a default and there is not already a remove, remove.
-        let changed = false;
-        let filtered = parent.modifications.filter( (item) => {
-            const foundOne = (item.type === ModificationType.REMOVE) ||
-                (item.type === ModificationType.CUSTOM) ||
-                (item.pid !== pid);
-            changed = changed || foundOne;
-            return foundOne; 
-        });
-
-        // If the item being removed is a default and hasn't been removed already,
-        // remove it now.
-        if (Catalog.IsDefaultOf(pid, pd) && !filtered.find( (item) =>
-            item.type === ModificationType.REMOVE && item.pid === pid
-        )) {
-            changed = true;
-            filtered = [...filtered, { type: ModificationType.REMOVE, pid }];
+    static tryAddComponent(pid: PID, count: number, parent: ItemInstance, pd: ItemDescription): ItemInstance | undefined {
+        if (Catalog.IsDefaultOf(pid, pd) || Catalog.IsOptionOf(pid, pd)) {
+            return this.trySetQuantity(pid, count, parent, pd);
         }
 
-        // TODO: Is it ok to modify the cart, even if nothing changed?
+        if (Catalog.IsChoiceOf(pid, pd)) {
+            return this.trySetChoice(pid, count, parent, pd);
+        }
+
+        // pid could not be added because it is not a default, option, or
+        // choice of parent.
+        return undefined;
+    }
+
+    static trySetQuantity(pid: PID, delta: number, parent: ItemInstance, pd: ItemDescription): ItemInstance | undefined {
+        let changed = false;
+        const modifications: Modification[] = [];
+        for (const mod of parent.modifications) {
+            // Only retain modifications that are not removals.
+            if (mod.type !== ModificationType.REMOVE) {
+
+                // If we encounter a QUANTITY modification, replace it.
+                if (mod.type === ModificationType.QUANTITY
+                    && mod.pid === pid
+                    && mod.delta !== delta
+                ) {
+                    modifications.push({...mod, delta});
+                    changed = true;
+                }
+                else {
+                    modifications.push(mod);
+                }
+            }
+        }
+        if (!changed) {
+            modifications.push({type: ModificationType.QUANTITY, pid, delta});
+            changed = true;
+        }
+
         if (changed) {
-            return { ...parent, modifications: filtered };
+            return { ...parent, modifications };
+        }
+        else {
+            return undefined;
+        }
+    }
+
+    static trySetChoice(pid: PID, delta: number, parent: ItemInstance, pd: ItemDescription): ItemInstance | undefined {
+        let changed = false;
+        const modifications: Modification[] = [];
+        for (const mod of parent.modifications) {
+            // Only retain modifications that are not removals.
+            if (mod.type !== ModificationType.CHOICE ||
+                mod.pid !== pid ||
+                mod.choice.quantity !== delta
+            ) {
+                modifications.push(mod);
+            }
+            else {
+                const choice = CartOps.createItemInstance(pid, delta);
+                modifications.push({ type: ModificationType.CHOICE, pid, choice});
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            return { ...parent, modifications };
+        }
+        else {
+            return undefined;
+        }
+    }
+
+    // TODO: what about items that contradict each other?
+    //   Add medium-rare to an item that is well-done.
+    // TODO: handle CUSTOM modification.
+    static tryRemoveComponent(pid: PID, parent: ItemInstance, pd: ItemDescription): ItemInstance | undefined {
+        
+        // Filter out additions, substitutions, choices, notes, etc. for this PID.
+        let changed = false;
+        let hasRemove = false;
+        const modifications: Modification[] = [];
+        for (const mod of parent.modifications) {
+            if (mod.type !== ModificationType.QUANTITY ||
+                mod.pid !== pid
+                ) {
+                    // Not a QUANTITY adjustment for pid, so copy.
+                    modifications.push(mod);
+                    
+                    if (mod.type === ModificationType.REMOVE && mod.pid === pid) {
+                        hasRemove = true;
+                    }
+                }
+                else {
+                    // Found a QUANTITY adjustment for pid. Don't copy it.
+                    changed = true;
+                }
+            }
+            
+        // If this PID is a default and there is not already a remove, remove.
+        if (!hasRemove && Catalog.IsDefaultOf(pid, pd)) {
+            // If there was no REMOVE modification, add one now.
+            modifications.push({ type: ModificationType.REMOVE, pid });
+            changed = true;
+        }
+
+        if (changed) {
+            return { ...parent, modifications };
         }
         else {
             return undefined;

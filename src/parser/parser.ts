@@ -59,6 +59,9 @@ class Parser {
         const description = this.catalog.get(entity.pid);
 
         if (Catalog.isStandalone(description)) {
+
+            // TODO: Even if it is standalone, it might be a choice of another item.
+
             if (quantity === 0) {
                 // We're probably removing an existing item from the cart.
                 // What if existing item is ingredient of another item? E.g. part of a combo/special meal.
@@ -77,29 +80,14 @@ class Parser {
             if (quantity === 0) {
                 // We're probably adding or removing it from an item already in the cart.
                 // Look in cart for most recently added item.
-                return CartOps.modifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
+                return CartOps.tryModifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
                     CartOps.tryRemoveComponent(item.pid, item, this.catalog.get(item.pid)));
-                    // const parent = this.catalog.get(item.pid);
-                    // if (parent && Catalog.IsComponentOf(description.pid, parent)) {
-
-                    // }
-                    // else {
-                    //     // We've already made our modification, so just return this item.
-                    //     return item;
-                    // }
-                //);
             }
             else {
-                return CartOps.modifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
-                    CartOps.tryAddComponent(item.pid, item, this.catalog.get(item.pid)));
+                return CartOps.tryModifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
+                    CartOps.tryAddComponent(item.pid, quantity, item, this.catalog.get(item.pid)));
             }
         }
-        // else {
-        //     // We couldn't find this item in the catalog, even though the tokenizer generated it.
-        //     // Probably a bug.
-        //     // TODO: log unknown PID?
-        //     console.log(`addEntityToCart: unknown item pid=${entity.pid}`);
-        // }
     }
 
     // https://medium.com/@ustunozgur/object-oriented-functional-programming-or-how-can-you-use-classes-as-redux-reducers-23462a5cae85
