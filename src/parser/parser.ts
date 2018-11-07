@@ -81,11 +81,11 @@ class Parser {
                 // We're probably adding or removing it from an item already in the cart.
                 // Look in cart for most recently added item.
                 return CartOps.tryModifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
-                    CartOps.tryRemoveComponent(item.pid, item, this.catalog.get(item.pid)));
+                    CartOps.tryRemoveComponent(description.pid, item, this.catalog.get(item.pid)));
             }
             else {
                 return CartOps.tryModifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
-                    CartOps.tryAddComponent(item.pid, quantity, item, this.catalog.get(item.pid)));
+                    CartOps.tryAddComponent(description.pid, quantity, item, this.catalog.get(item.pid)));
             }
         }
     }

@@ -186,12 +186,17 @@ export class CartOps {
             else {
                 // Attempt to modify this item.
                 const modifiedItem = modifier(originalItem);
-                if (modifiedItem) {
-                    changed = true;
-                    modifiedItems.push(modifiedItem);
+
+                if (modifiedItem === originalItem) {
+                    // This item was not changed. Just copy it.
+                    modifiedItems.push(originalItem);
                 }
                 else {
-                    modifiedItems.push(originalItem);
+                    // We either changed or eliminated this item.
+                    changed = true;
+                    if (modifiedItem != null) {
+                        modifiedItems.push(modifiedItem);
+                    }
                 }
             }
         }
@@ -231,7 +236,7 @@ export class CartOps {
                     && mod.pid === pid
                     && mod.delta !== delta
                 ) {
-                    modifications.push({...mod, delta});
+                    modifications.push({ ...mod, delta });
                     changed = true;
                 }
                 else {
@@ -240,7 +245,7 @@ export class CartOps {
             }
         }
         if (!changed) {
-            modifications.push({type: ModificationType.QUANTITY, pid, delta});
+            modifications.push({ type: ModificationType.QUANTITY, pid, delta });
             changed = true;
         }
 
@@ -265,7 +270,7 @@ export class CartOps {
             }
             else {
                 const choice = CartOps.createItemInstance(pid, delta);
-                modifications.push({ type: ModificationType.CHOICE, pid, choice});
+                modifications.push({ type: ModificationType.CHOICE, pid, choice });
                 changed = true;
             }
         }
@@ -281,41 +286,160 @@ export class CartOps {
     // TODO: what about items that contradict each other?
     //   Add medium-rare to an item that is well-done.
     // TODO: handle CUSTOM modification.
-    static tryRemoveComponent(pid: PID, parent: ItemInstance, pd: ItemDescription): ItemInstance | undefined {
-        
-        // Filter out additions, substitutions, choices, notes, etc. for this PID.
-        let changed = false;
-        let hasRemove = false;
-        const modifications: Modification[] = [];
-        for (const mod of parent.modifications) {
-            if (mod.type !== ModificationType.QUANTITY ||
-                mod.pid !== pid
-                ) {
-                    // Not a QUANTITY adjustment for pid, so copy.
-                    modifications.push(mod);
-                    
-                    if (mod.type === ModificationType.REMOVE && mod.pid === pid) {
-                        hasRemove = true;
-                    }
+    static tryRemoveComponent(pid: PID, parent: ItemInstance, pd: ItemDescription): ItemInstance | null {
+        if (pid === parent.pid) {
+            // Remove the entire item.
+            return null;
+        }
+        else {
+            // Otherwise, try to remove a component of the item.
+            // Filter out additions, substitutions, choices, notes, etc. for this PID.
+            let hasRemove = false;
+            const modifications: Modification[] = [];
+            for (const mod of parent.modifications) {
+                switch (mod.type) {
+                    case ModificationType.CUSTOM:
+                        // Only copy this modification for other pid values.
+                        if (pid !== mod.item.pid) {
+                            modifications.push(mod);
+                        }
+                        break;
+                    case ModificationType.CHOICE:
+                        // Only copy this modification for other pid values.
+                        if (pid !== mod.choice.pid) {
+                            modifications.push(mod);
+                        }
+                        break;
+                    case ModificationType.NOTE:
+                    case ModificationType.QUANTITY:
+                    case ModificationType.SUBSTITUTE:
+                        // Only copy these modification for other pid values.
+                        if (pid !== mod.pid) {
+                            modifications.push(mod);
+                        }
+                        break;
+                    case ModificationType.REMOVE:
+                        modifications.push(mod);
+                        if (pid !== mod.pid) {
+                            hasRemove = true;
+                        }
+                    break;
+                    default:
                 }
-                else {
-                    // Found a QUANTITY adjustment for pid. Don't copy it.
+
+                // if (mod.type !== ModificationType.QUANTITY ||
+                //     mod.pid !== pid
+                // ) {
+                //     // Not a QUANTITY adjustment for pid, so copy.
+                //     modifications.push(mod);
+
+                //     if (mod.type === ModificationType.REMOVE && mod.pid === pid) {
+                //         hasRemove = true;
+                //     }
+                // }
+                // else {
+                //     // Found a QUANTITY adjustment for pid. Don't copy it.
+                //     changed = true;
+                // }
+            }
+
+            let changed = (modifications.length !== parent.modifications.length));
+
+            // If this PID is a default and there is not already a remove, remove.
+            if (Catalog.IsDefaultOf(pid, pd) && !hasRemove) {
+                // If the PID represents a default, add a REMOVE if there 
+                // isn't one already there.
+                modifications.push({ type: ModificationType.REMOVE, pid });
+                changed = true;
+            }
+
+            if (changed) {
+                return { ...parent, modifications };
+            }
+            else {
+                return parent;
+            }
+        }
+    }
+
+    static traverse(cart: Cart, f: (item: ItemInstance) => ItemInstance | null) {
+        let changed = false;
+        const items: ItemInstance[] = [];
+
+        for (const item of cart.items) {
+            let result: ItemInstance | null = item;
+
+            if (changed) {
+                // We've already changed an item, so just copy this one.
+                items.push(result);
+            }
+            else {
+                // We haven't yet changed an item, so attempt to change this
+                // one. First try to change one of this item's choices.
+                result = CartOps.traverseChoices(item, f);
+
+                if (result === item) {
+                    // If none of the item's choices were changed,
+                    // attempt to change the item itself.
+                    result = f(item);
+                }
+
+                if (result !== null) {
+                    items.push(result);
+                }
+
+                if (result !== item) {
                     changed = true;
                 }
             }
-            
-        // If this PID is a default and there is not already a remove, remove.
-        if (!hasRemove && Catalog.IsDefaultOf(pid, pd)) {
-            // If there was no REMOVE modification, add one now.
-            modifications.push({ type: ModificationType.REMOVE, pid });
-            changed = true;
         }
 
         if (changed) {
-            return { ...parent, modifications };
+            return { items };
         }
         else {
-            return undefined;
+            return cart;
+        }
+
+    }
+
+    static traverseChoices(
+        item: ItemInstance,
+        f: (item: ItemInstance) => ItemInstance | null
+    ): ItemInstance {
+        let changed = false;
+        const modifications: Modification[] = [];
+
+        for (const mod of item.modifications) {
+            if (mod.type !== ModificationType.CHOICE || changed) {
+                // If this isn't a CHOICE or we've already changed a
+                // modification, just copy unchanged.
+                modifications.push(mod);
+            }
+            else {
+                // Otherwise, attempt to change this choice.
+                const choice = f(mod.choice);
+
+                if (choice === mod.choice) {
+                    // No changes. Just copy.
+                    modifications.push(mod);
+                }
+                else {
+                    // We changed this choice.
+                    // Copy the choice if it wasn't removed.
+                    changed = true;
+                    if (choice !== null) {
+                        modifications.push({ ...mod, choice });
+                    }
+                }
+            }
+        }
+
+        if (changed) {
+            return { ...item, modifications };
+        }
+        else {
+            return item;
         }
     }
 }
