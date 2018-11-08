@@ -35,7 +35,9 @@ export class CartOps {
             else {
                 // Attempt to edit an item.
                 const result = this.updateItem(item, pid, quantity);
-                updated.push(result);
+                if (result.quantity !== 0) {
+                    updated.push(result);
+                }
 
                 if (result !== item) {
                     changed = true;
@@ -49,15 +51,13 @@ export class CartOps {
             changed = true;
             updated.unshift({ pid, quantity, modifications:[] });
         }
-        else {
-            // TODO: report or log error here?
-            console.log(`CartOps.updateCart(): no modifications for pid=${pid}.`);
-        }
 
         if (changed) {
             return { ...cart, items: updated };
         }
         else {
+            // TODO: report or log error here?
+            console.log(`CartOps.updateCart(): no modifications for pid=${pid}.`);
             return cart;
         }
     }
@@ -218,3 +218,18 @@ export interface LineItem {
     quantity: number;      // TODO: ADD vs SUB vs NO vs x
 }
 
+// TODO: prices for everything in menu (including drinks)
+// TODO: menu item with choices
+// TODO: fields for order printing
+// TODO: ADD delta above default for order printing
+// TODO: correct prices for order printing
+// TODO: subtotal, tax, total for cart formatting
+// TODO: add options to menu items (e.g. 7000 = well done)
+// TODO: format messages without ADD
+// TODO: unit tests
+//   add sub item that matches nothing
+//   add top level item
+//   remove top level item
+//   add sub item that matches 1st top level
+//   add sub item that matches 2nd top level
+// TODO: check for legal quantities in add/remove

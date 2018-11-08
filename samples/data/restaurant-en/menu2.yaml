@@ -143,7 +143,12 @@ items:
           price: 0.3
       choices: []
       substitutions: []
-      options: []
+      options:
+        - pid: 7000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
   - pid: 3
     name: Big Apple Burger
     registerName: Big Apple
