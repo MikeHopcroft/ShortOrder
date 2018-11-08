@@ -1,5 +1,47 @@
 import { ItemDescription, PID, Catalog } from '../catalog';
 
+
+// DESIGN INTENT: most objects are POJOs, instead of classes to allow for
+// serialization.
+
+// ///////////////////////////////////////////////////////////////////////////////
+// //
+// // DESIGN NOTE: We might want a function that will compute a hash for a
+// // canonical representation of the components ItemInstance. We could use this
+// // hash to convert a "Hamburger with Cheese" into a "Cheeseburger". Another
+// // use case would be when someone orders two Dakota Burgers and we replace it
+// // with a Two-Fer combo.
+// //
+// // DESIGN NOTE: We should think about canonical forms for ItemInstances.
+// // Are two ItemInstances with the same ingredients, but different orders
+// // considered the same? Are we optimizing for capturing customer history
+// // timeline or for canonical contents.
+// //
+// // DESIGN NOTE: We might want a function that takes an ItemInstance and
+// // returns its flattened form. One could use this to, say, convert a Dakota
+// // Combo to a sandwich, fries, and a drink choice, as the first step in
+// // replacing the drink with a Frappe, which is not a part of the Dakota Combo.
+// // 
+// ///////////////////////////////////////////////////////////////////////////////
+
+
+// function CanItemAddComponent(item: ItemInstance, component: ItemDescription): boolean {
+//     return false;
+// }
+
+// type CanItemRemoveComponent = (item: ItemInstance, component: ItemDescription) => boolean;
+// type CanItemReplaceComponent = (item: ItemInstance, replaces: ItemDescription, replacesWith: ItemDescription) => boolean;
+// type IsComponentOfItem = (parent: ItemDescription, child: ItemDescription) => boolean;
+// type IsItemFullySpecified = (item: ItemInstance) => boolean;
+
+// // for developer asserts, only. Not public? Part of test harness?
+// type IsItemValid = (item: ItemInstance) => boolean;
+
+// // QUESTION: does this return an array of UID or ComponentInstance?
+// // QUESTION: does the system provide a map from UID to ComponentInstance?
+// type ListIncompleteComponents = (item: ItemInstance) => ItemInstance[];
+
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // ItemInstance
