@@ -30,41 +30,59 @@ export class Catalog {
         return item;
     }
 
-    static IsDefaultOf(pid: PID, parent: ItemDescription): boolean {
-        return parent.composition.defaults.find( component =>
-            component.pid === pid
+    isDefaultOf(child: PID, parent: PID): boolean {
+        const p = this.get(parent);
+        return p.composition.defaults.find(
+            component => component.pid === child
         ) !== undefined;
     }
 
-    static IsChoiceOf(pid: PID, parent: ItemDescription): boolean {
-        for (const choice of parent.composition.choices) {
-            if (choice.alternatives.find( alternative => pid === alternative)) {
+    isChoiceOf(child: PID, parent: PID): boolean {
+        const p = this.get(parent);
+        for (const choice of p.composition.choices) {
+            if (choice.alternatives.find( alternative => child === alternative)) {
                 return true;
             }
         }
         return false;
     }
 
-    static IsOptionOf(pid: PID, parent: ItemDescription): boolean {
-        return parent.composition.options.find( option =>
-            option.pid === pid
+    isOptionOf(child: PID, parent: PID): boolean {
+        const p = this.get(parent);
+        return p.composition.options.find( option =>
+            option.pid === child
         ) !== undefined;
     }
 
-    static IsSubstitutionOf(pid: PID, parent: ItemDescription): boolean {
-        return parent.composition.substitutions.find( substitution =>
-            substitution.replaceWith === pid
+    isSubstitutionOf(child: PID, parent: PID): boolean {
+        const p = this.get(parent);
+        return p.composition.substitutions.find(
+            substitution => substitution.replaceWith === child
         ) !== undefined;
     }
 
-    static IsComponentOf(pid: PID, parent: ItemDescription) {
-        return Catalog.IsDefaultOf(pid, parent)
-            || Catalog.IsChoiceOf(pid, parent)
-            || Catalog.IsOptionOf(pid, parent)
-            || Catalog.IsSubstitutionOf(pid, parent);
+    isComponentOf(child: PID, parent: PID) {
+        return this.isDefaultOf(child, parent)
+            || this.isChoiceOf(child, parent)
+            || this.isOptionOf(child, parent)
+            || this.isSubstitutionOf(child, parent);
     }
 
-    static isStandalone(item: ItemDescription) {
+    isStandalone(pid: PID) {
+        const item = this.get(pid);
         return item.isStandalone;
+    }
+
+    defaultQuantity(child: PID, parent: PID) {
+        const p = this.get(parent);
+        const component = p.composition.defaults.find(
+            component => component.pid === child
+        );
+        if (component) {
+            return component.defaultQuantity;
+        }
+        else {
+            return 0;
+        }
     }
 }
