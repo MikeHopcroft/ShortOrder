@@ -1,16 +1,18 @@
 import { AnyToken, ATTRIBUTE, AttributeToken, ENTITY, EntityToken, QUANTITY, QuantityToken, INTENT, IntentToken} from '..';
 import { Cart, CartOps, Catalog } from '..';
 import { PeekableSequence, Token } from 'token-flow';
-import { ItemDescription } from '../catalog';
-import { ItemInstance } from '../cart';
+// import { ItemDescription } from '../catalog';
+// import { ItemInstance } from '../cart';
 
 // TODO: MultipleEntityToken, MultipleAttributeToken
 
 class Parser {
     catalog: Catalog;
+    ops: CartOps;
 
     constructor(catalog: Catalog) {
         this.catalog = catalog;
+        this.ops = new CartOps(catalog);
     }
 
     parseEntity(input: PeekableSequence<AnyToken>, cart: Cart) {
@@ -56,38 +58,10 @@ class Parser {
 
         // TODO: handle attributes here.
 
+        const ops = new CartOps(this.catalog);
+
         const description = this.catalog.get(entity.pid);
-
-        if (Catalog.isStandalone(description)) {
-
-            // TODO: Even if it is standalone, it might be a choice of another item.
-
-            if (quantity === 0) {
-                // We're probably removing an existing item from the cart.
-                // What if existing item is ingredient of another item? E.g. part of a combo/special meal.
-                // TODO: CartOps.transformItems maps function that removes ingredient.
-                return CartOps.removeItem(cart, item => item.pid !== entity.pid);
-            }
-            else {
-                // We're probably adding some positive quantity of items to the cart.
-                const item = CartOps.createItemInstance(description, quantity);
-                return CartOps.addItem(cart, item);
-            }
-        }
-        else {
-            // This item is a component of another item.
-
-            if (quantity === 0) {
-                // We're probably adding or removing it from an item already in the cart.
-                // Look in cart for most recently added item.
-                return CartOps.tryModifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
-                    CartOps.tryRemoveComponent(description.pid, item, this.catalog.get(item.pid)));
-            }
-            else {
-                return CartOps.tryModifyNewestMatchingItem(cart, (item: ItemInstance): ItemInstance | undefined =>
-                    CartOps.tryAddComponent(description.pid, quantity, item, this.catalog.get(item.pid)));
-            }
-        }
+        return ops.updateCart(cart, entity.pid, quantity);
     }
 
     // https://medium.com/@ustunozgur/object-oriented-functional-programming-or-how-can-you-use-classes-as-redux-reducers-23462a5cae85

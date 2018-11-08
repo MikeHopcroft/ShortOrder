@@ -24,26 +24,6 @@ export class CartOps {
         this.catalog = catalog;
     }
 
-    // isComponentOf(pid: PID, item: ItemInstance): boolean {
-    //     const description = this.catalog.get(item.pid);
-    //     return Catalog.IsComponentOf(pid, description);
-    // }
-
-    // isDefaultOf(pid: PID, item: ItemInstance): boolean {
-    //     const description = this.catalog.get(item.pid);
-    //     return Catalog.IsDefaultOf(pid, description);
-    // }
-
-    // defaultQuantity(pid: PID, item: ItemInstance): number {
-    //     const description = this.catalog.get(pid);
-    //     return Catalog.defaultQuantity(pid, description);
-    // }
-
-    // isStandalone(pid: PID): boolean {
-    //     const description = this.catalog.get(pid);
-    //     return Catalog.isStandalone(description);
-    // }
-
     updateCart(cart: Cart, pid: PID, quantity: number): Cart {
         let changed = false;
         const updated: ItemInstance[] = [];
@@ -71,7 +51,7 @@ export class CartOps {
         }
         else {
             // TODO: report or log error here?
-            console.log(`CartOps.updateCart(): no modifications for pid=${pid}.`)
+            console.log(`CartOps.updateCart(): no modifications for pid=${pid}.`);
         }
 
         if (changed) {
@@ -156,4 +136,85 @@ export class CartOps {
             return parent.modifications;
         }
     }
+
+    formatCart(cart: Cart) {
+        const order: LineItem[] = [];
+
+        for (const item of cart.items) {
+            this.formatItem(order, item, 0);
+        }
+
+        return order;
+    }
+
+    formatItem(order: LineItem[], item: ItemInstance, level: number) {
+        for (const mod of item.modifications) {
+            this.formatItem(order, mod, level + 1);
+        }
+
+        const d = this.catalog.get(item.pid);
+
+        const product = d.name;
+        const quantity = item.quantity;
+        const indent = level;
+        const price = d.price;
+
+        let operation = undefined;
+        if (!this.catalog.isStandalone(item.pid)) {
+            // TODO: CHOICE
+            // TODO: ADD quantity
+            // TODO: Add excess quantity (over default)
+            if (quantity === 0) {
+                operation = 'NO';
+            }
+            else if (quantity === 1) {
+                operation = 'ADD';
+            }
+            else {
+                operation = `ADD ${quantity}`;
+            }
+        }
+
+        order.unshift({ indent, operation, price, product, quantity });
+    }
+
+    printCart(cart: Cart) {
+        this.printOrder(this.formatCart(cart));
+    }
+
+    printOrder(order: LineItem[]) {
+        console.log(this.formatOrder(order));
+    }
+
+    formatOrder(order: LineItem[]) {
+        return order.map(this.formatLineItem).join('\n');
+    }
+
+    formatLineItem = (item: LineItem) => {
+        const indent = new Array(item.indent + 1).join('  ');
+        const quantity = (!item.operation) ? `${item.quantity} ` : ' ';
+
+        // TODO: operation quantity when > 1.
+        const operation = item.operation ? ` ${item.operation} ` :  '';
+        const product = item.product;
+
+        // TODO: price multiplied by quantity
+        // TODO: only charge for excess above default
+        const left = `${indent}${quantity}${operation}${product}`;
+        const right = (item.price && item.price > 0) ? item.price.toString() : '';
+
+        const width = 50;
+        const padding = new Array(Math.max(0, width - left.length - right.length)).join(' ');
+
+        return `${left}${padding}${right}`;
+    }
 }
+
+export interface LineItem {
+    indent: number;
+    operation?: string;
+    price?: number;
+    product: string;
+    quantity: number;      // TODO: ADD vs SUB vs NO vs x
+}
+

@@ -70,7 +70,7 @@ export class Catalog {
 
     isStandalone(pid: PID) {
         const item = this.get(pid);
-        return item.isStandalone;
+        return item.standalone;
     }
 
     defaultQuantity(child: PID, parent: PID) {

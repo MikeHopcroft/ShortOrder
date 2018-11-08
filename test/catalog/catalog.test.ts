@@ -14,7 +14,7 @@ const item1: ItemDescription = {
     name: 'item1',
     aliases: [],
     price: 0.99,
-    isStandalone: true,
+    standalone: true,
     composition: {
         defaults: [
             {
@@ -62,7 +62,7 @@ function makeItem(pid: PID) {
         name: `item${pid}`,
         aliases: [],
         price: anyPrice,
-        isStandalone: true,
+        standalone: true,
         composition: {
             defaults: [],
             choices: [],

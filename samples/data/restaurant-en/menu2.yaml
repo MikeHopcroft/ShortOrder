@@ -541,7 +541,7 @@ items:
     registerName: Sm Coke
     aliases:
       - 'Small (Coke,Coca Cola,Cola)'
-    price: 0
+    price: 0.99
     standalone: true
     composition:
       defaults:
@@ -558,7 +558,7 @@ items:
     registerName: Med Coke
     aliases:
       - '[Medium] (Coke,Coca Cola,Cola)'
-    price: 0
+    price: 1.29
     standalone: true
     composition:
       defaults:
@@ -575,7 +575,7 @@ items:
     registerName: Lg Coke
     aliases:
       - 'Large (Coke,Coca Cola,Cola)'
-    price: 0
+    price: 1.69
     standalone: true
     composition:
       defaults:
