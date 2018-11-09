@@ -1,5 +1,5 @@
 import { LineItem, Order, OrderOps, PID, Catalog } from '..';
-import { ComponentDescription } from '../catalog';
+import { ComponentDescription, ItemDescription } from '../catalog';
 
 
 // DESIGN INTENT: most objects are POJOs, instead of classes to allow for
@@ -191,6 +191,34 @@ export class CartOps {
         }
     }
 
+    // TODO: this should return a more structured type than a string.
+    // Perhaps it should return an object with the parent PID and an
+    // array of unmet choices.
+    missingChoicesInCart(cart: Cart): string[] {
+        const missingChoices: string[] = [];
+        for (const item of cart.items) {
+            this.missingChoicesInItem(item, missingChoices);
+        }
+        return missingChoices;
+    }
+
+    missingChoicesInItem(item: ItemInstance, missingChoices: string[]) {
+        const d = this.catalog.get(item.pid);
+        const choices = d.composition.choices;
+
+        for (const choice of choices) {
+            if (!intersect(choice.alternatives, item.modifications))
+            {
+                missingChoices.push(`Select ${choice.className} for ${d.name}.`);
+            }
+        }
+
+        for (const mod of item.modifications) {
+            this.missingChoicesInItem(mod, missingChoices);
+        }
+    }
+
+
     ///////////////////////////////////////////////////////////////////////////
     //
     // Generating Orders from the a Cart
@@ -321,6 +349,16 @@ export class CartOps {
         const text = OrderOps.formatOrder(order);
         console.log(text);
     }
+}
+
+function intersect(choices: PID[], items: ItemInstance[]): boolean
+{
+    for (const item of items) {
+        if (item.quantity > 0 && choices.includes(item.pid)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // BUG: adding second cheeseburger in cart_demo adds new line item.

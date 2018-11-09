@@ -31,6 +31,12 @@ function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {
         cart = ops.updateCart(cart, op.pid, op.quantity);
         ops.printCart(cart);
         console.log();
+
+        const missingChoices = ops.missingChoicesInCart(cart);
+        for (const missing of missingChoices) {
+            console.log(missing);
+        }
+        console.log();
     }
 }
 
