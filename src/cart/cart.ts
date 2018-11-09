@@ -123,7 +123,7 @@ export class CartOps {
                     const n = this.catalog.defaultQuantity(pid, item.pid);
                     if (n !== quantity) {
                         // TODO: how do we know whether to fill in substituteFor?
-                        result.push({pid, quantity, modifications:[]});
+                        result.unshift({pid, quantity, modifications:[]});
                     }
                     changed = true;
                 }
