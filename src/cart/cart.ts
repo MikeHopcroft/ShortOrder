@@ -188,7 +188,7 @@ export class CartOps {
         const lines: LineItem[] = [];
 
         for (const item of cart.items) {
-            this.formatItem(lines, item, 0);
+            this.formatItem(lines, item, 0, undefined);
         }
 
         lines.unshift({
@@ -233,24 +233,29 @@ export class CartOps {
         return { lines };
     }
 
-    formatItem(order: LineItem[], item: ItemInstance, level: number) {
+    formatItem(order: LineItem[], item: ItemInstance, indent: number, parent: PID | undefined) {
         for (const mod of item.modifications) {
-            this.formatItem(order, mod, level + 1);
+            this.formatItem(order, mod, indent + 1, item.pid);
         }
 
         const d = this.catalog.get(item.pid);
 
-        const indent = level;
-        const price = d.price;
+        let price: number | undefined = d.price;
+
         let left = '';
         let middle = '';
-        if (this.catalog.isStandalone(item.pid)) {
+        if (parent === undefined) {
             left = item.quantity.toString();
             middle = d.name;
         }
         else {
             if (this.catalog.isNote(item.pid)) {
                 middle = d.name;
+            }
+            else if (this.catalog.isChoiceOf(item.pid, parent)) {
+                left = item.quantity.toString();
+                middle = d.name;
+                price = undefined;
             }
             else if (item.quantity === 0) {
                 middle = `NO ${d.name}`;
