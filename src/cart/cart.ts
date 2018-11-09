@@ -323,6 +323,8 @@ export class CartOps {
     }
 }
 
+// BUG: adding second cheeseburger in cart_demo adds new line item.
+// TODO: merging two menu items when their modifications become identical - originally they were different.
 // x TODO: pricing in pennies?
 // TODO: XTRA, LIGHT (see https://www.yelp.com/biz_photos/mcdonalds-los-angeles-50?select=2CRC1OC4ZyF8_94zxJqUNA)
 //   (see also https://i.imgur.com/YpFyFW7.jpg, google for "mcdonalds receipt extra bacon"
@@ -332,10 +334,10 @@ export class CartOps {
 // TODO: options with prices
 // TODO: defaults with prices
 // TODO: correct prices for order printing
-// TODO: ADD delta above default for order printing
-// TODO: menu item with choices
-// TODO: fields for order printing - numbers right justified in own fields.
-// TODO: subtotal, tax, total for cart formatting
+// x TODO: ADD delta above default for order printing
+// x TODO: menu item with choices
+// x TODO: fields for order printing - numbers right justified in own fields.
+// x TODO: subtotal, tax, total for cart formatting
 // TODO: add options to menu items (e.g. 7000 = well done)
 // x TODO: format messages without ADD
 // TODO: unit tests
