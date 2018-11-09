@@ -1,4 +1,4 @@
-import { CatalogItems, ItemDescription, PID } from './interfaces';
+import { CatalogItems, ItemDescription, PID, ComponentDescription } from './interfaces';
 // import { Type } from 'js-yaml';
 
 // TODO: No neet to implement CatalogItems.
@@ -35,6 +35,13 @@ export class Catalog {
         return p.composition.defaults.find(
             component => component.pid === child
         ) !== undefined;
+    }
+
+    getDefaultInfo(child: PID, parent: PID): ComponentDescription | undefined {
+        const p = this.get(parent);
+        return p.composition.defaults.find(
+            component => component.pid === child
+        );
     }
 
     isChoiceOf(child: PID, parent: PID): boolean {

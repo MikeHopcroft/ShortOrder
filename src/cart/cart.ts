@@ -1,4 +1,5 @@
 import { LineItem, Order, OrderOps, PID, Catalog } from '..';
+import { ComponentDescription } from '../catalog';
 
 
 // DESIGN INTENT: most objects are POJOs, instead of classes to allow for
@@ -110,6 +111,11 @@ export class CartOps {
                 return item;
             }
             else {
+                // TODO: do we always want to update the quantity of an
+                // existing item? How do we add a new item?
+                // Think this is ok, because the convention is that items
+                // with the same PID are always represented as a single line
+                // with a quantity adjustment.
                 return { ...item, quantity };
             }
         }
@@ -120,6 +126,9 @@ export class CartOps {
                 // No changes made so far.
                 if (this.catalog.isComponentOf(pid, item.pid))
                 {
+                    // TODO: handle adding n items that are choices of this item.
+                    // Add correct number as choices. Then add remaining to top level.
+
                     const n = this.catalog.defaultQuantity(pid, item.pid);
                     if (n !== quantity) {
                         // TODO: how do we know whether to fill in substituteFor?
@@ -127,6 +136,9 @@ export class CartOps {
                     }
                     changed = true;
                 }
+            }
+            else {
+                changed = true;
             }
 
             if (changed) {
@@ -240,13 +252,14 @@ export class CartOps {
 
         const d = this.catalog.get(item.pid);
 
-        let price: number | undefined = d.price;
+        let price: number | undefined = undefined;
 
         let left = '';
         let middle = '';
         if (parent === undefined) {
             left = item.quantity.toString();
             middle = d.name;
+            price = d.price;
         }
         else {
             if (this.catalog.isNote(item.pid)) {
@@ -257,18 +270,49 @@ export class CartOps {
                 middle = d.name;
                 price = undefined;
             }
+            else if (this.catalog.isDefaultOf(item.pid, parent)) {
+                const info = this.catalog.getDefaultInfo(item.pid, parent) as ComponentDescription;
+                const delta = item.quantity - info.defaultQuantity;
+
+                if (delta > 0 && d.price !== undefined) {
+                    price = delta * d.price;
+                }
+
+                if (item.quantity === 0) {
+                    middle = `NO ${d.name}`;
+                }
+                else if (delta === 0) {
+                    console.log('this should never happen');
+                }
+                else if (delta === 1) {
+                    middle = `XTRA ${d.name}`;
+                }
+                else if (delta > 1) {
+                    middle = `XTRA ${delta} ${d.name}`;
+                }
+                else if (delta === -1) {
+                    middle = `LIGHT ${d.name}`;
+                }
+                else if (delta < -2) {
+                    middle = `LIGHT ${-delta} ${d.name}`;
+                }
+            }
             else if (item.quantity === 0) {
                 middle = `NO ${d.name}`;
             }
             else if (item.quantity === 1) {
+                price = d.price;
                 middle = `ADD ${d.name}`;
             }
             else {
+                if (d.price !== undefined) {
+                    price = item.quantity * d.price;
+                }
                 middle = `ADD ${item.quantity} ${d.name}`;
             }
         }
 
-        order.unshift({ indent, left, middle, price});
+        order.unshift({ indent, left, middle, price });
     }
 
     // TODO: does this convenience method really belong here?
@@ -303,6 +347,7 @@ export class CartOps {
 //   n copies of an item with m options that have a non-zero cost
 // TODO: check for legal quantities/pids in add/remove
 // TODO: detect missing choice - choice validator
+// TODO: scenario: attempt to change quanity of choice item
 
 // Choices
 //   Price should be zero since choice is included
