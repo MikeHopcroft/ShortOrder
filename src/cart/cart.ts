@@ -259,7 +259,7 @@ export class CartOps {
         if (parent === undefined) {
             left = item.quantity.toString();
             middle = d.name;
-            price = d.price;
+            price = item.quantity * d.price;
         }
         else {
             if (this.catalog.isNote(item.pid)) {
@@ -324,6 +324,8 @@ export class CartOps {
 }
 
 // BUG: adding second cheeseburger in cart_demo adds new line item.
+// BUG: no price for adding 2 Cheddar Cheese Slice 5101
+// BUG: 5100 is on hamburger - investigate
 // TODO: merging two menu items when their modifications become identical - originally they were different.
 // x TODO: pricing in pennies?
 // TODO: XTRA, LIGHT (see https://www.yelp.com/biz_photos/mcdonalds-los-angeles-50?select=2CRC1OC4ZyF8_94zxJqUNA)

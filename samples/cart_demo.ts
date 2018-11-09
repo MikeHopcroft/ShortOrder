@@ -13,12 +13,12 @@ function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {
     const ops = new CartOps(catalog);
     
     let cart: Cart = { items: [
-        { pid: 1, quantity: 2, modifications: [
-            { pid: 5200, quantity: 2, modifications: []},
-            { pid: 5201, quantity: 0, modifications: []},
-            { pid: 5202, quantity: 5, modifications: []}
-        ]},
-        { pid: 2, quantity: 1, modifications: []}
+        // { pid: 1, quantity: 2, modifications: [
+        //     { pid: 5200, quantity: 2, modifications: []},
+        //     { pid: 5201, quantity: 0, modifications: []},
+        //     { pid: 5202, quantity: 5, modifications: []}
+        // ]},
+        // { pid: 2, quantity: 1, modifications: []}
     ]};
 
     for (const op of operations) {
@@ -35,14 +35,22 @@ function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {
 }
 
 const operations: Array<{pid: PID, quantity: number}> = [
-    // { pid: 1, quantity: 2},
-    // { pid: 5200, quantity: 2},
-    // { pid: 5201, quantity: 0},
-    // { pid: 5201, quantity: 5},
     { pid: 2, quantity: 1},
+    { pid: 1, quantity: 2},
+
+    // This exposes a bug. Adds 2nd cheeseburger line item
+    // instead of increasing the quantity of the first cheeseburger.
+    { pid: 2, quantity: 1},
+    
+    { pid: 5200, quantity: 2},
+    { pid: 5201, quantity: 0},
+    { pid: 5201, quantity: 5},
+    
+    // { pid: 2, quantity: 1},
+
     { pid: 5202, quantity: 4},
     { pid: 5200, quantity: 0},
-    { pid: 5100, quantity: 2},
+    { pid: 5101, quantity: 2},
     { pid: 100, quantity: 7},
     { pid: 1000, quantity: 1},
     { pid: 1090, quantity: 0},
