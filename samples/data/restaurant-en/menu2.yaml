@@ -1200,7 +1200,7 @@ items:
     aliases:
       - 'Surf (N,And) Turf [Combo] [Meal]'
     price: 7.99
-    standalone: false
+    standalone: true
     composition:
       defaults:
         - pid: 2
@@ -1218,7 +1218,10 @@ items:
           minQuantity: 0
           maxQuantity: 3
           price: 0.3
-      choices: []
+      choices:
+        - pid: 10000
+          className: beverage
+          alternatives: [1000, 1003, 1070, 1073]
       substitutions: []
       options: []
   - pid: 7000

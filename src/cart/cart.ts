@@ -264,7 +264,10 @@ export class CartOps {
     }
 }
 
-// TODO: pricing in pennies?
+// x TODO: pricing in pennies?
+// TODO: XTRA, LIGHT (see https://www.yelp.com/biz_photos/mcdonalds-los-angeles-50?select=2CRC1OC4ZyF8_94zxJqUNA)
+//   (see also https://i.imgur.com/YpFyFW7.jpg, google for "mcdonalds receipt extra bacon"
+// TODO: sample app to replace junk.ts
 // TODO: prices for everything in menu (including drinks)
 // TODO: register tape name
 // TODO: options with prices
@@ -272,7 +275,7 @@ export class CartOps {
 // TODO: correct prices for order printing
 // TODO: ADD delta above default for order printing
 // TODO: menu item with choices
-// TODO: fields for order printing
+// TODO: fields for order printing - numbers right justified in own fields.
 // TODO: subtotal, tax, total for cart formatting
 // TODO: add options to menu items (e.g. 7000 = well done)
 // x TODO: format messages without ADD
@@ -282,4 +285,43 @@ export class CartOps {
 //   remove top level item
 //   add sub item that matches 1st top level
 //   add sub item that matches 2nd top level
+//   n copies of an item with m options that have a non-zero cost
 // TODO: check for legal quantities/pids in add/remove
+// TODO: detect missing choice - choice validator
+
+// Choices
+//   Price should be zero since choice is included
+//   Quantity should be multiplied by parent quantity - when adding or dispaying?
+//   Scenario: order two meals, then select two different drinks - what happens?
+//     e.q "2 surf n turf with coke and sprite" or "2 surf n turf one with coke and the other with sprite"
+//   One can choose "NO foobar" for a choice of foobar.
+//   Scenario: order the surf n turf, then customize one sandwich.
+//     Add a default quantity item with modifications
+
+// Quantified item - standalone or choice. Could also be used for header if qty was text
+//   indent qty name price
+// QTY ITEM                     TOTAL
+//   1 Cheeseburger              1.99
+//       EXTRA Pickles
+//       NO Onions
+//       Well done
+//   1 Surf N Turf               7.99
+//     1 Small Coke
+//         NO Ice
+// Subtotal
+//   Tax
+// Total
+//
+// Mofication
+//   indent mod [qty] name price
+//     ADD 4 American Cheese     3.44
+//     XTRA Ketchup
+//     LIGHT Mayonnaise
+//     NO pickles
+//     SUB Swiss cheese
+//
+// Info - header, subtotal, tax, total
+//   indent name price
+// Subtotal
+//   Tax
+// Total
