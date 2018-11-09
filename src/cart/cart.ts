@@ -179,12 +179,24 @@ export class CartOps {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Generating Orders from the a Cart
+    //
+    ///////////////////////////////////////////////////////////////////////////   
     formatCart(cart: Cart): Order {
         const lines: LineItem[] = [];
 
         for (const item of cart.items) {
             this.formatItem(lines, item, 0);
         }
+
+        lines.unshift({
+            indent: 0,
+            left: 'QTY',
+            middle: 'ITEM',
+            right: 'TOTAL'
+        });
 
         let subtotal = 0;
         for (const line of lines) {
@@ -194,9 +206,9 @@ export class CartOps {
         }
         lines.push({
             indent: 0,
-            price: subtotal,
-            product: 'Subtotal',
-            quantity: 1
+            left: 'Subtotal',
+            middle: '',
+            price: subtotal
         });
 
         const taxRate = 0.09;
@@ -204,18 +216,18 @@ export class CartOps {
         // (e.g. pennies in the US, nickels in Canada).
         const tax = Math.round(subtotal * taxRate);
         lines.push({
-            indent: 1,
-            price: tax,
-            product: 'Tax',
-            quantity: 1
+            indent: 0,
+            left: '',
+            middle: 'Tax',
+            price: tax
         });
 
         const total = subtotal + tax;
         lines.push({
             indent: 0,
-            price: total,
-            product: 'Total',
-            quantity: 1
+            left: 'Total',
+            middle: '',
+            price: total
         });
 
         return { lines };
@@ -228,32 +240,30 @@ export class CartOps {
 
         const d = this.catalog.get(item.pid);
 
-        const product = d.name;
-        const quantity = item.quantity;
         const indent = level;
-        const price = d.price * quantity;
-
-        let operation = undefined;
-        if (!this.catalog.isStandalone(item.pid)) {
-            // TODO: CHOICE
-            // TODO: ADD quantity
-            // TODO: Add excess quantity (over default)
-            // TODO: only charge for excess above default
+        const price = d.price;
+        let left = '';
+        let middle = '';
+        if (this.catalog.isStandalone(item.pid)) {
+            left = item.quantity.toString();
+            middle = d.name;
+        }
+        else {
             if (this.catalog.isNote(item.pid)) {
-                operation = 'NOTE';
+                middle = d.name;
             }
-            else if (quantity === 0) {
-                operation = 'NO';
+            else if (item.quantity === 0) {
+                middle = `NO ${d.name}`;
             }
-            else if (quantity === 1) {
-                operation = 'ADD';
+            else if (item.quantity === 1) {
+                middle = `ADD ${d.name}`;
             }
             else {
-                operation = `ADD ${quantity}`;
+                middle = `ADD ${item.quantity} ${d.name}`;
             }
         }
 
-        order.unshift({ indent, operation, price, product, quantity });
+        order.unshift({ indent, left, middle, price});
     }
 
     // TODO: does this convenience method really belong here?

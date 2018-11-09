@@ -1,11 +1,12 @@
 export interface LineItem {
     indent: number;
-    operation?: string;
-    // DESIGN NOTE: All prices are in lowest denomination units
-    // (e.g. pennies in the US, nickels in Canada).
+
+    left: string;
+    middle: string;
+
+    // Price is a number to facilitate computing subtotal.
     price?: number;
-    product: string;
-    quantity: number;      // TODO: ADD vs SUB vs NO vs x
+    right?: string;
 }
 
 export interface Order {
@@ -23,31 +24,47 @@ export class OrderOps {
     }
 
     static formatLineItem(item: LineItem) {
-        const indent = new Array(item.indent + 1).join('  ');
-        const quantity = item.operation === undefined ? `${item.quantity} ` : '';
+        const leftFieldWidth = 4 + item.indent * 2;
+        const left = rightJustify(item.left + ' ', leftFieldWidth);
 
-        // TODO: operation quantity when > 1.
-        let operation = '';
-        if (item.operation) {
-            if (item.operation === 'NOTE') {
-                operation = '  ';
-            }
-            else {
-                operation = `  ${item.operation} `;
-            }
+        const rightFieldWidth = 6;  // Prices up to 999.99
+        let right = '';
+        if (item.right !== undefined) {
+            right = rightJustify(item.right, rightFieldWidth);
         }
-        // const operation = item.operation ? `  ${item.operation} ` : '';
-        const product = item.product;
+        else if (item.price !== undefined && item.price > 0) {
+            // DESIGN NOTE: All prices are in lowest denomination units
+            // (e.g. pennies in the US, nickels in Canada).
+            right = rightJustify((item.price / 100).toFixed(2), rightFieldWidth);
+        }
 
-        const left = `${indent}${quantity}${operation}${product}`;
+        const totalWidth = 50;
+        const middleWidth = 
+            Math.max(0, totalWidth - left.length - right.length);
+        const middle = leftJustify(item.middle + ' ', middleWidth);
 
-        // DESIGN NOTE: All prices are in lowest denomination units
-        // (e.g. pennies in the US, nickels in Canada).
-        const right = (item.price && item.price > 0) ? (item.price / 100).toFixed(2) : '';
+        return `${left}${middle}${right}`;
+    }
+}
 
-        const width = 50;
-        const padding = new Array(Math.max(0, width - left.length - right.length)).join(' ');
+function leftJustify(text: string, width: number) {
+    if (text.length >= width) {
+        return text;
+    }
+    else {
+        const paddingWidth = width - text.length;
+        const padding = new Array(paddingWidth + 1).join(' ');
+        return text + padding;
+    }
+}
 
-        return `${left}${padding}${right}`;
+function rightJustify(text: string, width: number) {
+    if (text.length >= width) {
+        return text;
+    }
+    else {
+        const paddingWidth = width - text.length;
+        const padding = new Array(paddingWidth + 1).join(' ');
+        return padding + text;
     }
 }
