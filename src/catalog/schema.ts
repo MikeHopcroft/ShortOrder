@@ -223,3 +223,11 @@ export function validateIndexableItemsCollection(collection: IndexableItemCollec
         throw TypeError(message);
     }
 }
+
+export function ConvertDollarsToPennies(catalog: CatalogItems) {
+    for (const item of catalog.items) {
+        if (item.price !== undefined) {
+            item.price = Math.round(item.price * 100);
+        }
+    }
+}

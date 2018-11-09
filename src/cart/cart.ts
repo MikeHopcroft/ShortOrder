@@ -1,4 +1,4 @@
-import { ItemDescription, PID, Catalog } from '../catalog';
+import { LineItem, Order, OrderOps, PID, Catalog } from '..';
 
 
 // DESIGN INTENT: most objects are POJOs, instead of classes to allow for
@@ -179,14 +179,46 @@ export class CartOps {
         }
     }
 
-    formatCart(cart: Cart) {
-        const order: LineItem[] = [];
+    formatCart(cart: Cart): Order {
+        const lines: LineItem[] = [];
 
         for (const item of cart.items) {
-            this.formatItem(order, item, 0);
+            this.formatItem(lines, item, 0);
         }
 
-        return order;
+        let subtotal = 0;
+        for (const line of lines) {
+            if (line.price) {
+                subtotal += line.price;
+            }
+        }
+        lines.push({
+            indent: 0,
+            price: subtotal,
+            product: 'Subtotal',
+            quantity: 1
+        });
+
+        const taxRate = 0.09;
+        // DESIGN NOTE: All prices are in lowest denomination units
+        // (e.g. pennies in the US, nickels in Canada).
+        const tax = Math.round(subtotal * taxRate);
+        lines.push({
+            indent: 1,
+            price: tax,
+            product: 'Tax',
+            quantity: 1
+        });
+
+        const total = subtotal + tax;
+        lines.push({
+            indent: 0,
+            price: total,
+            product: 'Total',
+            quantity: 1
+        });
+
+        return { lines };
     }
 
     formatItem(order: LineItem[], item: ItemInstance, level: number) {
@@ -199,13 +231,14 @@ export class CartOps {
         const product = d.name;
         const quantity = item.quantity;
         const indent = level;
-        const price = d.price;
+        const price = d.price * quantity;
 
         let operation = undefined;
         if (!this.catalog.isStandalone(item.pid)) {
             // TODO: CHOICE
             // TODO: ADD quantity
             // TODO: Add excess quantity (over default)
+            // TODO: only charge for excess above default
             if (this.catalog.isNote(item.pid)) {
                 operation = 'NOTE';
             }
@@ -223,67 +256,30 @@ export class CartOps {
         order.unshift({ indent, operation, price, product, quantity });
     }
 
+    // TODO: does this convenience method really belong here?
     printCart(cart: Cart) {
-        this.printOrder(this.formatCart(cart));
-    }
-
-    printOrder(order: LineItem[]) {
-        console.log(this.formatOrder(order));
-    }
-
-    formatOrder(order: LineItem[]) {
-        return order.map(this.formatLineItem).join('\n');
-    }
-
-    formatLineItem = (item: LineItem) => {
-        const indent = new Array(item.indent + 1).join('  ');
-        const quantity = item.operation === undefined ? `${item.quantity} ` : '';
-
-        // TODO: operation quantity when > 1.
-        let operation = '';
-        if (item.operation) {
-            if (item.operation === 'NOTE') {
-                operation = '  ';
-            }
-            else {
-                operation = `  ${item.operation} `;
-            }
-        }
-        // const operation = item.operation ? `  ${item.operation} ` : '';
-        const product = item.product;
-
-        // TODO: price multiplied by quantity
-        // TODO: only charge for excess above default
-        const left = `${indent}${quantity}${operation}${product}`;
-        const right = (item.price && item.price > 0) ? item.price.toString() : '';
-
-        const width = 50;
-        const padding = new Array(Math.max(0, width - left.length - right.length)).join(' ');
-
-        return `${left}${padding}${right}`;
+        const order = this.formatCart(cart);
+        const text = OrderOps.formatOrder(order);
+        console.log(text);
     }
 }
 
-export interface LineItem {
-    indent: number;
-    operation?: string;
-    price?: number;
-    product: string;
-    quantity: number;      // TODO: ADD vs SUB vs NO vs x
-}
-
+// TODO: pricing in pennies?
 // TODO: prices for everything in menu (including drinks)
+// TODO: register tape name
+// TODO: options with prices
+// TODO: defaults with prices
+// TODO: correct prices for order printing
+// TODO: ADD delta above default for order printing
 // TODO: menu item with choices
 // TODO: fields for order printing
-// TODO: ADD delta above default for order printing
-// TODO: correct prices for order printing
 // TODO: subtotal, tax, total for cart formatting
 // TODO: add options to menu items (e.g. 7000 = well done)
-// TODO: format messages without ADD
+// x TODO: format messages without ADD
 // TODO: unit tests
 //   add sub item that matches nothing
 //   add top level item
 //   remove top level item
 //   add sub item that matches 1st top level
 //   add sub item that matches 2nd top level
-// TODO: check for legal quantities in add/remove
+// TODO: check for legal quantities/pids in add/remove

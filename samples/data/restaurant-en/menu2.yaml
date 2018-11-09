@@ -1077,7 +1077,7 @@ items:
     registerName: Pickles
     aliases:
       - Pickles
-    price: 0
+    price: 0.10
     standalone: false
     composition:
       defaults: []
