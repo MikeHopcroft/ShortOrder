@@ -153,6 +153,9 @@ const catalogItemSchema = {
                 },
                 "standalone": {
                     "type": "boolean"
+                },
+                "note": {
+                    "type": "boolean"
                 }
             },
             "required": [

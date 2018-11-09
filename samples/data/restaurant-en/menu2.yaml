@@ -1228,6 +1228,7 @@ items:
       - Well Done
     price: 0
     standalone: false
+    note: true
     composition:
       defaults: []
       choices: []

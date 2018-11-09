@@ -206,7 +206,10 @@ export class CartOps {
             // TODO: CHOICE
             // TODO: ADD quantity
             // TODO: Add excess quantity (over default)
-            if (quantity === 0) {
+            if (this.catalog.isNote(item.pid)) {
+                operation = 'NOTE';
+            }
+            else if (quantity === 0) {
                 operation = 'NO';
             }
             else if (quantity === 1) {
@@ -234,10 +237,19 @@ export class CartOps {
 
     formatLineItem = (item: LineItem) => {
         const indent = new Array(item.indent + 1).join('  ');
-        const quantity = (!item.operation) ? `${item.quantity} ` : ' ';
+        const quantity = item.operation === undefined ? `${item.quantity} ` : '';
 
         // TODO: operation quantity when > 1.
-        const operation = item.operation ? ` ${item.operation} ` :  '';
+        let operation = '';
+        if (item.operation) {
+            if (item.operation === 'NOTE') {
+                operation = '  ';
+            }
+            else {
+                operation = `  ${item.operation} `;
+            }
+        }
+        // const operation = item.operation ? `  ${item.operation} ` : '';
         const product = item.product;
 
         // TODO: price multiplied by quantity

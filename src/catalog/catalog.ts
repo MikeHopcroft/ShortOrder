@@ -73,6 +73,11 @@ export class Catalog {
         return item.standalone;
     }
 
+    isNote(pid: PID) {
+        const item = this.get(pid);
+        return item.note === true;
+    }
+
     defaultQuantity(child: PID, parent: PID) {
         const p = this.get(parent);
         const component = p.composition.defaults.find(
