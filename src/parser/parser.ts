@@ -1,12 +1,18 @@
-import { AnyToken, ATTRIBUTE, AttributeToken, ENTITY, EntityToken, QUANTITY, QuantityToken, INTENT, IntentToken} from '..';
+import { WORD } from 'token-flow';
+import {AnyToken} from '../pipeline';
+
+import {
+    ATTRIBUTE, AttributeToken, ENTITY, EntityToken, 
+    QUANTITY, QuantityToken, INTENT, IntentToken
+} from '../recognizers';
 
 import {
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
     CONJUNCTION, END_OF_ORDER, NEED_MORE_TIME, PREPOSITION, REMOVE_ITEM, RESTATE,
     SALUTATION, SEPERATOR, SUBSTITUTE
-} from '..';
+} from '../recognizers';
 
-import { Cart, CartOps, Catalog } from '..';
+import { Cart, CartOps, Catalog, Pipeline } from '..';
 import { PeekableSequence, Token } from 'token-flow';
 
 // TODO: MultipleEntityToken, MultipleAttributeToken
@@ -14,7 +20,11 @@ import { PeekableSequence, Token } from 'token-flow';
 const endOfEntity = [
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
     CONJUNCTION, END_OF_ORDER, NEED_MORE_TIME, PREPOSITION, REMOVE_ITEM, RESTATE,
-    SALUTATION, SEPERATOR, SUBSTITUTE
+    SALUTATION, SEPERATOR, SUBSTITUTE, WORD
+];
+
+const startOfEntity = [
+    ADD_TO_ORDER, ATTRIBUTE, ENTITY, QUANTITY
 ];
 
 // TODO: What is the meaning of "ADD X REMOVE Y Z"?
@@ -22,16 +32,42 @@ const endOfEntity = [
 // Seems like you stay in remove mode until an ADD_TO_ORDER intent is seen.
 
 
-class Parser {
+export class Parser {
     catalog: Catalog;
     ops: CartOps;
+    pipeline: Pipeline;
 
-    constructor(catalog: Catalog) {
+    constructor(catalog: Catalog, pipeline: Pipeline) {
         this.catalog = catalog;
         this.ops = new CartOps(catalog);
+        this.pipeline = pipeline;
     }
 
-    parseEntity(input: PeekableSequence<AnyToken>, cart: Cart) {
+    parse(input: string, cart: Cart): Cart {
+        const tokens = this.pipeline.processOneQuery(input) as AnyToken[];
+        const sequence = new PeekableSequence<AnyToken>(tokens[Symbol.iterator]());
+        return this.parseRoot(sequence, cart);
+    }
+
+    parseRoot(input: PeekableSequence<AnyToken>, cart: Cart): Cart {
+        while (!input.atEOF()) {
+            const token = input.peek();
+            if (startOfEntity.includes(token.type)) {
+                // console.log(`Processing ENTITY`);
+                cart = this.parseEntity(input, cart);
+                // this.ops.printCart(cart);
+                // console.log();
+            }
+            else {
+                console.log(`Skipped token ${token.type.toString()}`);
+                console.log();
+                input.get();
+            }
+        }
+        return cart;
+    }
+
+    parseEntity(input: PeekableSequence<AnyToken>, cart: Cart): Cart {
         let entity = undefined;
         const quantifiers: QuantityToken[] = [];
         const attributes: AttributeToken[] = [];
@@ -47,39 +83,44 @@ class Parser {
         while (!input.atEOF()) {
             const token = input.peek();
 
-            // TODO: need to see if token.type is in a list of production-ending types.
-            if (token.type === INTENT) {
-                // We're at a new intent.
-                // Stop looking for attributes, quantifiers, and entities.
+            if (endOfEntity.includes(token.type)) {
                 break;
             }
 
-            if (!entity) {
-                // We haven't found an entity yet. Keep looking.
-                switch (token.type) {
-                    case ATTRIBUTE:
-                        attributes.push(token);
-                        input.get();
-                        break;
-                    case ENTITY:
-                        entity = token;
-                        input.get();
-                        // TODO: break out of loop here.
-                        break;
-                    case QUANTITY:
-                        // TODO: do we really want to collect non-adjacent quantities?
-                        quantifiers.push(token);
-                        input.get();
-                        break;
-                    default:
-                        // TODO: break out of loop here.
-                        break;
-                }
+            switch (token.type) {
+                case ATTRIBUTE:
+                    attributes.push(token);
+                    input.get();
+                    break;
+                case ENTITY:
+                    entity = token;
+                    input.get();
+                    // TODO: break out of loop here.
+                    break;
+                case QUANTITY:
+                    // TODO: do we really want to collect non-adjacent quantities?
+                    quantifiers.push(token);
+                    input.get();
+                    break;
+                default:
+                    // TODO: break out of loop here.
+                    // IMPORTANT - really need to ensure unknown token is
+                    // pulled from the input, either here or in the caller.
+                    // Otherwise code will get in an infinite loop.
+                    break;
+            }
+
+            if (entity) {
+                break;
             }
         }
 
         if (entity) {
-            return this.addEntityToCart(cart, entity, quantifiers, attributes);
+            const quantity = Parser.quantityFromTokens(quantifiers);
+
+            // TODO: handle attributes here.
+    
+            return this.ops.updateCart(cart, entity.pid, quantity);
         }
         else {
             // TODO: log that we failed to get an entity?
@@ -89,25 +130,21 @@ class Parser {
         }
     }
 
-    // TODO: is there some way to inject a different version of this function
-    // for unit testing. Want unit test to just record the calls to this method.
-    // Is it ok to rely on monkey patch form sinon or rewire?
-    addEntityToCart(cart: Cart, entity: EntityToken, quantifiers: QuantityToken[], attributes: AttributeToken[]) {
-        const quantity = Parser.quantityFromTokens(quantifiers);
+    // // TODO: is there some way to inject a different version of this function
+    // // for unit testing. Want unit test to just record the calls to this method.
+    // // Is it ok to rely on monkey patch form sinon or rewire?
+    // addEntityToCart(cart: Cart, entity: EntityToken, quantifiers: QuantityToken[], attributes: AttributeToken[]) {
+    //     const quantity = Parser.quantityFromTokens(quantifiers);
 
-        // TODO: handle attributes here.
+    //     // TODO: handle attributes here.
 
-        // TODO: move this to parser constructor.
-        const ops = new CartOps(this.catalog);
-
-        // const description = this.catalog.get(entity.pid);
-        return ops.updateCart(cart, entity.pid, quantity);
-    }
+    //     return this.ops.updateCart(cart, entity.pid, quantity);
+    // }
 
     // https://medium.com/@ustunozgur/object-oriented-functional-programming-or-how-can-you-use-classes-as-redux-reducers-23462a5cae85
 
     static quantityFromTokens(quantifiers: QuantityToken[]) {
-        if (quantifiers.length === 1) {
+        if (quantifiers.length === 0) {
             // Default is 1.
             return 1;
         }

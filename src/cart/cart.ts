@@ -209,7 +209,7 @@ export class CartOps {
         for (const choice of choices) {
             if (!intersect(choice.alternatives, item.modifications))
             {
-                missingChoices.push(`Select ${choice.className} for ${d.name}.`);
+                missingChoices.push(`>>> PROMPT: Select ${choice.className} for ${d.name}.`);
             }
         }
 
@@ -363,6 +363,7 @@ function intersect(choices: PID[], items: ItemInstance[]): boolean
 
 // BUG: adding second cheeseburger in cart_demo adds new line item.
 // BUG: no price for adding 2 Cheddar Cheese Slice 5101
+//   ISSUE was that options list price was not consulted. Used price for pid.
 // BUG: 5100 is on hamburger - investigate
 // TODO: merging two menu items when their modifications become identical - originally they were different.
 // x TODO: pricing in pennies?

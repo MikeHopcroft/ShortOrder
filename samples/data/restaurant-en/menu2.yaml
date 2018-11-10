@@ -765,7 +765,7 @@ items:
     registerName: Sm Coffee
     aliases:
       - Small Coffee
-    price: 0
+    price: 0.99
     standalone: true
     composition:
       defaults: []
@@ -812,7 +812,7 @@ items:
     registerName: Med Coffee
     aliases:
       - '[Medium] Coffee'
-    price: 0
+    price: 1.29
     standalone: true
     composition:
       defaults: []
@@ -859,7 +859,7 @@ items:
     registerName: Lg Coffee
     aliases:
       - Large Coffee
-    price: 0
+    price: 1.59
     standalone: true
     composition:
       defaults: []
@@ -1041,7 +1041,7 @@ items:
     registerName: Cheddar
     aliases:
       - 'Cheddar [Cheese]'
-    price: 0
+    price: 0.30
     standalone: false
     composition:
       defaults: []

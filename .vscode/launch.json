@@ -94,6 +94,14 @@
             "name": "Launch Cart Demo",
             "program": "${workspaceFolder}/build/samples/cart_demo.js",
             "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Parser Demo",
+            "program": "${workspaceFolder}/build/samples/parser_demo.js",
+            "outputCapture": "std"
         }
+
     ]
 }
