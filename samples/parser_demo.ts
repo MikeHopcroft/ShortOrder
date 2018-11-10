@@ -49,15 +49,24 @@ function go(infile: string, utterances: string[]) {
 
 const utterances = [
     'can I get a cheeseburger well done with no pickles double onion double lettuce and a coffee two cream two sugar',
-    'lose the cheeseburger and get me a pet chicken',
+    'also get me a hamburger with swiss',
+    'lose the cheeseburger and get me a couple pet chicken',
     "i'll also take a surf n turf",
     "make that with a small diet coke"
+
+    // NOT IMPLEMENTED
     // "replace the small diet coke with a small coke"
 
-    // This one just adds default onion and lettuce because extra corresponds to 1.
+    // FAILS: because of the word 'of' between 'couple' and 'pet'
+    // 'lose the cheeseburger and get me a couple of pet chicken',
+
+
+    // FAILS: just adds default onion and lettuce because extra corresponds to 1.
     // 'cheeseburger no pickles extra onion extra lettuce and well done'
 
-    // This one enters infinite loop at misspelled lettue.
+    // FIXED: This one enters infinite loop at misspelled 'lettue'.
+    // Risk is that random, unexpected terms might be able to trigger this behavior.
+    // Also, should not be brittle in face of new tokens.
     // 'cheeseburger no pickles extra onion extra lettue and well done'
     // 'cheeseburger extra lettue and well done'
 ];

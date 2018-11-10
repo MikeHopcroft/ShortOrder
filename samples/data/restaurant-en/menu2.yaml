@@ -1053,7 +1053,7 @@ items:
     registerName: Swiss
     aliases:
       - 'Swiss [Cheese]'
-    price: 0
+    price: 0.30
     standalone: false
     composition:
       defaults: []

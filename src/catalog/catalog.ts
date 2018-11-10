@@ -1,7 +1,7 @@
-import { CatalogItems, ItemDescription, PID, ComponentDescription } from './interfaces';
-// import { Type } from 'js-yaml';
+import { CatalogItems, ItemDescription, ComponentDescription } from './interfaces';
+import { PID } from 'token-flow';
 
-// TODO: No neet to implement CatalogItems.
+// TODO: No need to implement CatalogItems.
 export class Catalog { 
     // implements CatalogItems {
     // TODO: don't really need to store items - just the map.

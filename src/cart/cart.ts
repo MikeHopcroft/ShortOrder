@@ -1,5 +1,6 @@
-import { LineItem, Order, OrderOps, PID, Catalog } from '..';
-import { ComponentDescription, ItemDescription } from '../catalog';
+import { Catalog, ComponentDescription } from '../catalog';
+import { LineItem, Order, OrderOps } from '../order';
+import { PID } from 'token-flow';
 
 
 // DESIGN INTENT: most objects are POJOs, instead of classes to allow for
@@ -367,9 +368,9 @@ function intersect(choices: PID[], items: ItemInstance[]): boolean
 // BUG: 5100 is on hamburger - investigate
 // TODO: merging two menu items when their modifications become identical - originally they were different.
 // x TODO: pricing in pennies?
-// TODO: XTRA, LIGHT (see https://www.yelp.com/biz_photos/mcdonalds-los-angeles-50?select=2CRC1OC4ZyF8_94zxJqUNA)
+// x TODO: XTRA, LIGHT (see https://www.yelp.com/biz_photos/mcdonalds-los-angeles-50?select=2CRC1OC4ZyF8_94zxJqUNA)
 //   (see also https://i.imgur.com/YpFyFW7.jpg, google for "mcdonalds receipt extra bacon"
-// TODO: sample app to replace junk.ts
+// x TODO: sample app to replace junk.ts
 // TODO: prices for everything in menu (including drinks)
 // TODO: register tape name
 // TODO: options with prices
@@ -379,7 +380,7 @@ function intersect(choices: PID[], items: ItemInstance[]): boolean
 // x TODO: menu item with choices
 // x TODO: fields for order printing - numbers right justified in own fields.
 // x TODO: subtotal, tax, total for cart formatting
-// TODO: add options to menu items (e.g. 7000 = well done)
+// x TODO: add options to menu items (e.g. 7000 = well done)
 // x TODO: format messages without ADD
 // TODO: unit tests
 //   add sub item that matches nothing
@@ -390,7 +391,7 @@ function intersect(choices: PID[], items: ItemInstance[]): boolean
 //   n copies of an item with m options that have a non-zero cost
 // TODO: check for legal quantities/pids in add/remove
 // TODO: detect missing choice - choice validator
-// TODO: scenario: attempt to change quanity of choice item
+// TODO: scenario: attempt to change quantity of choice item
 
 // Choices
 //   Price should be zero since choice is included
