@@ -27,10 +27,15 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
     
     let state: State = { cart: { items: [] }, actions: [] };
 
+    console.log('-----------------------------------------');
+    console.log();
+    console.log("SHORT-ORDER: \"Welcome to Mike's American Grill. What can I get started for you?\"");
+    console.log();
+
     for (const utterance of utterances) {
         console.log('-----------------------------------------');
 
-        console.log(`"${utterance}":`);
+        console.log(`CUSTOMER: "${utterance}":`);
         console.log();
         
         state = parser.parse(utterance, state);
@@ -48,7 +53,7 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
         const order = ops.formatCart(state.cart);
         const replies = 
             responses(state.actions as AnyAction[], order, catalog);
-        console.log(replies.join(' '));
+        console.log(`SHORT-ORDER: "${replies.join(' ')}"`);
         console.log();
 
         state = {...state, actions: []};

@@ -4,6 +4,186 @@
 
 It is based on a pattern-driven NLP tokenizer from the companion [token-flow project](https://github.com/MikeHopcroft/TokenFlow).
 
+Here's a sample dialog involving ordering at the drive through of ficticious restaurant called `Mike's American Grill`:
+
+~~~
+% node build/samples/parser_demo.js 
+
+14 items contributed 200 aliases.
+5 items contributed 28 aliases.
+16 items contributed 31 aliases.
+60 items contributed 212 aliases.
+
+-----------------------------------------
+
+SHORT-ORDER "Welcome to Mike's American Grill. What can I get started for you?"
+
+-----------------------------------------
+CUSTOMER: "hi there give me uh a coffee with two creams":
+
+QTY ITEM                                     TOTAL
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+Subtotal                                      1.29
+    Tax                                       0.12
+Total                                         1.41
+
+SHORT-ORDER: "Ok. Can I get you anything else?"
+
+-----------------------------------------
+CUSTOMER: "let's start over":
+
+QTY ITEM                                     TOTAL
+Subtotal                                          
+    Tax                                           
+Total                                             
+
+SHORT-ORDER: "Welcome to Mike's American Grill. What can I get started for you?"
+
+-----------------------------------------
+CUSTOMER: "can I get a cheeseburger well done with no pickles double onion double lettuce and a coffee two cream two sugar":
+
+QTY ITEM                                     TOTAL
+  1 Cheeseburger                              1.99
+      Well Done                                   
+      NO Pickles                                  
+      XTRA Sliced Red Onion                       
+      XTRA Leaf Lettuce                           
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+Subtotal                                      3.28
+    Tax                                       0.30
+Total                                         3.58
+
+SHORT-ORDER: "Got it. Is that everything?"
+
+-----------------------------------------
+CUSTOMER: "blah blah blah":
+
+QTY ITEM                                     TOTAL
+  1 Cheeseburger                              1.99
+      Well Done                                   
+      NO Pickles                                  
+      XTRA Sliced Red Onion                       
+      XTRA Leaf Lettuce                           
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+Subtotal                                      3.28
+    Tax                                       0.30
+Total                                         3.58
+
+SHORT-ORDER: "I didn't understand that. What else would you like?"
+
+-----------------------------------------
+CUSTOMER: "also get me a hamburger with swiss please":
+
+QTY ITEM                                     TOTAL
+  1 Cheeseburger                              1.99
+      Well Done                                   
+      NO Pickles                                  
+      XTRA Sliced Red Onion                       
+      XTRA Leaf Lettuce                           
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+  1 Hamburger                                 1.69
+      ADD Swiss Cheese Slice                  0.30
+Subtotal                                      5.27
+    Tax                                       0.47
+Total                                         5.74
+
+SHORT-ORDER: "Got it. What else?"
+
+-----------------------------------------
+CUSTOMER: "lose the cheeseburger and get me a couple pet chicken":
+
+QTY ITEM                                     TOTAL
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+  1 Hamburger                                 1.69
+      ADD Swiss Cheese Slice                  0.30
+  2 Grilled Petaluma Chicken Sandwich         7.98
+Subtotal                                     11.26
+    Tax                                       1.01
+Total                                        12.27
+
+SHORT-ORDER: "Got it. Anything else?"
+
+-----------------------------------------
+CUSTOMER: "just a sec":
+
+QTY ITEM                                     TOTAL
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+  1 Hamburger                                 1.69
+      ADD Swiss Cheese Slice                  0.30
+  2 Grilled Petaluma Chicken Sandwich         7.98
+Subtotal                                     11.26
+    Tax                                       1.01
+Total                                        12.27
+
+SHORT-ORDER: "Take your time."
+
+-----------------------------------------
+CUSTOMER: "i'll also take I don't know a surf n turf":
+
+QTY ITEM                                     TOTAL
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+  1 Hamburger                                 1.69
+      ADD Swiss Cheese Slice                  0.30
+  2 Grilled Petaluma Chicken Sandwich         7.98
+  1 Surf N Turf                               7.99
+Subtotal                                     19.25
+    Tax                                       1.73
+Total                                        20.98
+
+SHORT-ORDER: "Ok. What beverage would you like with your Surf N Turf?"
+
+-----------------------------------------
+CUSTOMER: "make that with a small diet coke":
+
+QTY ITEM                                     TOTAL
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+  1 Hamburger                                 1.69
+      ADD Swiss Cheese Slice                  0.30
+  2 Grilled Petaluma Chicken Sandwich         7.98
+  1 Surf N Turf                               7.99
+    1 Small Diet Coke                             
+Subtotal                                     19.25
+    Tax                                       1.73
+Total                                        20.98
+
+SHORT-ORDER: "Ok. Is that all?"
+
+-----------------------------------------
+CUSTOMER: "that'll do it":
+
+QTY ITEM                                     TOTAL
+  1 Medium Coffee                             1.29
+      ADD 2 Cream                                 
+      ADD 2 Sugar                                 
+  1 Hamburger                                 1.69
+      ADD Swiss Cheese Slice                  0.30
+  2 Grilled Petaluma Chicken Sandwich         7.98
+  1 Surf N Turf                               7.99
+    1 Small Diet Coke                             
+Subtotal                                     19.25
+    Tax                                       1.73
+Total                                        20.98
+
+SHORT-ORDER: "Thank you. Your total is $20.98. Please pull forward."
+~~~
+
+## How Short-Order Worrks
+
 As an example, consider the following utterance, which would typically come from a speech-to-text system:
 
 ~~~
@@ -21,7 +201,7 @@ Using [token-flow](https://github.com/MikeHopcroft/TokenFlow), this text might b
 [MEDIUM_COKE(1001)]
 ~~~
 
-After tokenization, the short-order parser might be able to group the tokens into a tree that reflects the speaker's intent:
+After tokenization, the short-order parser groups the tokens into a tree that reflects the speaker's intent:
 ~~~
 [ADD_TO_ORDER]
     [QUANTITY(1)] [DAKOTA_BURGER(pid=4)]            // Burger, standalone menu item.
@@ -49,10 +229,20 @@ These samples are not included in the [short-order npm package](https://www.npmj
 clone the [repo from GitHub](https://github.com/MikeHopcroft/ShortOrder).
 
 You can find the definition files for the menu, intents, attributes, and quantifiers at
-* `samples/data/restaurant-en/menu.yaml`
+* `samples/data/restaurant-en/menu2.yaml`
 * `samples/data/restaurant-en/intents.yaml`
 * `samples/data/restaurant-en/attributes.yaml`
 * `samples/data/restaurant-en/quantifiers.yaml`
+
+### Drive Through Conversation Sample
+
+This example generated the conversation at the beginning of this README. If you've cloned the repo, you can build and run the sample as follows:
+
+~~~
+npm install
+npm run compile
+node build/samples/parser_demo.js
+~~~
 
 ### Relevance Test Sample
 
