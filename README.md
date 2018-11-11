@@ -223,7 +223,7 @@ If you are interested in taking a look, you can clone the repo on GitHub or inst
 npm install shortorder
 ~~~
 
-As of [commit 3166f1e2](https://github.com/MikeHopcroft/ShortOrder/commit/3166f1e21cf96fed8d0fbe56aeb4f38841b62fd6), there are a number of working samples, based on a ficticious restaurant and an imaginary car dealership.
+`short-order` includes a number of working samples, based on a ficticious restaurant and an imaginary car dealership.
 
 These samples are not included in the [short-order npm package](https://www.npmjs.com/package/short-order). To use them, you must
 clone the [repo from GitHub](https://github.com/MikeHopcroft/ShortOrder).
