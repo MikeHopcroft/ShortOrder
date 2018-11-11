@@ -169,12 +169,13 @@ export class CartOps {
                     // If it was edited, determine whether is should remain on
                     // the child item list.
                     changed = true;
-                    const n = this.catalog.defaultQuantity(pid, parent.pid);
-                    if (n !== result.quantity || 
-                        (result.quantity > 0 && result.modifications.length > 0)) {
-                        // Keep the item if it specifies a non-default quantity
-                        // or has other modifications and a non-zero quantity.
-                        updated.push(result);
+                    if (result.quantity > 0) {
+                        const n = this.catalog.defaultQuantity(pid, parent.pid);
+                        if (n !== result.quantity || result.modifications.length > 0) {
+                            // Keep the item if it specifies a non-default quantity
+                            // or has other modifications and a non-zero quantity.
+                            updated.push(result);
+                        }
                     }
                 }
                 else {

@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { Catalog, CatalogItems, PID, validateCatalogItems, ConvertDollarsToPennies } from '../src';
+import { Catalog, CatalogItems, validateCatalogItems, ConvertDollarsToPennies } from '../src';
 import { Cart, CartOps } from '../src';
+import { PID } from 'token-flow';
 
 
 function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {

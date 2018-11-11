@@ -23,3 +23,4 @@
 * Categories (e.g. flavor, size, etc.)
 * Presumptive close
 * Pluggable sales tax.
+* Scenario: customize one sandwich in surf-n-turf.

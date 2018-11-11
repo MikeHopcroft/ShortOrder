@@ -12,7 +12,7 @@ items:
         - pid: 5000
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 5200
           defaultQuantity: 1
@@ -104,7 +104,7 @@ items:
         - pid: 5000
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 5100
           defaultQuantity: 1
@@ -161,7 +161,7 @@ items:
         - pid: 5000
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 5100
           defaultQuantity: 1
@@ -213,7 +213,7 @@ items:
         - pid: 5000
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 5100
           defaultQuantity: 1
@@ -281,7 +281,7 @@ items:
         - pid: 5001
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 190
           defaultQuantity: 1
@@ -326,7 +326,7 @@ items:
         - pid: 5001
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 191
           defaultQuantity: 1
@@ -393,7 +393,7 @@ items:
         - pid: 5000
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 290
           defaultQuantity: 1
@@ -425,7 +425,7 @@ items:
         - pid: 5002
           defaultQuantity: 1
           minQuantity: 0
-          maxQuantity: 3
+          maxQuantity: 1
           price: 0.3
         - pid: 291
           defaultQuantity: 1

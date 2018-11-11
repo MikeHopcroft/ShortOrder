@@ -1,8 +1,8 @@
 import { assert } from 'chai';
 import 'mocha';
 
-// import { IsChoiceOf, IsComponentOf, IsDefaultOf, IsOptionOf, IsSubstitutionOf, ItemDescription, PID } from '../../src/catalog';
-import { ItemDescription, PID, Catalog } from '../../src/catalog';
+import { ItemDescription, Catalog } from '../../src/catalog';
+import { PID } from 'token-flow';
 
 const anyPrice = 0.99;
 const anyDefaultQuantity = 1;
