@@ -14,7 +14,7 @@ import {
 
 import { CartOps, Catalog, Pipeline, State } from '..';
 import { PeekableSequence, Token } from 'token-flow';
-import { CONFUSED, DONE, OK, WAIT } from '../actions';
+import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
 
 // TODO: MultipleEntityToken, MultipleAttributeToken
 
@@ -26,6 +26,10 @@ const endOfEntity = [
 
 const startOfEntity = [
     ADD_TO_ORDER, ATTRIBUTE, ENTITY, QUANTITY
+];
+
+const ignore = [
+    CONJUNCTION, SEPERATOR
 ];
 
 // TODO: What is the meaning of "ADD X REMOVE Y Z"?
@@ -67,6 +71,18 @@ export class Parser {
             else if (token.type as symbol === END_OF_ORDER) {
                 const actions = [ { type: DONE }, ...state.actions ];
                 state = { ...state, actions };
+                input.get();
+            }
+            else if (token.type as symbol === CANCEL_ORDER) {
+                const actions = [ { type: WELCOME }, ...state.actions ];
+                const cart = { items: [] };
+                state = { cart, actions };
+                input.get();
+            }
+            else if (token.type as symbol === SALUTATION) {
+                input.get();
+            }
+            else if (ignore.includes(token.type)) {
                 input.get();
             }
             else {

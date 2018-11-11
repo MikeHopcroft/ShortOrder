@@ -49,9 +49,15 @@ function go(infile: string, utterances: string[]) {
 }
 
 const utterances = [
+    // May want to preprocess ADD_TO_ORDER + SEPARATOR into ADD_TO_ORDER
+    // Proabably don't want to ignore all separators.
+    // Perhaps there should be entity-breaking separtors and non-breaking.
+    'hi there give me uh a coffee with two creams',
+
+    "let's start over",
     'can I get a cheeseburger well done with no pickles double onion double lettuce and a coffee two cream two sugar',
     'blah blah blah',
-    'also get me a hamburger with swiss',
+    'also get me a hamburger with swiss please',
     'lose the cheeseburger and get me a couple pet chicken',
 
     // This line give the ADD_TO_ORDER intent followed by NEED_MORE_TIME
@@ -59,7 +65,9 @@ const utterances = [
 
     'just a sec',
 
-    "i'll also take a surf n turf",
+    // May want to preprocess ADD_TO_ORDER + SEPARATOR into ADD_TO_ORDER
+    "i'll also take I don't know a surf n turf",
+
     "make that with a small diet coke",
     "that'll do it"
 

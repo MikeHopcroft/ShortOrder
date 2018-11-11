@@ -92,9 +92,9 @@ items:
   - pid: 100011
     name: CANCEL_ORDER
     aliases:
-      - cancel
+      - cancel [my,this,the] [order]
       - quit
-      - start over
+      - "[let's] (start over,try again)"
 
   # ISSUE: No subjects like "I", "We".
   - pid: 100012

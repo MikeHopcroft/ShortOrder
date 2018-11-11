@@ -112,16 +112,21 @@ export interface WaitAction extends Action {
 export const WELCOME: unique symbol = Symbol('WELCOME');
 export type WELCOME = typeof WELCOME;
 
+export interface WelcomeAction extends Action {
+    type: WELCOME;
+}
+
 export type AnyAction = 
     ChoiceAction |
     CompleteAction |
     ConfusedAction |
     DoneAction |
     OkAction |
-    WaitAction;
+    WaitAction |
+    WelcomeAction;
 
 export function actionToString(action: AnyAction): string {
-    let result = "UNKNOWN action";
+    let result = `UNKNOWN action ${String(action.type)}`;
 
     switch (action.type) {
         case CHOICE:
@@ -142,7 +147,11 @@ export function actionToString(action: AnyAction): string {
         case WAIT:
             result = `WAIT`;
             break;
+        case WELCOME:
+            result = 'WELCOME';
+            break;
         default:
+            break;
     }
 
     return result;
