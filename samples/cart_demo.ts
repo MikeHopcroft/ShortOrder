@@ -13,14 +13,7 @@ function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {
     
     const ops = new CartOps(catalog);
     
-    let cart: Cart = { items: [
-        // { pid: 1, quantity: 2, modifications: [
-        //     { pid: 5200, quantity: 2, modifications: []},
-        //     { pid: 5201, quantity: 0, modifications: []},
-        //     { pid: 5202, quantity: 5, modifications: []}
-        // ]},
-        // { pid: 2, quantity: 1, modifications: []}
-    ]};
+    let cart: Cart = { items: []};
 
     for (const op of operations) {
         console.log('-----------------------------------------');

@@ -82,7 +82,6 @@ const catalogItems = {
                 options: []
             }
         },
-//        makeIngredient(7000, 'Well Done', 0),
 
         makeStandalone(200, "Down East Fish Sandwich", 3.99, [], [], [], []),
 
@@ -584,7 +583,7 @@ describe('CartOps', () => {
         // Should collapse to a single item with quantity = 2.
 
         // TODO: Removing modifications until item is identical with
-        // another item in the cart.
+        // another item in the cart. Two items should be collapsed together.
 
         // TODO: Adding a choice to an item with quantity > 1.
         // Should add enough copies of choice.
@@ -595,7 +594,6 @@ describe('CartOps', () => {
         // TODO: Adding modification that applies to nothing in the cart.
 
         // TODO: Detect imcomplete choices.
-
     });
 
     describe('Formatting', () => {

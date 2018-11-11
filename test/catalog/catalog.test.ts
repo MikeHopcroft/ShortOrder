@@ -81,37 +81,33 @@ const item400 = makeItem(400);
 
 const catalog = new Catalog({ items: [item1, item2, item3, item4, item5, item100, item400] });
 
-describe('catalog', () => {
-    describe('IsChoiceOf', () => {
-        it('should accurately test choice membership.', () => {
+describe('Catalog', () => {
+    describe('PredicatesX', () => {
+        it('IsChoiceOf', () => {
             assert.isTrue(catalog.isChoiceOf(100, 1));
             assert.isTrue(catalog.isChoiceOf(400, 1));
             assert.isFalse(catalog.isChoiceOf(3, 1));
         });
-    });
-    describe('IsComponentOf', () => {
-        it('should accurately test choice membership.', () => {
+
+        it('IsComponentOf', () => {
             assert.isTrue(catalog.isComponentOf(100, 1));
             assert.isTrue(catalog.isComponentOf(2, 1));
             assert.isTrue(catalog.isComponentOf(5, 1));
             assert.isTrue(catalog.isComponentOf(4, 1));
             assert.isFalse(catalog.isChoiceOf(3, 1));
         });
-    });
-    describe('IsDefaultOf', () => {
-        it('should accurately test default membership.', () => {
+
+        it('IsDefaultOf', () => {
             assert.isTrue(catalog.isDefaultOf(2, 1));
             assert.isFalse(catalog.isDefaultOf(3, 1));
         });
-    });
-    describe('IsOptionOf', () => {
-        it('should accurately test option membership.', () => {
+
+        it('IsOptionOf', () => {
             assert.isTrue(catalog.isOptionOf(5, 1));
             assert.isFalse(catalog.isOptionOf(2, 1));
         });
-    });
-    describe('IsSubstitutionOf', () => {
-        it('should accurately test substitutions membership.', () => {
+        
+        it('isSubstitutionOf', () => {
             assert.isTrue(catalog.isSubstitutionOf(4, 1));
             assert.isFalse(catalog.isSubstitutionOf(2, 1));
         });
