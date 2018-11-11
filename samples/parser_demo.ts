@@ -6,7 +6,7 @@ import { Catalog, CatalogItems, validateCatalogItems, ConvertDollarsToPennies } 
 import { actionToString, AnyAction, CartOps, Parser, Pipeline, responses, State } from '../src';
 
 
-function go(infile: string, utterances: string[]) {
+function go(infile: string, utterances: string[], debugMode: boolean) {
     const catalogItems = yaml.safeLoad(fs.readFileSync(infile, 'utf8')) as CatalogItems;
     validateCatalogItems(catalogItems);
     ConvertDollarsToPennies(catalogItems);
@@ -14,7 +14,6 @@ function go(infile: string, utterances: string[]) {
     
     const ops = new CartOps(catalog);
 
-    const debugMode = false;
     const pipeline = new Pipeline(
         path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
@@ -24,7 +23,7 @@ function go(infile: string, utterances: string[]) {
         debugMode);
 
 
-    const parser = new Parser(catalog, pipeline);
+    const parser = new Parser(catalog, pipeline, debugMode);
     
     let state: State = { cart: { items: [] }, actions: [] };
 
@@ -39,13 +38,17 @@ function go(infile: string, utterances: string[]) {
         console.log();
 
         state = ops.missingChoicesInCart(state);
-        for (const action of state.actions) {
-            console.log(`ACTION: ${actionToString(action as AnyAction)}`);
+
+        if (debugMode) {
+            for (const action of state.actions) {
+                console.log(`ACTION: ${actionToString(action as AnyAction)}`);
+            }
         }
-        const replies = responses(state.actions as AnyAction[]);
-        for (const reply of replies) {
-            console.log(`"${reply}"`);
-        }
+
+        const order = ops.formatCart(state.cart);
+        const replies = 
+            responses(state.actions as AnyAction[], order, catalog);
+        console.log(replies.join(' '));
         console.log();
 
         state = {...state, actions: []};
@@ -92,6 +95,6 @@ const utterances = [
     // 'cheeseburger extra lettue and well done'
 ];
 
-go('./samples/data/restaurant-en/menu2.yaml', utterances);
+go('./samples/data/restaurant-en/menu2.yaml', utterances, false);
 
 console.log('done');

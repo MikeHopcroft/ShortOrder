@@ -1,5 +1,6 @@
 import { AnyAction, CHOICE, COMPLETE, CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
-
+import { Order } from '../order';
+import { Catalog } from '../catalog';
 
 // DESIGN INTENT: data driven rendering of responses to facilitate
 // multiple languages (e.g. English, Spanish, etc.)
@@ -29,7 +30,27 @@ function lastSpecialAction(actions: AnyAction[]) {
     return last;
 }
 
-export function responses(actions: AnyAction[]): string[] {
+const prompts = [
+    'Can I get you anything else?',
+    'Is that everything?',
+    'What else would you like?',
+    'What else?',
+    'Anything else?',
+    'Is that all?',
+    'What else can I get you?'
+];
+
+let promptCounter = 0;
+
+function getPrompt() {
+    return prompts[promptCounter++ % prompts.length];
+}
+
+export function responses(
+    actions: AnyAction[],
+    order: Order,
+    catalog: Catalog
+): string[] {
     const results: string[] = [];
 
     const confusedCount = actions.filter( (x:AnyAction) => x.type === CONFUSED).length;
@@ -46,14 +67,16 @@ export function responses(actions: AnyAction[]): string[] {
             results.push('Not sure I got all that.');
         }
         else {
-            results.push('Ok.')
+            results.push('Ok.');
         }
     }
 
     const action: AnyAction = lastSpecialAction(actions);
     switch (action.type) {
         case DONE:
-            results.push('Thank you. Your total is $XX. Please pull forward.');
+            const total = 
+                (order.lines[order.lines.length - 1].price as number / 100).toFixed(2);
+            results.push(`Thank you. Your total is $${total}. Please pull forward.`);
             break;
         case WAIT:
             results.push('Take your time.');
@@ -63,12 +86,12 @@ export function responses(actions: AnyAction[]): string[] {
             break;
         case CHOICE:
             const className = action.choice.className;
-            const productName = action.item.pid;
-            results.push(`What ${className} would you like with the ${productName}?`);
+            const productName = catalog.get(action.item.pid).name;
+            results.push(`What ${className} would you like with your ${productName}?`);
             break;
         case COMPLETE:
             // TODO: if the user answers no, need to end order.
-            results.push('Can I get you anything else?');
+            results.push(getPrompt());
             break;
         default:
     }

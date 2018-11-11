@@ -41,11 +41,13 @@ export class Parser {
     catalog: Catalog;
     ops: CartOps;
     pipeline: Pipeline;
+    debugMode: boolean;
 
-    constructor(catalog: Catalog, pipeline: Pipeline) {
+    constructor(catalog: Catalog, pipeline: Pipeline, debugMode: boolean) {
         this.catalog = catalog;
         this.ops = new CartOps(catalog);
         this.pipeline = pipeline;
+        this.debugMode = debugMode;
     }
 
     parse(input: string, state: State): State {
@@ -58,10 +60,7 @@ export class Parser {
         while (!input.atEOF()) {
             const token = input.peek();
             if (startOfEntity.includes(token.type)) {
-                // console.log(`Processing ENTITY`);
                 state = this.parseEntity(input, state);
-                // this.ops.printCart(cart);
-                // console.log();
             }
             else if (token.type as symbol === NEED_MORE_TIME) {
                 const actions = [ { type: WAIT }, ...state.actions ];
@@ -88,9 +87,11 @@ export class Parser {
             else {
                 const actions = [ { type: CONFUSED }, ...state.actions ];
                 state = { ...state, actions };
-                console.log(`Skipped token ${token.type.toString()}`);
-                console.log();
                 input.get();
+                if (this.debugMode) {
+                    console.log(`Skipped token ${token.type.toString()}`);
+                    console.log();
+                }
             }
         }
         return state;
@@ -154,7 +155,9 @@ export class Parser {
         else {
             // TODO: log that we failed to get an entity?
             // TODO: emit token sequence that led to this problem.
-            console.log('Parser.parseEntity: no entity detected.');
+            if (this.debugMode) {
+                console.log('Parser.parseEntity: no entity detected.');
+            }
             const actions = [{type: CONFUSED}, ...state.actions];
             return { ...state, actions };
         }
