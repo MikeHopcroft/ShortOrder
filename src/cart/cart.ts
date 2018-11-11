@@ -214,8 +214,11 @@ export class CartOps {
             return {...state, actions: [...missingChoices, ...state.actions]};
         }
         else {
-            return {...state, actions: [ { type: COMPLETE }, ...state.actions]};
+            return state;
         }
+        // else {
+        //     return {...state, actions: [ { type: COMPLETE }, ...state.actions]};
+        // }
     }
 
     missingChoicesInItem(item: ItemInstance, missingChoices: ChoiceAction[]) {

@@ -3,7 +3,7 @@ import * as yaml from 'js-yaml';
 import * as path from 'path';
 
 import { Catalog, CatalogItems, validateCatalogItems, ConvertDollarsToPennies } from '../src';
-import { actionToString, AnyAction, CartOps, Parser, Pipeline, State } from '../src';
+import { actionToString, AnyAction, CartOps, Parser, Pipeline, responses, State } from '../src';
 
 
 function go(infile: string, utterances: string[]) {
@@ -41,6 +41,10 @@ function go(infile: string, utterances: string[]) {
         state = ops.missingChoicesInCart(state);
         for (const action of state.actions) {
             console.log(`ACTION: ${actionToString(action as AnyAction)}`);
+        }
+        const replies = responses(state.actions as AnyAction[]);
+        for (const reply of replies) {
+            console.log(`"${reply}"`);
         }
         console.log();
 
