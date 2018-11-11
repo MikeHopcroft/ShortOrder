@@ -1,3 +1,7 @@
+import { ItemInstance } from "../cart";
+import { ChoiceDescription } from "../catalog";
+import { Done } from "mocha";
+
 // DESIGN INTENT: data driven rendering of responses to facilitate
 // multiple languages (e.g. English, Spanish, etc.)
 
@@ -27,6 +31,12 @@ export type ACKNOWLEDGE = typeof ACKNOWLEDGE;
 export const CHOICE: unique symbol = Symbol('CHOICE');
 export type CHOICE = typeof CHOICE;
 
+export interface ChoiceAction extends Action {
+    type: CHOICE;
+    item: ItemInstance;
+    choice: ChoiceDescription;
+}
+
 // Presumptive close
 // "Is that with a large coke?"
 export const CLOSE: unique symbol = Symbol('CLOSE');
@@ -37,15 +47,35 @@ export type CLOSE = typeof CLOSE;
 export const COMPLETE: unique symbol = Symbol('COMPLETE');
 export type COMPLETE = typeof COMPLETE;
 
+export interface CompleteAction extends Action {
+    type: COMPLETE;
+}
+
 // Errors processing order. May not have added everything correctly.
 // "Not sure I got all that. Is there anything else I can get you?"
 export const CONFUSED: unique symbol = Symbol('CONFUSED');
 export type CONFUSED = typeof CONFUSED;
 
+export interface ConfusedAction extends Action {
+    type: CONFUSED;
+}
+
 // User has completed order.
 // "Thank you. Your total is $XX.YY. Please pull forward."
 export const DONE: unique symbol = Symbol('DONE');
 export type DONE = typeof DONE;
+
+export interface DoneAction extends Action {
+    type: DONE;
+}
+
+// Acknowledging transaction performed successfully.
+export const OK: unique symbol = Symbol('OK');
+export type OK = typeof OK;
+
+export interface OkAction {
+    type: OK;
+}
 
 // Times up (after waiting, after getting a complete order w/o DONE).
 // May need a TICK intent which we inject from a timer.
@@ -73,8 +103,47 @@ export type UPSELL = typeof UPSELL;
 export const WAIT: unique symbol = Symbol('WAIT');
 export type WAIT = typeof WAIT;
 
+export interface WaitAction extends Action {
+    type: WAIT;
+}
+
 // Welcome at start of order
 // "Welcome to Mike's American Grill. What can I get started for you?"
 export const WELCOME: unique symbol = Symbol('WELCOME');
 export type WELCOME = typeof WELCOME;
 
+export type AnyAction = 
+    ChoiceAction |
+    CompleteAction |
+    ConfusedAction |
+    DoneAction |
+    OkAction |
+    WaitAction;
+
+export function actionToString(action: AnyAction): string {
+    let result = "UNKNOWN action";
+
+    switch (action.type) {
+        case CHOICE:
+            result = `CHOICE: ${action.choice.className} for ${action.item.pid}`;
+            break;
+            case COMPLETE:
+            result = `COMPLETE`;
+            break;
+        case CONFUSED:
+            result = `CONFUSED`;
+            break;
+        case DONE:
+            result = `DONE`;
+            break;
+        case OK:
+            result = `OK`;
+            break;
+        case WAIT:
+            result = `WAIT`;
+            break;
+        default:
+    }
+
+    return result;
+}

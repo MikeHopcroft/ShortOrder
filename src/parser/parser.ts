@@ -1,8 +1,8 @@
 import { WORD } from 'token-flow';
-import {AnyToken} from '../pipeline';
+import { AnyToken } from '../pipeline';
 
 import {
-    ATTRIBUTE, AttributeToken, ENTITY, EntityToken, 
+    ATTRIBUTE, AttributeToken, ENTITY, EntityToken,
     QUANTITY, QuantityToken, INTENT, IntentToken
 } from '../recognizers';
 
@@ -12,8 +12,9 @@ import {
     SALUTATION, SEPERATOR, SUBSTITUTE
 } from '../recognizers';
 
-import { Cart, CartOps, Catalog, Pipeline } from '..';
+import { CartOps, Catalog, Pipeline, State } from '..';
 import { PeekableSequence, Token } from 'token-flow';
+import { CONFUSED, DONE, OK, WAIT } from '../actions';
 
 // TODO: MultipleEntityToken, MultipleAttributeToken
 
@@ -43,31 +44,43 @@ export class Parser {
         this.pipeline = pipeline;
     }
 
-    parse(input: string, cart: Cart): Cart {
+    parse(input: string, state: State): State {
         const tokens = this.pipeline.processOneQuery(input) as AnyToken[];
         const sequence = new PeekableSequence<AnyToken>(tokens[Symbol.iterator]());
-        return this.parseRoot(sequence, cart);
+        return this.parseRoot(sequence, state);
     }
 
-    parseRoot(input: PeekableSequence<AnyToken>, cart: Cart): Cart {
+    parseRoot(input: PeekableSequence<AnyToken>, state: State): State {
         while (!input.atEOF()) {
             const token = input.peek();
             if (startOfEntity.includes(token.type)) {
                 // console.log(`Processing ENTITY`);
-                cart = this.parseEntity(input, cart);
+                state = this.parseEntity(input, state);
                 // this.ops.printCart(cart);
                 // console.log();
             }
+            else if (token.type as symbol === NEED_MORE_TIME) {
+                const actions = [ { type: WAIT }, ...state.actions ];
+                state = { ...state, actions };
+                input.get();
+            }
+            else if (token.type as symbol === END_OF_ORDER) {
+                const actions = [ { type: DONE }, ...state.actions ];
+                state = { ...state, actions };
+                input.get();
+            }
             else {
+                const actions = [ { type: CONFUSED }, ...state.actions ];
+                state = { ...state, actions };
                 console.log(`Skipped token ${token.type.toString()}`);
                 console.log();
                 input.get();
             }
         }
-        return cart;
+        return state;
     }
 
-    parseEntity(input: PeekableSequence<AnyToken>, cart: Cart): Cart {
+    parseEntity(input: PeekableSequence<AnyToken>, state: State): State {
         let entity = undefined;
         const quantifiers: QuantityToken[] = [];
         const attributes: AttributeToken[] = [];
@@ -119,14 +132,15 @@ export class Parser {
             const quantity = Parser.quantityFromTokens(quantifiers);
 
             // TODO: handle attributes here.
-    
-            return this.ops.updateCart(cart, entity.pid, quantity);
+
+            return this.ops.updateCart(state, entity.pid, quantity);
         }
         else {
             // TODO: log that we failed to get an entity?
             // TODO: emit token sequence that led to this problem.
             console.log('Parser.parseEntity: no entity detected.');
-            return cart;
+            const actions = [{type: CONFUSED}, ...state.actions];
+            return { ...state, actions };
         }
     }
 
@@ -152,7 +166,7 @@ export class Parser {
             // If there is one quantifier, just return it.
             return quantifiers[0].value;
         }
-        else if (quantifiers.find( x => x.value === 0 )) {
+        else if (quantifiers.find(x => x.value === 0)) {
             // If there are multiple quantifiers and at least one is zero,
             // return zero. This handles cases like "with no", where "with"
             // becomes 1 and "no" becomes 0.

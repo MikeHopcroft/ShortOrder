@@ -1,3 +1,4 @@
+import { Action, ChoiceAction, CHOICE, CONFUSED, COMPLETE, OK } from '../actions';
 import { Catalog, ComponentDescription } from '../catalog';
 import { LineItem, Order, OrderOps } from '../order';
 import { PID } from 'token-flow';
@@ -61,6 +62,11 @@ export interface Cart {
     items: ItemInstance[];
 }
 
+export interface State {
+    cart: Cart;
+    actions: Action[];
+}
+
 export class CartOps {
     catalog: Catalog;
 
@@ -68,7 +74,8 @@ export class CartOps {
         this.catalog = catalog;
     }
 
-    updateCart(cart: Cart, pid: PID, quantity: number): Cart {
+    updateCart(state: State, pid: PID, quantity: number): State {
+        const cart = state.cart;
         let changed = false;
         const updated: ItemInstance[] = [];
         for (const item of cart.items) {
@@ -93,20 +100,22 @@ export class CartOps {
         // Attempt to add pid to cart as top-level, stand-alone item.
         if (!changed && this.catalog.isStandalone(pid)) {
             changed = true;
-            updated.unshift({ pid, quantity, modifications:[] });
+            updated.unshift({ pid, quantity, modifications: [] });
         }
 
         if (changed) {
-            return { ...cart, items: updated };
+            const actions = [ { type: OK }, ...state.actions ];
+            return { cart: { ...cart, items: updated }, actions };
         }
         else {
             // TODO: report or log error here?
             console.log(`CartOps.updateCart(): no modifications for pid=${pid}.`);
-            return cart;
+            const actions = [{ type: CONFUSED }, ...state.actions];
+            return { ...state, actions };
         }
     }
 
-    updateItem(item: ItemInstance, pid: PID, quantity: number ): ItemInstance {
+    updateItem(item: ItemInstance, pid: PID, quantity: number): ItemInstance {
         if (pid === item.pid) {
             if (quantity === item.quantity) {
                 return item;
@@ -125,15 +134,14 @@ export class CartOps {
             const result = this.updateChildren(item, pid, quantity);
             if (result === item.modifications) {
                 // No changes made so far.
-                if (this.catalog.isComponentOf(pid, item.pid))
-                {
+                if (this.catalog.isComponentOf(pid, item.pid)) {
                     // TODO: handle adding n items that are choices of this item.
                     // Add correct number as choices. Then add remaining to top level.
 
                     const n = this.catalog.defaultQuantity(pid, item.pid);
                     if (n !== quantity) {
                         // TODO: how do we know whether to fill in substituteFor?
-                        result.unshift({pid, quantity, modifications:[]});
+                        result.unshift({ pid, quantity, modifications: [] });
                     }
                     changed = true;
                 }
@@ -151,7 +159,7 @@ export class CartOps {
         }
     }
 
-    updateChildren(parent: ItemInstance, pid: PID, quantity: number ): ItemInstance[] {
+    updateChildren(parent: ItemInstance, pid: PID, quantity: number): ItemInstance[] {
         let changed = false;
         const updated: ItemInstance[] = [];
 
@@ -196,22 +204,31 @@ export class CartOps {
     // TODO: this should return a more structured type than a string.
     // Perhaps it should return an object with the parent PID and an
     // array of unmet choices.
-    missingChoicesInCart(cart: Cart): string[] {
-        const missingChoices: string[] = [];
-        for (const item of cart.items) {
+    missingChoicesInCart(state: State): State {
+        const missingChoices: ChoiceAction[] = [];
+        for (const item of state.cart.items) {
             this.missingChoicesInItem(item, missingChoices);
         }
-        return missingChoices;
+
+        if (missingChoices.length > 0) {
+            return {...state, actions: [...missingChoices, ...state.actions]};
+        }
+        else {
+            return {...state, actions: [ { type: COMPLETE }, ...state.actions]};
+        }
     }
 
-    missingChoicesInItem(item: ItemInstance, missingChoices: string[]) {
+    missingChoicesInItem(item: ItemInstance, missingChoices: ChoiceAction[]) {
         const d = this.catalog.get(item.pid);
         const choices = d.composition.choices;
 
         for (const choice of choices) {
-            if (!intersect(choice.alternatives, item.modifications))
-            {
-                missingChoices.push(`>>> PROMPT: Select ${choice.className} for ${d.name}.`);
+            if (!intersect(choice.alternatives, item.modifications)) {
+                missingChoices.push({
+                    type:CHOICE,
+                    item,
+                    choice });
+                // missingChoices.push(`>>> PROMPT: Select ${choice.className} for ${d.name}.`);
             }
         }
 
@@ -353,8 +370,7 @@ export class CartOps {
     }
 }
 
-function intersect(choices: PID[], items: ItemInstance[]): boolean
-{
+function intersect(choices: PID[], items: ItemInstance[]): boolean {
     for (const item of items) {
         if (item.quantity > 0 && choices.includes(item.pid)) {
             return true;

@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
+import { actionToString, AnyAction } from '../src';
 import { Catalog, CatalogItems, validateCatalogItems, ConvertDollarsToPennies } from '../src';
-import { Cart, CartOps } from '../src';
+import { Cart, CartOps, State } from '../src';
 import { PID } from 'token-flow';
 
 
@@ -13,7 +14,8 @@ function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {
     
     const ops = new CartOps(catalog);
     
-    let cart: Cart = { items: []};
+    const cart: Cart = { items: []};
+    let state: State = { cart, actions: [] };
 
     for (const op of operations) {
         console.log('-----------------------------------------');
@@ -22,13 +24,14 @@ function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {
         console.log(`"${op.quantity} ${description.name}":`);
         console.log();
 
-        cart = ops.updateCart(cart, op.pid, op.quantity);
-        ops.printCart(cart);
+        state = ops.updateCart(state, op.pid, op.quantity);
+        ops.printCart(state.cart);
         console.log();
 
-        const missingChoices = ops.missingChoicesInCart(cart);
-        for (const missing of missingChoices) {
-            console.log(missing);
+        state = ops.missingChoicesInCart(state);
+
+        for (const action of state.actions) {
+            console.log(`ACTION: ${actionToString(action as AnyAction)}`);
         }
         console.log();
     }

@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import 'mocha';
-import { Cart, CartOps, Catalog, ChoiceDescription, ConvertDollarsToPennies, ItemInstance, SubstitutionDescription } from '../../src';
+import { Cart, CartOps, Catalog, ChoiceDescription, ConvertDollarsToPennies, ItemInstance, State, SubstitutionDescription } from '../../src';
 import { PID } from 'token-flow';
 
 
@@ -119,14 +119,15 @@ describe('CartOps', () => {
         //
 
         it('add standalone top level', () => {
-            let cart: Cart = { items: [] };
-            cart = ops.updateCart(cart, 2, 1);
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
+            state = ops.updateCart(state, 2, 1);
 
             const expected = { items: [
                 { pid: 2, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         // // Fails because the functionality is not implemented.
@@ -145,22 +146,23 @@ describe('CartOps', () => {
         // });
 
         it('remove standalone top level', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee for good measure.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Remove the cheeseburger.
-            cart = ops.updateCart(cart, 2, 0);
+            state = ops.updateCart(state, 2, 0);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         //
@@ -168,16 +170,17 @@ describe('CartOps', () => {
         //
 
         it('add default to newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add two creams.
-            cart = ops.updateCart(cart, 1190, 2);
+            state = ops.updateCart(state, 1190, 2);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1, modifications: [
@@ -190,23 +193,24 @@ describe('CartOps', () => {
                 { pid: 2, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         it('modify default in newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add two creams.
-            cart = ops.updateCart(cart, 1190, 2);
+            state = ops.updateCart(state, 1190, 2);
 
             // Change to three creams.
-            cart = ops.updateCart(cart, 1190, 3);
+            state = ops.updateCart(state, 1190, 3);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1, modifications: [
@@ -219,43 +223,45 @@ describe('CartOps', () => {
                 { pid: 2, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         it('remove default from newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add two creams.
-            cart = ops.updateCart(cart, 1190, 2);
+            state = ops.updateCart(state, 1190, 2);
 
             // Change to three creams.
-            cart = ops.updateCart(cart, 1190, 0);
+            state = ops.updateCart(state, 1190, 0);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[] },
                 { pid: 2, quantity: 1, modifications: [] as ItemInstance[] }
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         it('add default to older item', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add three pickles.
-            cart = ops.updateCart(cart, 5200, 3);
+            state = ops.updateCart(state, 5200, 3);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1,modifications: [] as ItemInstance[] },
@@ -268,28 +274,29 @@ describe('CartOps', () => {
                 ]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         // Fails because the pickles aren't removed.
         // Their quantity is just set to zero.
         it('modify default in older item', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add three pickles.
-            cart = ops.updateCart(cart, 5200, 3);
+            state = ops.updateCart(state, 5200, 3);
 
             // Add two red onion.
-            cart = ops.updateCart(cart, 5201, 2);
+            state = ops.updateCart(state, 5201, 2);
 
             // Remove pickles.
-            cart = ops.updateCart(cart, 5200, 4);
+            state = ops.updateCart(state, 5200, 4);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1,modifications: [] as ItemInstance[] },
@@ -307,28 +314,29 @@ describe('CartOps', () => {
                 ]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         // This test fails because the pickles aren't removed.
         // Their quantity is just set to zero.
         it('remove default from older item', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add three pickles.
-            cart = ops.updateCart(cart, 5200, 3);
+            state = ops.updateCart(state, 5200, 3);
 
             // Add two red onion.
-            cart = ops.updateCart(cart, 5201, 2);
+            state = ops.updateCart(state, 5201, 2);
 
             // Remove pickles.
-            cart = ops.updateCart(cart, 5200, 0);
+            state = ops.updateCart(state, 5200, 0);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1,modifications: [] as ItemInstance[] },
@@ -341,7 +349,7 @@ describe('CartOps', () => {
                 ]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         //
@@ -349,16 +357,17 @@ describe('CartOps', () => {
         //
 
         it('add option to newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add Swiss Cheese.
-            cart = ops.updateCart(cart, 5102, 2);
+            state = ops.updateCart(state, 5102, 2);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[]},
@@ -371,26 +380,27 @@ describe('CartOps', () => {
                 ]},
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         it('modify option in newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add Swiss Cheese.
-            cart = ops.updateCart(cart, 5102, 2);
+            state = ops.updateCart(state, 5102, 2);
 
             // Add a cream
-            cart = ops.updateCart(cart, 1194, 1);
+            state = ops.updateCart(state, 1194, 1);
 
             // Make it three slices of Swiss Cheese.
-            cart = ops.updateCart(cart, 5102, 3);
+            state = ops.updateCart(state, 5102, 3);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1, modifications: [
@@ -409,26 +419,27 @@ describe('CartOps', () => {
                 ]},
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         it('remove option from newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a cheeseburger.
-            cart = ops.updateCart(cart, 2, 1);
+            state = ops.updateCart(state, 2, 1);
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add Swiss Cheese.
-            cart = ops.updateCart(cart, 5102, 2);
+            state = ops.updateCart(state, 5102, 2);
 
             // Add a cream
-            cart = ops.updateCart(cart, 1194, 1);
+            state = ops.updateCart(state, 1194, 1);
 
             // Make it three slices of Swiss Cheese.
-            cart = ops.updateCart(cart, 5102, 0);
+            state = ops.updateCart(state, 5102, 0);
 
             const expected = { items: [
                 { pid: 1100, quantity: 1, modifications: [
@@ -441,7 +452,7 @@ describe('CartOps', () => {
                 { pid: 2, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected, cart);
+            assert.deepEqual(expected, state.cart);
         });
 
         // TODO: consider cases for modifying options in older items.
@@ -453,23 +464,24 @@ describe('CartOps', () => {
         //
 
         it('add choice to newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add a Surf N Turf.
-            cart = ops.updateCart(cart, 6000, 1);
+            state = ops.updateCart(state, 6000, 1);
 
             const expected1 = { items: [
                 { pid: 6000, quantity: 1, modifications: [] as ItemInstance[]},
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected1, cart);
+            assert.deepEqual(expected1, state.cart);
 
             // Add a small Coke.
-            cart = ops.updateCart(cart, 1000, 1);
+            state = ops.updateCart(state, 1000, 1);
 
             const expected2 = { items: [
                 { pid: 6000, quantity: 1, modifications: [
@@ -482,26 +494,27 @@ describe('CartOps', () => {
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected2, cart);
+            assert.deepEqual(expected2, state.cart);
         });
 
         it('modify choice in newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add a Surf N Turf.
-            cart = ops.updateCart(cart, 6000, 1);
+            state = ops.updateCart(state, 6000, 1);
 
             // Add a small Coke.
-            cart = ops.updateCart(cart, 1000, 1);
+            state = ops.updateCart(state, 1000, 1);
 
             // Remove the Coke.
-            cart = ops.updateCart(cart, 1000, 0);
+            state = ops.updateCart(state, 1000, 0);
 
             // Add a small Diet Coke.
-            cart = ops.updateCart(cart, 1003, 1);
+            state = ops.updateCart(state, 1003, 1);
 
             const expected2 = { items: [
                 { pid: 6000, quantity: 1, modifications: [
@@ -514,23 +527,24 @@ describe('CartOps', () => {
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected2, cart);
+            assert.deepEqual(expected2, state.cart);
         });
 
         it('add modification to choice in newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add a Surf N Turf.
-            cart = ops.updateCart(cart, 6000, 1);
+            state = ops.updateCart(state, 6000, 1);
 
             // Add a small Coke.
-            cart = ops.updateCart(cart, 1000, 1);
+            state = ops.updateCart(state, 1000, 1);
 
             // Remove the Coke.
-            cart = ops.updateCart(cart, 1090, 0);
+            state = ops.updateCart(state, 1090, 0);
 
             const expected2 = { items: [
                 { pid: 6000, quantity: 1, modifications: [
@@ -549,30 +563,31 @@ describe('CartOps', () => {
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected2, cart);
+            assert.deepEqual(expected2, state.cart);
         });
 
         it('remove choice from newest', () => {
-            let cart: Cart = { items: [] };
+            const cart: Cart = { items: [] };
+            let state: State = { cart, actions:[] };
 
             // Add a coffee.
-            cart = ops.updateCart(cart, 1100, 1);
+            state = ops.updateCart(state, 1100, 1);
 
             // Add a Surf N Turf.
-            cart = ops.updateCart(cart, 6000, 1);
+            state = ops.updateCart(state, 6000, 1);
 
             // Add a small Coke.
-            cart = ops.updateCart(cart, 1000, 1);
+            state = ops.updateCart(state, 1000, 1);
 
             // Remove the Coke.
-            cart = ops.updateCart(cart, 1000, 0);
+            state = ops.updateCart(state, 1000, 0);
 
             const expected2 = { items: [
                 { pid: 6000, quantity: 1, modifications: [] as ItemInstance[]},
                 { pid: 1100, quantity: 1, modifications: [] as ItemInstance[]}
             ]};
 
-            assert.deepEqual(expected2, cart);
+            assert.deepEqual(expected2, state.cart);
         });
 
         //
