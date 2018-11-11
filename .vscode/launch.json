@@ -101,7 +101,13 @@
             "name": "Launch Parser Demo",
             "program": "${workspaceFolder}/build/samples/parser_demo.js",
             "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Menu Demo",
+            "program": "${workspaceFolder}/build/samples/menu_demo.js",
+            "outputCapture": "std"
         }
-
     ]
 }

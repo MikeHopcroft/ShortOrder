@@ -1004,7 +1004,7 @@ items:
     aliases:
       - Whole Wheat Bun
     price: 0
-    standalone: true
+    standalone: false
     composition:
       defaults: []
       choices: []

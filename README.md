@@ -244,6 +244,98 @@ npm run compile
 node build/samples/parser_demo.js
 ~~~
 
+### Printing the menu
+It is often helpful to be able to inspect the menu. The `menu_demo` sample prints out the menu.
+
+~~~
+% node build/samples/menu_demo.js 
+
+1 Hamburger
+  Ingredients: Seasame Bun, Pickles, Sliced Red Onion, Leaf Lettuce, Tomato Slice, Ketchup, Yellow Mustard
+  Options: American Cheese Slice, Cheddar Cheese Slice, Swiss Cheese Slice, Monterey Jack Cheese Slice, Dijon Mustard, Tartar Sauce, Mayonnaise, Sriracha Mayonnaise, Well Done
+
+2 Cheeseburger
+  Ingredients: Seasame Bun, American Cheese Slice, Pickles, Sliced Red Onion, Leaf Lettuce, Tomato Slice, Ketchup, Yellow Mustard
+  Options: Well Done
+
+3 Big Apple Burger
+  Ingredients: Seasame Bun, American Cheese Slice, Pickles, Sliced Red Onion, Leaf Lettuce, Tomato Slice, Ketchup, Yellow Mustard
+
+4 Dakota Burger
+  Ingredients: Seasame Bun, American Cheese Slice, Pickles, Sliced Red Onion, Leaf Lettuce, Tomato Slice, Ketchup, Yellow Mustard
+
+100 Grilled Petaluma Chicken Sandwich
+  Ingredients: Whole Wheat Bun, Grilled Chicken Breast, Pickles, Leaf Lettuce, Tomato Slice, Tartar Sauce
+
+101 Fried Petaluma Chicken Sandwich
+  Ingredients: Whole Wheat Bun, Fried Chicken Breast, Pickles, Leaf Lettuce, Tomato Slice, Mayonnaise
+
+200 Down East Fish Sandwich
+  Ingredients: Seasame Bun, Fried Cod Fillet, American Cheese Slice, Tartar Sauce
+
+201 Northwest Sockeye Sandwich
+  Ingredients: Ancient Grains Bun, Grilled Sockeye Fillet, Sliced Red Onion, Leaf Lettuce, Tomato Slice, Tartar Sauce
+
+400 Small French Fries
+
+401 Medium French Fries
+
+402 Large French Fries
+
+410 6 Wings
+
+411 12 Wings
+
+1000 Small Coke
+  Ingredients: Ice
+
+1001 Medium Coke
+  Ingredients: Ice
+
+1002 Large Coke
+  Ingredients: Ice
+
+1003 Small Diet Coke
+  Ingredients: Ice
+
+1004 Medium Diet Coke
+  Ingredients: Ice
+
+1005 Large Diet Coke
+  Ingredients: Ice
+
+1070 Small Unsweet Tea
+  Ingredients: Ice
+
+1071 Medium Unsweet Tea
+  Ingredients: Ice
+
+1072 Large Unsweet Tea
+  Ingredients: Ice
+
+1073 Small Sweet Tea
+  Ingredients: Ice
+
+1074 Medium Sweet Tea
+  Ingredients: Ice
+
+1075 Large Sweet Tea
+  Ingredients: Ice
+
+1100 Small Coffee
+  Options: Sleeve, Sugar, Sweet N Low, Equal, Stevia, Cream, Half And Half
+
+1101 Medium Coffee
+  Options: Sleeve, Sugar, Sweet N Low, Equal, Stevia, Cream, Half And Half
+
+1102 Large Coffee
+  Options: Sleeve, Sugar, Sweet N Low, Equal, Stevia, Cream, Half And Half
+
+6000 Surf N Turf
+  Ingredients: Cheeseburger, Down East Fish Sandwich, Large Coke
+  Choices: beverage
+~~~
+
 ### Relevance Test Sample
 
 This sample runs a suite of test utterances through the tokenization pipeline. The test utterances can be found at `samples/data/restaurant-en/tests.yaml`.
