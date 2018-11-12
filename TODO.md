@@ -9,6 +9,11 @@
     * Async messages from timer
 
 * Cart operations
+    * Separate finding items, matching some criteria from operating on these items.
+    * Search for matching entities.
+    * Search for matching categories/attributes.
+    * Splitting non-singleton item instances when modifying one.
+    * Pronoun heuristics and support (last item added, last n, etc.)
     * BUG: adding second cheeseburger in cart_demo adds a new line item.
     * Distinction between increasing the quantity and setting the quantity.
     * Merging two menu items when their modifications become identical
@@ -17,6 +22,8 @@
     * Scenario: wings come with choices for 2 or 4 sauces. How to fill these.
     * Scenario: 'bbq sauce' means 'bbq dipping sauce' for wings and 'bbq sauce' ingredient for Dakota Burger. Similar with ketchup packet and ketchup ingredient.
     * Scenario: 'Chicago dog no bun' - which bun do we remove? Is bun a category? 'Chicago dog no salt' - means no celerey salt.
+    * Undo/go back.
+    * Friendly names for products: "Got it. What sauce would you like with your 12 Wings?" vs "Got it. What sauce would you like with your wings?"
 
 * Prepare to receive answers to questions
     * What beverage would you like with your surf n turf?

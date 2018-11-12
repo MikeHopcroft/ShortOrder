@@ -15,7 +15,7 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
     const ops = new CartOps(catalog);
 
     const pipeline = new Pipeline(
-        path.join(__dirname, './data/restaurant-en/menu.yaml'),
+        path.join(__dirname, './data/restaurant-en/menu2.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
@@ -81,7 +81,9 @@ const utterances = [
     "i'll also take I don't know a surf n turf",
 
     "make that with a small diet coke",
-    "that'll do it"
+    "two dozen wings",
+
+    "bbq that'll do it"
 
     // NOT IMPLEMENTED
     // "replace the small diet coke with a small coke"

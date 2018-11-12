@@ -17,7 +17,8 @@ function pipelineDemo(query: string, debugMode = false) {
     printTokens(tokens);
 }
 
-//const a = 'i want a chicken sandwich and some fries i want a big apple burger fried chicken breast and salmon';
-const a = 'fried chicken breast';
-pipelineDemo(a);
+// const a = 'i want a chicken sandwich and some fries i want a big apple burger fried chicken breast and salmon';
+// const a = 'fried chicken breast';
+const a = "bbq that'll do it";
+pipelineDemo(a, true);
 // pipelineDemo('can I have two hamburgers');
