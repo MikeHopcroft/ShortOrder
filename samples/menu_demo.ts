@@ -10,6 +10,7 @@ function go(infile: string) {
     ConvertDollarsToPennies(catalogItems);
     const catalog = new Catalog(catalogItems);
 
+    console.log('=== STAND ALONE ITEMS ===');
     for (const [pid, item] of catalog.map) {
         if (item.standalone) {
             console.log(`${pid} ${item.name}`);
@@ -21,11 +22,18 @@ function go(infile: string) {
                 const options = item.composition.options.map( (x) => catalog.get(x.pid).name );
                 console.log(`  Options: ${options.join(', ')}`);
             }
-            if (item.composition.choices.length > 0) {
-                const choices = item.composition.choices.map( (x) => x.className );
-                console.log(`  Choices: ${choices.join(', ')}`);
+            for (const choice of item.composition.choices) {
+                const alternatives = choice.alternatives.map( (x) => catalog.get(x).name );
+                console.log(`  Choice of ${choice.className}: ${alternatives.join(', ')}`);
             }
             console.log();
+        }
+    }
+
+    console.log('=== INGREDIENTS ===');
+    for (const [pid, item] of catalog.map) {
+        if (!item.standalone) {
+            console.log(`${pid} ${item.name}`);
         }
     }
 }

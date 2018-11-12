@@ -14,6 +14,9 @@
     * Merging two menu items when their modifications become identical
     * Sort out number of choice items to add under multiples (e.g. 2 surf n turf needs 2 drinks)
     * Scenario: customize one sandwich in surf-n-turf.
+    * Scenario: wings come with choices for 2 or 4 sauces. How to fill these.
+    * Scenario: 'bbq sauce' means 'bbq dipping sauce' for wings and 'bbq sauce' ingredient for Dakota Burger. Similar with ketchup packet and ketchup ingredient.
+    * Scenario: 'Chicago dog no bun' - which bun do we remove? Is bun a category? 'Chicago dog no salt' - means no celerey salt.
 
 * Prepare to receive answers to questions
     * What beverage would you like with your surf n turf?
