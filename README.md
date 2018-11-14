@@ -229,7 +229,7 @@ These samples are not included in the [short-order npm package](https://www.npmj
 clone the [repo from GitHub](https://github.com/MikeHopcroft/ShortOrder).
 
 You can find the definition files for the menu, intents, attributes, and quantifiers at
-* `samples/data/restaurant-en/menu2.yaml`
+* `samples/data/restaurant-en/menu.yaml`
 * `samples/data/restaurant-en/intents.yaml`
 * `samples/data/restaurant-en/attributes.yaml`
 * `samples/data/restaurant-en/quantifiers.yaml`

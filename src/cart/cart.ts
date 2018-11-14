@@ -365,11 +365,14 @@ export class CartOps {
         order.unshift({ indent, left, middle, price });
     }
 
+    cartToString(cart: Cart) {
+        const order = this.formatCart(cart);
+        return OrderOps.formatOrder(order);
+    }
+
     // TODO: does this convenience method really belong here?
     printCart(cart: Cart) {
-        const order = this.formatCart(cart);
-        const text = OrderOps.formatOrder(order);
-        console.log(text);
+        console.log(this.cartToString(cart));
     }
 }
 

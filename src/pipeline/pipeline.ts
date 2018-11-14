@@ -69,7 +69,6 @@ export function printTokens(tokens: Token[]) {
 export class Pipeline {
     attributeRecognizer: Recognizer;
     entityRecognizer: Recognizer;
-    // fixupRecognizer: Recognizer2;
     intentRecognizer: Recognizer;
     numberRecognizer: Recognizer;
     quantityRecognizer: Recognizer;

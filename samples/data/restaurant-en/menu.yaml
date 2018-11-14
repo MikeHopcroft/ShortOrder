@@ -1,7 +1,27 @@
+# x Surf and Turf shouldn't have a Large Coke by default
+# x Apple slices on Big Apple Burger
+# x San Francisco Burger with teryaki and pineapple, frisco burger, teryaki burger
+# x Beef patties on burgers
+# x Angus beef patty for Dakota burger
+# x BBQ sauce for Dakota burger
+# x Hot, BBQ, Ranch, Blue Cheese sauce for wings (double sauce for big wings)
+# x Onion rings
+# More options for burgers. Add most every condiment/topping.
+# Ketchup packet
+# Black coffee
+# Extra hot coffee
+# Kid's meal with more choices - drink, toy?
+# Latte, Espresso, Cappucino, Cortado, Americano
+# x Salt for fries
+# x Chicago Dog - still needs chopped onions, options
+# x Hot dog options: jalapeños, sauerkraut, grilled cabbage, scallions, chopped onions, yellow mustard, brown mustard, ketchup
+# Coney
+# New York Dog
+# x Seattle Dog - cream cheese, polish sausage
+# https://en.wikipedia.org/wiki/List_of_hot_dogs
+# http://www.foodrepublic.com/2015/05/19/40-ways-the-world-makes-awesome-hot-dogs/
+# Buffalo in wings alias
 items:
-
-  # 1-99: Burgers
-
   - pid: 1
     name: Hamburger
     registerName: Hamburger
@@ -10,10 +30,101 @@ items:
       - Hamburger
     price: 1.69
     standalone: true
-    defaults: [5000, 5200, 5201, 5202, 5203, 5204, 5205]
-    # NOTE: option 5206 should really be a substitution for default 5205.
-    options: [5100, 5101, 5102, 5103, 5206, 5207, 5208, 5209, 7000]
-    
+    composition:
+      defaults:
+        - pid: 5000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 90
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.99
+        - pid: 5200
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5201
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5204
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5205
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5100
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5101
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5102
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5103
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5206
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5207
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5208
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5209
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 7000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
+        - pid: 7001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
   - pid: 2
     name: Cheeseburger
     registerName: Cheeseburger
@@ -21,29 +132,411 @@ items:
       - Cheeseburger
     price: 1.99
     standalone: true
-    defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
-    options: []
-  
+    composition:
+      defaults:
+        - pid: 5000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 90
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.99  
+        - pid: 5100
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5200
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5201
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5204
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5205
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 7000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
+        - pid: 7001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
   - pid: 3
     name: Big Apple Burger
     registerName: Big Apple
     aliases:
-      - "Big Apple [Burger]"
+      - 'Big Apple [Burger]'
     price: 5.99
     standalone: true
-    defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
-    options: []
-  
+    composition:
+      defaults:
+        - pid: 5000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 90
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.99  
+        - pid: 5210
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5100
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5200
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5201
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5204
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5205
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 4
     name: Dakota Burger
     registerName: Dakota
     aliases:
-      - "Dakota [Burger]"
+      - 'Dakota [Burger]'
     price: 5.99
     standalone: true
-    defaults: [5000, 5100, 5200, 5201, 5202, 5203, 5204, 5205]
-    options: []
-  
+    composition:
+      defaults:
+        - pid: 5000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 91
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.99  
+        - pid: 5100
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5200
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5201
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5214
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options:
+        - pid: 7000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
+        - pid: 7001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
+  - pid: 5
+    name: San Francisco Burger
+    registerName: Frisco Burger
+    aliases:
+      - '(San Francisco,Frisco,Teryaki) [Burger]'
+    price: 5.99
+    standalone: true
+    composition:
+      defaults:
+        - pid: 5000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 90
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.99  
+        - pid: 5102
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5211
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5212
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5208
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options:
+        - pid: 7000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
+        - pid: 7001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
+  - pid: 20
+    name: Chicago Dog
+    registerName: Chicago
+    aliases:
+      - 'Chicago [Hot Dog,Dog]'
+    price: 3.99
+    standalone: true
+    composition:
+      defaults:
+        - pid: 5020
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 92
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.99  
+        - pid: 5218
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5205
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5219
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5220
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5221
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5222
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5204
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5205
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5206
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5214
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5223
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5224
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5226
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+  - pid: 21
+    name: Seattle Dog
+    registerName: Seattle
+    aliases:
+      - 'Seattle [Hot Dog,Dog]'
+    price: 3.99
+    standalone: true
+    composition:
+      defaults:
+        - pid: 5021
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 93
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.99  
+        - pid: 5225
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5204
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5205
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5206
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5214
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5223
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5224
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 5226
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5222
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
   - pid: 90
     name: Beef Patty
     registerName: Beef Patty
@@ -51,45 +544,139 @@ items:
       - Beef
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-  #
-  # 100-199: Chicken
-  #
-
-  # The Fried vs Grilled distinction in the Petaluma Chicken Sandwich
-  # might be a good candidate for an attribute on a single product.
-  # Currently, the grilled version has extra aliases for the case where
-  # neither Fried nor Grilled is specified.
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 91
+    name: Angus Beef Patty
+    registerName: Angus Patty
+    aliases:
+      - Angus [Beef] [Patty]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 92
+    name: All Beef Frankfurter
+    registerName: Beef Frank
+    aliases:
+      - Frankfurter
+      - Hot dog
+    price: 0.99
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 93
+    name: Polish Sausage
+    registerName: Polish
+    aliases:
+      - Polish Sausage
+    price: 0.99
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 100
     name: Grilled Petaluma Chicken Sandwich
     registerName: Pet Chk Grilled
-    aliases: 
-      - "Petaluma [Chicken] [Sandwich] [Grilled]"
-      - "[Grilled] Petaluma [Chicken] [Sandwich]"
-      - "Pet Chicken [Sandwich] [Grilled]"
-      - "[Grilled] Pet Chicken [Sandwich]"
-      - "Chicken Sandwich [Grilled]"
+    aliases:
+      - 'Petaluma [Chicken] [Sandwich] [Grilled]'
+      - '[Grilled] Petaluma [Chicken] [Sandwich]'
+      - 'Pet Chicken [Sandwich] [Grilled]'
+      - '[Grilled] Pet Chicken [Sandwich]'
+      - 'Chicken Sandwich [Grilled]'
     price: 3.99
     standalone: true
-    defaults: [5001, 190, 5200, 5202, 5203, 5207]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 5001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 190
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5200
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5207
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 101
     name: Fried Petaluma Chicken Sandwich
     registerName: Pet Chk Fried
-    aliases: 
-      - "Petaluma [Chicken] [Sandwich] Fried"
-      - "Fried Petaluma [Chicken] [Sandwich]"
-      - "Pet Chicken [Sandwich] Fried"
-      - "Fried [Pet] Chicken [Sandwich]"
+    aliases:
+      - 'Petaluma [Chicken] [Sandwich] Fried'
+      - 'Fried Petaluma [Chicken] [Sandwich]'
+      - 'Pet Chicken [Sandwich] Fried'
+      - 'Fried [Pet] Chicken [Sandwich]'
     price: 3.99
     standalone: true
-    defaults: [5001, 191, 5200, 5202, 5203, 5208]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 5001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 191
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5200
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5208
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 190
     name: Grilled Chicken Breast
     registerName: Grilled Chk
@@ -97,45 +684,98 @@ items:
       - Grilled Chicken
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-  # NOTE: cannot include alias "Fried" here because, when stemmed, it collides
-  # with "Fries".
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 191
     name: Fried Chicken Breast
     registerName: Fried Chk
     aliases:
-      - Fried Chicken [Breast]
+      - 'Fried Chicken [Breast]'
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-
-
-  # 200-299: Fish
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 200
     name: Down East Fish Sandwich
     registerName: Down East Fish
     aliases:
-      - "Down East [Fish] [Sandwich]"
+      - 'Down East [Fish] [Sandwich]'
       - Down Easter
     price: 3.99
     standalone: true
-    defaults: [5000, 290, 5100, 5207]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 5000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 290
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5100
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5207
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 201
     name: Northwest Sockeye Sandwich
     registerName: NW Sockey
     aliases:
-      - "[Northwest] Sockeye [Sandwich]"
+      - '[Northwest] Sockeye [Sandwich]'
     price: 4.99
     standalone: true
-    defaults: [5002, 291, 5201, 5202, 5203, 5207]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 5002
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0.3
+        - pid: 291
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5201
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5202
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5203
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 5207
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 290
     name: Fried Cod Fillet
     registerName: Cod Fillet
@@ -144,209 +784,394 @@ items:
       - Cod Filet
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 291
     name: Grilled Sockeye Fillet
     registerName: Sockey
     aliases:
-      - "Grilled Sockeye [Fillet]"
+      - 'Grilled Sockeye [Fillet]'
       - Sockeye Fillet
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-
-  # 300-399: Tacos, Burritos, Nachos, etc.
-  # 400-499: Fries
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 400
     name: Small French Fries
     registerName: Sm Fries
     aliases:
-      - "Small [French] Fries"
+      - 'Small [French] Fries'
     price: 0.99
     standalone: true
-    defaults: []
-    options: []
-
+    composition:
+      defaults:
+        - pid: 5213
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options: []
   - pid: 401
     name: Medium French Fries
     registerName: Med Fries
     aliases:
-      - "[Medium] [French] Fries"
+      - '[Medium] [French] Fries'
     price: 1.29
     standalone: true
-    defaults: []
-    options: []
-
+    composition:
+      defaults:
+        - pid: 5213
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options: []
   - pid: 402
     name: Large French Fries
     registerName: Lg Fries
     aliases:
-      - "Large [French] Fries"
+      - 'Large [French] Fries'
     price: 1.79
     standalone: true
-    defaults: []
-    options: []
-
-  # NOTE: number of wings must be expressed as 'six', not '6', as this is the
-  # form produced by the speech-to-text algorithm.
+    composition:
+      defaults:
+        - pid: 5213
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 403
+    name: Small Onion Rings
+    registerName: Sm Onion Rings
+    aliases:
+      - 'Small [Onion] Rings'
+    price: 0.99
+    standalone: true
+    composition:
+      defaults:
+        - pid: 5213
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 404
+    name: Medium Onion Rings
+    registerName: Med Onion Rings
+    aliases:
+      - '[Medium] [Onion] Rings'
+    price: 0.99
+    standalone: true
+    composition:
+      defaults:
+        - pid: 5213
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 405
+    name: Large Onion Rings
+    registerName: Lg Onion Rings
+    aliases:
+      - 'Large [Onion] Rings'
+    price: 0.99
+    standalone: true
+    composition:
+      defaults:
+        - pid: 5213
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+      choices: []
+      substitutions: []
+      options: []
   - pid: 410
     name: 6 Wings
     registerName: 6 Wings
     aliases:
-      - "six [Piece] [Chicken] Wings"
+      - 'six [Piece] [Chicken] Wings'
+      - half dozen wings
     price: 5.99
     standalone: true
-    defaults: []
-    options: []
-
-  # NOTE: Default wing quanity is a dozen.
-  # NOTE: number of wings must be expressed as 'twelve', not '12', as this is the
-  # form produced by the speech-to-text algorithm.
+    composition:
+      defaults: []
+      choices:
+        - pid: 10001
+          className: sauce
+          alternatives: [5214, 5215, 5216, 5217]
+      substitutions: []
+      options: []
   - pid: 411
     name: 12 Wings
     registerName: 12 Wings
     aliases:
-      - "[twelve,twelve Piece,Dozen] [Chicken] Wings"
-    price: 5.99
+      - '[twelve,twelve Piece,Dozen] [Chicken] Wings'
+    price: 9.99
     standalone: true
-    defaults: []
-    options: []
-
-
-  # 500-599: Salads
-  # 600-699: Desserts - shakes, soft server
-  # 1000-1099: Sodas
+    composition:
+      defaults: []
+      choices:
+        - pid: 10001
+          className: sauce
+          alternatives: [5214, 5215, 5216, 5217]
+      substitutions: []
+      options: []
   - pid: 1000
     name: Small Coke
     registerName: Sm Coke
     aliases:
-      - "Small (Coke,Coca Cola,Cola)"
-    price: 0
+      - 'Small (Coke,Coca Cola,Cola)'
+    price: 0.99
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1001
     name: Medium Coke
     registerName: Med Coke
     aliases:
-      - "[Medium] (Coke,Coca Cola,Cola)"
-    price: 0
+      - '[Medium] (Coke,Coca Cola,Cola)'
+    price: 1.29
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1002
     name: Large Coke
     registerName: Lg Coke
     aliases:
-      - "Large (Coke,Coca Cola,Cola)"
-    price: 0
+      - 'Large (Coke,Coca Cola,Cola)'
+    price: 1.69
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1003
     name: Small Diet Coke
     registerName: Sm Diet Coke
     aliases:
-      - "Small Diet [Coke,Coca Cola,Cola]"
+      - 'Small Diet [Coke,Coca Cola,Cola]'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1004
     name: Medium Diet Coke
     registerName: Med Diet Coke
     aliases:
-      - "[Medium] Diet [Coke,Coca Cola,Cola]"
+      - '[Medium] Diet [Coke,Coca Cola,Cola]'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1005
     name: Large Diet Coke
     registerName: Lg Diet Coke
     aliases:
-      - "Large Diet [Coke,Coca Cola,Cola]"
+      - 'Large Diet [Coke,Coca Cola,Cola]'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
-  # Note, one might ask for a "Large Tea, no sugar."
-  # Currently, this would be handled as a modification,
-  #  rather than a separate product.
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1070
     name: Small Unsweet Tea
     registerName: Sm Unsweet Tea
     aliases:
-      - "Small (Unsweet,Unsweetened) [Iced] Tea"
-      - "Small [Iced] Tea (Unsweet,Unsweetened)"
+      - 'Small (Unsweet,Unsweetened) [Iced] Tea'
+      - 'Small [Iced] Tea (Unsweet,Unsweetened)'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5227
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
   - pid: 1071
     name: Medium Unsweet Tea
     registerName: Med Unsweet Tea
     aliases:
-      - "[Medium] (Unsweet,Unsweetened) [Iced] Tea"
-      - "[Medium] [Iced] Tea (Unsweet,Unsweetened)"
+      - '[Medium] (Unsweet,Unsweetened) [Iced] Tea'
+      - '[Medium] [Iced] Tea (Unsweet,Unsweetened)'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5227
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
   - pid: 1072
     name: Large Unsweet Tea
     registerName: Lg Unsweet Tea
     aliases:
-      - "Large (Unsweet,Unsweetened) [Iced] Tea"
-      - "Large [Iced] Tea (Unsweet,Unsweetened)"
+      - 'Large (Unsweet,Unsweetened) [Iced] Tea'
+      - 'Large [Iced] Tea (Unsweet,Unsweetened)'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5227
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
   - pid: 1073
     name: Small Sweet Tea
     registerName: Sm Sweet Tea
     aliases:
-      - "Small (Sweet,Iced) Tea"
+      - 'Small (Sweet,Iced) Tea'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5227
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
   - pid: 1074
     name: Medium Sweet Tea
     registerName: Med Sweet Tea
     aliases:
-      - "[Medium] (Sweet,Iced) Tea"
+      - '[Medium] (Sweet,Iced) Tea'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5227
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
   - pid: 1075
     name: Large Sweet Tea
     registerName: Lg Sweet Tea
     aliases:
-      - "Large (Sweet,Iced) Tea"
+      - 'Large (Sweet,Iced) Tea'
     price: 0
     standalone: true
-    defaults: [1090]
-    options: []
-
+    composition:
+      defaults:
+        - pid: 1090
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices: []
+      substitutions: []
+      options:
+        - pid: 5227
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
   - pid: 1090
     name: Ice
     registerName: Ice
@@ -354,45 +1179,152 @@ items:
       - Ice
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-  # 1100-1199: Coffees
-
-  # Another good candidate for attributes
-  #   Size: small, medium, large
-  #   Caf: regualr, decaf, half-caf
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1100
     name: Small Coffee
     registerName: Sm Coffee
     aliases:
       - Small Coffee
-    price: 0
+    price: 0.99
     standalone: true
-    defaults: []
-    options: [1180, 1190, 1191, 1192, 1193, 1194, 1195]
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options:
+        - pid: 1180
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1190
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1191
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1192
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1193
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1194
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1195
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
   - pid: 1101
     name: Medium Coffee
     registerName: Med Coffee
     aliases:
-      - "[Medium] Coffee"
-    price: 0
+      - '[Medium] Coffee'
+    price: 1.29
     standalone: true
-    defaults: []
-    options: [1180, 1190, 1191, 1192, 1193, 1194, 1195]
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options:
+        - pid: 1180
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1190
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1191
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1192
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1193
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1194
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1195
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
   - pid: 1102
     name: Large Coffee
     registerName: Lg Coffee
     aliases:
       - Large Coffee
-    price: 0
+    price: 1.59
     standalone: true
-    defaults: []
-    options: [1180, 1190, 1191, 1192, 1193, 1194, 1195]
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options:
+        - pid: 1180
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1190
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1191
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1192
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1193
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1194
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1195
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
   - pid: 1180
     name: Sleeve
     registerName: Sleeve
@@ -401,9 +1333,11 @@ items:
       - Cozy
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1190
     name: Sugar
     registerName: Sugar
@@ -411,11 +1345,11 @@ items:
       - Sugar
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-    # ISSUE: Not sure whether speech-to-text will give us 'N', 'en', or 'and'
-    # for 'Sweet N Low'.
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1191
     name: Sweet N Low
     registerName: Sweet N Low
@@ -423,9 +1357,11 @@ items:
       - Sweet N Low
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1192
     name: Equal
     registerName: Equal
@@ -433,9 +1369,11 @@ items:
       - Equal
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1193
     name: Stevia
     registerName: Stevia
@@ -443,9 +1381,11 @@ items:
       - Stevia
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1194
     name: Cream
     registerName: Cream
@@ -453,9 +1393,11 @@ items:
       - Cream
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 1195
     name: Half And Half
     registerName: 1/2 + 1/2
@@ -463,13 +1405,11 @@ items:
       - Half And Half
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-
-  # 1200-1299: Espresso, Cappucino, Latte, Cortado, etc.
-  # 5000: Ingredients
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5000
     name: Seasame Bun
     registerName: Seasame Bun
@@ -477,96 +1417,134 @@ items:
       - Seasame Bun
     price: 0
     standalone: false
-    defaults: []
-    options: []
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5001
     name: Whole Wheat Bun
     registerName: Wheat Bun
     aliases:
       - Whole Wheat Bun
     price: 0
-    standalone: true
-    defaults: []
-    options: []
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5002
     name: Ancient Grains Bun
     registerName: Ancient Bun
     aliases:
-      - "Ancient Grains [Bun]"
+      - 'Ancient Grains [Bun]'
       - Crunchy Bun
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
-  # One argument for an ontological level is that the term, "cheese" may
-  # refer to any cheese (shredded or sliced, Swiss or American) in the context
-  # of "with no cheese". If every cheese includes the alias, "cheese" in order
-  # to match in the "no cheese" situation, a random cheese product will match.
-  # We have the same situation with Buns. The phrase "no bun" could refer to
-  # any of the bun types.
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5020
+    name: Poppy Seed Bun
+    registerName: Poppy Bun
+    aliases:
+      - '[Poppy Seed] Bun'
+      - Roll
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5021
+    name: Hoagie Roll
+    registerName: Hoagie Roll
+    aliases:
+      - '[Hoagie] Roll'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5100
     name: American Cheese Slice
     registerName: American
     aliases:
-      - "American [Cheese]"
+      - 'American [Cheese]'
       - Cheese
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5101
     name: Cheddar Cheese Slice
     registerName: Cheddar
     aliases:
-      - "Cheddar [Cheese]"
-    price: 0
+      - 'Cheddar [Cheese]'
+    price: 0.30
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5102
     name: Swiss Cheese Slice
     registerName: Swiss
     aliases:
-      - "Swiss [Cheese]"
-    price: 0
+      - 'Swiss [Cheese]'
+    price: 0.30
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5103
     name: Monterey Jack Cheese Slice
     registerName: Jack
     aliases:
-      - "[Monterey] Jack [Cheese]"
+      - '[Monterey] Jack [Cheese]'
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5200
     name: Pickles
     registerName: Pickles
     aliases:
       - Pickles
-    price: 0
+    price: 0.10
     standalone: false
-    defaults: []
-    options: []
-    
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5201
     name: Sliced Red Onion
     registerName: Red Onion
     aliases:
-      - "[Red] Onion"
+      - '[Red] Onion'
     price: 0
     standalone: false
-    defaults: []
-    options: []
-    
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5202
     name: Leaf Lettuce
     registerName: Lettuce
@@ -574,9 +1552,11 @@ items:
       - Lettuce
     price: 0
     standalone: false
-    defaults: []
-    options: []
-    
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5203
     name: Tomato Slice
     registerName: Tomato
@@ -584,9 +1564,11 @@ items:
       - Tomato
     price: 0
     standalone: false
-    defaults: []
-    options: []
-    
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5204
     name: Ketchup
     registerName: Ketchup
@@ -594,40 +1576,48 @@ items:
       - Ketchup
     price: 0
     standalone: false
-    defaults: []
-    options: []
-    
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5205
     name: Yellow Mustard
     registerName: Mustard
     aliases:
-      - "[Plain,Yellow,American] Mustard"
+      - '[Plain,Yellow,American] Mustard'
     price: 0
     standalone: false
-    defaults: []
-    options: []
-    
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5206
     name: Dijon Mustard
     registerName: Dijon
     aliases:
-      - "(Dijon,Brown,Spicy) Mustard"
+      - '(Dijon,Brown,Spicy) Mustard'
       - Dijon
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5207
     name: Tartar Sauce
     registerName: Tartar
     aliases:
-      - "Tartar [Sauce]"
+      - 'Tartar [Sauce]'
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5208
     name: Mayonnaise
     registerName: Mayonnaise
@@ -636,37 +1626,267 @@ items:
       - Mayo
     price: 0
     standalone: false
-    defaults: []
-    options: []
-
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 5209
     name: Sriracha Mayonnaise
     registerName: Sriracha Mayo
     aliases:
-      - "Sriracha [Mayonnaise,Mayo]"
+      - 'Sriracha [Mayonnaise,Mayo]'
     price: 0
     standalone: false
-    defaults: []
-    options: []
-    
-    
-  # 6000: Meals, combos, and deals.
-
-  # Eventually, items like combos will have choices, e.g. choice of drink.
-
-    # ISSUE: Not sure whether speech-to-text will give us 'N', 'en', or 'and'
-    # for 'Surf N Turf'.
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5210
+    name: Grilled Apple Slices
+    registerName: Apple
+    aliases:
+      - '[Grilled] Apple [Slices]'
+    price: 0.30
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5211
+    name: Pineapple Slices
+    registerName: Pineapple
+    aliases:
+      - '[Sliced] Pineapple'
+      - Pineapple Slices
+    price: 0.30
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5212
+    name: Teryaki Sauce
+    registerName: Teryaki
+    aliases:
+      - 'Teryaki [Sauce]'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5213
+    name: Salt
+    registerName: Salt
+    aliases:
+      - Salt
+      - Salted
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5214
+    name: BBQ Sauce
+    registerName: BBQ Sauce
+    aliases:
+      - (BBQ, Barbecue) [Sauce]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5215
+    name: Blue Cheese Sauce
+    registerName: Blue Cheese
+    aliases:
+      - Blue Cheese [Sauce,Dressing]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5216
+    name: Ranch Sauce
+    registerName: Ranch Sauce
+    aliases:
+      - Ranch [Sauce,Dressing]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5217
+    name: Hot Sauce
+    registerName: Hot Sauce
+    aliases:
+      - (Hot,Hot Wing,Wing) [Sauce]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5218
+    name: Celery Salt
+    registerName: Celery Salt
+    aliases:
+      - '[Celery] Salt'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5219
+    name: Pickle Relish
+    registerName: Pickle Relish
+    aliases:
+      - '[Pickle] Relish'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5220
+    name: Sport Peppers
+    registerName: Sport Peppers
+    aliases:
+      - '[Sport] Peppers'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5221
+    name: Dill Pickle Spear
+    registerName: Dill Pickle
+    aliases:
+      - '[Dill] Pickle'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5222
+    name: Chopped Onion
+    registerName: Chopped Onion
+    aliases:
+      - '[Chopped] Onion'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5223
+    name: Sauerkraut
+    registerName: Sauerkraut
+    aliases:
+      - Sauerkraut
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5224
+    name: Jalapeños
+    registerName: Jalapeño
+    aliases:
+      - Jalapeños
+      - Jalapenos
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5225
+    name: Cream Cheese
+    registerName: Cream Cheese
+    aliases:
+      - Cream Cheese
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5226
+    name: Grilled Onions
+    registerName: Grilled Onions
+    aliases:
+      - Grilled Onions
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 5227
+    name: Lemon Wedge
+    registerName: Lemon
+    aliases:
+      - 'Lemon [Wedge]'
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 6000
     name: Surf N Turf
     registerName: Surf N Turf
     aliases:
-      - "Surf (N,And) Turf [Combo] [Meal]"
+      - 'Surf (N,And) Turf [Combo] [Meal]'
     price: 7.99
-    standalone: false
-    defaults: [2, 200, 1002]
-    options: []
-  
-  # 7000: Special handling
+    standalone: true
+    composition:
+      defaults:
+        - pid: 2
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 200
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+      choices:
+        - pid: 10000
+          className: beverage
+          alternatives: [1000, 1003, 1070, 1073]
+      substitutions: []
+      options: []
   - pid: 7000
     name: Well Done
     registerName: Well Done
@@ -674,5 +1894,22 @@ items:
       - Well Done
     price: 0
     standalone: false
-    defaults: []
-    options: []
+    note: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 7001
+    name: Cut In Half
+    registerName: Cut In Half
+    aliases:
+      - Cut In Half
+    price: 0
+    standalone: false
+    note: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []

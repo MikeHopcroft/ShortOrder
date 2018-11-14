@@ -86,7 +86,8 @@
             "request": "launch",
             "name": "Launch REPL",
             "program": "${workspaceFolder}/build/samples/repl_demo.js",
-            "outputCapture": "std"
+            "outputCapture": "std",
+            "console": "externalTerminal"
         },
         {
             "type": "node",
@@ -107,6 +108,13 @@
             "request": "launch",
             "name": "Launch Menu Demo",
             "program": "${workspaceFolder}/build/samples/menu_demo.js",
+            "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Stemmer Confusion Demo",
+            "program": "${workspaceFolder}/build/samples/stemmer_confusion_demo.js",
             "outputCapture": "std"
         }
     ]

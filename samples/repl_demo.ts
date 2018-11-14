@@ -1,8 +1,8 @@
 import * as path from 'path';
-import { repl } from '../src/repl';
+import { runRepl } from '../src/repl';
 
 function replDemo() {
-    repl(
+    runRepl(
         path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),

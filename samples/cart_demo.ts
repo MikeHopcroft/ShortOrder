@@ -70,4 +70,4 @@ const operations2: Array<{pid: PID, quantity: number}> = [
     { pid: 5101, quantity: 2}
 ];
 
-go('./samples/data/restaurant-en/menu2.yaml', operations);
+go('./samples/data/restaurant-en/menu.yaml', operations);

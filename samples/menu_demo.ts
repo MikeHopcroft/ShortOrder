@@ -38,5 +38,5 @@ function go(infile: string) {
     }
 }
 
-go('./samples/data/restaurant-en/menu2.yaml');
+go('./samples/data/restaurant-en/menu.yaml');
 

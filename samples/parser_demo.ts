@@ -15,7 +15,7 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
     const ops = new CartOps(catalog);
 
     const pipeline = new Pipeline(
-        path.join(__dirname, './data/restaurant-en/menu2.yaml'),
+        path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
@@ -102,6 +102,6 @@ const utterances = [
     // 'cheeseburger extra lettue and well done'
 ];
 
-go('./samples/data/restaurant-en/menu2.yaml', utterances, false);
+go('./samples/data/restaurant-en/menu.yaml', utterances, false);
 
 console.log('done');

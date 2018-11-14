@@ -3,7 +3,7 @@ import { Pipeline, printTokens } from '../src/pipeline';
 
 function pipelineDemo(query: string, debugMode = false) {
     const pipeline = new Pipeline(
-        path.join(__dirname, './data/restaurant-en/menu2.yaml'),
+        path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
