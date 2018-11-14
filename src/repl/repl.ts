@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as replServer from 'repl';
 
+import { PID } from 'token-flow';
+
 import { actionToString, AnyAction } from '../actions';
 import { CartOps, State } from '../cart';
 import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems } from '../catalog';
@@ -10,6 +12,7 @@ import { Parser } from '../parser';
 import { Pipeline, printTokens } from '../pipeline';
 import { speechToTextFilter } from './speech_to_text_filter';
 import { responses } from '../turn';
+import { ENTITY, EntityToken } from '../recognizers';
 
 const maxHistorySteps = 1000;
 const historyFile = '.repl_history';
@@ -22,9 +25,11 @@ export function runRepl(
 ) {
     let debugMode = false;
 
-    console.log('yyxxWelcome to the ShortOrder REPL.');
+    console.log('Welcome to the ShortOrder REPL.');
     console.log('Type your order below.');
     console.log('A blank line exits.');
+    console.log();
+    console.log('Type .help for information on commands.');
     console.log();
 
     // Set up the tokenizer pipeline.
@@ -106,6 +111,75 @@ export function runRepl(
             repl.displayPrompt();
         }
     });
+
+    repl.defineCommand('menu', {
+        help: "Display menu",
+        action(line: string) {
+            if (line.length === 0) {
+                for (const [pid, item] of catalog.map) {
+                    if (item.standalone) {
+                        console.log(`${pid} ${item.name}`);
+                    }
+                }
+            }
+            else if (!isNaN(Number(line))) {
+                const pid: PID = Number(line);
+
+                if (!catalog.has(pid)) {
+                    console.log(`${style.red.open}Unknown PID ${pid}${style.red.close}`);
+                }
+                else {
+                    const item = catalog.get(Number(line));
+                    console.log(`${pid} ${item.name}`);
+                    if (item.composition.defaults.length > 0) {
+                        const defaults = item.composition.defaults.map( (x) => catalog.get(x.pid).name );
+                        console.log(`  Ingredients: ${defaults.join(', ')}`);
+                    }
+                    if (item.composition.options.length > 0) {
+                        const options = item.composition.options.map( (x) => catalog.get(x.pid).name );
+                        console.log(`  Options: ${options.join(', ')}`);
+                    }
+                    for (const choice of item.composition.choices) {
+                        const alternatives = choice.alternatives.map( (x) => catalog.get(x).name );
+                        console.log(`  Choice of ${choice.className}: ${alternatives.join(', ')}`);
+                    }
+                    console.log();
+                }
+            }
+            else {
+                const tokens = pipeline.processOneQuery(line, debugMode);
+                if (tokens.length > 0 && tokens[0].type === ENTITY) {
+                    const token = tokens[0] as EntityToken;
+                    const pid = token.pid;
+                    if (catalog.has(pid)) {
+                        const item = catalog.get(pid);
+                        console.log(`${pid} ${item.name}`);
+                        if (item.composition.defaults.length > 0) {
+                            const defaults = item.composition.defaults.map( (x) => catalog.get(x.pid).name );
+                            console.log(`  Ingredients: ${defaults.join(', ')}`);
+                        }
+                        if (item.composition.options.length > 0) {
+                            const options = item.composition.options.map( (x) => catalog.get(x.pid).name );
+                            console.log(`  Options: ${options.join(', ')}`);
+                        }
+                        for (const choice of item.composition.choices) {
+                            const alternatives = choice.alternatives.map( (x) => catalog.get(x).name );
+                            console.log(`  Choice of ${choice.className}: ${alternatives.join(', ')}`);
+                        }
+                        console.log();    
+                    }
+                    else {
+                        console.log(`Unrecognized menu item "${line}"`);
+                    }
+                }
+                else {
+                    console.log(`Unrecognized menu item "${line}"`);
+                }
+            }
+            repl.displayPrompt();
+        }
+    });
+
 
     // tslint:disable-next-line:no-any
     function myEval(line: string, context: any, filename: any, callback: any) {

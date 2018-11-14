@@ -19,7 +19,11 @@ export class Catalog {
         }
     }
 
-    has = this.map.has;
+    // DESGIN NOTE: can't just assign `this.map.has` to `has` because `this` won't
+    // be bound correctly.
+    has(pid: PID) {
+        return this.map.has(pid);
+    }
 
     // TODO: modify get to throw if not available.
     get(pid: PID) {
