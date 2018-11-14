@@ -48,7 +48,7 @@
     "number-to-words": "^1.2.4",
     "readline-sync": "^1.4.9",
     "snowball-stemmers": "^0.6.0",
-    "token-flow": "0.0.22",
+    "token-flow": "0.0.24",
     "words-to-numbers": "^1.5.1"
   }
 }
