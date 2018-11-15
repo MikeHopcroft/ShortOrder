@@ -7,7 +7,7 @@ import { PID } from 'token-flow';
 
 import { actionToString, AnyAction } from '../actions';
 import { CartOps, State } from '../cart';
-import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems } from '../catalog';
+import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems, ItemDescription } from '../catalog';
 import { Parser } from '../parser';
 import { Pipeline, printTokens } from '../pipeline';
 import { speechToTextFilter } from './speech_to_text_filter';
@@ -130,20 +130,7 @@ export function runRepl(
                 }
                 else {
                     const item = catalog.get(Number(line));
-                    console.log(`${pid} ${item.name}`);
-                    if (item.composition.defaults.length > 0) {
-                        const defaults = item.composition.defaults.map( (x) => catalog.get(x.pid).name );
-                        console.log(`  Ingredients: ${defaults.join(', ')}`);
-                    }
-                    if (item.composition.options.length > 0) {
-                        const options = item.composition.options.map( (x) => catalog.get(x.pid).name );
-                        console.log(`  Options: ${options.join(', ')}`);
-                    }
-                    for (const choice of item.composition.choices) {
-                        const alternatives = choice.alternatives.map( (x) => catalog.get(x).name );
-                        console.log(`  Choice of ${choice.className}: ${alternatives.join(', ')}`);
-                    }
-                    console.log();
+                    printMenuItem(item, catalog);
                 }
             }
             else {
@@ -153,22 +140,10 @@ export function runRepl(
                     const pid = token.pid;
                     if (catalog.has(pid)) {
                         const item = catalog.get(pid);
-                        console.log(`${pid} ${item.name}`);
-                        if (item.composition.defaults.length > 0) {
-                            const defaults = item.composition.defaults.map( (x) => catalog.get(x.pid).name );
-                            console.log(`  Ingredients: ${defaults.join(', ')}`);
-                        }
-                        if (item.composition.options.length > 0) {
-                            const options = item.composition.options.map( (x) => catalog.get(x.pid).name );
-                            console.log(`  Options: ${options.join(', ')}`);
-                        }
-                        for (const choice of item.composition.choices) {
-                            const alternatives = choice.alternatives.map( (x) => catalog.get(x).name );
-                            console.log(`  Choice of ${choice.className}: ${alternatives.join(', ')}`);
-                        }
-                        console.log();    
+                        printMenuItem(item, catalog);
                     }
                     else {
+                        // This should never happen if tokenizer returned PID.
                         console.log(`Unrecognized menu item "${line}"`);
                     }
                 }
@@ -252,4 +227,21 @@ export function runRepl(
     function myWriter(text: string) {
         return text;
     }
+}
+
+function printMenuItem(item: ItemDescription, catalog: Catalog) {
+    console.log(`${item.pid} ${item.name}`);
+    if (item.composition.defaults.length > 0) {
+        const defaults = item.composition.defaults.map( (x) => catalog.get(x.pid).name );
+        console.log(`  Ingredients: ${defaults.join(', ')}`);
+    }
+    if (item.composition.options.length > 0) {
+        const options = item.composition.options.map( (x) => catalog.get(x.pid).name );
+        console.log(`  Options: ${options.join(', ')}`);
+    }
+    for (const choice of item.composition.choices) {
+        const alternatives = choice.alternatives.map( (x) => catalog.get(x).name );
+        console.log(`  Choice of ${choice.className}: ${alternatives.join(', ')}`);
+    }
+    console.log();
 }
