@@ -49,13 +49,6 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch ingest_and_test",
-            "program": "${workspaceFolder}/build/src/samples/ingest_and_test.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
             "name": "Launch relevance_demo_english",
             "program": "${workspaceFolder}/build/samples/relevance_demo_english.js",
             "outputCapture": "std"
