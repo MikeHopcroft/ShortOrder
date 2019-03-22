@@ -68,7 +68,7 @@ export interface State {
 }
 
 export class CartOps {
-    catalog: Catalog;
+    private readonly catalog: Catalog;
 
     constructor(catalog: Catalog) {
         this.catalog = catalog;
@@ -115,7 +115,7 @@ export class CartOps {
         }
     }
 
-    updateItem(item: ItemInstance, pid: PID, quantity: number): ItemInstance {
+    private updateItem(item: ItemInstance, pid: PID, quantity: number): ItemInstance {
         if (pid === item.pid) {
             if (quantity === item.quantity) {
                 return item;
@@ -159,7 +159,7 @@ export class CartOps {
         }
     }
 
-    updateChildren(parent: ItemInstance, pid: PID, quantity: number): ItemInstance[] {
+    private updateChildren(parent: ItemInstance, pid: PID, quantity: number): ItemInstance[] {
         let changed = false;
         const updated: ItemInstance[] = [];
 
@@ -221,7 +221,7 @@ export class CartOps {
         // }
     }
 
-    missingChoicesInItem(item: ItemInstance, missingChoices: ChoiceAction[]) {
+    private missingChoicesInItem(item: ItemInstance, missingChoices: ChoiceAction[]) {
         const d = this.catalog.get(item.pid);
         const choices = d.composition.choices;
 
@@ -295,7 +295,7 @@ export class CartOps {
         return { lines };
     }
 
-    formatItem(order: LineItem[], item: ItemInstance, indent: number, parent: PID | undefined) {
+    private formatItem(order: LineItem[], item: ItemInstance, indent: number, parent: PID | undefined) {
         for (const mod of item.modifications) {
             this.formatItem(order, mod, indent + 1, item.pid);
         }

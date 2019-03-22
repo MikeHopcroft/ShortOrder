@@ -6,7 +6,7 @@ export class Catalog {
     // implements CatalogItems {
     // TODO: don't really need to store items - just the map.
     // items: ItemDescription[];
-    map = new Map<PID, ItemDescription>();
+    readonly map = new Map<PID, ItemDescription>();
 
     constructor(catalogItems: CatalogItems) {
         // this.items = catalogItems.items;

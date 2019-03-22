@@ -1,4 +1,4 @@
-import { NUMBERTOKEN, PeekableSequence } from 'token-flow';
+import { NumberToken, NUMBERTOKEN, PeekableSequence } from 'token-flow';
 
 import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
 import { CartOps, State } from '../cart';
@@ -42,12 +42,13 @@ const ignore = [
 //   Is it "ADD X REMOVE Y REMOVE Z" or "ADD X REMOVE Y ADD Z"
 // Seems like you stay in remove mode until an ADD_TO_ORDER intent is seen.
 
+type QuantifierToken = NumberToken | QuantityToken;
 
 export class Parser {
-    catalog: Catalog;
-    ops: CartOps;
-    unified: Unified;
-    debugMode: boolean;
+    private readonly catalog: Catalog;
+    private readonly ops: CartOps;
+    private readonly unified: Unified;
+    private readonly debugMode: boolean;
 
     constructor(catalog: Catalog, pipeline: Unified, debugMode: boolean) {
         this.catalog = catalog;
@@ -62,7 +63,7 @@ export class Parser {
         return this.parseRoot(sequence, state);
     }
 
-    parseRoot(input: PeekableSequence<AnyToken>, state: State): State {
+    private parseRoot(input: PeekableSequence<AnyToken>, state: State): State {
         while (!input.atEOF()) {
             const token = input.peek();
             if (startOfEntity.includes(token.type)) {
@@ -103,9 +104,9 @@ export class Parser {
         return state;
     }
 
-    parseEntity(input: PeekableSequence<AnyToken>, state: State): State {
+    private parseEntity(input: PeekableSequence<AnyToken>, state: State): State {
         let entity: EntityToken | undefined = undefined;
-        const quantifiers: QuantityToken[] = [];
+        const quantifiers: QuantifierToken[] = [];
         const attributes: AttributeToken[] = [];
 
         // If there is a leading ADD_TO_ORDER token, skip it.
@@ -134,9 +135,6 @@ export class Parser {
                     // TODO: break out of loop here.
                     break;
                 case NUMBERTOKEN:
-                    quantifiers.push({ type: QUANTITY, value: token.value } as QuantityToken);
-                    input.get();
-                    break;
                 case QUANTITY:
                     // TODO: do we really want to collect non-adjacent quantities?
                     quantifiers.push(token);
@@ -186,7 +184,7 @@ export class Parser {
 
     // https://medium.com/@ustunozgur/object-oriented-functional-programming-or-how-can-you-use-classes-as-redux-reducers-23462a5cae85
 
-    static quantityFromTokens(quantifiers: QuantityToken[]) {
+    private static quantityFromTokens(quantifiers: QuantifierToken[]) {
         if (quantifiers.length === 0) {
             // Default is 1.
             return 1;

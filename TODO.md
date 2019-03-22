@@ -1,16 +1,18 @@
 # TODO List
 
 * Integrate token-flow 0.0.28
+    * NUMBERTOKEN vs QUANTITY
+        * Rename NUMBERTOKEN to NUMBER?
+        * ~~x Replace each NUMBERTOKEN with QUANTITY~~
     * Publish 0.0.29. Pick up from npm instead of local.
     * Sort out debug package dependency.
-    * NUMBERTOKEN vs QUANTITY
     * parser_Demo
         * ~~"hi there give me uh a coffee with two creams" gives one cream.~~
     * relevance_demo_english
         * Reinstate HackedStemmer.
     * parser.ts
         * ~~Clean up imports~~
-    * WORD and WordToken
+    * ~~WORD and WordToken~~
         * ~~Are these still used by ShortOrder? YES~~
         * ~~Are they still used by TokenFlow?~~
         * ~~Relationship to UnknownToken? ShortOrder replaces UnknownToken with WORD~~
