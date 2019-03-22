@@ -9,10 +9,11 @@ import { actionToString, AnyAction } from '../actions';
 import { CartOps, State } from '../cart';
 import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems, ItemDescription } from '../catalog';
 import { Parser } from '../parser';
-import { Pipeline, printTokens } from '../pipeline';
+//import { Pipeline, printTokens } from '../pipeline';
 import { speechToTextFilter } from './speech_to_text_filter';
 import { responses } from '../turn';
-import { ENTITY, EntityToken } from '../recognizers';
+import { ENTITY, EntityToken } from '../unified';
+import { tokenToString, Unified } from '../unified';
 
 const maxHistorySteps = 1000;
 const historyFile = '.repl_history';
@@ -33,7 +34,8 @@ export function runRepl(
     console.log();
 
     // Set up the tokenizer pipeline.
-    const pipeline = new Pipeline(catlogFile, intentFile, attributesFile, quantifierFile);
+    const unified = new Unified(catlogFile, intentFile, attributesFile, quantifierFile);
+    // const pipeline = new Pipeline(catlogFile, intentFile, attributesFile, quantifierFile);
     console.log();
 
     // Set up the conversational agent and parser.
@@ -43,7 +45,7 @@ export function runRepl(
     ConvertDollarsToPennies(catalogItems);
     const catalog = new Catalog(catalogItems);
 
-    const parser = new Parser(catalog, pipeline, debugMode);   
+    const parser = new Parser(catalog, unified, debugMode);   
     const ops = new CartOps(catalog);
 
     let state: State = { cart: { items: [] }, actions: [] };
@@ -102,10 +104,10 @@ export function runRepl(
                 console.log(`${style.red.close}`);
             }
     
-            const tokens = pipeline.processOneQuery(text, debugMode);
+            const tokens = unified.processOneQuery(text);
 
             console.log(`${style.yellow.open}`);
-            printTokens(tokens);
+            console.log(tokens.map(tokenToString).join(' '));
             console.log(`${style.yellow.close}`);
     
             repl.displayPrompt();
@@ -134,7 +136,7 @@ export function runRepl(
                 }
             }
             else {
-                const tokens = pipeline.processOneQuery(line, debugMode);
+                const tokens = unified.processOneQuery(line);
                 if (tokens.length > 0 && tokens[0].type === ENTITY) {
                     const token = tokens[0] as EntityToken;
                     const pid = token.pid;

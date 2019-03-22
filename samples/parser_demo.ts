@@ -3,8 +3,9 @@ import * as yaml from 'js-yaml';
 import * as path from 'path';
 
 import { Catalog, CatalogItems, validateCatalogItems, ConvertDollarsToPennies } from '../src';
-import { actionToString, AnyAction, CartOps, Parser, Pipeline, responses, State } from '../src';
+import { actionToString, AnyAction, CartOps, Parser, responses, State } from '../src';
 
+import { Unified } from '../src/unified';
 
 function go(infile: string, utterances: string[], debugMode: boolean) {
     const catalogItems = yaml.safeLoad(fs.readFileSync(infile, 'utf8')) as CatalogItems;
@@ -14,16 +15,16 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
     
     const ops = new CartOps(catalog);
 
-    const pipeline = new Pipeline(
+    // const pipeline = new Pipeline(
+    const unified = new Unified(
         path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
-        undefined,
         debugMode);
 
 
-    const parser = new Parser(catalog, pipeline, debugMode);
+    const parser = new Parser(catalog, unified, debugMode);
     
     let state: State = { cart: { items: [] }, actions: [] };
 

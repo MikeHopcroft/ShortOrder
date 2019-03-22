@@ -1,19 +1,20 @@
-import { WORD } from 'token-flow';
-import { AnyToken } from '../pipeline';
+import { AnyToken } from '../unified';
+import { WORD } from '../unified';
 
 import {
-    ATTRIBUTE, AttributeToken, ENTITY, EntityToken,
-    QUANTITY, QuantityToken, INTENT, IntentToken
-} from '../recognizers';
+    ATTRIBUTE, AttributeToken, ENTITY,
+    Unified,
+    QUANTITY, QuantityToken,
+} from '../unified';
 
 import {
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
     CONJUNCTION, END_OF_ORDER, NEED_MORE_TIME, PREPOSITION, REMOVE_ITEM, RESTATE,
     SALUTATION, SEPERATOR, SUBSTITUTE
-} from '../recognizers';
+} from '../unified';
 
-import { CartOps, Catalog, Pipeline, State } from '..';
-import { PeekableSequence, Token } from 'token-flow';
+import { NumberToken, NUMBERTOKEN, PeekableSequence, Token } from 'token-flow';
+import { CartOps, Catalog, State } from '..';
 import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
 
 // TODO: MultipleEntityToken, MultipleAttributeToken
@@ -40,10 +41,10 @@ const ignore = [
 export class Parser {
     catalog: Catalog;
     ops: CartOps;
-    pipeline: Pipeline;
+    pipeline: Unified;
     debugMode: boolean;
 
-    constructor(catalog: Catalog, pipeline: Pipeline, debugMode: boolean) {
+    constructor(catalog: Catalog, pipeline: Unified, debugMode: boolean) {
         this.catalog = catalog;
         this.ops = new CartOps(catalog);
         this.pipeline = pipeline;
@@ -126,6 +127,10 @@ export class Parser {
                     entity = token;
                     input.get();
                     // TODO: break out of loop here.
+                    break;
+                case NUMBERTOKEN:
+                    quantifiers.push({ type: QUANTITY, value: token.value } as QuantityToken);
+                    input.get();
                     break;
                 case QUANTITY:
                     // TODO: do we really want to collect non-adjacent quantities?

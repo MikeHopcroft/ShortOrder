@@ -1,12 +1,14 @@
-import { NumberRecognizer } from 'token-flow';
-import { QUANTITY, QuantityToken } from './quantity_recognizer';
-import { Token } from 'token-flow';
+export const fooNumber = 0;
 
-export function CreateNumberRecognizer(): NumberRecognizer {
-    const tokenFactory = (value: number, children: Token[]): QuantityToken => {
-        return { type: QUANTITY, children, value };
-    };
+// import { NumberRecognizer } from 'token-flow';
+// import { QUANTITY, QuantityToken } from './quantity_recognizer';
+// import { Token } from 'token-flow';
 
-    return new NumberRecognizer(tokenFactory);
-}
+// export function CreateNumberRecognizer(): NumberRecognizer {
+//     const tokenFactory = (value: number, children: Token[]): QuantityToken => {
+//         return { type: QUANTITY, children, value };
+//     };
+
+//     return new NumberRecognizer(tokenFactory);
+// }
 
