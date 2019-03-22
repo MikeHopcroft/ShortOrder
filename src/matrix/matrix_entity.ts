@@ -1,58 +1,21 @@
-import { PID, Token } from 'token-flow';
-import { AnyToken, ENTITY, EntityToken } from '../unified';
-import { IndexableItem, ItemDescription } from '../catalog';
+import { PID } from 'token-flow';
+import { AttributeToken, EntityToken } from '../unified';
+import { IndexableItem } from '../catalog';
 
-export const MATRIXENTITY: unique symbol = Symbol('MATRIXENTITY');
-export type MATRIXENTITY = typeof MATRIXENTITY;
-
-export interface MatrixEntityToken extends Token {
-    type: MATRIXENTITY;
-    pid: PID;
-    name: string;
-}
-
-export const ATTRIBUTE2: unique symbol = Symbol('v');
-export type ATTRIBUTE2 = typeof ATTRIBUTE2;
-
-type AxisId = number;
-
-export interface AttributeToken2 extends Token {
-    type: ATTRIBUTE2;
-    pid: PID;
-    axis: AxisId;
-    name: string;
-}
-
-type AnyEntityToken = EntityToken | MatrixEntityToken;
-
-export class MatrixEntityBuilder {
-    constructor() {
-    }
-
-    trySetEntity(entity: AnyEntityToken): boolean {
-        return false;
-    }
-
-    trySetAttribute(attribute: AnyToken): boolean {
-        return true;
-    }
-
-    getPID(): PID {
-        return 0;
-    } 
-}
-
-interface AttributeItem extends IndexableItem {
+export interface AttributeItem extends IndexableItem {
     pid: PID;
     name: string;
     aliases: string[];
     isDefault?: boolean;
 }
 
+// Represents a characteristic like size, color, or flavor.
+// Each Dimension is associated with a number of attributes such as
+// `small`, `medium` and `large`.
 export class Dimension {
-    id: PID;
-    attributes: AttributeItem[];
-    defaultAttribute: PID;
+    readonly id: PID;
+    readonly attributes: AttributeItem[];
+    readonly defaultAttribute: PID;
 
     constructor(id: PID, attributesIterator: IterableIterator<AttributeItem>) {
         this.id = id;
@@ -82,30 +45,74 @@ export class Dimension {
     }
 }
 
-interface AttributeCoordinate {
+// The (dimension, position) coordinates of an attribute within a Matrix.
+// Dimension corresponds to a characteristic like `size`.
+// Position corresponds to a specific characteristic value such as `small`,
+// 'medium`, or `large`.
+export interface AttributeCoordinate {
     dimension: Dimension;
     position: number;
 }
 
+// Represents a configuration matrix consisting of a set of Dimensions
+// each of which corresponds to a set of Attributes.
+// Used to generate entity keys.
 export class Matrix {
     id: PID;
+    dimensions: Dimension[];
+    scales: number[];
+    counts: number[];
 
-    constructor(id: PID, dimensions: PID[]) {
+    constructor(id: PID, dimensions: Dimension[]) {
         this.id = id;
-        // Allocate array of encoder scale factors.
-        // Allocate array of Dimensions
+        this.dimensions = dimensions;
+
+        this.counts = dimensions.map( (x) => x.attributes.length );
+
+        this.scales = [];
+        let scale = 1;
+        for (const count of this.counts) {
+            this.scales.push(scale);
+            scale *= count;
+        }
+    }
+
+    // Given a map from dimensionId to attributeId, return a number that
+    // represents those set of attribute values associated Dimensions of
+    // this Matrix.
+    getKey(dimensionIdToAttribute: Map<PID, PID>, info: AttributeInfo): number {
+        let key = 0;
+        for (const [index, dimension] of this.dimensions.entries()) {
+            let attributeId = dimensionIdToAttribute.get(dimension.id);
+            if (attributeId === undefined) {
+                attributeId = dimension.defaultAttribute;
+            }
+            const coordinate = info.getAttributeCoordinates(attributeId);
+            if (!coordinate) {
+                const message = `unknown attribute ${attributeId}.`;
+                throw TypeError(message);
+            }
+
+            key += coordinate.position * this.scales[index];
+        }
+
+        return key;
     }
 }
 
-export class AttributeMatrix {
-    readonly dimensionIdToDimension = new Map<PID, Dimension>();
-    readonly attributeIdToCoordinate = new Map<PID, AttributeCoordinate>();
-    readonly matrixIdToMatrix = new Map<PID, Matrix>();
-    readonly entityIdToMatrix = new Map<PID, Matrix>();
+// Store information about the relationships between Attributes,
+// Dimensions, and Matrices.
+export class AttributeInfo {
+    private readonly dimensionIdToDimension = new Map<PID, Dimension>();
+    private readonly attributeIdToCoordinate = new Map<PID, AttributeCoordinate>();
+    private readonly matrixIdToMatrix = new Map<PID, Matrix>();
+    private readonly entityIdToMatrix = new Map<PID, Matrix>();
+    private readonly keyToEntityId = new Map<number, PID>();
 
     constructor() {
     }
 
+    // Indexes a Dimension and its Attributes.
     addDimension(dimension: Dimension) {
         if (this.dimensionIdToDimension.has(dimension.id)) {
             const message = `found duplicate dimension id ${dimension.id}.`;
@@ -124,6 +131,7 @@ export class AttributeMatrix {
         }
     }
 
+    // Indexes a Matrix.
     addMatrix(matrix: Matrix) {
         if (this.matrixIdToMatrix.has(matrix.id)) {
             const message = `found duplicate matrix id ${matrix.id}.`;
@@ -132,7 +140,8 @@ export class AttributeMatrix {
         this.matrixIdToMatrix.set(matrix.id, matrix);
     }
 
-    addEntity(entityId: PID, matrixId: PID) {
+    // Associates an Entity with a specific Matrix.
+    addGeneraicEntity(entityId: PID, matrixId: PID) {
         if (this.entityIdToMatrix.has(entityId)) {
             const message = `found duplicate entity id ${entityId}.`;
             throw new TypeError(message);
@@ -147,41 +156,100 @@ export class AttributeMatrix {
         }
     }
 
-    getAttributeCoordinates(attributeId: PID): AttributeCoordinate | null {
-        const coordinate = this.attributeIdToCoordinate.get(attributeId);
-        return coordinate ? coordinate : null;
+    addSpecificEntity(entityId: PID, key: number) {
+        if (this.keyToEntityId.has(key)) {
+            const message = `found duplicate entity key ${key}.`;
+            throw new TypeError(message);
+        }
+        this.keyToEntityId.set(key, entityId);
     }
 
-    getMatrix(entityId: PID): Matrix | null {
-        const matrix = this.entityIdToMatrix.get(entityId);
-        return matrix ? matrix : null;
+    // Lookup an AttributeCoordinate by PID. The Coordinate provides the
+    // Attribute's Dimension (e.g. size) and its Position in the Dimension
+    // (e.g. 0 ==> small).
+    getAttributeCoordinates(attributeId: PID): AttributeCoordinate | undefined {
+        return this.attributeIdToCoordinate.get(attributeId);
+    }
+
+    // Lookup the Matrix that should be used to configure an Entity.
+    getMatrix(entityId: PID): Matrix | undefined {
+        return this.entityIdToMatrix.get(entityId);
+    }
+
+    // Returns the PID of an entity with a specific key.
+    getPid(key: number): PID | undefined {
+        return this.keyToEntityId.get(key);
     }
 }
 
+// MatrixEntityBuilder collects Attribute and Entity values that will later be
+// used to generate an Entity key which can be used to lookup the specific
+// PID.
+//
+// For example, we might have a `cone` which is configured by `flavor` and
+// `size` dimensions.
+//
+// Adding the entity `cone` and the attributes `small` and `chocolate` will
+// allow us to generate a key which yields the PID for a `small chocolate cone`.
+export class MatrixEntityBuilder {
+    info: AttributeInfo;
+    matrix: Matrix;
 
+    entityId: PID | undefined = undefined;
+    
+    dimensionIdToAttribute = new Map<PID, PID>();
 
+    constructor(info: AttributeInfo, matrix: Matrix) {
+        this.info = info;
+        this.matrix = matrix;
+    }
 
+    hasEntity(): boolean {
+        return this.entityId !== undefined;
+    }
 
-    // table: Map<AxisId, Set<PID>>;
-    // dimensions: Map<PID, Dimension>;
+    setEntity(entity: EntityToken) {
+        if (this.entityId === undefined) {
+            this.entityId = entity.pid;
+            return true;
+        }
+        else {
+            const message = `attempting to overwrite entity ${this.entityId} with ${entity.pid}`;
+            throw TypeError(message);
+        }
+    }
 
-    // constructor(attributes: IterableIterator<AttributeItem>) {
-        // this.table = new Map<AxisId, Set<PID>>();
+    addAttribute(attribute: AttributeToken): boolean {
+        const coordinate = this.info.getAttributeCoordinates(attribute.id);
+        if (!coordinate) {
+            const message = `unknown attribute ${attribute.id}.`;
+            throw TypeError(message);
+        }
+        else if (this.dimensionIdToAttribute.has(coordinate.dimension.id)) {
+            return false;
+        }
+        else {
+            this.dimensionIdToAttribute.set(coordinate.dimension.id, attribute.id);
+            return true;
+        }
+    }
 
-        // for (const attribute of attributes) {
-        //     let axisAttributes = this.table.get(attribute.axis);
-        //     if (axisAttributes) {
-        //         axisAttributes.add(attribute.pid);
-        //     }
-        //     else {
-        //         axisAttributes = new Set<PID>();
-        //         axisAttributes.add(attribute.pid);
-        //         this.table.set(attribute.axis, axisAttributes);
-        //     }
-        // }
-    // }
-    // if (this.dimensions.has(d.id)) {
-    //     const message = `Found duplicate dimension id ${d.id}`;
-    //     throw new TypeError(message);
-    // }
-    // this.dimensions.set(d.id, d);
+    getPID(): PID | undefined {
+        if (this.entityId === undefined) {
+            const message = `no entity set`;
+            throw TypeError(message);
+        }
+
+        const matrix = this.info.getMatrix(this.entityId);
+        if (matrix === undefined) {
+            // This entity does not need configuration.
+            // Just return its id.
+            return this.entityId;
+        }
+
+        const key = this.matrix.getKey(this.dimensionIdToAttribute, this.info);
+        const pid = this.info.getPid(key);
+
+        return pid;
+    }
+}
