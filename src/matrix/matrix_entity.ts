@@ -1,6 +1,6 @@
 import { PID, Token } from 'token-flow';
 import { AnyToken, ENTITY, EntityToken } from '../unified';
-import { IndexableItem } from '../catalog';
+import { IndexableItem, ItemDescription } from '../catalog';
 
 export const MATRIXENTITY: unique symbol = Symbol('MATRIXENTITY');
 export type MATRIXENTITY = typeof MATRIXENTITY;
@@ -25,7 +25,7 @@ export interface AttributeToken2 extends Token {
 
 type AnyEntityToken = EntityToken | MatrixEntityToken;
 
-export class MatrixEntity {
+export class MatrixEntityBuilder {
     constructor() {
     }
 
@@ -49,43 +49,117 @@ interface AttributeItem extends IndexableItem {
     isDefault?: boolean;
 }
 
-interface Dimension {
+export class Dimension {
+    id: PID;
     attributes: AttributeItem[];
+    defaultAttribute: PID;
+
+    constructor(id: PID, attributesIterator: IterableIterator<AttributeItem>) {
+        this.id = id;
+        this.attributes = [...attributesIterator[Symbol.iterator]()];
+        if (this.attributes.length <= 1) {
+            const message = `expect at least one attribute`;
+            throw new TypeError(message);
+        }
+
+        let defaultAttribute: PID | undefined = undefined;
+        for (const attribute of this.attributes) {
+            if (attribute.isDefault === true) {
+                if (defaultAttribute !== undefined) {
+                    const message = `found second default attribute ${attribute.pid}`;
+                    throw TypeError(message);
+                }
+                defaultAttribute = attribute.pid;
+            }
+        }
+
+        if (defaultAttribute === undefined) {
+            const message = `expected at least one default attribute`;
+            throw TypeError(message);
+        }
+
+        this.defaultAttribute = defaultAttribute;
+    }
 }
 
-interface AttributeValue {
-    dimension: number;
-    value: number;
+interface AttributeCoordinate {
+    dimension: Dimension;
+    position: number;
+}
+
+export class Matrix {
+    id: PID;
+
+    constructor(id: PID, dimensions: PID[]) {
+        this.id = id;
+        // Allocate array of encoder scale factors.
+        // Allocate array of Dimensions
+    }
 }
 
 export class AttributeMatrix {
+    readonly dimensionIdToDimension = new Map<PID, Dimension>();
+    readonly attributeIdToCoordinate = new Map<PID, AttributeCoordinate>();
+    readonly matrixIdToMatrix = new Map<PID, Matrix>();
+    readonly entityIdToMatrix = new Map<PID, Matrix>();
 
-    // Maps from attribute PID to dimension PID and numerical value.
-    dimensions: number[];
-    table: Map<PID, AttributeValue>;
+    constructor() {
+    }
 
-    constructor(dimensions: IterableIterator<Dimension>) {
-        this.dimensions = [];
-        this.table = new Map<PID, AttributeValue>();
+    addDimension(dimension: Dimension) {
+        if (this.dimensionIdToDimension.has(dimension.id)) {
+            const message = `found duplicate dimension id ${dimension.id}.`;
+            throw new TypeError(message);
+        }
+        this.dimensionIdToDimension.set(dimension.id, dimension);
 
-        let scale = 1;
-
-        for (const d of dimensions) {
-            const slot = this.dimensions.length;
-            this.dimensions.push(d.attributes.length);
-
-            let counter = 0;
-            for (const a of d.attributes) {
-                this.table.set(a.pid, {
-                    dimension: slot,
-                    value: scale * counter++});
+        let position = 0;
+        for (const attribute of dimension.attributes) {
+            if (this.attributeIdToCoordinate.has(attribute.pid)) {
+                const message = `found duplicate attribute pid ${attribute.pid}.`;
+                throw new TypeError(message);    
             }
-
-            scale *= d.attributes.length;
+            this.attributeIdToCoordinate.set(attribute.pid, { dimension, position });
+            position++;
         }
     }
 
+    addMatrix(matrix: Matrix) {
+        if (this.matrixIdToMatrix.has(matrix.id)) {
+            const message = `found duplicate matrix id ${matrix.id}.`;
+            throw new TypeError(message);
+        }
+        this.matrixIdToMatrix.set(matrix.id, matrix);
+    }
+
+    addEntity(entityId: PID, matrixId: PID) {
+        if (this.entityIdToMatrix.has(entityId)) {
+            const message = `found duplicate entity id ${entityId}.`;
+            throw new TypeError(message);
+        }
+        const matrix = this.matrixIdToMatrix.get(matrixId);
+        if (matrix) {
+            this.entityIdToMatrix.set(entityId, matrix);
+        }
+        else {
+            const message = `unknown matrix id ${matrixId}.`;
+            throw new TypeError(message);
+        }
+    }
+
+    getAttributeCoordinates(attributeId: PID): AttributeCoordinate | null {
+        const coordinate = this.attributeIdToCoordinate.get(attributeId);
+        return coordinate ? coordinate : null;
+    }
+
+    getMatrix(entityId: PID): Matrix | null {
+        const matrix = this.entityIdToMatrix.get(entityId);
+        return matrix ? matrix : null;
+    }
 }
+
+
+
 
 
     // table: Map<AxisId, Set<PID>>;
