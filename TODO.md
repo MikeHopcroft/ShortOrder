@@ -5,23 +5,27 @@
     * Sort out debug package dependency.
     * NUMBERTOKEN vs QUANTITY
     * parser_Demo
-        * "hi there give me uh a coffee with two creams" gives one cream.
-        * remove the burger from an empty cart give 0 burgers
-        * "fries" gives attribute fried
+        * ~~"hi there give me uh a coffee with two creams" gives one cream.~~
     * relevance_demo_english
         * Reinstate HackedStemmer.
     * parser.ts
-        * Clean up imports
+        * ~~Clean up imports~~
     * WORD and WordToken
-        * Are these still used by ShortOrder?
-        * Are they still used by TokenFlow?
-        * Relationship to UnknownToken?
+        * ~~Are these still used by ShortOrder? YES~~
+        * ~~Are they still used by TokenFlow?~~
+        * ~~Relationship to UnknownToken? ShortOrder replaces UnknownToken with WORD~~
+    * OK action
 
 
 * Bugs
     * BUG: fix Spanish relevance cases.
     * BUG: hamburger extra pickles does not add pickles
     * BUG: six piece wings wings wings adds separate two wing sauce line items
+    * BUG: start with empty cart. "no burger". Adds a line item for 0 burger.
+    * BUG: start with empty cart. "fries" gives attribute "fried" which leads to "I didn't understand"
+        * Could fix with the stemmer since we're seeing the fried vs fries issue.
+        * Could fix with the graph API.
+        * Alternate repro: "give me a burger fries and a coke" yields a buger and a coke, no fries.
 
 * Tokenizer REPL
     * @debug command

@@ -1,22 +1,28 @@
 import { NUMBERTOKEN, PeekableSequence } from 'token-flow';
 
-import { AnyToken } from '../unified';
-import { WORD } from '../unified';
+import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
+import { CartOps, State } from '../cart';
+import { Catalog } from '../catalog';
+import { Unified } from '../unified';
 
+// General tokens
 import {
-    ATTRIBUTE, AttributeToken, ENTITY,
-    Unified,
-    QUANTITY, QuantityToken,
+    AnyToken,
+    ATTRIBUTE,
+    AttributeToken,
+    ENTITY,
+    EntityToken,
+    QUANTITY,
+    QuantityToken,
+    WORD
 } from '../unified';
 
+// Specific intent tokens
 import {
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
     CONJUNCTION, END_OF_ORDER, NEED_MORE_TIME, PREPOSITION, REMOVE_ITEM, RESTATE,
     SALUTATION, SEPERATOR, SUBSTITUTE
 } from '../unified';
-
-import { CartOps, Catalog, State } from '..';
-import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
 
 const endOfEntity = [
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
@@ -63,17 +69,17 @@ export class Parser {
                 state = this.parseEntity(input, state);
             }
             else if (token.type as symbol === NEED_MORE_TIME) {
-                const actions = [ { type: WAIT }, ...state.actions ];
+                const actions = [{ type: WAIT }, ...state.actions];
                 state = { ...state, actions };
                 input.get();
             }
             else if (token.type as symbol === END_OF_ORDER) {
-                const actions = [ { type: DONE }, ...state.actions ];
+                const actions = [{ type: DONE }, ...state.actions];
                 state = { ...state, actions };
                 input.get();
             }
             else if (token.type as symbol === CANCEL_ORDER) {
-                const actions = [ { type: WELCOME }, ...state.actions ];
+                const actions = [{ type: WELCOME }, ...state.actions];
                 const cart = { items: [] };
                 state = { cart, actions };
                 input.get();
@@ -85,7 +91,7 @@ export class Parser {
                 input.get();
             }
             else {
-                const actions = [ { type: CONFUSED }, ...state.actions ];
+                const actions = [{ type: CONFUSED }, ...state.actions];
                 state = { ...state, actions };
                 input.get();
                 if (this.debugMode) {
@@ -98,7 +104,7 @@ export class Parser {
     }
 
     parseEntity(input: PeekableSequence<AnyToken>, state: State): State {
-        let entity = undefined;
+        let entity: EntityToken | undefined = undefined;
         const quantifiers: QuantityToken[] = [];
         const attributes: AttributeToken[] = [];
 
@@ -162,7 +168,7 @@ export class Parser {
             if (this.debugMode) {
                 console.log('Parser.parseEntity: no entity detected.');
             }
-            const actions = [{type: CONFUSED}, ...state.actions];
+            const actions = [{ type: CONFUSED }, ...state.actions];
             return { ...state, actions };
         }
     }
