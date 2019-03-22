@@ -15,6 +15,7 @@
     * WORD and WordToken
         * Are these still used by ShortOrder?
         * Are they still used by TokenFlow?
+        * Relationship to UnknownToken?
 
 
 * Bugs

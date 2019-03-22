@@ -25,7 +25,7 @@ const endOfEntity = [
 ];
 
 const startOfEntity = [
-    ADD_TO_ORDER, ATTRIBUTE, ENTITY, QUANTITY
+    ADD_TO_ORDER, ATTRIBUTE, ENTITY, NUMBERTOKEN, QUANTITY
 ];
 
 const ignore = [
