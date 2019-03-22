@@ -1,10 +1,10 @@
 # TODO List
 
 * Integrate token-flow 0.0.28
-    * NUMBERTOKEN vs QUANTITY
-        * Rename NUMBERTOKEN to NUMBER?
+    * ~~NUMBERTOKEN vs QUANTITY~~
+        * ~~Rename NUMBERTOKEN to NUMBER? No~~
         * ~~x Replace each NUMBERTOKEN with QUANTITY~~
-    * Publish 0.0.29. Pick up from npm instead of local.
+    * ~~Publish 0.0.29. Pick up from npm instead of local.~~
     * Sort out debug package dependency.
     * parser_Demo
         * ~~"hi there give me uh a coffee with two creams" gives one cream.~~
@@ -20,6 +20,7 @@
 
 
 * Bugs
+    * BUG: parser_demo "i'll also take I don't know a surf n turf" => "Not sure I got all that..."
     * BUG: fix Spanish relevance cases.
     * BUG: hamburger extra pickles does not add pickles
     * BUG: six piece wings wings wings adds separate two wing sauce line items
