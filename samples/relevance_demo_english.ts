@@ -1,6 +1,5 @@
 import * as path from 'path';
 import { runRelevanceTest } from './relevance_demo_helper';
-// import { Tokenizer } from 'token-flow';
 
 // // This hacked stemmer exists solely to demonstrate pluggable stemmers.
 // function hackedStemmer(term: string): string {

@@ -9,11 +9,9 @@ import { actionToString, AnyAction } from '../actions';
 import { CartOps, State } from '../cart';
 import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems, ItemDescription } from '../catalog';
 import { Parser } from '../parser';
-//import { Pipeline, printTokens } from '../pipeline';
 import { speechToTextFilter } from './speech_to_text_filter';
 import { responses } from '../turn';
-import { ENTITY, EntityToken } from '../unified';
-import { tokenToString, Unified } from '../unified';
+import { ENTITY, EntityToken, tokenToString, Unified } from '../unified';
 
 const maxHistorySteps = 1000;
 const historyFile = '.repl_history';
@@ -35,7 +33,6 @@ export function runRepl(
 
     // Set up the tokenizer pipeline.
     const unified = new Unified(catlogFile, intentFile, attributesFile, quantifierFile);
-    // const pipeline = new Pipeline(catlogFile, intentFile, attributesFile, quantifierFile);
     console.log();
 
     // Set up the conversational agent and parser.
@@ -49,7 +46,6 @@ export function runRepl(
     const ops = new CartOps(catalog);
 
     let state: State = { cart: { items: [] }, actions: [] };
-
 
     const repl = replServer.start({
         prompt: '% ',

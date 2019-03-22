@@ -13,12 +13,9 @@ import {
     Lexicon,
     Matcher,
     NumberToken,
-    // NUMBERTOKEN,
-    // PID,
     Token,
     Tokenizer,
     TokenPredicate,
-    // UnknownToken,
     UNKNOWNTOKEN,
     NUMBERTOKEN
 } from 'token-flow';
@@ -28,41 +25,6 @@ import { ENTITY, EntityToken, entityTokenFactory } from './entities';
 import { intentTokenFactory } from './intents';
 import { QUANTITY, QuantityToken, quantityTokenFactory } from './quantities';
 
-// export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
-// export type ATTRIBUTE = typeof ATTRIBUTE;
-
-// export interface AttributeToken extends Token {
-//     type: ATTRIBUTE;
-//     pid: PID;
-//     name: string;
-// }
-
-// export const ENTITY: unique symbol = Symbol('ENTITY');
-// export type ENTITY = typeof ENTITY;
-
-// export interface EntityToken extends Token {
-//     type: ENTITY;
-//     pid: PID;
-//     name: string;
-// }
-
-// export const INTENT: unique symbol = Symbol('INTENT');
-// export type INTENT = typeof INTENT;
-
-// export interface IntentToken extends Token {
-//     type: INTENT;
-//     id: PID;
-//     name: string;
-// }
-
-// export const QUANTIFIER: unique symbol = Symbol('QUANTIFIER');
-// export type QUANTIFIER = typeof QUANTIFIER;
-
-// export interface QuantifierToken extends Token {
-//     type: QUANTIFIER;
-//     value: number;
-// }
-
 export const WORD: unique symbol = Symbol('WORD');
 export type WORD = typeof WORD;
 
@@ -71,19 +33,9 @@ export interface WordToken extends Token {
     text: string;
 }
 
-// type AnyToken =
-//     AttributeToken |
-//     EntityToken |
-// //    IntentToken |
-//     NumberToken |
-//     QuantityToken |
-//     UnknownToken |
-//     WordToken;
-
 export type AnyToken =
     AttributeToken |
     EntityToken |
-    // IntentToken |
     NumberToken |
     QuantityToken |
     WordToken;
@@ -100,9 +52,6 @@ export function tokenToString(t: Token) {
             const entity = token.name.replace(/\s/g, '_').toUpperCase();
             name = `[ENTITY:${entity},${token.pid}]`;
             break;
-        // case INTENT:
-        //     name = `[INTENT:${token.name}]`;
-        //     break;
         case NUMBERTOKEN:
             name = `[NUMBER:${token.value}]`;
             break;
@@ -120,43 +69,6 @@ export function tokenToString(t: Token) {
     }
     return name;
 }
-
-// export function tokenToString(t: Token) {
-//     const token = t as AnyToken;
-//     let name: string;
-//     switch (token.type) {
-//         case ATTRIBUTE:
-//             const attribute = token.name.replace(/\s/g, '_').toUpperCase();
-//             name = `[ATTRIBUTE:${attribute},${token.pid}]`;
-//             break;
-//         case ENTITY:
-//             const entity = token.name.replace(/\s/g, '_').toUpperCase();
-//             name = `[ENTITY:${entity},${token.pid}]`;
-//             break;
-//         case INTENT:
-//             // name = `[INTENT:${token.name}]`;
-//             name = `[${token.name}]`;
-//             break;
-//         case QUANTIFIER:
-//             name = `[QUANTIFIER:${token.value}]`;
-//             break;
-//         case WORD:
-//             name = `[WORD:${token.text}]`;
-//             break;
-//         case NUMBERTOKEN:
-//             name = `[NUMBER:${token.value}]`; 
-//             break;
-//         case UNKNOWNTOKEN:
-//             name = `[UNKNOWN]`; 
-//             break;
-//         default:
-//             {
-//                 const symbol = t.type.toString();
-//                 name = `[${symbol.slice(7, symbol.length - 1)}]`;
-//             }
-//     }
-//     return name;
-// }
 
 export type TokenFactory = (item: Item) => Token;
 
@@ -253,43 +165,24 @@ export class Unified {
         const attributes = aliasesFromYamlString(
             fs.readFileSync(attributesFile, 'utf8'),
             attributeTokenFactory);
-            // (item: Item) => ({
-            //     type: ATTRIBUTE,
-            //     pid: item.pid,
-            //     name: item.name
-            // }));
         this.lexicon.addDomain(attributes);
 
         // Entities
         const entities = aliasesFromYamlString(
             fs.readFileSync(entityFile, 'utf8'),
             entityTokenFactory);
-            // (item: Item) => ({
-            //     type: ENTITY,
-            //     pid: item.pid,
-            //     name: item.name
-            // }));
         this.lexicon.addDomain(entities);
 
         // Quantifiers
         const quantifiers = aliasesFromYamlString(
             fs.readFileSync(quantifiersFile, 'utf8'),
             quantityTokenFactory);
-            // (item: Item) => ({
-            //     type: QUANTIFIER,
-            //     value: item.pid
-            // }));
         this.lexicon.addDomain(quantifiers);
 
         // Intents
         const intents = aliasesFromYamlString(
             fs.readFileSync(intentsFile, 'utf8'),
             intentTokenFactory);
-            // (item: Item) => ({
-            //     type: INTENT,
-            //     pid: item.pid,
-            //     name: item.name
-            // }));
         this.lexicon.addDomain(intents);
         
         this.lexicon.ingest(this.tokenizer);

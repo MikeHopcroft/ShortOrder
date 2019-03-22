@@ -4,14 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch tokenizer.test.js",
-            "program": "${workspaceFolder}/build/src/tokenizer/tokenizer.test.js",
-            "console": "integratedTerminal",
-        },
         {
             "type": "node",
             "request": "launch",
@@ -70,8 +62,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch pipeline_demo",
-            "program": "${workspaceFolder}/build/samples/pipeline_demo.js",
+            "name": "Launch Unified Demo",
+            "program": "${workspaceFolder}/build/samples/unified_demo.js",
             "outputCapture": "std"
         },
         {

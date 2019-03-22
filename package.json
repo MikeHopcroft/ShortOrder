@@ -33,7 +33,6 @@
     "@types/node": "^10.11.4",
     "@types/number-to-words": "^1.2.0",
     "@types/readline-sync": "^1.4.3",
-    "@types/snowball-stemmers": "^0.6.0",
     "chai": "^4.2.0",
     "copyfiles": "^2.1.0",
     "gts": "^0.8.0",
@@ -49,7 +48,6 @@
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
     "readline-sync": "^1.4.9",
-    "snowball-stemmers": "^0.6.0",
     "token-flow": "file:../tokenflow/token-flow-0.0.28.tgz",
     "words-to-numbers": "^1.5.1"
   }

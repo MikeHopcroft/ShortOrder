@@ -2,20 +2,28 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 
-import { Catalog, CatalogItems, validateCatalogItems, ConvertDollarsToPennies } from '../src';
-import { actionToString, AnyAction, CartOps, Parser, responses, State } from '../src';
-
-import { Unified } from '../src/unified';
+import {
+    Catalog,
+    CatalogItems,
+    validateCatalogItems,
+    ConvertDollarsToPennies,
+    actionToString,
+    AnyAction,
+    CartOps,
+    Parser,
+    responses,
+    State,
+    Unified
+} from '../src';
 
 function go(infile: string, utterances: string[], debugMode: boolean) {
     const catalogItems = yaml.safeLoad(fs.readFileSync(infile, 'utf8')) as CatalogItems;
     validateCatalogItems(catalogItems);
     ConvertDollarsToPennies(catalogItems);
     const catalog = new Catalog(catalogItems);
-    
+
     const ops = new CartOps(catalog);
 
-    // const pipeline = new Pipeline(
     const unified = new Unified(
         path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
@@ -25,7 +33,7 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
 
 
     const parser = new Parser(catalog, unified, debugMode);
-    
+
     let state: State = { cart: { items: [] }, actions: [] };
 
     console.log('-----------------------------------------');
@@ -38,7 +46,7 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
 
         console.log(`CUSTOMER: "${utterance}":`);
         console.log();
-        
+
         state = parser.parse(utterance, state);
         ops.printCart(state.cart);
         console.log();
@@ -52,12 +60,12 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
         }
 
         const order = ops.formatCart(state.cart);
-        const replies = 
+        const replies =
             responses(state.actions as AnyAction[], order, catalog);
         console.log(`SHORT-ORDER: "${replies.join(' ')}"`);
         console.log();
 
-        state = {...state, actions: []};
+        state = { ...state, actions: [] };
     }
 }
 

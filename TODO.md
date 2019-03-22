@@ -1,5 +1,22 @@
 # TODO List
 
+* Integrate token-flow 0.0.28
+    * Publish 0.0.29. Pick up from npm instead of local.
+    * Sort out debug package dependency.
+    * NUMBERTOKEN vs QUANTITY
+    * parser_Demo
+        * "hi there give me uh a coffee with two creams" gives one cream.
+        * remove the burger from an empty cart give 0 burgers
+        * "fries" gives attribute fried
+    * relevance_demo_english
+        * Reinstate HackedStemmer.
+    * parser.ts
+        * Clean up imports
+    * WORD and WordToken
+        * Are these still used by ShortOrder?
+        * Are they still used by TokenFlow?
+
+
 * Bugs
     * BUG: fix Spanish relevance cases.
     * BUG: hamburger extra pickles does not add pickles

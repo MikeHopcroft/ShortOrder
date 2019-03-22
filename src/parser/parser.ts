@@ -1,3 +1,5 @@
+import { NUMBERTOKEN, PeekableSequence } from 'token-flow';
+
 import { AnyToken } from '../unified';
 import { WORD } from '../unified';
 
@@ -13,11 +15,8 @@ import {
     SALUTATION, SEPERATOR, SUBSTITUTE
 } from '../unified';
 
-import { NumberToken, NUMBERTOKEN, PeekableSequence, Token } from 'token-flow';
 import { CartOps, Catalog, State } from '..';
 import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
-
-// TODO: MultipleEntityToken, MultipleAttributeToken
 
 const endOfEntity = [
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
@@ -41,18 +40,18 @@ const ignore = [
 export class Parser {
     catalog: Catalog;
     ops: CartOps;
-    pipeline: Unified;
+    unified: Unified;
     debugMode: boolean;
 
     constructor(catalog: Catalog, pipeline: Unified, debugMode: boolean) {
         this.catalog = catalog;
         this.ops = new CartOps(catalog);
-        this.pipeline = pipeline;
+        this.unified = pipeline;
         this.debugMode = debugMode;
     }
 
     parse(input: string, state: State): State {
-        const tokens = this.pipeline.processOneQuery(input) as AnyToken[];
+        const tokens = this.unified.processOneQuery(input) as AnyToken[];
         const sequence = new PeekableSequence<AnyToken>(tokens[Symbol.iterator]());
         return this.parseRoot(sequence, state);
     }
