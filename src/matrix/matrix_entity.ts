@@ -2,6 +2,8 @@ import { PID } from 'token-flow';
 import { AttributeToken, EntityToken } from '../unified';
 import { IndexableItem } from '../catalog';
 
+// TODO: concept of no attribute. e.g. diet coke vs coke
+
 export interface AttributeItem extends IndexableItem {
     pid: PID;
     name: string;
@@ -58,10 +60,10 @@ export interface AttributeCoordinate {
 // each of which corresponds to a set of Attributes.
 // Used to generate entity keys.
 export class Matrix {
-    id: PID;
-    dimensions: Dimension[];
-    scales: number[];
-    counts: number[];
+    readonly id: PID;
+    readonly dimensions: Dimension[];
+    readonly scales: number[];
+    readonly counts: number[];
 
     constructor(id: PID, dimensions: Dimension[]) {
         this.id = id;
@@ -141,7 +143,7 @@ export class AttributeInfo {
     }
 
     // Associates an Entity with a specific Matrix.
-    addGeneraicEntity(entityId: PID, matrixId: PID) {
+    addGenericEntity(entityId: PID, matrixId: PID) {
         if (this.entityIdToMatrix.has(entityId)) {
             const message = `found duplicate entity id ${entityId}.`;
             throw new TypeError(message);
