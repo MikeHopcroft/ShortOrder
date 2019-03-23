@@ -1,6 +1,9 @@
 import { PID } from 'token-flow';
 
+import { Catalog } from '../catalog';
+
 import { Dimension } from './dimension';
+import { Attributes } from './interfaces';
 import { Matrix } from './matrix';
 
 // The (dimension, position) coordinates of an attribute within a Matrix.
@@ -21,7 +24,37 @@ export class AttributeInfo {
     private readonly entityIdToMatrix = new Map<PID, Matrix>();
     private readonly keyToEntityId = new Map<number, PID>();
 
-    constructor() {
+    static factory(catalog: Catalog, attributes: Attributes): AttributeInfo {
+        const info = new AttributeInfo();
+
+        for (const dimension of attributes.dimensions) {
+            info.addDimension(new Dimension(dimension.did, dimension.items.values()));
+        }
+
+        for (const matrix of attributes.matrices) {
+            // TODO: check for bad/unknown `did`.
+            const dimensions: Dimension[] = [];
+            for (const did of matrix.dimensions) {
+                const dimension = info.dimensionIdToDimension.get(did);
+                if (!dimension) {
+                    const message = `unknown dimension ${did}.`;
+                    throw TypeError(message);
+                }
+                dimensions.push(dimension);
+            }
+            info.addMatrix(new Matrix(matrix.mid, dimensions));
+        }
+
+        for (const item of catalog.map.values()) {
+            if (item.matrix) {
+                info.addGenericEntity(item.pid, item.matrix);
+            }
+            else if (item.key) {
+                info.addSpecificEntity(item.pid, item.key);
+            }
+        }
+
+        return info;
     }
 
     // Indexes a Dimension and its Attributes.

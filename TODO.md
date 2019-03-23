@@ -4,9 +4,10 @@
 * Matrix configuration
     * ~~Finish up unit tests.~~
     * Rework for attributes
-        * attributes2.yaml
-        * Schema for Dimensions, AttributeItem, Matrices
+        * ~~attributes2.yaml~~
+        * ~~Schema for Dimensions, AttributeItem, Matrices~~
         * Catalog analog for AttributeItems. Loader, alias enumerator.
+            * Constructor takes Attributes
         * Load AttributeItems into Unified
         * Load Matrices into AttributeInfo
         * Load Dimensions + AttributeItems into AttributeInfo
