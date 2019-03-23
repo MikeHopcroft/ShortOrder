@@ -1,5 +1,10 @@
 import * as AJV from 'ajv';
-import { Attributes } from './interfaces';
+import * as Debug from 'debug';
+import * as yaml from 'js-yaml';
+
+import { Attributes, AttributeItem } from './interfaces';
+
+const debug = Debug('tf:itemMapFromYamlString');
 
 // Schema generated with typescript-json-schema:
 //   typescript-json-schema tsconfig.json Attributes --required
@@ -107,4 +112,25 @@ export function validateAttributes(attributes: Attributes) {
         console.log(attributesValidator.errors);
         throw TypeError(message);
     }
+}
+
+export function* itemsFromAttributes(attributes: Attributes): IterableIterator<AttributeItem> {
+    for (const dimension of attributes.dimensions) {
+        for (const item of dimension.items) {
+            yield item;
+        }
+    }
+}
+
+export function attributesFromYamlString(yamlText: string) {
+    const yamlRoot = yaml.safeLoad(yamlText) as Attributes;
+
+    if (!attributesValidator(yamlRoot)) {
+        const message = 'attributesFromYamlString: yaml data does not conform to schema.';
+        debug(message);
+        debug(attributesValidator.errors);
+        throw TypeError(message);
+    }
+
+    return yamlRoot;
 }

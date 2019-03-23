@@ -65,4 +65,15 @@
   expected: >-
     [ADD_TO_ORDER] [QUANTITY:1] [ENTITY:MEDIUM_COFFEE,1101]
     [ADD_TO_ORDER] [NUMBER:2] [ENTITY:HAMBURGER,1]
-  
+
+- priority: 1
+  suites: attributes
+  input: I want a small chocolate cone
+  expected: >-
+    [ADD_TO_ORDER] [NUMBER:1] [ATTRIBUTE:SMALL,1] [ATTRIBUTE:CHOCOLATE,5] [ENTITY:CONE,8000]
+
+- priority: 1
+  suites: attributes
+  input: I want an ice cream cone
+  expected: >-
+    [ADD_TO_ORDER] [QUANTITY:1] [ENTITY:CONE,8000]

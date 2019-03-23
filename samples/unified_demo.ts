@@ -30,7 +30,9 @@ go('convertible');
 // const a = 'fried chicken breast';
 // const a = "bbq that'll do it";
 // const a = "fries"
-const a = "I'll have two six piece wings";
+// const a = "I'll have two six piece wings";
+// const a = "I want a small chocolate cone";
+const a = "I want an ice cream cone";
 
 go(a);
 // pipelineDemo('can I have two hamburgers');

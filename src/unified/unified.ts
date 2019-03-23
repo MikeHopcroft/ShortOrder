@@ -20,6 +20,8 @@ import {
     NUMBERTOKEN
 } from 'token-flow';
 
+import { attributesFromYamlString, itemsFromAttributes } from '../attributes/schema';
+
 import { ATTRIBUTE, AttributeToken, attributeTokenFactory } from './attributes';
 import { ENTITY, EntityToken, entityTokenFactory } from './entities';
 import { intentTokenFactory } from './intents';
@@ -129,10 +131,8 @@ function patternFromExpression(alias: string) {
     return alias;
 }
 
-function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
-    const items = itemMapFromYamlString(yamlText);
-
-    for (const item of items.values()) {
+function* aliasesFromItems(items: IterableIterator<Item>, factory: TokenFactory) {
+    for (const item of items) {
         for (const expression of item.aliases) {
             const matcher = matcherFromExpression(expression);
             const pattern = patternFromExpression(expression);
@@ -145,6 +145,11 @@ function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
             }
         }
     }
+}
+
+function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
+    const items = itemMapFromYamlString(yamlText);
+    yield * aliasesFromItems(items.values(), factory);
 }
 
 export class Unified {
@@ -162,10 +167,11 @@ export class Unified {
         this.tokenizer = new Tokenizer(this.lexicon.termModel, this.lexicon.numberParser, debugMode);
 
         // Attributes
-        const attributes = aliasesFromYamlString(
-            fs.readFileSync(attributesFile, 'utf8'),
-            attributeTokenFactory);
-        this.lexicon.addDomain(attributes);
+        const attributes =
+            attributesFromYamlString(fs.readFileSync(attributesFile, 'utf8'));
+        const attributeItems = itemsFromAttributes(attributes);
+        const attributeAliases = aliasesFromItems(attributeItems, attributeTokenFactory);
+        this.lexicon.addDomain(attributeAliases);
 
         // Entities
         const entities = aliasesFromYamlString(
