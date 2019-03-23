@@ -47,7 +47,57 @@ function getName(
     return fields.join(' ');
 }
 
-function go(attributesFile: string, item: ItemDescription) {
+
+function explode(
+    attributeFromPID: Map<PID, AttributeItem>,
+    info: AttributeInfo,
+    items: IterableIterator<ItemDescription>
+) {
+    const outputs: ItemDescription[] = [];
+
+    for (const item of items) {
+        outputs.push(item);
+
+        const matrixId = item.matrix;
+        if (matrixId === undefined) {
+            const message = `unknown matrix id ${matrixId}`;
+            throw TypeError(message);
+        }
+        const matrix = info.getMatrix(matrixId);
+        if (matrix === undefined) {
+            const message = `unknown matrix id ${matrixId}.`;
+            throw TypeError(message);
+        }
+
+        let pid = item.pid + 1;
+        const base = item.name;
+        for (const c of combinations(matrix)) {
+            const name = getName(c, attributeFromPID, base);
+            const key = matrix.getKey(c, info);
+
+            outputs.push({
+                pid,
+                name,
+                aliases: [name],
+                price: item.price,
+                standalone: true,
+                key,
+                composition: {
+                    defaults: [],
+                    choices: [],
+                    substitutions: [],
+                    options: []
+                }
+            });
+
+            console.log(`${pid}: ${name} (key = ${key})`);
+            pid++;
+        }
+    }
+    return outputs;
+}
+
+function go(attributesFile: string, items: IterableIterator<ItemDescription>) {
     const attributes =
         attributesFromYamlString(fs.readFileSync(attributesFile, 'utf8'));
     
@@ -65,53 +115,27 @@ function go(attributesFile: string, item: ItemDescription) {
 
     const info = AttributeInfo.factory(catalog, attributes);
 
-    const matrixId = item.matrix;
-    if (matrixId === undefined) {
-        const message = `unknown matrix id ${matrixId}`;
-        throw TypeError(message);
-    }
-    const matrix = info.getMatrix(matrixId);
-    if (matrix === undefined) {
-        const message = `unknown matrix id ${matrixId}.`;
-        throw TypeError(message);
-    }
+    const outputs = explode(attributeFromPID, info, items);
 
-    const items: ItemDescription[] = [item];
-
-    let pid = item.pid + 1;
-    const base = item.name;
-    for (const c of combinations(matrix)) {
-        // const a = [...c.values()].map((x) => (attributeFromPID.get(x) as AttributeItem).name).join(' ');
-        // const name = `${a} ${base}`;
-
-        // const text = [...c.values()].map((x) => (attributeFromPID.get(x) as AttributeItem).name).join(' ');
-        const name = getName(c, attributeFromPID, base);
-        const key = matrix.getKey(c, info);
-
-        items.push({
-            pid,
-            name,
-            aliases: [name],
-            price: item.price,
-            standalone: true,
-            key,
-            composition: {
-                defaults: [],
-                choices: [],
-                substitutions: [],
-                options: []
-            }
-        });
-
-        console.log(`${pid}: ${name} (key = ${key})`);
-        pid++;
-    }
-
-    const yamlText = yaml.dump(items);
+    const yamlText = yaml.dump(outputs);
     console.log(yamlText);
-
-    console.log('done');
 }
+
+const coneMatrix = 1;
+const cone: ItemDescription = {
+    pid: 8000,
+    name: 'cone',
+    aliases: ['cone', 'ice cream [cone]'],
+    price: 1.99,
+    standalone: true,
+    matrix: coneMatrix,
+    composition: {
+        defaults: [],
+        choices: [],
+        substitutions: [],
+        options: []
+    }
+};
 
 const coffeeMatrix = 2;
 const latte: ItemDescription = {
@@ -131,5 +155,5 @@ const latte: ItemDescription = {
 
 go(
     path.join(__dirname, './data/restaurant-en/attributes.yaml'),
-    latte
+    [cone, latte].values()
 );
