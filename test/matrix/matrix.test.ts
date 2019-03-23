@@ -398,7 +398,8 @@ describe('Matrix', () => {
             const f = () => builder.setEntity(entity);
             assert.throws(f, 'attempting to overwrite entity 123 with 123');
         });
-        
+
+
         it('addAttribute()', () => {
             const info = new AttributeInfo();
             info.addDimension(softServeDimensions[0]);
@@ -422,6 +423,7 @@ describe('Matrix', () => {
             // First time adding a flavor should succeed.
             assert.isTrue(builder.addAttribute(makeAttributeToken(flavorChocolate)));
         });
+
         
         it('getPID()', () => {
             const info = new AttributeInfo();
@@ -438,9 +440,9 @@ describe('Matrix', () => {
             info.addGenericEntity(cone, softServeMatrixId);
 
             // Configure with a specific `medium vanilla regular cone`.
-            // Key is (size:0)*1 + (flavor:0)*3 + (style:0)*9 = 0
+            // Key is (size:1)*1 + (flavor:0)*3 + (style:0)*9 = 1
             const mediumVanillaRegularCone = 500;
-            info.addSpecificEntity(mediumVanillaRegularCone, 0);
+            info.addSpecificEntity(mediumVanillaRegularCone, 1);
 
             // Configure with a specific `medium chocolate regular cone`.
             // Key is (size:1)*1 + (flavor:1)*3 + (style:0)*9 = 4
@@ -479,10 +481,6 @@ describe('Matrix', () => {
             const builder2 = new MatrixEntityBuilder(info, softServeMatrix);
             builder2.setEntity(makeEntityToken(unknownPID));
             assert.equal(builder2.getPID(), unknownPID);
-        });
-
-        it('getPID() - exceptions', () => {
-
         });
     });
 
