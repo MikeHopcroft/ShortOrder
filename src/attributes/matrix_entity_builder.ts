@@ -64,7 +64,7 @@ export class MatrixEntityBuilder {
             throw TypeError(message);
         }
 
-        const matrix = this.info.getMatrix(this.entityId);
+        const matrix = this.info.getMatrixForEntity(this.entityId);
         if (matrix === undefined) {
             // This entity does not need configuration.
             // Just return its id.

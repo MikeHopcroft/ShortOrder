@@ -348,11 +348,11 @@ describe('Matrix', () => {
             info.addGenericEntity(2, coffeeMatrixId);
 
             // Lookup entities with ids 1 and 2.
-            assert.equal(softServeMatrix, info.getMatrix(1));
-            assert.equal(coffeeMatrix, info.getMatrix(2));
+            assert.equal(softServeMatrix, info.getMatrixForEntity(1));
+            assert.equal(coffeeMatrix, info.getMatrixForEntity(2));
 
             // Attempt to lookup non-existant entity.
-            assert.equal(undefined, info.getMatrix(unknownPID));
+            assert.equal(undefined, info.getMatrixForEntity(unknownPID));
         });
 
         it('addSpecificEntity()', () => {

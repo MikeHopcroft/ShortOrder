@@ -6,6 +6,7 @@ export interface AttributeItem extends IndexableItem {
     pid: PID;
     name: string;
     aliases: string[];
+    hidden?: boolean;
     isDefault?: boolean;
 }
 

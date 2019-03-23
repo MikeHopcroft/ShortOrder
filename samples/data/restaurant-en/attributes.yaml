@@ -36,6 +36,7 @@ dimensions:
     items:
       - pid: 7
         name: caffinated
+        hidden: true
         isDefault: true
         aliases:
         - caf
@@ -44,7 +45,7 @@ dimensions:
         - full caffeine
         - regular
       - pid: 8
-        name: half caf
+        name: halfcaf
         aliases:
           - half caf
           - split shot
@@ -58,6 +59,7 @@ dimensions:
     items:
       - pid: 10
         name: hot
+        hidden: true
         isDefault: true
         aliases:
           - hot

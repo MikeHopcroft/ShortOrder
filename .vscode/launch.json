@@ -101,6 +101,14 @@
             "name": "Launch Stemmer Confusion Demo",
             "program": "${workspaceFolder}/build/samples/stemmer_confusion_demo.js",
             "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Matrix Demo",
+            "program": "${workspaceFolder}/build/samples/matrix_demo.js",
+            "outputCapture": "std"
         }
+
     ]
 }

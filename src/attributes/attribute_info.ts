@@ -116,8 +116,12 @@ export class AttributeInfo {
         return this.attributeIdToCoordinate.get(attributeId);
     }
 
+    getMatrix(matrixId: PID): Matrix | undefined {
+        return this.matrixIdToMatrix.get(matrixId);
+    }
+
     // Lookup the Matrix that should be used to configure an Entity.
-    getMatrix(entityId: PID): Matrix | undefined {
+    getMatrixForEntity(entityId: PID): Matrix | undefined {
         return this.entityIdToMatrix.get(entityId);
     }
 

@@ -19,6 +19,9 @@ const attributeSchema = {
                     },
                     "type": "array"
                 },
+                "hidden": {
+                    "type": "boolean"
+                },
                 "isDefault": {
                     "type": "boolean"
                 },

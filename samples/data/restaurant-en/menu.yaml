@@ -1914,6 +1914,12 @@ items:
       substitutions: []
       options: []
  
+###############################################################################
+#
+# Ice Cream Cones
+#
+###############################################################################
+
   # Generic entity for an ice cream cone
   - pid: 8000
     name: Cone
@@ -1930,7 +1936,11 @@ items:
       options: []
     matrix: 1
 
+  #
   # Specific matrix entities for specific cone configurations
+  #
+
+  # Small cones
   - pid: 8001
     name: Small Vanilla Cone
     registerName: Sm Vanilla Cone
@@ -1968,6 +1978,7 @@ items:
       options: []
     key: 6
 
+  # Medium cones
   - pid: 8004
     name: Medium Vanilla Cone
     registerName: Med Vanilla Cone
@@ -2005,7 +2016,7 @@ items:
       options: []
     key: 7
     
-
+  # Large cones
   - pid: 8007
     name: Large Vanilla Cone
     registerName: Lg Vanilla Cone
@@ -2042,3 +2053,239 @@ items:
       substitutions: []
       options: []
     key: 8
+
+###############################################################################
+#
+# Lattes
+#
+###############################################################################
+
+  # Generic entity for a latte
+  - pid: 9000
+    name: latte
+    aliases:
+      - latte
+    price: 1.99
+    standalone: true
+    matrix: 2
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9001
+    name: small latte
+    aliases:
+      - small latte
+    price: 1.99
+    standalone: true
+    key: 0
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9002
+    name: small iced latte
+    aliases:
+      - small iced latte
+    price: 1.99
+    standalone: true
+    key: 9
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9003
+    name: small halfcaf latte
+    aliases:
+      - small halfcaf latte
+    price: 1.99
+    standalone: true
+    key: 3
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9004
+    name: small halfcaf iced latte
+    aliases:
+      - small halfcaf iced latte
+    price: 1.99
+    standalone: true
+    key: 12
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9005
+    name: small decaf latte
+    aliases:
+      - small decaf latte
+    price: 1.99
+    standalone: true
+    key: 6
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9006
+    name: small decaf iced latte
+    aliases:
+      - small decaf iced latte
+    price: 1.99
+    standalone: true
+    key: 15
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9007
+    name: medium latte
+    aliases:
+      - medium latte
+    price: 1.99
+    standalone: true
+    key: 1
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9008
+    name: medium iced latte
+    aliases:
+      - medium iced latte
+    price: 1.99
+    standalone: true
+    key: 10
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9009
+    name: medium halfcaf latte
+    aliases:
+      - medium halfcaf latte
+    price: 1.99
+    standalone: true
+    key: 4
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9010
+    name: medium halfcaf iced latte
+    aliases:
+      - medium halfcaf iced latte
+    price: 1.99
+    standalone: true
+    key: 13
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9011
+    name: medium decaf latte
+    aliases:
+      - medium decaf latte
+    price: 1.99
+    standalone: true
+    key: 7
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9012
+    name: medium decaf iced latte
+    aliases:
+      - medium decaf iced latte
+    price: 1.99
+    standalone: true
+    key: 16
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9013
+    name: large latte
+    aliases:
+      - large latte
+    price: 1.99
+    standalone: true
+    key: 2
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9014
+    name: large iced latte
+    aliases:
+      - large iced latte
+    price: 1.99
+    standalone: true
+    key: 11
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9015
+    name: large halfcaf latte
+    aliases:
+      - large halfcaf latte
+    price: 1.99
+    standalone: true
+    key: 5
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9016
+    name: large halfcaf iced latte
+    aliases:
+      - large halfcaf iced latte
+    price: 1.99
+    standalone: true
+    key: 14
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9017
+    name: large decaf latte
+    aliases:
+      - large decaf latte
+    price: 1.99
+    standalone: true
+    key: 8
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 9018
+    name: large decaf iced latte
+    aliases:
+      - large decaf iced latte
+    price: 1.99
+    standalone: true
+    key: 17
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
