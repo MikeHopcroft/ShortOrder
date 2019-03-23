@@ -6,13 +6,13 @@
     * Rework for attributes
         * ~~attributes2.yaml~~
         * ~~Schema for Dimensions, AttributeItem, Matrices~~
-        * Catalog analog for AttributeItems. Loader, alias enumerator.
-            * Constructor takes Attributes
+        * ~~Catalog analog for AttributeItems. Loader, alias enumerator.~~
+            * ~~Constructor takes Attributes~~
         * Load AttributeItems into Unified
-        * Load Matrices into AttributeInfo
-        * Load Dimensions + AttributeItems into AttributeInfo
-        * Load generic entities (catalog items with matrix) into attributeInfo
-        * Load specific entities (catalog items with key) into attributeInfo. key field
+        * ~~Load Matrices into AttributeInfo~~
+        * ~~Load Dimensions + AttributeItems into AttributeInfo~~
+        * ~~Load generic entities (catalog items with matrix) into attributeInfo~~
+        * ~~Load specific entities (catalog items with key) into attributeInfo. key field~~
         * aliasesFromYamlString()
         * token-flow: itemMapFromYamlString() - perhaps add own version to ShortOrder.
         * schema.ts
