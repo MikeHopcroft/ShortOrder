@@ -1,5 +1,15 @@
 # TODO List
 
+* Matrix configuration
+    * Finish up unit tests.
+    * Where does AttributeItem belong?
+    * Loader for Dimensions file w/AJV.
+    * Replace attributes.yaml with dimensions.yaml.
+    * Modify unified to use AttributeInfo.
+    * Replumb attributes in parser.
+    * Publish package.
+    * Make vesion of Parser that doesn't require Token-Flow.
+
 * Integrate token-flow 0.0.28
     * ~~NUMBERTOKEN vs QUANTITY~~
         * ~~Rename NUMBERTOKEN to NUMBER? No~~

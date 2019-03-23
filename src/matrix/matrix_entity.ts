@@ -179,7 +179,7 @@ export class AttributeInfo {
     }
 
     // Returns the PID of an entity with a specific key.
-    getPid(key: number): PID | undefined {
+    getPID(key: number): PID | undefined {
         return this.keyToEntityId.get(key);
     }
 }
@@ -194,12 +194,12 @@ export class AttributeInfo {
 // Adding the entity `cone` and the attributes `small` and `chocolate` will
 // allow us to generate a key which yields the PID for a `small chocolate cone`.
 export class MatrixEntityBuilder {
-    info: AttributeInfo;
-    matrix: Matrix;
+    private readonly info: AttributeInfo;
+    private readonly matrix: Matrix;
 
-    entityId: PID | undefined = undefined;
+    private entityId: PID | undefined = undefined;
     
-    dimensionIdToAttribute = new Map<PID, PID>();
+    private readonly dimensionIdToAttribute = new Map<PID, PID>();
 
     constructor(info: AttributeInfo, matrix: Matrix) {
         this.info = info;
@@ -250,7 +250,7 @@ export class MatrixEntityBuilder {
         }
 
         const key = this.matrix.getKey(this.dimensionIdToAttribute, this.info);
-        const pid = this.info.getPid(key);
+        const pid = this.info.getPID(key);
 
         return pid;
     }
