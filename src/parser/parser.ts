@@ -50,10 +50,10 @@ export class Parser {
     private readonly unified: Unified;
     private readonly debugMode: boolean;
 
-    constructor(catalog: Catalog, pipeline: Unified, debugMode: boolean) {
+    constructor(catalog: Catalog, unified: Unified, debugMode: boolean) {
         this.catalog = catalog;
         this.ops = new CartOps(catalog);
-        this.unified = pipeline;
+        this.unified = unified;
         this.debugMode = debugMode;
     }
 

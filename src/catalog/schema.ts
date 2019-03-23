@@ -156,7 +156,13 @@ const catalogItemSchema = {
                 },
                 "note": {
                     "type": "boolean"
-                }
+                },
+                "matrix": {
+                    "type": "number"
+                },
+                "key": {
+                    "type": "number"
+                },
             },
             "required": [
                 "aliases",

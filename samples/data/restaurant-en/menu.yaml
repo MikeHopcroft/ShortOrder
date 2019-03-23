@@ -1913,3 +1913,132 @@ items:
       choices: []
       substitutions: []
       options: []
+ 
+  # Generic entity for an ice cream cone
+  - pid: 8000
+    name: Cone
+    registerName: Cone
+    aliases:
+      - Cone
+      - Ice Cream [Cone]
+    price: 1.99
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    matrix: 1
+
+  # Specific matrix entities for specific cone configurations
+  - pid: 8001
+    name: Small Vanilla Cone
+    registerName: Sm Vanilla Cone
+    aliases: []
+    price: 1.99
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 0
+  - pid: 8002
+    name: Small Chocolate Cone
+    registerName: Sm Choc Cone
+    aliases: []
+    price: 1.99
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 3
+  - pid: 8003
+    name: Small Strawberry Cone
+    registerName: Sm Straw Cone
+    aliases: []
+    price: 1.99
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 6
+
+  - pid: 8004
+    name: Medium Vanilla Cone
+    registerName: Med Vanilla Cone
+    aliases: []
+    price: 2.49
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 1
+  - pid: 8005
+    name: Medium Chocolate Cone
+    registerName: Med Choc Cone
+    aliases: []
+    price: 2.49
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 4
+  - pid: 8006
+    name: Medium Strawberry Cone
+    registerName: Med Straw Cone
+    aliases: []
+    price: 2.49
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 7
+    
+
+  - pid: 8007
+    name: Large Vanilla Cone
+    registerName: Lg Vanilla Cone
+    aliases: []
+    price: 3.99
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 2
+  - pid: 8008
+    name: Large Chocolate Cone
+    registerName: Lg Choc Cone
+    aliases: []
+    price: 3.99
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 5
+  - pid: 8009
+    name: Large Strawberry Cone
+    registerName: Lg Straw Cone
+    aliases: []
+    price: 3.99
+    standalone: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+    key: 8

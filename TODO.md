@@ -1,7 +1,20 @@
 # TODO List
 
 * Matrix configuration
-    * Finish up unit tests.
+    * ~~Finish up unit tests.~~
+    * Rework for attributes
+        * attributes2.yaml
+        * Schema for Dimensions, AttributeItem, Matrices
+        * Catalog analog for AttributeItems. Loader, alias enumerator.
+        * Load AttributeItems into Unified
+        * Load Matrices into AttributeInfo
+        * Load Dimensions + AttributeItems into AttributeInfo
+        * Load generic entities (catalog items with matrix) into attributeInfo
+        * Load specific entities (catalog items with key) into attributeInfo. key field
+        * aliasesFromYamlString()
+        * token-flow: itemMapFromYamlString() - perhaps add own version to ShortOrder.
+        * schema.ts
+        * ~~Where do generic entities go? Can they go in the catalog? Probably with a new field. maxtrix = MID~~
     * Where does AttributeItem belong?
     * Loader for Dimensions file w/AJV.
     * Replace attributes.yaml with dimensions.yaml.
