@@ -4,8 +4,9 @@ import 'mocha';
 import { PID } from 'token-flow';
 
 import { ENTITY, EntityToken, ATTRIBUTE, AttributeToken } from '../../src';
-import { AttributeItem, AttributeInfo } from '../../src/attributes/attribute_info';
+import { AttributeInfo } from '../../src/attributes/attribute_info';
 import { Dimension } from '../../src/attributes/dimension';
+import { AttributeItem } from '../../src/attributes/interfaces';
 import { Matrix } from '../../src/attributes/matrix';
 import { MatrixEntityBuilder } from '../../src/attributes/matrix_entity_builder';
 

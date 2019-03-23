@@ -1,6 +1,6 @@
 import { PID } from 'token-flow';
 
-import { AttributeItem } from './attribute_info';
+import { AttributeItem } from './interfaces';
 
 // Represents a characteristic like size, color, or flavor.
 // Each Dimension is associated with a number of attributes such as

@@ -1,15 +1,7 @@
 import { PID } from 'token-flow';
 
-import { IndexableItem } from '../catalog';
 import { Dimension } from './dimension';
 import { Matrix } from './matrix';
-
-export interface AttributeItem extends IndexableItem {
-    pid: PID;
-    name: string;
-    aliases: string[];
-    isDefault?: boolean;
-}
 
 // The (dimension, position) coordinates of an attribute within a Matrix.
 // Dimension corresponds to a characteristic like `size`.
