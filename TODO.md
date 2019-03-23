@@ -1,5 +1,6 @@
 # TODO List
 
+* concept of no attribute. e.g. diet coke vs coke
 * Matrix configuration
     * ~~Finish up unit tests.~~
     * Rework for attributes

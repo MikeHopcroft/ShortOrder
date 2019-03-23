@@ -1,4 +1,5 @@
 export * from './actions';
+export * from './attributes';
 export * from './cart';
 export * from './catalog';
 export * from './order';

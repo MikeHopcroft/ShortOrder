@@ -2,8 +2,12 @@ import { assert } from 'chai';
 import 'mocha';
 
 import { PID } from 'token-flow';
-import { AttributeItem, Dimension, Matrix, AttributeInfo, MatrixEntityBuilder } from '../../src/matrix';
+
 import { ENTITY, EntityToken, ATTRIBUTE, AttributeToken } from '../../src';
+import { AttributeItem, AttributeInfo } from '../../src/attributes/attribute_info';
+import { Dimension } from '../../src/attributes/dimension';
+import { Matrix } from '../../src/attributes/matrix';
+import { MatrixEntityBuilder } from '../../src/attributes/matrix_entity_builder';
 
 // A PID that is not indexed in any data structure in this file.
 // For testing error cases.
