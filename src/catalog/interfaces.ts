@@ -66,7 +66,7 @@ export interface ItemDescription extends IndexableItem {
     standalone: boolean;
     note?: boolean;
     matrix?: PID;
-    key?: PID;
+    key?: string;
     composition: {
         defaults: ComponentDescription[];
         choices: ChoiceDescription[];

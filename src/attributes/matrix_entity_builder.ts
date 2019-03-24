@@ -17,15 +17,13 @@ import { Matrix } from './matrix';
 // allow us to generate a key which yields the PID for a `small chocolate cone`.
 export class MatrixEntityBuilder {
     private readonly info: AttributeInfo;
-    private readonly matrix: Matrix;
 
     private entityId: PID | undefined = undefined;
     
     private readonly dimensionIdToAttribute = new Map<PID, PID>();
 
-    constructor(info: AttributeInfo, matrix: Matrix) {
+    constructor(info: AttributeInfo) {
         this.info = info;
-        this.matrix = matrix;
     }
 
     hasEntity(): boolean {
@@ -71,7 +69,7 @@ export class MatrixEntityBuilder {
             return this.entityId;
         }
 
-        const key = this.matrix.getKey(this.dimensionIdToAttribute, this.info);
+        const key = matrix.getKey(this.entityId, this.dimensionIdToAttribute, this.info);
         const pid = this.info.getPID(key);
 
         if (pid === undefined) {

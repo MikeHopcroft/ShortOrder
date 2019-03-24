@@ -73,7 +73,7 @@ function explode(
         const base = item.name;
         for (const c of combinations(matrix)) {
             const name = getName(c, attributeFromPID, base);
-            const key = matrix.getKey(c, info);
+            const key = matrix.getKey(item.pid, c, info);
 
             outputs.push({
                 pid,
@@ -155,5 +155,5 @@ const cone: ItemDescription = {
 
 go(
     path.join(__dirname, './data/restaurant-en/attributes.yaml'),
-    [latte].values()
+    [cone, latte].values()
 );

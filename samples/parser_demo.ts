@@ -123,15 +123,17 @@ const utterances1 = [
 ];
 
 const utterances2 = [
-    // 'can I get a cheeseburger well done with no pickles',
-    // 'give me a latte',
-    // 'give me a decaf latte',
-    // 'give me a large latte iced',
-    // 'give me a small half caf latte iced',
-    // 'give me a large latte iced iced tea and a coke',
+    'can I get a cheeseburger well done with no pickles',
+    'give me a latte',
+    'give me a decaf latte',
+    'give me a large latte iced',
+    'give me a small half caf latte iced',
+    'give me a large latte iced iced tea and a coke',
     'give me a small latte decaf decaf latte and a half caf latte',
+    'give me a chocolate cone',
+    'give me a cone'
 ];
 
-go(utterances1, false);
+go(utterances2, false);
 
 console.log('done');

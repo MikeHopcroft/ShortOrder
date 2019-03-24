@@ -9,28 +9,17 @@ import { Dimension } from './dimension';
 export class Matrix {
     readonly id: PID;
     readonly dimensions: Dimension[];
-    readonly scales: number[];
-    readonly counts: number[];
 
     constructor(id: PID, dimensions: Dimension[]) {
         this.id = id;
         this.dimensions = dimensions;
-
-        this.counts = dimensions.map( (x) => x.attributes.length );
-
-        this.scales = [];
-        let scale = 1;
-        for (const count of this.counts) {
-            this.scales.push(scale);
-            scale *= count;
-        }
     }
 
     // Given a map from dimensionId to attributeId, return a number that
     // represents those set of attribute values associated Dimensions of
     // this Matrix.
-    getKey(dimensionIdToAttribute: Map<PID, PID>, info: AttributeInfo): number {
-        let key = 0;
+    getKey(entityId: PID, dimensionIdToAttribute: Map<PID, PID>, info: AttributeInfo): string {
+        const key = [entityId];
         for (const [index, dimension] of this.dimensions.entries()) {
             let attributeId = dimensionIdToAttribute.get(dimension.id);
             if (attributeId === undefined) {
@@ -42,9 +31,9 @@ export class Matrix {
                 throw TypeError(message);
             }
 
-            key += coordinate.position * this.scales[index];
+            key.push(coordinate.position);
         }
 
-        return key;
+        return key.join(':');
     }
 }

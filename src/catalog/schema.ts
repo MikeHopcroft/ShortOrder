@@ -161,7 +161,7 @@ const catalogItemSchema = {
                     "type": "number"
                 },
                 "key": {
-                    "type": "number"
+                    "type": "string"
                 },
             },
             "required": [

@@ -22,7 +22,7 @@ export class AttributeInfo {
     private readonly attributeIdToCoordinate = new Map<PID, AttributeCoordinate>();
     private readonly matrixIdToMatrix = new Map<PID, Matrix>();
     private readonly entityIdToMatrix = new Map<PID, Matrix>();
-    private readonly keyToEntityId = new Map<number, PID>();
+    private readonly keyToEntityId = new Map<string, PID>();
 
     static factory(catalog: Catalog, attributes: Attributes): AttributeInfo {
         const info = new AttributeInfo();
@@ -101,7 +101,7 @@ export class AttributeInfo {
         }
     }
 
-    addSpecificEntity(entityId: PID, key: number) {
+    addSpecificEntity(entityId: PID, key: string) {
         if (this.keyToEntityId.has(key)) {
             const message = `found duplicate entity key ${key}.`;
             throw new TypeError(message);
@@ -126,7 +126,7 @@ export class AttributeInfo {
     }
 
     // Returns the PID of an entity with a specific key.
-    getPID(key: number): PID | undefined {
+    getPID(key: string): PID | undefined {
         return this.keyToEntityId.get(key);
     }
 }

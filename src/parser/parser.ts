@@ -114,7 +114,7 @@ export class Parser {
     }
 
     private parseEntity(input: PeekableSequence<AnyToken>, state: State): State {
-        const builder = new MatrixEntityBuilder(this.attributeInfo, this.matrix);
+        const builder = new MatrixEntityBuilder(this.attributeInfo);
         const quantifiers: QuantifierToken[] = [];
 
         // If there is a leading ADD_TO_ORDER token, skip it.

@@ -1,6 +1,7 @@
 # TODO List
 
 * New repo with sample application
+    * Make version of Parser that doesn't require Token-Flow.
     * Menu
         * One matrix
         * Lots of matrixed entities
@@ -10,15 +11,17 @@
         * Add new patterns for add-to-order.
     * Quantifiers
 * Merge mhop-matrix into master
+* Publish package.
+* Remove dead code from matrix.ts
 * ~~Update Order to show PIDs~~
-* Parser shouldn't construct CartOps - this should be passed in. Parser shouldn't know about formatting options.
+* ~~OK. Parser shouldn't construct CartOps - this should be passed in. Parser shouldn't know about formatting options.~~
 * Pluggable parser for run_repl and others? Pluggable catalog?
-* BUG/ISSUE: entity keys are not unique across matrices. (e.g. cone and latte both have key 0)
-* BUG/ISSUE: parse doesn't support multiple matrices
+* ~~BUG/ISSUE: entity keys are not unique across matrices. (e.g. cone and latte both have key 0)~~
+* ~~BUG/ISSUE: parse doesn't support multiple matrices~~
 * ~~concept of no attribute. e.g. diet coke vs coke~~
 * Matrix configuration
     * ~~Finish up unit tests.~~
-    * Rework for attributes
+    * ~~Rework for attributes~~
         * ~~attributes2.yaml~~
         * ~~Schema for Dimensions, AttributeItem, Matrices~~
         * ~~Catalog analog for AttributeItems. Loader, alias enumerator.~~
@@ -32,13 +35,11 @@
         * ~~token-flow: itemMapFromYamlString() - perhaps add own version to ShortOrder.~~
         * ~~schema.ts~~
         * ~~Where do generic entities go? Can they go in the catalog? Probably with a new field. maxtrix = MID~~
-    * Where does AttributeItem belong?
-    * Loader for Dimensions file w/AJV.
-    * Replace attributes.yaml with dimensions.yaml.
-    * Modify unified to use AttributeInfo.
-    * Replumb attributes in parser.
-    * Publish package.
-    * Make vesion of Parser that doesn't require Token-Flow.
+    * ~~Where does AttributeItem belong?~~
+    * ~~Loader for Dimensions file w/AJV.~~
+    * ~~X Replace attributes.yaml with dimensions.yaml.~~~
+    * ~~Modify unified to use AttributeInfo.~~
+    * ~~Replumb attributes in parser.~~
 
 * Integrate token-flow 0.0.28
     * ~~NUMBERTOKEN vs QUANTITY~~

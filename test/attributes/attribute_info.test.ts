@@ -14,6 +14,10 @@ import { MatrixEntityBuilder } from '../../src/attributes/matrix_entity_builder'
 // For testing error cases.
 const unknownPID = 9999;
 
+// A key that is not indexed in any data structure in this file.
+// For testing error cases.
+const unknownKey = '9999';
+
 const attributes: AttributeItem[] = [
     {
         pid: 0,
@@ -228,8 +232,6 @@ describe('Matrix', () => {
 
             assert.equal(matrix.id, anyMatrixId);
             assert.deepEqual(matrix.dimensions, softServeDimensions);
-            assert.deepEqual(matrix.scales, [1, 3, 9]);
-            assert.deepEqual(matrix.counts, [3, 3, 2]);
         });
 
         it('getKey()', () => {
@@ -243,14 +245,17 @@ describe('Matrix', () => {
 
             const dimensionIdToAttribute = new Map<PID, PID>();
             dimensionIdToAttribute.set(size, sizeMedium);
-            dimensionIdToAttribute.set(flavor, flavorChocolate);
-            dimensionIdToAttribute.set(style, styleOriginal);
+            dimensionIdToAttribute.set(flavor, flavorStrawberry);
+            dimensionIdToAttribute.set(style, styleRegular);
 
-            //    medium: position 1 * scale 1 =  1
-            // chocolate: position 1 * scale 3 =  3
-            //  original: position 1 * scale 9 =  9
-            //                             key = 13
-            assert.equal(matrix.getKey(dimensionIdToAttribute, info), 13);
+            const anyEntityId = 456;
+
+            // anyEntityId: 456
+            //      medium:   1
+            //  strawberry:   2
+            //     regular:   0
+            //         key: 456:1:2:0
+            assert.equal(matrix.getKey(anyEntityId, dimensionIdToAttribute, info), "456:1:2:0");
         });
     });
 
@@ -323,10 +328,6 @@ describe('Matrix', () => {
         it('addGenericEntity()', () => {
             const info = new AttributeInfo();
 
-            // info.addDimension(softServeDimensions[0]);
-            // info.addDimension(softServeDimensions[1]);
-            // info.addDimension(softServeDimensions[2]);
- 
             const softServeMatrixId = 123;
             const softServeMatrix = new Matrix(softServeMatrixId, softServeDimensions);
             info.addMatrix(softServeMatrix);
@@ -358,17 +359,17 @@ describe('Matrix', () => {
         it('addSpecificEntity()', () => {
             const info = new AttributeInfo();
 
-            info.addSpecificEntity(1, 123);
+            info.addSpecificEntity(1, '123');
 
-            // Attempt to add entity with key=123 again.
-            const f = () => info.addSpecificEntity(1, 123);
+            // Attempt to add entity with key="123" again.
+            const f = () => info.addSpecificEntity(1, '123');
             assert.throws(f, 'found duplicate entity key 123.');
 
-            info.addSpecificEntity(2, 456);
+            info.addSpecificEntity(2, '456');
 
-            assert.equal(1, info.getPID(123));
-            assert.equal(2, info.getPID(456));
-            assert.equal(undefined, info.getPID(unknownPID));
+            assert.equal(1, info.getPID('123'));
+            assert.equal(2, info.getPID('456'));
+            assert.equal(undefined, info.getPID(unknownKey));
         });
     });
 
@@ -383,10 +384,7 @@ describe('Matrix', () => {
         
         it('hasEntity()/setEntity()', () => {
             const info = new AttributeInfo();
-            const softServeMatrixId = 123;
-            const softServeMatrix = new Matrix(softServeMatrixId, softServeDimensions);
-
-            const builder = new MatrixEntityBuilder(info, softServeMatrix);
+            const builder = new MatrixEntityBuilder(info);
 
             // Haven't added an entity yet.
             assert.isFalse(builder.hasEntity());
@@ -411,10 +409,7 @@ describe('Matrix', () => {
             info.addDimension(softServeDimensions[1]);
             info.addDimension(softServeDimensions[2]);
 
-            const softServeMatrixId = 123;
-            const softServeMatrix = new Matrix(softServeMatrixId, softServeDimensions);
-
-            const builder = new MatrixEntityBuilder(info, softServeMatrix);
+            const builder = new MatrixEntityBuilder(info);
 
             const f = () => builder.addAttribute(makeAttributeToken(unknownPID));
             assert.throws(f, 'unknown attribute 9999.');
@@ -447,19 +442,19 @@ describe('Matrix', () => {
             // Configure with a specific `medium vanilla regular cone`.
             // Key is (size:1)*1 + (flavor:0)*3 + (style:0)*9 = 1
             const mediumVanillaRegularCone = 500;
-            info.addSpecificEntity(mediumVanillaRegularCone, 1);
+            info.addSpecificEntity(mediumVanillaRegularCone, '456:1:0:0');
 
             // Configure with a specific `medium chocolate regular cone`.
             // Key is (size:1)*1 + (flavor:1)*3 + (style:0)*9 = 4
             const mediumChocolateRegularCone = 501;
-            info.addSpecificEntity(mediumChocolateRegularCone, 4);
+            info.addSpecificEntity(mediumChocolateRegularCone, '456:1:1:0');
 
             // Configure with a specific `large chocolate regular cone`.
             // Key is (size:2)*1 + (flavor:1)*3 + (style:0)*9 = 5
             const largeChocolateRegularCone = 502;
-            info.addSpecificEntity(largeChocolateRegularCone, 5);
+            info.addSpecificEntity(largeChocolateRegularCone, '456:2:1:0');
 
-            const builder = new MatrixEntityBuilder(info, softServeMatrix);
+            const builder = new MatrixEntityBuilder(info);
 
             // getPID() before adding entity should throw.
             const f = () => builder.getPID();
@@ -483,7 +478,7 @@ describe('Matrix', () => {
 
             // Now create another builder and set the entity to something that
             // is not generic.
-            const builder2 = new MatrixEntityBuilder(info, softServeMatrix);
+            const builder2 = new MatrixEntityBuilder(info,);
             builder2.setEntity(makeEntityToken(unknownPID));
             assert.equal(builder2.getPID(), unknownPID);
         });
