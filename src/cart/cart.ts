@@ -1,5 +1,5 @@
 import { Action, ChoiceAction, CHOICE, CONFUSED, COMPLETE, OK } from '../actions';
-import { Catalog, ComponentDescription } from '../catalog';
+import { Catalog, ComponentDescription, ItemDescription } from '../catalog';
 import { LineItem, Order, OrderOps } from '../order';
 import { PID } from 'token-flow';
 
@@ -69,9 +69,11 @@ export interface State {
 
 export class CartOps {
     private readonly catalog: Catalog;
+    private readonly showPIDs: boolean;
 
-    constructor(catalog: Catalog) {
+    constructor(catalog: Catalog, showPIDs = false) {
         this.catalog = catalog;
+        this.showPIDs = showPIDs;
     }
 
     updateCart(state: State, pid: PID, quantity: number): State {
@@ -301,23 +303,25 @@ export class CartOps {
         }
 
         const d = this.catalog.get(item.pid);
+        const name = this.formatItemName(d);
 
         let price: number | undefined = undefined;
+
 
         let left = '';
         let middle = '';
         if (parent === undefined) {
             left = item.quantity.toString();
-            middle = d.name;
+            middle = name;
             price = item.quantity * d.price;
         }
         else {
             if (this.catalog.isNote(item.pid)) {
-                middle = d.name;
+                middle = name;
             }
             else if (this.catalog.isChoiceOf(item.pid, parent)) {
                 left = item.quantity.toString();
-                middle = d.name;
+                middle = name;
                 price = undefined;
             }
             else if (this.catalog.isDefaultOf(item.pid, parent)) {
@@ -329,40 +333,49 @@ export class CartOps {
                 }
 
                 if (item.quantity === 0) {
-                    middle = `NO ${d.name}`;
+                    middle = `NO ${name}`;
                 }
                 else if (delta === 0) {
                     console.log('this should never happen');
                 }
                 else if (delta === 1) {
-                    middle = `XTRA ${d.name}`;
+                    middle = `XTRA ${name}`;
                 }
                 else if (delta > 1) {
-                    middle = `XTRA ${delta} ${d.name}`;
+                    middle = `XTRA ${delta} ${name}`;
                 }
                 else if (delta === -1) {
-                    middle = `LIGHT ${d.name}`;
+                    middle = `LIGHT ${name}`;
                 }
                 else if (delta < -2) {
-                    middle = `LIGHT ${-delta} ${d.name}`;
+                    middle = `LIGHT ${-delta} ${name}`;
                 }
             }
             else if (item.quantity === 0) {
-                middle = `NO ${d.name}`;
+                middle = `NO ${name}`;
             }
             else if (item.quantity === 1) {
                 price = d.price;
-                middle = `ADD ${d.name}`;
+                middle = `ADD ${name}`;
             }
             else {
                 if (d.price !== undefined) {
                     price = item.quantity * d.price;
                 }
-                middle = `ADD ${item.quantity} ${d.name}`;
+                middle = `ADD ${item.quantity} ${name}`;
             }
         }
 
         order.unshift({ indent, left, middle, price });
+    }
+
+    formatItemName(item: ItemDescription): string {
+        if (this.showPIDs) {
+            return `${item.name} (${item.pid})`;
+        }
+        else {
+            return item.name;
+        }
     }
 
     cartToString(cart: Cart) {

@@ -1,9 +1,21 @@
 # TODO List
 
-* Update Order to show PIDs
+* New repo with sample application
+    * Menu
+        * One matrix
+        * Lots of matrixed entities
+        * Lots of additions, notes, etc.
+    * Attributes
+    * Intents
+        * Add new patterns for add-to-order.
+    * Quantifiers
+* Merge mhop-matrix into master
+* ~~Update Order to show PIDs~~
+* Parser shouldn't construct CartOps - this should be passed in. Parser shouldn't know about formatting options.
+* Pluggable parser for run_repl and others? Pluggable catalog?
 * BUG/ISSUE: entity keys are not unique across matrices. (e.g. cone and latte both have key 0)
 * BUG/ISSUE: parse doesn't support multiple matrices
-* concept of no attribute. e.g. diet coke vs coke
+* ~~concept of no attribute. e.g. diet coke vs coke~~
 * Matrix configuration
     * ~~Finish up unit tests.~~
     * Rework for attributes
@@ -11,14 +23,14 @@
         * ~~Schema for Dimensions, AttributeItem, Matrices~~
         * ~~Catalog analog for AttributeItems. Loader, alias enumerator.~~
             * ~~Constructor takes Attributes~~
-        * Load AttributeItems into Unified
+        * ~~Load AttributeItems into Unified~~
         * ~~Load Matrices into AttributeInfo~~
         * ~~Load Dimensions + AttributeItems into AttributeInfo~~
         * ~~Load generic entities (catalog items with matrix) into attributeInfo~~
         * ~~Load specific entities (catalog items with key) into attributeInfo. key field~~
-        * aliasesFromYamlString()
-        * token-flow: itemMapFromYamlString() - perhaps add own version to ShortOrder.
-        * schema.ts
+        * ~~aliasesFromYamlString()~~
+        * ~~token-flow: itemMapFromYamlString() - perhaps add own version to ShortOrder.~~
+        * ~~schema.ts~~
         * ~~Where do generic entities go? Can they go in the catalog? Probably with a new field. maxtrix = MID~~
     * Where does AttributeItem belong?
     * Loader for Dimensions file w/AJV.

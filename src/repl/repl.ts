@@ -53,7 +53,7 @@ export function runRepl(
     }
 
     const parser = new Parser(catalog, attributeInfo, matrix, unified, debugMode);   
-    const ops = new CartOps(catalog);
+    const ops = new CartOps(catalog, true);
 
     let state: State = { cart: { items: [] }, actions: [] };
 

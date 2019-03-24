@@ -1,7 +1,7 @@
 import { NumberToken, NUMBERTOKEN, PeekableSequence } from 'token-flow';
 
 import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
-import { AttributeInfo, Matrix, MatrixDescription, MatrixEntityBuilder } from '../attributes';
+import { AttributeInfo, Matrix, MatrixEntityBuilder } from '../attributes';
 import { CartOps, State } from '../cart';
 import { Catalog } from '../catalog';
 import { Unified } from '../unified';
@@ -10,9 +10,7 @@ import { Unified } from '../unified';
 import {
     AnyToken,
     ATTRIBUTE,
-    AttributeToken,
     ENTITY,
-    EntityToken,
     QUANTITY,
     QuantityToken,
     WORD
@@ -65,7 +63,7 @@ export class Parser {
         this.matrix = matrix;
         this.unified = unified;
         this.debugMode = debugMode;
-        this.ops = new CartOps(catalog);
+        this.ops = new CartOps(catalog, false);
     }
 
     parse(input: string, state: State): State {

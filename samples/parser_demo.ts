@@ -38,7 +38,7 @@ function go(utterances: string[], debugMode: boolean) {
         throw TypeError(message);
     }
 
-    const ops = new CartOps(catalog);
+    const ops = new CartOps(catalog, true);
 
     const unified = 
         new Unified(catalogFile, intentsFile, attributesFile, quantifiersFile, debugMode);
