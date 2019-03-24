@@ -50,3 +50,7 @@ export function intentTokenFactory(item:Item): Token {
     const symbol = Symbol.for(name);
     return { type: symbol };
 }
+
+export function CreateIntent(type: symbol) {
+    return { type };
+}

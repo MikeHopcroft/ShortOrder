@@ -12,3 +12,7 @@ export interface AttributeToken extends Token {
 export function attributeTokenFactory(item:Item): Token {
     return { type: ATTRIBUTE, id: item.pid, name: item.name } as AttributeToken;
 }
+
+export function CreateAttribute(id: PID, name: string) {
+    return { type: ATTRIBUTE, id, name } as AttributeToken;
+}

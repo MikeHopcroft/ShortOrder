@@ -1,4 +1,4 @@
-import { Item, Token } from 'token-flow';
+import { Item, Token, NUMBERTOKEN, NumberToken } from 'token-flow';
 
 export const QUANTITY: unique symbol = Symbol('QUANTITY');
 export type QUANTITY = typeof QUANTITY;
@@ -10,4 +10,12 @@ export interface QuantityToken extends Token {
 
 export function quantityTokenFactory(item:Item): Token {
     return { type: QUANTITY, value: item.pid } as QuantityToken;
+}
+
+export function CreateQuantity(value: number) {
+    return { type: QUANTITY, value } as QuantityToken;
+}
+
+export function CreateNumber(value: number) {
+    return { type: NUMBERTOKEN, value } as NumberToken;
 }

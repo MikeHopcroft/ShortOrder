@@ -91,6 +91,13 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch Parse-Tokens Demo",
+            "program": "${workspaceFolder}/build/samples/parse_tokens_demo.js",
+            "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Menu Demo",
             "program": "${workspaceFolder}/build/samples/menu_demo.js",
             "outputCapture": "std"

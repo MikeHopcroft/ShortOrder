@@ -45,14 +45,8 @@ export function runRepl(
 
     const attributes = attributesFromYamlString(fs.readFileSync(attributesFile, 'utf8'));
     const attributeInfo = AttributeInfo.factory(catalog, attributes);
-    const matrixId = 1;
-    const matrix = attributeInfo.getMatrix(matrixId);
-    if (matrix === undefined) {
-        const message = `unknown matrix id ${matrixId}.`;
-        throw TypeError(message);
-    }
 
-    const parser = new Parser(catalog, attributeInfo, matrix, unified, debugMode);   
+    const parser = new Parser(catalog, attributeInfo, unified, debugMode);   
     const ops = new CartOps(catalog, true);
 
     let state: State = { cart: { items: [] }, actions: [] };
@@ -204,7 +198,7 @@ export function runRepl(
                         console.log(`${style.red.close}`);
                     }
             
-                    state = parser.parse(text, state);
+                    state = parser.parseText(text, state);
                     console.log(`${style.yellow.open}${ops.cartToString(state.cart)}${style.yellow.open}`);
                     console.log();
             

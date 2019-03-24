@@ -7,3 +7,4 @@ export * from './parser';
 export * from './repl';
 export * from './turn';
 export * from './unified';
+export * from './utilities';

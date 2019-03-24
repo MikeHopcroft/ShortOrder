@@ -3,47 +3,21 @@ import * as yaml from 'js-yaml';
 import * as path from 'path';
 
 import {
-    attributesFromYamlString,
-    AttributeInfo,
-    Catalog,
-    CatalogItems,
-    validateCatalogItems,
-    ConvertDollarsToPennies,
     actionToString,
     AnyAction,
-    CartOps,
-    Parser,
     responses,
+    setup,
     State,
-    Unified
 } from '../src';
 
 function go(utterances: string[], debugMode: boolean) {
-    const catalogFile = path.join(__dirname, './data/restaurant-en/menu.yaml');
-    const intentsFile = path.join(__dirname, './data/restaurant-en/intents.yaml');
-    const attributesFile = path.join(__dirname, './data/restaurant-en/attributes.yaml');
-    const quantifiersFile = path.join(__dirname, './data/restaurant-en/quantifiers.yaml');
-
-    const catalogItems = yaml.safeLoad(fs.readFileSync(catalogFile, 'utf8')) as CatalogItems;
-    validateCatalogItems(catalogItems);
-    ConvertDollarsToPennies(catalogItems);
-    const catalog = new Catalog(catalogItems);
-
-    const attributes = attributesFromYamlString(fs.readFileSync(attributesFile, 'utf8'));
-    const attributeInfo = AttributeInfo.factory(catalog, attributes);
-    const matrixId = 1;
-    const matrix = attributeInfo.getMatrix(matrixId);
-    if (matrix === undefined) {
-        const message = `unknown matrix id ${matrixId}.`;
-        throw TypeError(message);
-    }
-
-    const ops = new CartOps(catalog, true);
-
-    const unified = 
-        new Unified(catalogFile, intentsFile, attributesFile, quantifiersFile, debugMode);
-
-    const parser = new Parser(catalog, attributeInfo, matrix, unified, debugMode);
+    const { catalog, ops, parser } = setup(
+        path.join(__dirname, './data/restaurant-en/menu.yaml'),
+        path.join(__dirname, './data/restaurant-en/intents.yaml'),
+        path.join(__dirname, './data/restaurant-en/attributes.yaml'),
+        path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
+        debugMode
+    );
 
     let state: State = { cart: { items: [] }, actions: [] };
 
@@ -58,7 +32,7 @@ function go(utterances: string[], debugMode: boolean) {
         console.log(`CUSTOMER: "${utterance}":`);
         console.log();
 
-        state = parser.parse(utterance, state);
+        state = parser.parseText(utterance, state);
         ops.printCart(state.cart);
         console.log();
 
@@ -154,5 +128,3 @@ const bugs = [
 ];
 
 go(utterances2, false);
-
-console.log('done');

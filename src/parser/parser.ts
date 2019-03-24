@@ -44,9 +44,7 @@ const ignore = [
 type QuantifierToken = NumberToken | QuantityToken;
 
 export class Parser {
-    private readonly catalog: Catalog;
     private readonly attributeInfo: AttributeInfo;
-    private readonly matrix: Matrix;
     private readonly unified: Unified;
     private readonly debugMode: boolean;
     private readonly ops: CartOps;
@@ -54,20 +52,21 @@ export class Parser {
     constructor(
         catalog: Catalog,
         attributeInfo: AttributeInfo,
-        matrix: Matrix,
         unified: Unified,
         debugMode: boolean
     ) {
-        this.catalog = catalog;
         this.attributeInfo = attributeInfo;
-        this.matrix = matrix;
         this.unified = unified;
         this.debugMode = debugMode;
         this.ops = new CartOps(catalog, false);
     }
 
-    parse(input: string, state: State): State {
+    parseText(input: string, state: State): State {
         const tokens = this.unified.processOneQuery(input) as AnyToken[];
+        return this.parseTokens(tokens.values(), state);
+    }
+
+    parseTokens(tokens: IterableIterator<AnyToken>, state: State) {
         const sequence = new PeekableSequence<AnyToken>(tokens[Symbol.iterator]());
         return this.parseRoot(sequence, state);
     }
