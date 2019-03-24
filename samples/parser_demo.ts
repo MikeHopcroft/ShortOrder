@@ -134,6 +134,25 @@ const utterances2 = [
     'give me a cone'
 ];
 
+const bugs = [
+    // This bug no longer repros, now that there is no "fried" attribute.
+    // Stemmer confuses "fries" with "fried". Chose attribute "fried" instead
+    // of entity "fries". Match for these two has same score.
+   'fries',                        // Response: I don't understand
+
+    // This bug has been fixed.
+   'no burger',                    // Makes line item for 0 burgers
+
+    // In CatalogOps.updateItem(), "if (n !== quantity)" branch not taken
+    // "extra" maps to 1, which is the default quantity.
+    'hamburger extra pickles',      // Doesn't add pickles
+
+    // Adds a "six piece wings" and then two hot sauce children.
+    // Why hot sauce? Can you add two sauces?
+    // Stemmer confuses "wings" and "wing". The latter appears in "wing sauce".
+    'six piece wings wings wings',
+];
+
 go(utterances2, false);
 
 console.log('done');

@@ -100,7 +100,7 @@ export class CartOps {
 
         // The update did not apply to anything already in the cart.
         // Attempt to add pid to cart as top-level, stand-alone item.
-        if (!changed && this.catalog.isStandalone(pid)) {
+        if (!changed && this.catalog.isStandalone(pid) && quantity > 0) {
             changed = true;
             updated.unshift({ pid, quantity, modifications: [] });
         }
@@ -111,7 +111,7 @@ export class CartOps {
         }
         else {
             // TODO: report or log error here?
-            console.log(`CartOps.updateCart(): no modifications for pid=${pid}.`);
+            // console.log(`CartOps.updateCart(): no modifications for pid=${pid}.`);
             const actions = [{ type: CONFUSED }, ...state.actions];
             return { ...state, actions };
         }

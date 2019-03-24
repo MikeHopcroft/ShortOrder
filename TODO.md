@@ -2,6 +2,7 @@
 
 * New repo with sample application
     * Make version of Parser that doesn't require Token-Flow.
+    * Test suite that checks cart for one utterance
     * Menu
         * One matrix
         * Lots of matrixed entities
@@ -10,16 +11,22 @@
     * Intents
         * Add new patterns for add-to-order.
     * Quantifiers
+* Rename `Unified`?
 * Merge mhop-matrix into master
 * Publish package.
-* Remove dead code from matrix.ts
+
+* Sort out debug package dependency.
+* relevance_demo_english
+    * Reinstate HackedStemmer.
+
+* ~~Remove dead code from matrix.ts~~
 * ~~Update Order to show PIDs~~
 * ~~OK. Parser shouldn't construct CartOps - this should be passed in. Parser shouldn't know about formatting options.~~
 * Pluggable parser for run_repl and others? Pluggable catalog?
 * ~~BUG/ISSUE: entity keys are not unique across matrices. (e.g. cone and latte both have key 0)~~
 * ~~BUG/ISSUE: parse doesn't support multiple matrices~~
 * ~~concept of no attribute. e.g. diet coke vs coke~~
-* Matrix configuration
+* ~~Matrix configuration~~
     * ~~Finish up unit tests.~~
     * ~~Rework for attributes~~
         * ~~attributes2.yaml~~
@@ -41,17 +48,14 @@
     * ~~Modify unified to use AttributeInfo.~~
     * ~~Replumb attributes in parser.~~
 
-* Integrate token-flow 0.0.28
+* ~~Integrate token-flow 0.0.28~~
     * ~~NUMBERTOKEN vs QUANTITY~~
         * ~~Rename NUMBERTOKEN to NUMBER? No~~
         * ~~x Replace each NUMBERTOKEN with QUANTITY~~
     * ~~Publish 0.0.29. Pick up from npm instead of local.~~
-    * Sort out debug package dependency.
-    * parser_Demo
+    * ~~parser_Demo~~
         * ~~"hi there give me uh a coffee with two creams" gives one cream.~~
-    * relevance_demo_english
-        * Reinstate HackedStemmer.
-    * parser.ts
+    * ~~parser.ts~~
         * ~~Clean up imports~~
     * ~~WORD and WordToken~~
         * ~~Are these still used by ShortOrder? YES~~
@@ -65,7 +69,7 @@
     * BUG: fix Spanish relevance cases.
     * BUG: hamburger extra pickles does not add pickles
     * BUG: six piece wings wings wings adds separate two wing sauce line items
-    * BUG: start with empty cart. "no burger". Adds a line item for 0 burger.
+    * ~~BUG: start with empty cart. "no burger". Adds a line item for 0 burger.~~
     * BUG: start with empty cart. "fries" gives attribute "fried" which leads to "I didn't understand"
         * Could fix with the stemmer since we're seeing the fried vs fries issue.
         * Could fix with the graph API.
