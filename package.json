@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/ansi-styles": "^3.2.1",
     "@types/chai": "^4.1.6",
-    "@types/dotenv": "^4.0.3",
+    "@types/debug": "^4.1.2",
     "@types/js-yaml": "^3.11.2",
     "@types/mocha": "^5.2.5",
     "@types/murmurhash": "0.0.0",
@@ -40,7 +40,6 @@
     "typescript": "~2.8.0"
   },
   "dependencies": {
-    "@types/debug": "^4.1.2",
     "ajv": "^6.5.4",
     "ansi-styles": "^3.2.1",
     "debug": "^4.1.1",
@@ -48,7 +47,6 @@
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
     "readline-sync": "^1.4.9",
-    "token-flow": "0.0.29",
-    "words-to-numbers": "^1.5.1"
+    "token-flow": "0.0.29"
   }
 }

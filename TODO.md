@@ -18,6 +18,7 @@
 * Sort out debug package dependency.
 * relevance_demo_english
     * Reinstate HackedStemmer.
+* Consider replacing ansi-styles with chalk
 
 * ~~Remove dead code from matrix.ts~~
 * ~~Update Order to show PIDs~~
