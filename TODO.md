@@ -1,5 +1,8 @@
 # TODO List
 
+* Update Order to show PIDs
+* BUG/ISSUE: entity keys are not unique across matrices. (e.g. cone and latte both have key 0)
+* BUG/ISSUE: parse doesn't support multiple matrices
 * concept of no attribute. e.g. diet coke vs coke
 * Matrix configuration
     * ~~Finish up unit tests.~~

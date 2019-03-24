@@ -1133,7 +1133,7 @@ items:
     registerName: Med Sweet Tea
     aliases:
       - '[Medium] (Sweet,Iced) Tea'
-    price: 0
+    price: 0.99
     standalone: true
     composition:
       defaults:
@@ -1940,119 +1940,119 @@ items:
   # Specific matrix entities for specific cone configurations
   #
 
-  # Small cones
-  - pid: 8001
-    name: Small Vanilla Cone
-    registerName: Sm Vanilla Cone
-    aliases: []
-    price: 1.99
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 0
-  - pid: 8002
-    name: Small Chocolate Cone
-    registerName: Sm Choc Cone
-    aliases: []
-    price: 1.99
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 3
-  - pid: 8003
-    name: Small Strawberry Cone
-    registerName: Sm Straw Cone
-    aliases: []
-    price: 1.99
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 6
+  # # Small cones
+  # - pid: 8001
+  #   name: Small Vanilla Cone
+  #   registerName: Sm Vanilla Cone
+  #   aliases: []
+  #   price: 1.99
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 0
+  # - pid: 8002
+  #   name: Small Chocolate Cone
+  #   registerName: Sm Choc Cone
+  #   aliases: []
+  #   price: 1.99
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 3
+  # - pid: 8003
+  #   name: Small Strawberry Cone
+  #   registerName: Sm Straw Cone
+  #   aliases: []
+  #   price: 1.99
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 6
 
-  # Medium cones
-  - pid: 8004
-    name: Medium Vanilla Cone
-    registerName: Med Vanilla Cone
-    aliases: []
-    price: 2.49
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 1
-  - pid: 8005
-    name: Medium Chocolate Cone
-    registerName: Med Choc Cone
-    aliases: []
-    price: 2.49
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 4
-  - pid: 8006
-    name: Medium Strawberry Cone
-    registerName: Med Straw Cone
-    aliases: []
-    price: 2.49
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 7
+  # # Medium cones
+  # - pid: 8004
+  #   name: Medium Vanilla Cone
+  #   registerName: Med Vanilla Cone
+  #   aliases: []
+  #   price: 2.49
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 1
+  # - pid: 8005
+  #   name: Medium Chocolate Cone
+  #   registerName: Med Choc Cone
+  #   aliases: []
+  #   price: 2.49
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 4
+  # - pid: 8006
+  #   name: Medium Strawberry Cone
+  #   registerName: Med Straw Cone
+  #   aliases: []
+  #   price: 2.49
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 7
     
-  # Large cones
-  - pid: 8007
-    name: Large Vanilla Cone
-    registerName: Lg Vanilla Cone
-    aliases: []
-    price: 3.99
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 2
-  - pid: 8008
-    name: Large Chocolate Cone
-    registerName: Lg Choc Cone
-    aliases: []
-    price: 3.99
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 5
-  - pid: 8009
-    name: Large Strawberry Cone
-    registerName: Lg Straw Cone
-    aliases: []
-    price: 3.99
-    standalone: true
-    composition:
-      defaults: []
-      choices: []
-      substitutions: []
-      options: []
-    key: 8
+  # # Large cones
+  # - pid: 8007
+  #   name: Large Vanilla Cone
+  #   registerName: Lg Vanilla Cone
+  #   aliases: []
+  #   price: 3.99
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 2
+  # - pid: 8008
+  #   name: Large Chocolate Cone
+  #   registerName: Lg Choc Cone
+  #   aliases: []
+  #   price: 3.99
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 5
+  # - pid: 8009
+  #   name: Large Strawberry Cone
+  #   registerName: Lg Straw Cone
+  #   aliases: []
+  #   price: 3.99
+  #   standalone: true
+  #   composition:
+  #     defaults: []
+  #     choices: []
+  #     substitutions: []
+  #     options: []
+  #   key: 8
 
 ###############################################################################
 #
@@ -2067,7 +2067,7 @@ items:
       - latte
     price: 1.99
     standalone: true
-    matrix: 2
+    matrix: 1
     composition:
       defaults: []
       choices: []
@@ -2075,8 +2075,7 @@ items:
       options: []
   - pid: 9001
     name: small latte
-    aliases:
-      - small latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 0
@@ -2087,8 +2086,7 @@ items:
       options: []
   - pid: 9002
     name: small iced latte
-    aliases:
-      - small iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 9
@@ -2099,8 +2097,7 @@ items:
       options: []
   - pid: 9003
     name: small halfcaf latte
-    aliases:
-      - small halfcaf latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 3
@@ -2111,8 +2108,7 @@ items:
       options: []
   - pid: 9004
     name: small halfcaf iced latte
-    aliases:
-      - small halfcaf iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 12
@@ -2123,8 +2119,7 @@ items:
       options: []
   - pid: 9005
     name: small decaf latte
-    aliases:
-      - small decaf latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 6
@@ -2135,8 +2130,7 @@ items:
       options: []
   - pid: 9006
     name: small decaf iced latte
-    aliases:
-      - small decaf iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 15
@@ -2147,8 +2141,7 @@ items:
       options: []
   - pid: 9007
     name: medium latte
-    aliases:
-      - medium latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 1
@@ -2159,8 +2152,7 @@ items:
       options: []
   - pid: 9008
     name: medium iced latte
-    aliases:
-      - medium iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 10
@@ -2171,8 +2163,7 @@ items:
       options: []
   - pid: 9009
     name: medium halfcaf latte
-    aliases:
-      - medium halfcaf latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 4
@@ -2183,8 +2174,7 @@ items:
       options: []
   - pid: 9010
     name: medium halfcaf iced latte
-    aliases:
-      - medium halfcaf iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 13
@@ -2195,8 +2185,7 @@ items:
       options: []
   - pid: 9011
     name: medium decaf latte
-    aliases:
-      - medium decaf latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 7
@@ -2207,8 +2196,7 @@ items:
       options: []
   - pid: 9012
     name: medium decaf iced latte
-    aliases:
-      - medium decaf iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 16
@@ -2219,8 +2207,7 @@ items:
       options: []
   - pid: 9013
     name: large latte
-    aliases:
-      - large latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 2
@@ -2231,8 +2218,7 @@ items:
       options: []
   - pid: 9014
     name: large iced latte
-    aliases:
-      - large iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 11
@@ -2243,8 +2229,7 @@ items:
       options: []
   - pid: 9015
     name: large halfcaf latte
-    aliases:
-      - large halfcaf latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 5
@@ -2255,8 +2240,7 @@ items:
       options: []
   - pid: 9016
     name: large halfcaf iced latte
-    aliases:
-      - large halfcaf iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 14
@@ -2267,8 +2251,7 @@ items:
       options: []
   - pid: 9017
     name: large decaf latte
-    aliases:
-      - large decaf latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 8
@@ -2279,8 +2262,7 @@ items:
       options: []
   - pid: 9018
     name: large decaf iced latte
-    aliases:
-      - large decaf iced latte
+    aliases: []
     price: 1.99
     standalone: true
     key: 17

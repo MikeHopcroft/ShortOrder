@@ -3,6 +3,8 @@ import * as yaml from 'js-yaml';
 import * as path from 'path';
 
 import {
+    attributesFromYamlString,
+    AttributeInfo,
     Catalog,
     CatalogItems,
     validateCatalogItems,
@@ -16,23 +18,32 @@ import {
     Unified
 } from '../src';
 
-function go(infile: string, utterances: string[], debugMode: boolean) {
-    const catalogItems = yaml.safeLoad(fs.readFileSync(infile, 'utf8')) as CatalogItems;
+function go(utterances: string[], debugMode: boolean) {
+    const catalogFile = path.join(__dirname, './data/restaurant-en/menu.yaml');
+    const intentsFile = path.join(__dirname, './data/restaurant-en/intents.yaml');
+    const attributesFile = path.join(__dirname, './data/restaurant-en/attributes.yaml');
+    const quantifiersFile = path.join(__dirname, './data/restaurant-en/quantifiers.yaml');
+
+    const catalogItems = yaml.safeLoad(fs.readFileSync(catalogFile, 'utf8')) as CatalogItems;
     validateCatalogItems(catalogItems);
     ConvertDollarsToPennies(catalogItems);
     const catalog = new Catalog(catalogItems);
 
+    const attributes = attributesFromYamlString(fs.readFileSync(attributesFile, 'utf8'));
+    const attributeInfo = AttributeInfo.factory(catalog, attributes);
+    const matrixId = 1;
+    const matrix = attributeInfo.getMatrix(matrixId);
+    if (matrix === undefined) {
+        const message = `unknown matrix id ${matrixId}.`;
+        throw TypeError(message);
+    }
+
     const ops = new CartOps(catalog);
 
-    const unified = new Unified(
-        path.join(__dirname, './data/restaurant-en/menu.yaml'),
-        path.join(__dirname, './data/restaurant-en/intents.yaml'),
-        path.join(__dirname, './data/restaurant-en/attributes.yaml'),
-        path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
-        debugMode);
+    const unified = 
+        new Unified(catalogFile, intentsFile, attributesFile, quantifiersFile, debugMode);
 
-
-    const parser = new Parser(catalog, unified, debugMode);
+    const parser = new Parser(catalog, attributeInfo, matrix, unified, debugMode);
 
     let state: State = { cart: { items: [] }, actions: [] };
 
@@ -69,7 +80,7 @@ function go(infile: string, utterances: string[], debugMode: boolean) {
     }
 }
 
-const utterances = [
+const utterances1 = [
     // May want to preprocess ADD_TO_ORDER + SEPARATOR into ADD_TO_ORDER
     // Proabably don't want to ignore all separators.
     // Perhaps there should be entity-breaking separtors and non-breaking.
@@ -111,6 +122,16 @@ const utterances = [
     // 'cheeseburger extra lettue and well done'
 ];
 
-go('./samples/data/restaurant-en/menu.yaml', utterances, false);
+const utterances2 = [
+    // 'can I get a cheeseburger well done with no pickles',
+    // 'give me a latte',
+    // 'give me a decaf latte',
+    // 'give me a large latte iced',
+    // 'give me a small half caf latte iced',
+    // 'give me a large latte iced iced tea and a coke',
+    'give me a small latte decaf decaf latte and a half caf latte',
+];
+
+go(utterances1, false);
 
 console.log('done');

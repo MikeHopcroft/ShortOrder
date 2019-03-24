@@ -78,7 +78,7 @@ function explode(
             outputs.push({
                 pid,
                 name,
-                aliases: [name],
+                aliases: [],
                 price: item.price,
                 standalone: true,
                 key,
@@ -121,23 +121,7 @@ function go(attributesFile: string, items: IterableIterator<ItemDescription>) {
     console.log(yamlText);
 }
 
-const coneMatrix = 1;
-const cone: ItemDescription = {
-    pid: 8000,
-    name: 'cone',
-    aliases: ['cone', 'ice cream [cone]'],
-    price: 1.99,
-    standalone: true,
-    matrix: coneMatrix,
-    composition: {
-        defaults: [],
-        choices: [],
-        substitutions: [],
-        options: []
-    }
-};
-
-const coffeeMatrix = 2;
+const coffeeMatrix = 1;
 const latte: ItemDescription = {
     pid: 9000,
     name: 'latte',
@@ -153,7 +137,23 @@ const latte: ItemDescription = {
     }
 };
 
+const coneMatrix = 2;
+const cone: ItemDescription = {
+    pid: 8000,
+    name: 'cone',
+    aliases: ['cone', 'ice cream [cone]'],
+    price: 1.99,
+    standalone: true,
+    matrix: coneMatrix,
+    composition: {
+        defaults: [],
+        choices: [],
+        substitutions: [],
+        options: []
+    }
+};
+
 go(
     path.join(__dirname, './data/restaurant-en/attributes.yaml'),
-    [cone, latte].values()
+    [latte].values()
 );

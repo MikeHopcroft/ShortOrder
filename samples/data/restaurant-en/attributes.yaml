@@ -69,8 +69,8 @@ dimensions:
           - iced
 matrices:
   - mid: 1
-    name: cones
-    dimensions: [1,2]
-  - mid: 2
     name: coffees
     dimensions: [1,3,4]
+  - mid: 2
+    name: cones
+    dimensions: [1,2]

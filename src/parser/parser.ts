@@ -1,6 +1,7 @@
 import { NumberToken, NUMBERTOKEN, PeekableSequence } from 'token-flow';
 
 import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
+import { AttributeInfo, Matrix, MatrixDescription, MatrixEntityBuilder } from '../attributes';
 import { CartOps, State } from '../cart';
 import { Catalog } from '../catalog';
 import { Unified } from '../unified';
@@ -46,15 +47,25 @@ type QuantifierToken = NumberToken | QuantityToken;
 
 export class Parser {
     private readonly catalog: Catalog;
-    private readonly ops: CartOps;
+    private readonly attributeInfo: AttributeInfo;
+    private readonly matrix: Matrix;
     private readonly unified: Unified;
     private readonly debugMode: boolean;
+    private readonly ops: CartOps;
 
-    constructor(catalog: Catalog, unified: Unified, debugMode: boolean) {
+    constructor(
+        catalog: Catalog,
+        attributeInfo: AttributeInfo,
+        matrix: Matrix,
+        unified: Unified,
+        debugMode: boolean
+    ) {
         this.catalog = catalog;
-        this.ops = new CartOps(catalog);
+        this.attributeInfo = attributeInfo;
+        this.matrix = matrix;
         this.unified = unified;
         this.debugMode = debugMode;
+        this.ops = new CartOps(catalog);
     }
 
     parse(input: string, state: State): State {
@@ -105,9 +116,8 @@ export class Parser {
     }
 
     private parseEntity(input: PeekableSequence<AnyToken>, state: State): State {
-        let entity: EntityToken | undefined = undefined;
+        const builder = new MatrixEntityBuilder(this.attributeInfo, this.matrix);
         const quantifiers: QuantifierToken[] = [];
-        const attributes: AttributeToken[] = [];
 
         // If there is a leading ADD_TO_ORDER token, skip it.
         if (!input.atEOF()) {
@@ -117,6 +127,7 @@ export class Parser {
             }
         }
 
+        let stop = false;
         while (!input.atEOF()) {
             const token = input.peek();
 
@@ -126,19 +137,32 @@ export class Parser {
 
             switch (token.type) {
                 case ATTRIBUTE:
-                    attributes.push(token);
-                    input.get();
+                    if (builder.addAttribute(token)) {
+                        input.get();
+                    }
+                    else {
+                        stop = true;
+                    }
                     break;
                 case ENTITY:
-                    entity = token;
-                    input.get();
-                    // TODO: break out of loop here.
+                    if (builder.hasEntity()) {
+                        stop = true;
+                    }
+                    else {
+                        builder.setEntity(token);
+                        input.get();
+                    }
                     break;
                 case NUMBERTOKEN:
                 case QUANTITY:
                     // TODO: do we really want to collect non-adjacent quantities?
-                    quantifiers.push(token);
-                    input.get();
+                    if (builder.hasEntity()) {
+                        stop = true;
+                    }
+                    else {
+                        quantifiers.push(token);
+                        input.get();
+                    }
                     break;
                 default:
                     // TODO: break out of loop here.
@@ -148,17 +172,15 @@ export class Parser {
                     break;
             }
 
-            if (entity) {
+            if (stop) {
                 break;
             }
         }
 
-        if (entity) {
+        if (builder.hasEntity()) {
             const quantity = Parser.quantityFromTokens(quantifiers);
-
-            // TODO: handle attributes here.
-
-            return this.ops.updateCart(state, entity.pid, quantity);
+            const pid = builder.getPID();
+            return this.ops.updateCart(state, pid, quantity);
         }
         else {
             // TODO: log that we failed to get an entity?

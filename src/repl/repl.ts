@@ -6,6 +6,7 @@ import * as replServer from 'repl';
 import { PID } from 'token-flow';
 
 import { actionToString, AnyAction } from '../actions';
+import { attributesFromYamlString, AttributeInfo } from '../attributes';
 import { CartOps, State } from '../cart';
 import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems, ItemDescription } from '../catalog';
 import { Parser } from '../parser';
@@ -42,7 +43,16 @@ export function runRepl(
     ConvertDollarsToPennies(catalogItems);
     const catalog = new Catalog(catalogItems);
 
-    const parser = new Parser(catalog, unified, debugMode);   
+    const attributes = attributesFromYamlString(fs.readFileSync(attributesFile, 'utf8'));
+    const attributeInfo = AttributeInfo.factory(catalog, attributes);
+    const matrixId = 1;
+    const matrix = attributeInfo.getMatrix(matrixId);
+    if (matrix === undefined) {
+        const message = `unknown matrix id ${matrixId}.`;
+        throw TypeError(message);
+    }
+
+    const parser = new Parser(catalog, attributeInfo, matrix, unified, debugMode);   
     const ops = new CartOps(catalog);
 
     let state: State = { cart: { items: [] }, actions: [] };
