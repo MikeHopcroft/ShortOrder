@@ -1,12 +1,15 @@
 import { CatalogItems, ItemDescription, ComponentDescription } from './interfaces';
 import { PID } from 'token-flow';
 
+export type OptionOfPredicate = (catalog: Catalog, child: PID, parent: PID) => boolean;
+
 // TODO: No need to implement CatalogItems.
 export class Catalog { 
     // implements CatalogItems {
     // TODO: don't really need to store items - just the map.
     // items: ItemDescription[];
     readonly map = new Map<PID, ItemDescription>();
+    private optionOfPredicate: OptionOfPredicate | undefined;
 
     constructor(catalogItems: CatalogItems) {
         // this.items = catalogItems.items;
@@ -58,11 +61,20 @@ export class Catalog {
         return false;
     }
 
+    setOptionOfPredicate(predicate: OptionOfPredicate) {
+        this.optionOfPredicate = predicate;
+    }
+
     isOptionOf(child: PID, parent: PID): boolean {
-        const p = this.get(parent);
-        return p.composition.options.find( option =>
-            option.pid === child
-        ) !== undefined;
+        if (this.optionOfPredicate) {
+            return this.optionOfPredicate(this, child, parent);
+        }
+        else {
+            const p = this.get(parent);
+            return p.composition.options.find( option =>
+                option.pid === child
+            ) !== undefined;
+        }
     }
 
     isSubstitutionOf(child: PID, parent: PID): boolean {
