@@ -1,7 +1,13 @@
 # TODO List
 
+* Check for duplicate defaults in dimensions
+* Prepositions for restating
+* Entity sets
+* Simplify repl_demo
+* Simplify parser_demo, rename to parse_text_demo
+* parse_tokens_demo
 * New repo with sample application
-    * Make version of Parser that doesn't require Token-Flow.
+    * ~~Make version of Parser that doesn't require Token-Flow.~~
     * Test suite that checks cart for one utterance
     * Menu
         * One matrix

@@ -177,17 +177,19 @@ export class Parser {
         if (builder.hasEntity()) {
             const quantity = Parser.quantityFromTokens(quantifiers);
             const pid = builder.getPID();
-            return this.ops.updateCart(state, pid, quantity);
-        }
-        else {
-            // TODO: log that we failed to get an entity?
-            // TODO: emit token sequence that led to this problem.
-            if (this.debugMode) {
-                console.log('Parser.parseEntity: no entity detected.');
+
+            if (pid !== undefined) {
+                return this.ops.updateCart(state, pid, quantity);
             }
-            const actions = [{ type: CONFUSED }, ...state.actions];
-            return { ...state, actions };
         }
+
+        // TODO: log that we failed to get an entity?
+        // TODO: emit token sequence that led to this problem.
+        if (this.debugMode) {
+            console.log('Parser.parseEntity: no entity detected.');
+        }
+        const actions = [{ type: CONFUSED }, ...state.actions];
+        return { ...state, actions };
     }
 
     // // TODO: is there some way to inject a different version of this function
