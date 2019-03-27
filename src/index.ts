@@ -5,6 +5,7 @@ export * from './catalog';
 export * from './order';
 export * from './parser';
 export * from './repl';
+export * from './test_suite';
 export * from './turn';
 export * from './unified';
 export * from './utilities';
