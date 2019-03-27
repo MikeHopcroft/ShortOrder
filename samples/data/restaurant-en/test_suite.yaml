@@ -52,4 +52,36 @@
         quantity: 1
         name: soy milk
         pid: 100003
+- priority: 1
+  suites: features
+  comment: drink with three attributes (large, decaf, iced) and a leading modifier (skinny)
+  inputs: 
+    - can I get a large skinny decaf latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+      - indent: 1
+        quantity: 1
+        name: nonfat milk
+        pid: 100002
+# # Two conflicting modifiers (skinny and soy)
+# # What should we do here? Perhaps this should be modelled as a choice.
+# - priority: 1
+#   suites: features
+#   comment: drink with three attributes (large, decaf, iced) and a leading modifier (skinny)
+#   inputs: 
+#     - can I get a large skinny decaf latte iced with soy
+#   expected:
+#     - lines:
+#       - indent: 0
+#         quantity: 1
+#         name: large decaf iced latte
+#         pid: 9018
+#       - indent: 1
+#         quantity: 1
+#         name: nonfat milk
+#         pid: 100002
 

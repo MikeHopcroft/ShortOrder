@@ -71,26 +71,29 @@ dimensions:
     name: milk
     items:
       - pid: 100
+        sku: 100000
         name: whole milk
         aliases:
           - whole [milk]
       - pid: 101
+        sku: 100001
         name: two percent milk
         hidden: true
         isDefault: true
         aliases:
           - (two percent,low fat) [milk]
       - pid: 102
-        name: fat free milk
+        sku: 100002
+        name: nonfat milk
         aliases:
           - fat free [milk]
           - skinny
           - nonfat [milk]
       - pid: 103
+        sku: 100003
         name: soy milk
         aliases:
           - soy [milk]
-        sku: 100003
 matrices:
   - mid: 1
     name: coffees

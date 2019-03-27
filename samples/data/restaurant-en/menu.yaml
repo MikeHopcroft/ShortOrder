@@ -2248,6 +2248,21 @@ items:
       choices: []
       substitutions: []
       options:
+        - pid: 100000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 100001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+        - pid: 100002
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
         - pid: 100003
           defaultQuantity: 1
           minQuantity: 0
@@ -2259,6 +2274,41 @@ items:
 # Milks
 #
 ###############################################################################
+  - pid: 100000
+    name: whole milk
+    aliases:
+      - whole [milk]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 100001
+    name: two percent milk
+    aliases:
+      - (two percent,low fat) [milk]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+  - pid: 100002
+    name: nonfat milk
+    aliases:
+      - fat free [milk]
+      - skinny
+      - nonfat [milk]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
   - pid: 100003
     name: soy milk
     aliases:
