@@ -2247,4 +2247,26 @@ items:
       defaults: []
       choices: []
       substitutions: []
+      options:
+        - pid: 100003
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0
+
+###############################################################################
+#
+# Milks
+#
+###############################################################################
+  - pid: 100003
+    name: soy milk
+    aliases:
+      - soy [milk]
+    price: 0
+    standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
       options: []

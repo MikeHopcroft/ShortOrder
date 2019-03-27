@@ -174,21 +174,30 @@ export class Parser {
             }
         }
 
+        let s = state;
+        let succeeded = false;
         if (builder.hasEntity()) {
             const quantity = Parser.quantityFromTokens(quantifiers);
             const pid = builder.getPID();
 
             if (pid !== undefined) {
-                let s = this.ops.updateCart(state, pid, quantity);
-
-                // Add entities associated with any attributes that weren't
-                // used to configure specific entity.
-                for (const aid of builder.getUnusedAttributes()) {
-                    s = this.ops.updateCart(s, aid, 1);
-                }
-
-                return s;
+                s = this.ops.updateCart(s, pid, quantity);
+                succeeded = true;
             }
+        }
+
+        // Whether we saw an entity or not, add entities associated with any
+        // attributes that weren't used to configure specific entity.
+        for (const pid of builder.getUnusedAttributes()) {
+            const sku = this.attributeInfo.getAttributeSKU(pid);
+            if (sku !== undefined) {
+                s = this.ops.updateCart(s, sku, 1);
+                succeeded = true;
+            }
+        }
+
+        if (succeeded) {
+            return s;
         }
 
         // TODO: log that we failed to get an entity?

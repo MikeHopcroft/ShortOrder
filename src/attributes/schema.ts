@@ -30,6 +30,9 @@ const attributeSchema = {
                 },
                 "pid": {
                     "type": "number"
+                },
+                "sku": {
+                    "type": "number"
                 }
             },
             "required": [

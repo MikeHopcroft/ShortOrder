@@ -90,6 +90,7 @@ dimensions:
         name: soy milk
         aliases:
           - soy [milk]
+        sku: 100003
 matrices:
   - mid: 1
     name: coffees

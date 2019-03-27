@@ -20,6 +20,7 @@ export interface AttributeCoordinate {
 export class AttributeInfo {
     private readonly dimensionIdToDimension = new Map<PID, Dimension>();
     private readonly attributeIdToCoordinate = new Map<PID, AttributeCoordinate>();
+    private readonly attributeIdToSKU = new Map<PID, PID>();
     private readonly matrixIdToMatrix = new Map<PID, Matrix>();
     private readonly entityIdToMatrix = new Map<PID, Matrix>();
     private readonly keyToEntityId = new Map<string, PID>();
@@ -72,6 +73,14 @@ export class AttributeInfo {
                 throw new TypeError(message);    
             }
             this.attributeIdToCoordinate.set(attribute.pid, { dimension, position });
+
+            if (attribute.sku !== undefined) {
+                if (this.attributeIdToSKU.has(attribute.sku)) {
+                    const message = `found duplicate attribute pid ${attribute.pid}.`;
+                    throw new TypeError(message);       
+                }
+                this.attributeIdToSKU.set(attribute.pid, attribute.sku);
+            }
             position++;
         }
     }
@@ -114,6 +123,10 @@ export class AttributeInfo {
     // (e.g. 0 ==> small).
     getAttributeCoordinates(attributeId: PID): AttributeCoordinate | undefined {
         return this.attributeIdToCoordinate.get(attributeId);
+    }
+
+    getAttributeSKU(attributeId: PID): PID | undefined {
+        return this.attributeIdToSKU.get(attributeId);
     }
 
     getMatrix(matrixId: PID): Matrix | undefined {

@@ -80,18 +80,27 @@ export class MatrixEntityBuilder {
         return pid;
     }
 
+    // Iterator for PIDs of attributes that aren't associated with dimensions
+    // of the entity's matrix. This includes all collected attributes in the
+    // cases where the entity has not been set and where the entity is not
+    // associated with a matrix.
     *getUnusedAttributes(): IterableIterator<PID> {
-        if (this.entityId === undefined) {
-            const message = `no entity set`;
-            throw TypeError(message);
+        let matrix: Matrix | undefined = undefined;
+
+        // If we've collected an entity, attempt to get its matrix.
+        if (this.entityId !== undefined) {
+            matrix = this.info.getMatrixForEntity(this.entityId);
         }
 
-        const matrix = this.info.getMatrixForEntity(this.entityId);
-        if (matrix !== undefined) {
-            for (const [did, aid] of this.dimensionIdToAttribute.entries()) {
-                if (!matrix.hasDimension(did)) {
-                    yield aid;
-                }
+        // If we didn't get a matrix (either no entity or entity didn't specify
+        // a matrix), then create an empty matrix.
+        if (!matrix) {
+            matrix = new Matrix(0, []);
+        }
+        
+        for (const [did, aid] of this.dimensionIdToAttribute.entries()) {
+            if (!matrix.hasDimension(did)) {
+                yield aid;
             }
         }
     }
