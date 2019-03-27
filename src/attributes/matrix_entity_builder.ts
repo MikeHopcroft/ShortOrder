@@ -79,4 +79,20 @@ export class MatrixEntityBuilder {
 
         return pid;
     }
+
+    *getUnusedAttributes(): IterableIterator<PID> {
+        if (this.entityId === undefined) {
+            const message = `no entity set`;
+            throw TypeError(message);
+        }
+
+        const matrix = this.info.getMatrixForEntity(this.entityId);
+        if (matrix !== undefined) {
+            for (const [did, aid] of this.dimensionIdToAttribute.entries()) {
+                if (!matrix.hasDimension(did)) {
+                    yield aid;
+                }
+            }
+        }
+    }
 }

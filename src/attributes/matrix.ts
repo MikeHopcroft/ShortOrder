@@ -36,4 +36,13 @@ export class Matrix {
 
         return key.join(':');
     }
+
+    hasDimension(did: PID): boolean {
+        for (const dimension of this.dimensions) {
+            if (dimension.id === did) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

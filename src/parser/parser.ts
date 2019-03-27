@@ -179,7 +179,15 @@ export class Parser {
             const pid = builder.getPID();
 
             if (pid !== undefined) {
-                return this.ops.updateCart(state, pid, quantity);
+                let s = this.ops.updateCart(state, pid, quantity);
+
+                // Add entities associated with any attributes that weren't
+                // used to configure specific entity.
+                for (const aid of builder.getUnusedAttributes()) {
+                    s = this.ops.updateCart(s, aid, 1);
+                }
+
+                return s;
             }
         }
 
