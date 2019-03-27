@@ -67,6 +67,29 @@ dimensions:
         name: iced
         aliases:
           - iced
+  - did: 5
+    name: milk
+    items:
+      - pid: 100
+        name: whole milk
+        aliases:
+          - whole [milk]
+      - pid: 101
+        name: two percent milk
+        hidden: true
+        isDefault: true
+        aliases:
+          - (two percent,low fat) [milk]
+      - pid: 102
+        name: fat free milk
+        aliases:
+          - fat free [milk]
+          - skinny
+          - nonfat [milk]
+      - pid: 103
+        name: soy milk
+        aliases:
+          - soy [milk]
 matrices:
   - mid: 1
     name: coffees

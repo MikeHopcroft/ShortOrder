@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
@@ -101,6 +102,14 @@
             "name": "Launch Menu Demo",
             "program": "${workspaceFolder}/build/samples/menu_demo.js",
             "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Test Runner",
+            "program": "${workspaceFolder}/build/samples/test_runner.js",
+            "outputCapture": "std",
+            "args": ["-a"]
         },
         {
             "type": "node",
