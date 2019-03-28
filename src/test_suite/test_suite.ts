@@ -296,7 +296,7 @@ type YamlTestCases = YamlTestCase[];
 export type TokenizerFunction = (utterance: string) => IterableIterator<AnyToken>;
 
 export class TestSuite {
-    private tests: TestCase[] = [];
+    readonly tests: TestCase[] = [];
 
     // typescript-json-schema tsconfig.json YamlTestCases --required
     static fromYamlString(yamlText: string) {

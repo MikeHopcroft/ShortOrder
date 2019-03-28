@@ -30,75 +30,81 @@
         pid: 1194
 
 
-# - priority: 1
-#   suites: features
-#   comment: one-word drink
-#   inputs: 
-#     - can I get a latte
-#   expected:
-#     - lines:
-#       - indent: 0
-#         quantity: 1
-#         name: medium latte
-#         pid: 9007
-# - priority: 1
-#   suites: features
-#   comment: drink with two attributes
-#   inputs: 
-#     - can I get a large decaf latte iced
-#   expected:
-#     - lines:
-#       - indent: 0
-#         quantity: 1
-#         name: large decaf iced latte
-#         pid: 9018
+- priority: 1
+  suites: features
+  comment: one-word drink
+  inputs: 
+    - can I get a latte
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: medium latte
+        pid: 9007
+- priority: 1
+  suites: features
+  comment: drink with two attributes
+  inputs: 
+    - can I get a large decaf latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
 
 
-# - priority: 1
-#   suites: features
-#   comment: drink with three attributes (large, decaf, iced) and a leading modifier (soy)
-#   inputs: 
-#     - can I get a large decaf soy latte iced
-#   expected:
-#     - lines:
-#       - indent: 0
-#         quantity: 1
-#         name: large decaf iced latte
-#         pid: 9018
-#       - indent: 1
-#         quantity: 1
-#         name: soy milk
-#         pid: 100003
-# - priority: 1
-#   suites: features
-#   comment: drink with three attributes (large, decaf, iced) and a trailing modifier (soy)
-#   inputs: 
-#     - can I get a large decaf latte iced with soy
-#   expected:
-#     - lines:
-#       - indent: 0
-#         quantity: 1
-#         name: large decaf iced latte
-#         pid: 9018
-#       - indent: 1
-#         quantity: 1
-#         name: soy milk
-#         pid: 100003
-# - priority: 1
-#   suites: features
-#   comment: drink with three attributes (large, decaf, iced) and a leading modifier (skinny)
-#   inputs: 
-#     - can I get a large skinny decaf latte iced
-#   expected:
-#     - lines:
-#       - indent: 0
-#         quantity: 1
-#         name: large decaf iced latte
-#         pid: 9018
-#       - indent: 1
-#         quantity: 1
-#         name: nonfat milk
-#         pid: 100002
+- priority: 1
+  suites: features
+  comment: drink with three attributes (large, decaf, iced) and a leading modifier (soy)
+  inputs: 
+    - can I get a large decaf soy latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+      - indent: 1
+        quantity: 1
+        name: soy milk
+        pid: 100003
+- priority: 1
+  suites: features
+  comment: drink with three attributes (large, decaf, iced) and a trailing modifier (soy)
+  inputs: 
+    - can I get a large decaf latte iced with soy
+    - and a car
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+      - indent: 1
+        quantity: 1
+        name: soy milk
+        pid: 100003
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+- priority: 1
+  suites: features
+  comment: drink with three attributes (large, decaf, iced) and a leading modifier (skinny)
+  inputs: 
+    - can I get a large skinny decaf latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+      - indent: 1
+        quantity: 1
+        name: nonfat milk
+        pid: 100002
 
 
 
