@@ -2,7 +2,7 @@
 
 **short-order** is an exerimental natural language conversational agent intended for domains with a fixed vocabulary of entities and a small number of intents. Uses might include ordering food from a restaurant or organizing your song collection.
 
-It is based on a pattern-driven NLP tokenizer from the companion [token-flow project](https://github.com/MikeHopcroft/TokenFlow).
+`short-order` is based on a pattern-driven tokenizer from the companion [token-flow project](https://github.com/MikeHopcroft/TokenFlow). For more information on configuring `short-order`, please see our [concepts explainer](documentation/concepts).
 
 Here's a sample dialog involving ordering at the drive through of ficticious restaurant called `Mike's American Grill`:
 
