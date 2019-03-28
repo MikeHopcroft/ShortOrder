@@ -2126,7 +2126,12 @@ items:
       defaults: []
       choices: []
       substitutions: []
-      options: []
+      options:
+        - pid: 1194
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
   - pid: 9008
     name: medium iced latte
     aliases: []

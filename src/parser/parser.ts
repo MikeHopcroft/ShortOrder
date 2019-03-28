@@ -13,6 +13,8 @@ import {
     ENTITY,
     QUANTITY,
     QuantityToken,
+    UNIT,
+    UnitToken,
     WORD
 } from '../unified';
 
@@ -26,7 +28,7 @@ import {
 const endOfEntity = [
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
     CONJUNCTION, END_OF_ORDER, NEED_MORE_TIME, PREPOSITION, REMOVE_ITEM, RESTATE,
-    SALUTATION, SEPERATOR, SUBSTITUTE, WORD
+    SALUTATION, SEPERATOR, SUBSTITUTE, UNIT, WORD
 ];
 
 const startOfEntity = [
@@ -159,6 +161,10 @@ export class Parser {
                     else {
                         quantifiers.push(token);
                         input.get();
+                        const nextToken = input.peek();
+                        if (nextToken.type === UNIT) {
+                            input.get();
+                        }
                     }
                     break;
                 default:

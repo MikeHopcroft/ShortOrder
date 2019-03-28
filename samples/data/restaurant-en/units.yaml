@@ -1,7 +1,13 @@
 items:
   - pid: 0
-    name: ounce
+    name: pump
     aliases:
-      - ounce
+      - pump [of]
+      - splash [of]
+      - squirt [of]
+      - drop [of]
+      - drizzle [of]
+      - dollop [of]
+
 
 
