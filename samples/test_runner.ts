@@ -30,6 +30,7 @@ function go() {
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
+        path.join(__dirname, './data/restaurant-en/units.yaml'),
         false
     );
 

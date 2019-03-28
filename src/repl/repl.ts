@@ -21,7 +21,8 @@ export function runRepl(
     catlogFile: string,
     intentFile: string,
     attributesFile: string,
-    quantifierFile: string
+    quantifierFile: string,
+    unitsFile: string
 ) {
     let debugMode = false;
 
@@ -33,7 +34,7 @@ export function runRepl(
     console.log();
 
     // Set up the tokenizer pipeline.
-    const unified = new Unified(catlogFile, intentFile, attributesFile, quantifierFile);
+    const unified = new Unified(catlogFile, intentFile, attributesFile, quantifierFile, unitsFile);
     console.log();
 
     // Set up the conversational agent and parser.

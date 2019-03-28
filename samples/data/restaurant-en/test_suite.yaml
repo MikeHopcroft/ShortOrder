@@ -1,25 +1,25 @@
-# - priority: 1
-#   suites: features
-#   comment: one-word drink
-#   inputs: 
-#     - can I get a latte
-#   expected:
-#     - lines:
-#       - indent: 0
-#         quantity: 1
-#         name: medium latte
-#         pid: 9007
-# - priority: 1
-#   suites: features
-#   comment: drink with two attributes
-#   inputs: 
-#     - can I get a large decaf latte iced
-#   expected:
-#     - lines:
-#       - indent: 0
-#         quantity: 1
-#         name: large decaf iced latte
-#         pid: 9018
+- priority: 1
+  suites: features
+  comment: one-word drink
+  inputs: 
+    - can I get a latte
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: medium latte
+        pid: 9007
+- priority: 1
+  suites: features
+  comment: drink with two attributes
+  inputs: 
+    - can I get a large decaf latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
 
 
 - priority: 1

@@ -26,6 +26,7 @@ import { ATTRIBUTE, AttributeToken, attributeTokenFactory } from './attributes';
 import { ENTITY, EntityToken, entityTokenFactory } from './entities';
 import { intentTokenFactory } from './intents';
 import { QUANTITY, QuantityToken, quantityTokenFactory } from './quantities';
+import { UNIT, UnitToken, unitTokenFactory } from './units';
 
 export const WORD: unique symbol = Symbol('WORD');
 export type WORD = typeof WORD;
@@ -40,6 +41,7 @@ export type AnyToken =
     EntityToken |
     NumberToken |
     QuantityToken |
+    UnitToken |
     WordToken;
 
 export function tokenToString(t: Token) {
@@ -57,8 +59,12 @@ export function tokenToString(t: Token) {
         case NUMBERTOKEN:
             name = `[NUMBER:${token.value}]`;
             break;
-        case QUANTITY:
+            case QUANTITY:
             name = `[QUANTITY:${token.value}]`;
+            break;
+        case UNIT:
+            const unit = token.name.replace(/\s/g, '_').toUpperCase();
+            name = `[UNIT:${unit},${token.id}]`;
             break;
         case WORD:
             name = `[WORD:${token.text}]`;
@@ -161,6 +167,7 @@ export class Unified {
         intentsFile: string,
         attributesFile: string,
         quantifiersFile: string,
+        unitsFile: string,
         debugMode = false
     ) {
         this.lexicon = new Lexicon();
@@ -184,6 +191,12 @@ export class Unified {
             fs.readFileSync(quantifiersFile, 'utf8'),
             quantityTokenFactory);
         this.lexicon.addDomain(quantifiers);
+
+        // Units
+        const units = aliasesFromYamlString(
+            fs.readFileSync(unitsFile, 'utf8'),
+            unitTokenFactory);
+        this.lexicon.addDomain(units);
 
         // Intents
         const intents = aliasesFromYamlString(

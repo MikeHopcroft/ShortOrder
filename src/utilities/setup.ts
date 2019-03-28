@@ -29,6 +29,7 @@ export function setup(
     intentsFile: string,
     attributesFile: string,
     quantifiersFile: string,
+    unitsFile: string,
     debugMode: boolean
 ): World {
     const catalogItems = yaml.safeLoad(fs.readFileSync(catalogFile, 'utf8')) as CatalogItems;
@@ -42,7 +43,7 @@ export function setup(
     const ops = new CartOps(catalog, true);
 
     const unified = 
-        new Unified(catalogFile, intentsFile, attributesFile, quantifiersFile, debugMode);
+        new Unified(catalogFile, intentsFile, attributesFile, quantifiersFile, unitsFile, debugMode);
 
     const parser = new Parser(catalog, attributeInfo, unified, debugMode);
 

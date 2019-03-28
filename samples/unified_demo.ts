@@ -18,6 +18,7 @@ function go(query: string) {
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
+        path.join(__dirname, './data/restaurant-en/units.yaml'),
         true);
 
     const tokens = unified.processOneQuery(query);
