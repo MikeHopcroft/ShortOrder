@@ -31,7 +31,7 @@ export function tokenToColoredString(t: Token, catalog: Catalog, attributeInfo: 
             name = chalk.bgMagenta(`[UNIT:${unit},${token.id}]`);
             break;
         case WORD:
-            name = `[WORD:${token.text}]`;
+            name = chalk.bgWhite(`[WORD:${token.text}]`);
             break;
         default:
             {
