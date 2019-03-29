@@ -122,47 +122,48 @@ export class CartOps {
     }
 
     private updateItem(item: ItemInstance, pid: PID, quantity: number): ItemInstance {
-        if (pid === item.pid) {
-            if (quantity === item.quantity) {
-                return item;
-            }
-            else {
-                // TODO: do we always want to update the quantity of an
-                // existing item? How do we add a new item?
-                // Think this is ok, because the convention is that items
-                // with the same PID are always represented as a single line
-                // with a quantity adjustment.
-                return { ...item, quantity };
+        // if (pid === item.pid) {
+        //     if (quantity === item.quantity) {
+        //         return item;
+        //     }
+        //     else {
+        //         // TODO: do we always want to update the quantity of an
+        //         // existing item? How do we add a new item?
+        //         // Think this is ok, because the convention is that items
+        //         // with the same PID are always represented as a single line
+        //         // with a quantity adjustment.
+        //         return { ...item, quantity };
+        //     }
+        // }
+        // else {
+
+        let changed = false;
+        const result = this.updateChildren(item, pid, quantity);
+        if (result === item.modifications) {
+            // No changes made so far.
+            if (this.catalog.isComponentOf(pid, item.pid)) {
+                // TODO: handle adding n items that are choices of this item.
+                // Add correct number as choices. Then add remaining to top level.
+
+                const n = this.catalog.defaultQuantity(pid, item.pid);
+                if (n !== quantity) {
+                    // TODO: how do we know whether to fill in substituteFor?
+                    result.unshift({ pid, quantity, modifications: [] });
+                }
+                changed = true;
             }
         }
         else {
-            let changed = false;
-            const result = this.updateChildren(item, pid, quantity);
-            if (result === item.modifications) {
-                // No changes made so far.
-                if (this.catalog.isComponentOf(pid, item.pid)) {
-                    // TODO: handle adding n items that are choices of this item.
-                    // Add correct number as choices. Then add remaining to top level.
-
-                    const n = this.catalog.defaultQuantity(pid, item.pid);
-                    if (n !== quantity) {
-                        // TODO: how do we know whether to fill in substituteFor?
-                        result.unshift({ pid, quantity, modifications: [] });
-                    }
-                    changed = true;
-                }
-            }
-            else {
-                changed = true;
-            }
-
-            if (changed) {
-                return { ...item, modifications: result };
-            }
-            else {
-                return item;
-            }
+            changed = true;
         }
+
+        if (changed) {
+            return { ...item, modifications: result };
+        }
+        else {
+            return item;
+        }
+        // }
     }
 
     private updateChildren(parent: ItemInstance, pid: PID, quantity: number): ItemInstance[] {
