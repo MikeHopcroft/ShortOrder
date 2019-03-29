@@ -51,7 +51,10 @@ import { PID } from 'token-flow';
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+export type UID = number;
+
 export interface ItemInstance {
+    uid?: UID;
     pid: PID;
     quantity: number;
     modifications: ItemInstance[];
@@ -70,6 +73,7 @@ export interface State {
 export class CartOps {
     private readonly catalog: Catalog;
     private readonly showPIDs: boolean;
+    private nextUID: UID = 0;
 
     constructor(catalog: Catalog, showPIDs = false) {
         this.catalog = catalog;
@@ -242,12 +246,37 @@ export class CartOps {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Adding UIDs to ItemInstances in a cart.
+    //
+    // Adds a unique identifier to any ItemInstance in the cart that doesn't
+    // already have one.
+    //
+    // NOTE: this method side-effects the items in the cart.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    addUIDsToCart(cart: Cart) {
+        for (const item of cart.items) {
+            this.addUIDsToItem(item);
+        }
+    }
+
+    private addUIDsToItem(item: ItemInstance) {
+        if (item.uid === undefined) {
+            item.uid = this.nextUID++;
+        }
+
+        for (const mod of item.modifications) {
+            this.addUIDsToItem(mod);
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     //
     // Generating Orders from the a Cart
     //
-    ///////////////////////////////////////////////////////////////////////////   
+    ///////////////////////////////////////////////////////////////////////////
     formatCart(cart: Cart): Order {
         const lines: LineItem[] = [];
 
