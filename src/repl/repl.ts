@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as replServer from 'repl';
 
-import { PID } from 'token-flow';
+import { PID, Token } from 'token-flow';
 
 import { actionToString, AnyAction } from '../actions';
 import { attributesFromYamlString, AttributeInfo } from '../attributes';
@@ -12,7 +12,9 @@ import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems, I
 import { Parser } from '../parser';
 import { speechToTextFilter } from './speech_to_text_filter';
 import { responses } from '../turn';
-import { ENTITY, EntityToken, tokenToString, Unified } from '../unified';
+import { ENTITY, EntityToken, tokenToString, Unified, AnyToken } from '../unified';
+
+import { tokenToColoredString } from './colored_tokens';
 
 const maxHistorySteps = 1000;
 const historyFile = '.repl_history';
@@ -107,9 +109,14 @@ export function runRepl(
     
             const tokens = unified.processOneQuery(text);
 
-            console.log(`${style.yellow.open}`);
-            console.log(tokens.map(tokenToString).join(' '));
-            console.log(`${style.yellow.close}`);
+            console.log(`${style.black.open}`);
+
+            // console.log(tokens.map(tokenToString).join('\n'));
+
+            const formatter = (token: Token) => tokenToColoredString(token as AnyToken, catalog, attributeInfo);
+            console.log(tokens.map(formatter).join('\n'));
+
+            console.log(`${style.black.close}`);
     
             repl.displayPrompt();
         }
