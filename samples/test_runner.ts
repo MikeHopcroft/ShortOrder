@@ -4,7 +4,7 @@ import * as path from 'path';
 import { AnyToken, setup, TestSuite, TokenizerFunction } from '../src';
 
 
-function go() {
+async function go() {
     const args = minimist(process.argv.slice(2));
 
     const defaultTestFile = './data/restaurant-en/test_suite.yaml';
@@ -34,7 +34,7 @@ function go() {
         (world.unified.processOneQuery(utterance) as AnyToken[]).values();
 
     const suite = TestSuite.fromYamlString(fs.readFileSync(testFile, 'utf8'));
-    suite.run(world, showAll, suiteFilter, tokenizer);
+    await suite.run(world, showAll, suiteFilter, tokenizer);
 }
 
 go();
