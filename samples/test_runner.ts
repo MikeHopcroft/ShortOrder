@@ -1,13 +1,8 @@
 import * as fs from 'fs';
 import * as minimist from 'minimist';
 import * as path from 'path';
+import { AnyToken, setup, TestSuite, TokenizerFunction } from '../src';
 
-import {
-    AnyToken,
-    setup,
-    TestSuite,
-    TokenizerFunction
-} from '../src';
 
 function go() {
     const args = minimist(process.argv.slice(2));
@@ -35,7 +30,7 @@ function go() {
     );
 
     // Set up tokenizer
-    const tokenizer: TokenizerFunction = (utterance: string): IterableIterator<AnyToken> =>
+    const tokenizer: TokenizerFunction = async (utterance: string): Promise<IterableIterator<AnyToken>> =>
         (world.unified.processOneQuery(utterance) as AnyToken[]).values();
 
     const suite = TestSuite.fromYamlString(fs.readFileSync(testFile, 'utf8'));
