@@ -1,9 +1,9 @@
 import * as AJV from 'ajv';
 import * as Debug from 'debug';
 import * as yaml from 'js-yaml';
-
 import { PID } from 'token-flow';
 import { AnyToken, Cart, Catalog, ItemInstance, State, World } from '..';
+
 
 const debug = Debug('tf:itemMapFromYamlString');
 
@@ -197,7 +197,7 @@ export class TestCase {
         this.expected = expected;
     }
 
-    run(world: World, tokenizer: TokenizerFunction | undefined = undefined): Result {
+    async run(world: World, tokenizer: TokenizerFunction | undefined = undefined): Promise<Result> {
         const orders = [];
         let succeeded = true;
 
@@ -206,7 +206,7 @@ export class TestCase {
         for (const [i, input] of this.inputs.entries()) {
             // Run the parser
             if (tokenizer) {
-                state = world.parser.parseTokens(tokenizer(input), state);
+                state = world.parser.parseTokens(await tokenizer(input), state);
             }
             else {
                 state = world.parser.parseText(input, state);
@@ -293,7 +293,7 @@ interface YamlTestCase {
 // Type definition for use by typescript-json-schema.
 type YamlTestCases = YamlTestCase[];
 
-export type TokenizerFunction = (utterance: string) => IterableIterator<AnyToken>;
+export type TokenizerFunction = (utterance: string) => Promise<IterableIterator<AnyToken>>;
 
 export class TestSuite {
     readonly tests: TestCase[] = [];
@@ -408,16 +408,16 @@ export class TestSuite {
         this.tests = tests;
     }
 
-    run(world: World,
+    async run(world: World,
         showPassedCases = false,
         suite: string|undefined = undefined,
         tokenizer: TokenizerFunction|undefined = undefined
-    ): AggregatedResults {
+    ): Promise<AggregatedResults> {
         const aggregator = new AggregatedResults();
 
         for (const test of this.tests) {
             if (suite && test.suites.indexOf(suite) > -1 || !suite) {
-                aggregator.recordResult(test.run(world, tokenizer));
+                aggregator.recordResult(await test.run(world, tokenizer));
             }
         }
 
