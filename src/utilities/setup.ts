@@ -30,7 +30,8 @@ export function setup(
     attributesFile: string,
     quantifiersFile: string,
     unitsFile: string,
-    debugMode: boolean
+    debugMode: boolean,
+    itemFolding = true
 ): World {
     const catalogItems = yaml.safeLoad(fs.readFileSync(catalogFile, 'utf8')) as CatalogItems;
     validateCatalogItems(catalogItems);
@@ -40,7 +41,7 @@ export function setup(
     const attributes = attributesFromYamlString(fs.readFileSync(attributesFile, 'utf8'));
     const attributeInfo = AttributeInfo.factory(catalog, attributes);
 
-    const ops = new CartOps(catalog, true);
+    const ops = new CartOps(catalog, true, itemFolding);
 
     const unified = 
         new Unified(catalogFile, intentsFile, attributesFile, quantifiersFile, unitsFile, debugMode);
