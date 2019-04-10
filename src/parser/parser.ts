@@ -161,9 +161,13 @@ export class Parser {
                     else {
                         quantifiers.push(token);
                         input.get();
-                        const nextToken = input.peek();
-                        if (nextToken.type === UNIT) {
-                            input.get();
+
+                        if (!input.atEOF) {
+                            const nextToken = input.peek();
+
+                            if (nextToken.type === UNIT) {
+                                input.get();
+                            }
                         }
                     }
                     break;
