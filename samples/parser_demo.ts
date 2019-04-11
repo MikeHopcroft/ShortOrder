@@ -17,6 +17,7 @@ function go(utterances: string[], debugMode: boolean) {
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
         path.join(__dirname, './data/restaurant-en/units.yaml'),
+        path.join(__dirname, './data/restaurant-en/stopwords.txt'),
         debugMode
     );
 
@@ -128,4 +129,6 @@ const bugs = [
     'six piece wings wings wings',
 ];
 
-go(utterances2, false);
+const splashes = [ "can I get a latte with two splashes of cream" ];
+
+go(splashes, false);

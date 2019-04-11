@@ -24,7 +24,8 @@ export function runRepl(
     intentFile: string,
     attributesFile: string,
     quantifierFile: string,
-    unitsFile: string
+    unitsFile: string,
+    stopwordsFile: string
 ) {
     let debugMode = false;
 
@@ -36,7 +37,14 @@ export function runRepl(
     console.log();
 
     // Set up the tokenizer pipeline.
-    const unified = new Unified(catlogFile, intentFile, attributesFile, quantifierFile, unitsFile);
+    const unified = new Unified(
+        catlogFile,
+        intentFile,
+        attributesFile,
+        quantifierFile,
+        unitsFile,
+        stopwordsFile,
+    );
     console.log();
 
     // Set up the conversational agent and parser.
@@ -205,25 +213,25 @@ export function runRepl(
                         console.log('********************************************************');
                         console.log(`${style.red.close}`);
                     }
-            
+
                     state = parser.parseText(text, state);
                     console.log(`${style.yellow.open}${ops.cartToString(state.cart)}${style.yellow.open}`);
                     console.log();
-            
+
                     state = ops.missingChoicesInCart(state);
-            
+
                     if (debugMode) {
                         for (const action of state.actions) {
                             console.log(`ACTION: ${actionToString(action as AnyAction)}`);
                         }
                     }
-            
+
                     const order = ops.formatCart(state.cart);
                     const replies = 
                         responses(state.actions as AnyAction[], order, catalog);
-            
+
                     state = {...state, actions: []};
-            
+
                     const output = `${style.green.open}${replies.join(' ')}${style.green.close}`;    
                     console.log(output);
                     console.log();

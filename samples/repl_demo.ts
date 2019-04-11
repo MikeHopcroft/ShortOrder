@@ -7,7 +7,9 @@ function replDemo() {
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
-        path.join(__dirname, './data/restaurant-en/units.yaml'));
+        path.join(__dirname, './data/restaurant-en/units.yaml'),
+        path.join(__dirname, './data/restaurant-en/stopwords.txt')
+    );
 }
 
 replDemo();

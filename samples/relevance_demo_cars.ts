@@ -8,6 +8,7 @@ function relevanceDemoCars(showPassedCases = false) {
         path.join(__dirname, './data/auto-dealer/attributes.yaml'),
         path.join(__dirname, './data/auto-dealer/quantifiers.yaml'),
         path.join(__dirname, './data/auto-dealer/units.yaml'),
+        path.join(__dirname, './data/auto-dealer/stopwords.txt'),
         path.join(__dirname, './data/auto-dealer/tests.yaml'),
         showPassedCases);
     return suite;    

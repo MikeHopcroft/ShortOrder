@@ -17,6 +17,7 @@ export function runRelevanceTest(
     attributesFile: string,
     quantifierFile: string,
     unitsFile: string,
+    stopwordsFile: string,
     testFile: string,
     showPassedCases = false
 ): AggregatedResults {
@@ -29,6 +30,7 @@ export function runRelevanceTest(
         attributesFile,
         quantifierFile,
         unitsFile,
+        stopwordsFile,
         debugMode);
 
     // Blank line to separate console spew from unified constructor.

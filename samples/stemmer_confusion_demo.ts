@@ -16,6 +16,7 @@ function stemmerConfusionDemo() {
         path.join(__dirname, './data/auto-dealer/attributes.yaml'),
         path.join(__dirname, './data/auto-dealer/quantifiers.yaml'),
         path.join(__dirname, './data/auto-dealer/units.yaml'),
+        path.join(__dirname, './data/auto-dealer/stopwords.txt'),
         true);
 
     const matrix = stemmerConfusionMatrix(unified.lexicon);

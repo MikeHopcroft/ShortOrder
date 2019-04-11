@@ -30,6 +30,7 @@ export function setup(
     attributesFile: string,
     quantifiersFile: string,
     unitsFile: string,
+    stopwordsFile: string,
     debugMode: boolean,
     itemFolding = true
 ): World {
@@ -44,7 +45,14 @@ export function setup(
     const ops = new CartOps(catalog, true, itemFolding);
 
     const unified = 
-        new Unified(catalogFile, intentsFile, attributesFile, quantifiersFile, unitsFile, debugMode);
+        new Unified(
+            catalogFile,
+            intentsFile,
+            attributesFile,
+            quantifiersFile,
+            unitsFile,
+            stopwordsFile,
+            debugMode);
 
     const parser = new Parser(catalog, attributeInfo, unified, debugMode);
 

@@ -158,6 +158,18 @@ function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
     yield * aliasesFromItems(items.values(), factory);
 }
 
+function* aliasesFromStopwordString(stopwordsFileText: string) {
+    const lines = stopwordsFileText.split(/\r?\n/);
+    for (const line of lines) {
+        const text = line.trim();
+        yield {
+            token: { type: UNKNOWNTOKEN },
+            text,
+            matcher: exact
+        };
+    }
+}
+
 export class Unified {
     lexicon: Lexicon;
     tokenizer: Tokenizer;
@@ -168,10 +180,15 @@ export class Unified {
         attributesFile: string,
         quantifiersFile: string,
         unitsFile: string,
+        stopwordsFile: string,
         debugMode = false
     ) {
         this.lexicon = new Lexicon();
-        this.tokenizer = new Tokenizer(this.lexicon.termModel, this.lexicon.numberParser, debugMode);
+        this.tokenizer = new Tokenizer(
+            this.lexicon.termModel,
+            this.lexicon.numberParser,
+            debugMode
+        );
 
         // Attributes
         const attributes =
@@ -204,6 +221,11 @@ export class Unified {
             intentTokenFactory);
         this.lexicon.addDomain(intents);
         
+        // Stopwords
+        const stopwords = aliasesFromStopwordString(
+            fs.readFileSync(stopwordsFile, 'utf8'));
+        this.lexicon.addDomain(stopwords, false);
+
         this.lexicon.ingest(this.tokenizer);
     }
 

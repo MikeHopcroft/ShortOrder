@@ -33,7 +33,7 @@ export interface TestOrder {
 // Holds the results of one TestCase run.
 export class Result {
     readonly test: TestCase;         // TestCase that generated this Result.
-    readonly observed: TestOrder[];     // The sequence of Order2s produced by the run.
+    readonly observed: TestOrder[];     // The sequence of Orders produced by the run.
     readonly passed: boolean;        // Determination of the success of the test case.
 
     constructor(test: TestCase, observed: TestOrder[], passed: boolean) {
@@ -212,11 +212,11 @@ export class TestCase {
                 state = world.parser.parseText(input, state);
             }
 
-            // Convert the Cart to an Order2
+            // Convert the Cart to an Order
             const observed = formatCart(state.cart, world.catalog);
             orders.push(observed);
 
-            // Compare observed Order2s
+            // Compare observed Orders
             const expected = this.expected[i];
             succeeded = ordersAreEqual(observed, expected);
         }
@@ -326,7 +326,7 @@ export class TestSuite {
                     ],
                     "type": "object"
                 },
-                "Order2": {
+                "Order": {
                     "properties": {
                         "lines": {
                             "items": {
@@ -347,7 +347,7 @@ export class TestSuite {
                         },
                         "expected": {
                             "items": {
-                                "$ref": "#/definitions/Order2"
+                                "$ref": "#/definitions/Order"
                             },
                             "type": "array"
                         },
@@ -408,7 +408,8 @@ export class TestSuite {
         this.tests = tests;
     }
 
-    async run(world: World,
+    async run(
+        world: World,
         showPassedCases = false,
         suite: string|undefined = undefined,
         tokenizer: TokenizerFunction|undefined = undefined
