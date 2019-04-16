@@ -4,7 +4,7 @@ import * as yaml from 'js-yaml';
 
 import { Attributes, AttributeItem } from './interfaces';
 
-const debug = Debug('tf:itemMapFromYamlString');
+const debug = Debug('so:itemMapFromYamlString');
 
 // Schema generated with typescript-json-schema:
 //   typescript-json-schema tsconfig.json Attributes --required

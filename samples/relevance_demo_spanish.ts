@@ -8,7 +8,7 @@ function relevanceDemoSpanish(showPassedCases = false) {
         path.join(__dirname, './data/restaurant-es/attributes.yaml'),
         path.join(__dirname, './data/restaurant-es/quantifiers.yaml'),
         path.join(__dirname, './data/restaurant-es/units.yaml'),
-        path.join(__dirname, './data/restaurant-es/stopwords.txt'),
+        path.join(__dirname, './data/restaurant-es/stopwords.yaml'),
         path.join(__dirname, './data/restaurant-es/tests.yaml'),
         showPassedCases);
 }

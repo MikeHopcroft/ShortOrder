@@ -26,6 +26,7 @@ import { ATTRIBUTE, AttributeToken, attributeTokenFactory } from './attributes';
 import { ENTITY, EntityToken, entityTokenFactory } from './entities';
 import { intentTokenFactory } from './intents';
 import { QUANTITY, QuantityToken, quantityTokenFactory } from './quantities';
+import { stopwordsFromYamlString, Stopwords } from '../stopwords';
 import { UNIT, UnitToken, unitTokenFactory } from './units';
 
 export const WORD: unique symbol = Symbol('WORD');
@@ -158,10 +159,9 @@ function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
     yield * aliasesFromItems(items.values(), factory);
 }
 
-function* aliasesFromStopwordString(stopwordsFileText: string) {
-    const lines = stopwordsFileText.split(/\r?\n/);
-    for (const line of lines) {
-        const text = line.trim();
+function* tokensFromStopwords(stopwords: Stopwords) {
+    for (const word of stopwords) {
+        const text = word.trim();
         yield {
             token: { type: UNKNOWNTOKEN },
             text,
@@ -222,9 +222,10 @@ export class Unified {
         this.lexicon.addDomain(intents);
         
         // Stopwords
-        const stopwords = aliasesFromStopwordString(
+        const stopwords = stopwordsFromYamlString(
             fs.readFileSync(stopwordsFile, 'utf8'));
-        this.lexicon.addDomain(stopwords, false);
+        const stopwordTokens = tokensFromStopwords(stopwords);
+        this.lexicon.addDomain(stopwordTokens, false);
 
         this.lexicon.ingest(this.tokenizer);
     }
