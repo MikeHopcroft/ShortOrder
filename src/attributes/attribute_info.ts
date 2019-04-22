@@ -58,6 +58,10 @@ export class AttributeInfo {
         return info;
     }
 
+    getDimension(did: PID): Dimension | undefined {
+        return this.dimensionIdToDimension.get(did);
+    }
+
     // Indexes a Dimension and its Attributes.
     addDimension(dimension: Dimension) {
         if (this.dimensionIdToDimension.has(dimension.id)) {
