@@ -3,6 +3,7 @@ import * as Debug from 'debug';
 import * as yaml from 'js-yaml';
 import { PID } from 'token-flow';
 import { AnyToken, Cart, Catalog, ItemInstance, State, World } from '..';
+import { speechToTextFilter } from '../repl';
 
 
 const debug = Debug('tf:itemMapFromYamlString');
@@ -282,7 +283,7 @@ function ordersAreEqual(observed: TestOrder, expected: TestOrder): boolean {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-interface YamlTestCase {
+export interface YamlTestCase {
     priority: number;
     suites: string;
     comment: string;
@@ -404,10 +405,57 @@ export class TestSuite {
         return new TestSuite(tests);
     }
 
-    static fromInputLines(lines: string[]) {
+    // Generate a collection of yamlTestCase records from an array of input
+    // lines, each of which provides the input to a test case. Uses the
+    // observed output as the expected output.
+    static async fromInputLines(
+        world: World,
+        tokenizer: TokenizerFunction|undefined = undefined,
+        lines: string[],
+        priority: number,
+        suites: string[]
+    ): Promise<YamlTestCase[]> {
+        const emptyOrder: TestOrder = { lines: [] };
+
+        // Add the 'unverified' suite to mark this test as having expected
+        // output that has not yet been verified as correct. After generating
+        // a test suite, the user should verify and correct the expected
+        // output for each case, and then remove the 'unverified' mark.
+        suites = [...suites, 'unverified'];
+
+        // Generate a test case for each input line.
+        // Use speechToTextFilter to clean up each input line.
+        let counter = 0;
         const tests = lines.map((line) => {
-            
+            return new TestCase(
+                counter++,
+                priority.toString(),
+                suites,
+                '',
+                [speechToTextFilter(line)],
+                [emptyOrder]
+            );
         });
+
+        // Create a TestSuite from the TestCases, and then run it to collect
+        // the observed output.
+        const suite = new TestSuite(tests);
+        const results = await suite.run(world, false, undefined, tokenizer);
+
+        // Generate a yamlTestCase from each Result, using the observed output
+        // for the expected output. 
+        const output = results.results.map((result: Result): YamlTestCase => {
+            const t = result.test;
+            return {
+                priority: Number(t.priority),
+                suites: t.suites.join(' '),
+                comment: t.comment,
+                inputs: t.inputs,
+                expected: result.observed
+            };
+        });
+
+        return output;
     }
 
     constructor(tests: TestCase[]) {

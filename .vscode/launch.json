@@ -106,6 +106,14 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch Test Maker",
+            "program": "${workspaceFolder}/build/samples/test_maker.js",
+            "outputCapture": "std",
+            "args": ["-a", "-s=car"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Test Runner",
             "program": "${workspaceFolder}/build/samples/test_runner.js",
             "outputCapture": "std",
