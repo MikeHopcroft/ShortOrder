@@ -2,15 +2,18 @@ import * as numberToWords from 'number-to-words';
 
 // NOTE: These patterns cannot contain punctuation like periods because 
 // punctuation is stripped out before word replacement.
-// ISSUE: current code doesn't hanele "1/4lb".
+// ISSUE: current code doesn't handle "1/4lb".
 // ISSUE: what about an apostrophe like in "Mike's"?
+// ISSUE: Copyright (c), TM
 const replacements : {[key:string]:string} = {
     'okay': 'ok',
     'dr': 'doctor',
     '1/2': 'half',
+    '1/3': 'third',
     '1/4': 'quarter',
     'oz': 'ounce',
-    'lb': 'pound'
+    'lb': 'pound',
+    'lbs': 'pounds',
 };
 
 export function speechToTextFilter(input: string): string {

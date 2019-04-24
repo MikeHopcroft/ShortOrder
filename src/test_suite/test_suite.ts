@@ -404,6 +404,12 @@ export class TestSuite {
         return new TestSuite(tests);
     }
 
+    static fromInputLines(lines: string[]) {
+        const tests = lines.map((line) => {
+            
+        });
+    }
+
     constructor(tests: TestCase[]) {
         this.tests = tests;
     }
