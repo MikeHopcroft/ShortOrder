@@ -18,6 +18,9 @@ const debug = Debug('tf:itemMapFromYamlString');
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// String constant used to label tests that have been rebased.
+const UNVERIFIED = 'unverified';
+
 // Holds a single line of an TestOrder.
 export interface TestLineItem {
     readonly indent: number;
@@ -33,14 +36,36 @@ export interface TestOrder {
 
 // Holds the results of one TestCase run.
 export class Result {
-    readonly test: TestCase;         // TestCase that generated this Result.
+    readonly test: TestCase;            // TestCase that generated this Result.
     readonly observed: TestOrder[];     // The sequence of Orders produced by the run.
-    readonly passed: boolean;        // Determination of the success of the test case.
+    readonly passed: boolean;           // Determination of the success of the test case.
 
     constructor(test: TestCase, observed: TestOrder[], passed: boolean) {
         this.test = test;
         this.observed = observed;
         this.passed = passed;
+    }
+
+    rebase(): YamlTestCase {
+        const t = this.test;
+        let suites = t.suites;
+
+        // If this test case failed,
+        // Add the 'unverified' suite to mark this test as having expected
+        // output that has not yet been verified as correct. After generating
+        // a test suite, the user should verify and correct the expected
+        // output for each case, and then remove the 'unverified' mark.
+        if (!this.passed && !t.suites.includes(UNVERIFIED)) {
+            suites = suites.concat(UNVERIFIED);
+        }
+
+        return {
+            priority: Number(t.priority),
+            suites: t.suites.join(' '),
+            comment: t.comment,
+            inputs: t.inputs,
+            expected: this.observed
+        };
     }
 }
 
@@ -133,17 +158,9 @@ export class AggregatedResults {
         console.log(`Overall: ${this.passCount}/${this.results.length}`);
     }
 
-    // rebase() {
-    //     const baseline = this.results.map(result => {
-    //         return {
-    //             'priority': result.test.priority,
-    //             'suites': result.test.suites.join(' '),
-    //             'input': result.test.input,
-    //             'expected': result.observed
-    //         };
-    //     });
-    //     return baseline;
-    // }
+    rebase(): YamlTestCases {
+        return this.results.map(result => result.rebase());
+    }
 }
 
 function explainDifferences(observed: TestOrder, expected: TestOrder) {
@@ -292,7 +309,7 @@ export interface YamlTestCase {
 }
 
 // Type definition for use by typescript-json-schema.
-type YamlTestCases = YamlTestCase[];
+export type YamlTestCases = YamlTestCase[];
 
 export type TokenizerFunction = (utterance: string) => Promise<IterableIterator<AnyToken>>;
 
@@ -417,12 +434,6 @@ export class TestSuite {
     ): Promise<YamlTestCase[]> {
         const emptyOrder: TestOrder = { lines: [] };
 
-        // Add the 'unverified' suite to mark this test as having expected
-        // output that has not yet been verified as correct. After generating
-        // a test suite, the user should verify and correct the expected
-        // output for each case, and then remove the 'unverified' mark.
-        suites = [...suites, 'unverified'];
-
         // Generate a test case for each input line.
         // Use speechToTextFilter to clean up each input line.
         let counter = 0;
@@ -444,18 +455,7 @@ export class TestSuite {
 
         // Generate a yamlTestCase from each Result, using the observed output
         // for the expected output. 
-        const output = results.results.map((result: Result): YamlTestCase => {
-            const t = result.test;
-            return {
-                priority: Number(t.priority),
-                suites: t.suites.join(' '),
-                comment: t.comment,
-                inputs: t.inputs,
-                expected: result.observed
-            };
-        });
-
-        return output;
+        return results.rebase();
     }
 
     constructor(tests: TestCase[]) {

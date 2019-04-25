@@ -5,16 +5,28 @@ import * as yaml from 'js-yaml';
 
 import { AnyToken, setup, TestSuite, TokenizerFunction } from '../src';
 
-// TODO: input file
-// TODO: output file
-// TODO: refactor into separate suite rebasing function.
-// TODO: flag for restricting rebase to name field.
+function usage() {
+    console.log(`TODO: print usage here.`);
+}
 
 async function go() {
     const args = minimist(process.argv.slice(2));
 
-    // const defaultTestFile = './data/restaurant-en/test_suite.yaml';
-    // const testFile = path.resolve(__dirname, args['f'] || defaultTestFile);
+    if (args._.length !== 2) {
+        const message = 'Expected input file and output file on command line.';
+        console.log(message);
+        usage();
+        return;
+    }
+
+    const infile = args._[0];
+    const outfile = args._[1];
+
+    const infilePath = path.resolve(__dirname, infile);
+    console.log(`Rebasing from "${infilePath}"`);
+
+    const inputText = fs.readFileSync(infilePath, 'utf-8');
+    const lines = inputText.split(/\r?\n/);
 
     const world = setup(
         path.join(__dirname, './data/restaurant-en/menu.yaml'),
@@ -30,17 +42,22 @@ async function go() {
     const tokenizer: TokenizerFunction = async (utterance: string): Promise<IterableIterator<AnyToken>> =>
         (world.unified.processOneQuery(utterance) as AnyToken[]).values();
 
-    const lines = ['a hamburger with no pickles', 'two small soy lattes'];
+    // Run test suite to get new baseline.
+    const priority = 0;
+    const suites: string[] = [];
     const results = await TestSuite.fromInputLines(
         world,
         tokenizer,
         lines,
-        0,
-        ['a', 'b']);
+        priority,
+        suites);
 
     const yamlText = yaml.safeDump(results, { noRefs: true });
 
-    console.log(yamlText);
+    const outfilePath = path.resolve(__dirname, outfile);
+    fs.writeFileSync(outfilePath, yamlText, 'utf-8');
+
+    console.log(`Rebased to "${outfilePath}"`);
 }
 
 go();

@@ -21,7 +21,7 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "postcompile": "copyfiles samples/data/**/*.yaml build"
+    "postcompile": "copyfiles samples/data/**/*.yaml build && copyfiles samples/data/**/*.txt build"
   },
   "devDependencies": {
     "@types/ansi-styles": "^3.2.1",

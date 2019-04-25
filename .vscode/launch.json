@@ -109,7 +109,7 @@
             "name": "Launch Test Maker",
             "program": "${workspaceFolder}/build/samples/test_maker.js",
             "outputCapture": "std",
-            "args": ["-a", "-s=car"]
+            "args": ["./data/restaurant-en/test_utterances.txt", "./data/restaurant-en/generated_tests.yaml"]
         },
         {
             "type": "node",
