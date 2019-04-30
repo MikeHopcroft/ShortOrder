@@ -25,6 +25,7 @@ import { attributesFromYamlString, itemsFromAttributes } from '../attributes/sch
 import { ATTRIBUTE, AttributeToken, attributeTokenFactory } from './attributes';
 import { ENTITY, EntityToken, entityTokenFactory } from './entities';
 import { intentTokenFactory } from './intents';
+import { OPTION, OptionToken, optionTokenFactory } from './options';
 import { QUANTITY, QuantityToken, quantityTokenFactory } from './quantities';
 import { stopwordsFromYamlString, Stopwords } from '../stopwords';
 import { UNIT, UnitToken, unitTokenFactory } from './units';
@@ -41,6 +42,7 @@ export type AnyToken =
     AttributeToken |
     EntityToken |
     NumberToken |
+    OptionToken |
     QuantityToken |
     UnitToken |
     WordToken;
@@ -62,6 +64,10 @@ export function tokenToString(t: Token) {
             break;
             case QUANTITY:
             name = `[QUANTITY:${token.value}]`;
+            break;
+        case OPTION:
+            const option = token.name.replace(/\s/g, '_').toUpperCase();
+            name = `[OPTION:${option},${token.id}]`;
             break;
         case UNIT:
             const unit = token.name.replace(/\s/g, '_').toUpperCase();
@@ -178,6 +184,7 @@ export class Unified {
         entityFile: string,
         intentsFile: string,
         attributesFile: string,
+        optionsFile: string,
         quantifiersFile: string,
         unitsFile: string,
         stopwordsFile: string,
@@ -196,6 +203,12 @@ export class Unified {
         const attributeItems = itemsFromAttributes(attributes);
         const attributeAliases = aliasesFromItems(attributeItems, attributeTokenFactory);
         this.lexicon.addDomain(attributeAliases);
+
+        // Options
+        const options = aliasesFromYamlString(
+            fs.readFileSync(optionsFile, 'utf8'),
+            optionTokenFactory);
+        this.lexicon.addDomain(options);
 
         // Entities
         const entities = aliasesFromYamlString(

@@ -23,6 +23,7 @@ export function runRepl(
     catlogFile: string,
     intentFile: string,
     attributesFile: string,
+    optionsFile: string,
     quantifierFile: string,
     unitsFile: string,
     stopwordsFile: string
@@ -41,6 +42,7 @@ export function runRepl(
         catlogFile,
         intentFile,
         attributesFile,
+        optionsFile,
         quantifierFile,
         unitsFile,
         stopwordsFile,

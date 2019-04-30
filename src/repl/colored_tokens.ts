@@ -4,7 +4,7 @@ import { NUMBERTOKEN, Token } from 'token-flow';
 
 import { AttributeInfo } from '../attributes';
 import { Catalog } from '../catalog';
-import { AnyToken, ATTRIBUTE, AttributeToken, ENTITY, QUANTITY, UNIT, WORD, EntityToken } from '../unified';
+import { AnyToken, ATTRIBUTE, AttributeToken, ENTITY, OPTION, QUANTITY, UNIT, WORD, EntityToken } from '../unified';
 
 
 export function tokenToColoredString(t: Token, catalog: Catalog, attributeInfo: AttributeInfo) {
@@ -16,12 +16,14 @@ export function tokenToColoredString(t: Token, catalog: Catalog, attributeInfo: 
             name = chalk.bgRed(`[ATTRIBUTE:${attribute},${token.id}]`);
             break;
         case ENTITY:
-            // const entity = token.name.replace(/\s/g, '_').toUpperCase();
-            // name = chalk.bgGreenBright(`[ENTITY:${entity},${token.pid}]`);
             name = FormatEntityToken(token, catalog);
             break;
         case NUMBERTOKEN:
             name = chalk.bgCyan(`[NUMBER:${token.value}]`);
+            break;
+        case OPTION:
+            const option = token.name.replace(/\s/g, '_').toUpperCase();
+            name = chalk.bgRed(`[OPTION:${option},${token.id}]`);
             break;
         case QUANTITY:
             name = chalk.bgCyan(`[QUANTITY:${token.value}]`);
@@ -41,19 +43,6 @@ export function tokenToColoredString(t: Token, catalog: Catalog, attributeInfo: 
     }
     return name;
 }
-
-// function FormatAttributeToken(token: AttributeToken, catalog: Catalog, info: AttributeInfo) {
-//     // const item = catalog.get(token.id);
-//     const coordinate = info.getAttributeCoordinates(token.id);
-
-//     if (coordinate) {
-//         if (coordinate.)
-//     }
-//     else {
-//         const attribute = token.name.replace(/\s/g, '_').toUpperCase();
-//         return chalk.bgRed(`[ATTRIBUTE:${attribute},${token.id}]`)
-//     }
-// }
 
 function FormatEntityToken(token: EntityToken, catalog: Catalog) {
     const item = catalog.get(token.pid);

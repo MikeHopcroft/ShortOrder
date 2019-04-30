@@ -2132,6 +2132,21 @@ items:
           minQuantity: 0
           maxQuantity: 1
           price: 0
+        - pid: 1000000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1000001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 1000002
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
   - pid: 9008
     name: medium iced latte
     aliases: []

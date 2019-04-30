@@ -9,7 +9,7 @@ export interface AttributeToken extends Token {
     name: string;
 }
 
-export function attributeTokenFactory(item:Item): Token {
+export function attributeTokenFactory(item: Item): Token {
     return { type: ATTRIBUTE, id: item.pid, name: item.name } as AttributeToken;
 }
 

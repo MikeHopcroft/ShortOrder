@@ -1,0 +1,14 @@
+items:
+  - pid: 1000000
+    name: extra pumpkin syrup
+    aliases:
+      - extra pumpkin [syrup]
+  - pid: 1000001
+    name: light pumpkin syrup
+    aliases:
+      - light pumpkin [syrup]
+  - pid: 1000002
+    name: pumpkin syrup
+    aliases:
+      - pumpkin [syrup]
+   

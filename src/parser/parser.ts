@@ -11,6 +11,7 @@ import {
     AnyToken,
     ATTRIBUTE,
     ENTITY,
+    OPTION,
     QUANTITY,
     QuantityToken,
     UNIT,
@@ -32,7 +33,7 @@ const endOfEntity = [
 ];
 
 const startOfEntity = [
-    ADD_TO_ORDER, ATTRIBUTE, ENTITY, NUMBERTOKEN, QUANTITY
+    ADD_TO_ORDER, ATTRIBUTE, ENTITY, NUMBERTOKEN, OPTION, QUANTITY
 ];
 
 const ignore = [
@@ -152,6 +153,14 @@ export class Parser {
                         input.get();
                     }
                     break;
+                case OPTION:
+                    if (builder.addOption(token)) {
+                        input.get();
+                    }
+                    else {
+                        stop = true;
+                    }
+                    break;
                 case NUMBERTOKEN:
                 case QUANTITY:
                     // TODO: do we really want to collect non-adjacent quantities?
@@ -204,6 +213,10 @@ export class Parser {
                 s = this.ops.updateCart(s, sku, 1);
                 succeeded = true;
             }
+        }
+
+        for (const pid of builder.getOptions()) {
+            s = this.ops.updateCart(s, pid, 1);
         }
 
         if (succeeded) {

@@ -8,18 +8,21 @@ import {
     responses,
     setup,
     State,
+    tokenToString
 } from '../src';
 
 function go(utterances: string[], debugMode: boolean) {
-    const { catalog, ops, parser } = setup(
+    const world = setup(
         path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
+        path.join(__dirname, './data/restaurant-en/options.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
         path.join(__dirname, './data/restaurant-en/units.yaml'),
         path.join(__dirname, './data/restaurant-en/stopwords.yaml'),
         debugMode
     );
+    const { catalog, ops, parser } = world;
 
     let state: State = { cart: { items: [] }, actions: [] };
 
@@ -33,6 +36,11 @@ function go(utterances: string[], debugMode: boolean) {
 
         console.log(`CUSTOMER: "${utterance}":`);
         console.log();
+
+        {
+            const tokens = world.unified.processOneQuery(utterance);
+            console.log(tokens.map(tokenToString).join('\n'));
+        }
 
         state = parser.parseText(utterance, state);
         ops.printCart(state.cart);
@@ -131,4 +139,7 @@ const bugs = [
 
 const splashes = [ "can I get a latte with two splashes of cream" ];
 
-go(splashes, false);
+// const options = [ "large vanilla pumpkin latte"];
+const options = [ "pumpkin latte large"];
+
+go(options, false);

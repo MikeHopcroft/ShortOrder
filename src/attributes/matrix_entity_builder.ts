@@ -1,6 +1,6 @@
 import { PID } from 'token-flow';
 
-import { AttributeToken, EntityToken } from '../unified';
+import { AttributeToken, EntityToken, OptionToken } from '../unified';
 
 import { AttributeInfo } from './attribute_info';
 import { Matrix } from './matrix';
@@ -21,6 +21,8 @@ export class MatrixEntityBuilder {
     private entityId: PID | undefined = undefined;
     
     private readonly dimensionIdToAttribute = new Map<PID, PID>();
+
+    private readonly options = new Set<PID>();
 
     constructor(info: AttributeInfo) {
         this.info = info;
@@ -52,6 +54,17 @@ export class MatrixEntityBuilder {
         }
         else {
             this.dimensionIdToAttribute.set(coordinate.dimension.id, attribute.id);
+            return true;
+        }
+    }
+
+    // TODO: this should add a quantified option
+    addOption(option: OptionToken): boolean {
+        if (this.options.has(option.id)) {
+            return false;
+        }
+        else {
+            this.options.add(option.id);
             return true;
         }
     }
@@ -102,6 +115,12 @@ export class MatrixEntityBuilder {
             if (!matrix.hasDimension(did)) {
                 yield aid;
             }
+        }
+    }
+
+    *getOptions(): IterableIterator<PID> {
+        for (const pid of this.options) {
+            yield pid;
         }
     }
 }
