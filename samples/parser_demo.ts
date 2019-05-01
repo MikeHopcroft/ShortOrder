@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
 import * as path from 'path';
 
 import {
@@ -16,7 +14,6 @@ function go(utterances: string[], debugMode: boolean) {
         path.join(__dirname, './data/restaurant-en/menu.yaml'),
         path.join(__dirname, './data/restaurant-en/intents.yaml'),
         path.join(__dirname, './data/restaurant-en/attributes.yaml'),
-        path.join(__dirname, './data/restaurant-en/options.yaml'),
         path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
         path.join(__dirname, './data/restaurant-en/units.yaml'),
         path.join(__dirname, './data/restaurant-en/stopwords.yaml'),

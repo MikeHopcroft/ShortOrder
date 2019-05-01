@@ -12,7 +12,7 @@ import { Catalog, CatalogItems, ConvertDollarsToPennies, validateCatalogItems, I
 import { Parser } from '../parser';
 import { speechToTextFilter } from './speech_to_text_filter';
 import { responses } from '../turn';
-import { ENTITY, EntityToken, tokenToString, Unified, AnyToken } from '../unified';
+import { ENTITY, EntityToken, Unified, AnyToken } from '../unified';
 
 import { tokenToColoredString } from './colored_tokens';
 
@@ -23,7 +23,6 @@ export function runRepl(
     catlogFile: string,
     intentFile: string,
     attributesFile: string,
-    optionsFile: string,
     quantifierFile: string,
     unitsFile: string,
     stopwordsFile: string
@@ -42,7 +41,6 @@ export function runRepl(
         catlogFile,
         intentFile,
         attributesFile,
-        optionsFile,
         quantifierFile,
         unitsFile,
         stopwordsFile,
