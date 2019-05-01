@@ -191,20 +191,8 @@ export class Parser {
                             else {
                                 // This is just a quantifier of an upcomming entity.
                                 builder.addQuantifier(token);
-                                input.get();        
                             }
                         }
-
-                        // builder.addQuantifier(token);
-                        // input.get();
-
-                        // if (!input.atEOF()) {
-                        //     const nextToken = input.peek();
-
-                        //     if (nextToken.type === UNIT) {
-                        //         input.get();
-                        //     }
-                        // }
                     }
                     break;
                 default:

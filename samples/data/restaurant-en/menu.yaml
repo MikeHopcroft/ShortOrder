@@ -1393,6 +1393,7 @@ items:
       - Cream
     price: 0
     standalone: false
+    isOption: true
     composition:
       defaults: []
       choices: []
@@ -2243,7 +2244,22 @@ items:
       defaults: []
       choices: []
       substitutions: []
-      options: []
+      options:
+        - pid: 200000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 200001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 200002
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
   - pid: 9015
     name: large halfcaf latte
     aliases: []
@@ -2308,6 +2324,21 @@ items:
           minQuantity: 0
           maxQuantity: 3
           price: 0
+        - pid: 200000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 200001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 200002
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
 
 ###############################################################################
 #

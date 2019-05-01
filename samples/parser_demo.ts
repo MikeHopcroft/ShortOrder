@@ -139,8 +139,14 @@ const bugs = [
 
 const splashes = [ "can I get a latte with two splashes of cream" ];
 
-// const options = [ "large vanilla pumpkin latte"];
-// const options = [ "pumpkin latte large"];
-const options = [ "raspberry latte large"];
+// const options = [ "large vanilla pumpkin latte" ];
+// const options = [ "pumpkin latte large" ];
+const options = [ "raspberry latte large" ];
 
-go(options, false);
+const options2 = [
+    "large skinny raspberry decaf latte iced",
+    "large skinny three pump raspberry decaf latte iced",
+    "large skinny decaf latte iced with two pumps raspberry syrup"
+];
+
+go(options2, false);

@@ -109,6 +109,63 @@
         quantity: 1
         name: nonfat milk
         pid: 100002
+- priority: 1
+  suites: features
+  comment: drink with three attributes (large, decaf, iced) and a leading modifier (skinny)
+  inputs: 
+    - can I get a large skinny raspberry decaf latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+      - indent: 1
+        quantity: 1
+        name: nonfat milk
+        pid: 100002
+      - indent: 1
+        quantity: 1
+        name: raspberry syrup
+        pid: 200000
+- priority: 1
+  suites: features
+  comment: drink with three attributes (large, decaf, iced) and a leading modifier (skinny)
+  inputs: 
+    - can I get a large skinny three pump raspberry decaf latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+      - indent: 1
+        quantity: 1
+        name: nonfat milk
+        pid: 100002
+      - indent: 1
+        quantity: 3
+        name: raspberry syrup
+        pid: 200000
+- priority: 1
+  suites: features
+  comment: drink with three attributes (large, decaf, iced) and a leading modifier (skinny)
+  inputs: 
+    - can I get a large skinny decaf latte iced with two pumps raspberry syrup
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: large decaf iced latte
+        pid: 9018
+      - indent: 1
+        quantity: 1
+        name: nonfat milk
+        pid: 100002
+      - indent: 1
+        quantity: 2
+        name: raspberry syrup
+        pid: 200000
 
 
 

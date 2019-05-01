@@ -117,7 +117,8 @@
             "name": "Launch Test Runner",
             "program": "${workspaceFolder}/build/samples/test_runner.js",
             "outputCapture": "std",
-            "args": ["-a", "-s=car"]
+            "args": ["-a"]
+            // "args": ["-a", "-s=car"]
         },
         {
             "type": "node",
