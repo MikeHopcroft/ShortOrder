@@ -2132,17 +2132,17 @@ items:
           minQuantity: 0
           maxQuantity: 1
           price: 0
-        - pid: 1000000
+        - pid: 200000
           defaultQuantity: 1
           minQuantity: 0
           maxQuantity: 3
           price: 0.3
-        - pid: 1000001
+        - pid: 200001
           defaultQuantity: 1
           minQuantity: 0
           maxQuantity: 3
           price: 0.3
-        - pid: 1000002
+        - pid: 200002
           defaultQuantity: 1
           minQuantity: 0
           maxQuantity: 3
@@ -2212,7 +2212,27 @@ items:
       defaults: []
       choices: []
       substitutions: []
-      options: []
+      options:
+        - pid: 1194
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 1
+          price: 0
+        - pid: 200000
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 200001
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
+        - pid: 200002
+          defaultQuantity: 1
+          minQuantity: 0
+          maxQuantity: 3
+          price: 0.3
   - pid: 9014
     name: large iced latte
     aliases: []
@@ -2335,6 +2355,25 @@ items:
       - soy [milk]
     price: 0
     standalone: false
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
+
+###############################################################################
+#
+# Syrups
+#
+###############################################################################
+  - pid: 200000
+    name: raspberry syrup
+    aliases:
+      - raspberry [syrup]
+    price: 0
+    standalone: false
+    isOption: true
+    isQuantifiable: true
     composition:
       defaults: []
       choices: []

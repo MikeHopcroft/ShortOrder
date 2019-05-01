@@ -77,13 +77,13 @@ const catalogItemSchema = {
                 "defaultQuantity": {
                     "type": "number"
                 },
-                "pid": {
-                    "type": "number"
-                },
                 "maxQuantity": {
                     "type": "number"
                 },
                 "minQuantity": {
+                    "type": "number"
+                },
+                "pid": {
                     "type": "number"
                 },
                 "price": {
@@ -92,9 +92,9 @@ const catalogItemSchema = {
             },
             "required": [
                 "defaultQuantity",
-                "pid",
                 "maxQuantity",
                 "minQuantity",
+                "pid",
                 "price"
             ],
             "type": "object"
@@ -142,8 +142,23 @@ const catalogItemSchema = {
                     ],
                     "type": "object"
                 },
+                "isOption": {
+                    "type": "boolean"
+                },
+                "isQuantifiable": {
+                    "type": "boolean"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "matrix": {
+                    "type": "number"
+                },
                 "name": {
                     "type": "string"
+                },
+                "note": {
+                    "type": "boolean"
                 },
                 "pid": {
                     "type": "number"
@@ -153,24 +168,15 @@ const catalogItemSchema = {
                 },
                 "standalone": {
                     "type": "boolean"
-                },
-                "note": {
-                    "type": "boolean"
-                },
-                "matrix": {
-                    "type": "number"
-                },
-                "key": {
-                    "type": "string"
-                },
+                }
             },
             "required": [
                 "aliases",
                 "composition",
-                "standalone",
                 "name",
                 "pid",
-                "price"
+                "price",
+                "standalone"
             ],
             "type": "object"
         },

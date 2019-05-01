@@ -140,6 +140,7 @@ const bugs = [
 const splashes = [ "can I get a latte with two splashes of cream" ];
 
 // const options = [ "large vanilla pumpkin latte"];
-const options = [ "pumpkin latte large"];
+// const options = [ "pumpkin latte large"];
+const options = [ "raspberry latte large"];
 
 go(options, false);
