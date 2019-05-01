@@ -1,1 +1,0 @@
-# Latte Stand

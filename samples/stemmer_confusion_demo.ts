@@ -11,12 +11,12 @@ function stemmerConfusionDemo() {
     console.log();
 
     const unified = new Unified(
-        path.join(__dirname, './data/auto-dealer/catalog.yaml'),
-        path.join(__dirname, './data/auto-dealer/intents.yaml'),
-        path.join(__dirname, './data/auto-dealer/attributes.yaml'),
-        path.join(__dirname, './data/auto-dealer/quantifiers.yaml'),
-        path.join(__dirname, './data/auto-dealer/units.yaml'),
-        path.join(__dirname, './data/auto-dealer/stopwords.yaml'),
+        path.join(__dirname, './data/restaurant-en/menu.yaml'),
+        path.join(__dirname, './data/restaurant-en/intents.yaml'),
+        path.join(__dirname, './data/restaurant-en/attributes.yaml'),
+        path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
+        path.join(__dirname, './data/restaurant-en/units.yaml'),
+        path.join(__dirname, './data/restaurant-en/stopwords.yaml'),
         true);
 
     const matrix = stemmerConfusionMatrix(unified.lexicon);

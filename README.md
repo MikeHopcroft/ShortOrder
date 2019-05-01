@@ -548,16 +548,34 @@ bye
 
 ### Stemmer Confusion Matrix Sample
 In some cases, the stemmer can stem words with different meanings to the same term.
-One can check for these problems in their `menu.json`, `quantifiers.json`, and `intents.json` files by producing a stemmer confusion matrix.
+One can check for these problems in their `attributes.yaml`, `menu.yaml`, `quantifiers.yaml`, `stopwords.yaml`, `units.yaml` and `intents.yaml` files by producing a stemmer confusion matrix.
 
 ~~~
 node build/samples/stemmer_confusion_demo.js
 
-14 items contributed 143 aliases.
-5 items contributed 22 aliases.
-16 items contributed 31 aliases.
-60 items contributed 210 aliases.
-"fri": [fried,fries]
+Stemmer Confusion Matrix
+
+"and": [and,And]
+"small": [small,Small]
+"medium": [medium,Medium]
+"larg": [large,Large]
+"half": [half,Half]
+"hot": [hot,Hot]
+"ice": [iced,Iced,Ice,ice]
+"whole": [whole,Whole]
+"low": [low,Low]
+"dog": [Dog,dog]
+"fri": [Fried,Fries]
+"french": [French,french]
+"onion": [Onion,Onions]
+"wing": [Wings,wings,Wing]
+"dozen": [dozen,Dozen]
+"sweet": [Sweet,sweet]
+"cream": [Cream,cream]
+"pickl": [Pickles,Pickle]
+"slice": [Slices,Sliced]
+"salt": [Salt,Salted]
+"done": [Done,done]
 "that": [that,that's]
 "thank": [thank,thanks]
 ~~~
