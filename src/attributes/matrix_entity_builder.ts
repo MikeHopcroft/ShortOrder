@@ -22,8 +22,6 @@ export class MatrixEntityBuilder {
     
     private readonly dimensionIdToAttribute = new Map<PID, PID>();
 
-    private readonly options = new Set<PID>();
-
     constructor(info: AttributeInfo) {
         this.info = info;
     }
@@ -58,17 +56,6 @@ export class MatrixEntityBuilder {
         }
     }
 
-    // TODO: this should add a quantified option
-    addOption(option: OptionToken): boolean {
-        if (this.options.has(option.id)) {
-            return false;
-        }
-        else {
-            this.options.add(option.id);
-            return true;
-        }
-    }
-
     getPID(): PID | undefined {
         if (this.entityId === undefined) {
             const message = `no entity set`;
@@ -84,11 +71,6 @@ export class MatrixEntityBuilder {
 
         const key = matrix.getKey(this.entityId, this.dimensionIdToAttribute, this.info);
         const pid = this.info.getPID(key);
-
-        // if (pid === undefined) {
-        //     const message = `no PID for key ${key}.`;
-        //     throw TypeError(message);
-        // }
 
         return pid;
     }
@@ -115,12 +97,6 @@ export class MatrixEntityBuilder {
             if (!matrix.hasDimension(did)) {
                 yield aid;
             }
-        }
-    }
-
-    *getOptions(): IterableIterator<PID> {
-        for (const pid of this.options) {
-            yield pid;
         }
     }
 }

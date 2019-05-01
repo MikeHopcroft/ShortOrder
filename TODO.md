@@ -1,6 +1,7 @@
 # TODO List
 
 * IndexibleItem should be related to Item by extension
+* Remove unused sample data.
 * Test suite should not compare item names, just quantities and PIDs.
 * Plan for leading options.
     * Quantified leading options "three five pump pumpkin decaf lattes"

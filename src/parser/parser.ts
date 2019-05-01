@@ -1,7 +1,9 @@
 import { NumberToken, NUMBERTOKEN, PeekableSequence } from 'token-flow';
 
-import { CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
-import { AttributeInfo, Matrix, MatrixEntityBuilder } from '../attributes';
+import { Builder, QuantifierToken } from './builder';
+
+import { CONFUSED, DONE, WAIT, WELCOME } from '../actions';
+import { AttributeInfo, MatrixEntityBuilder } from '../attributes';
 import { CartOps, State } from '../cart';
 import { Catalog } from '../catalog';
 import { Unified } from '../unified';
@@ -13,9 +15,7 @@ import {
     ENTITY,
     OPTION,
     QUANTITY,
-    QuantityToken,
     UNIT,
-    UnitToken,
     WORD
 } from '../unified';
 
@@ -43,8 +43,6 @@ const ignore = [
 // TODO: What is the meaning of "ADD X REMOVE Y Z"?
 //   Is it "ADD X REMOVE Y REMOVE Z" or "ADD X REMOVE Y ADD Z"
 // Seems like you stay in remove mode until an ADD_TO_ORDER intent is seen.
-
-type QuantifierToken = NumberToken | QuantityToken;
 
 export class Parser {
     private readonly attributeInfo: AttributeInfo;
@@ -116,7 +114,7 @@ export class Parser {
     }
 
     private parseEntity(input: PeekableSequence<AnyToken>, state: State): State {
-        const builder = new MatrixEntityBuilder(this.attributeInfo);
+        const builder = new Builder(this.attributeInfo);
         const quantifiers: QuantifierToken[] = [];
 
         // If there is a leading ADD_TO_ORDER token, skip it.
@@ -154,7 +152,7 @@ export class Parser {
                     }
                     break;
                 case OPTION:
-                    if (builder.addOption(token)) {
+                    if (builder.addOption(token, 1)) {
                         input.get();
                     }
                     else {
@@ -168,16 +166,45 @@ export class Parser {
                         stop = true;
                     }
                     else {
-                        quantifiers.push(token);
+                        const quantifier = token;
                         input.get();
 
                         if (!input.atEOF()) {
-                            const nextToken = input.peek();
+                            const next = input.peek();
+                            if (next.type === UNIT || next.type === OPTION) {
+                                // Looking for QUANTIFIER [UNIT] OPTION
 
-                            if (nextToken.type === UNIT) {
-                                input.get();
+                                // For now, just skip over units.
+                                // TODO: check unit type is compatible with option.
+                                if (next.type === UNIT) {
+                                    input.get();
+                                }
+    
+                                if (!input.atEOF()) {
+                                    const option = input.peek();
+                                    if (option.type === OPTION) {
+                                        input.get();
+                                        builder.addOption(option, quantifier.value);
+                                    }
+                                }    
+                            }
+                            else {
+                                // This is just a quantifier of an upcomming entity.
+                                builder.addQuantifier(token);
+                                input.get();        
                             }
                         }
+
+                        // builder.addQuantifier(token);
+                        // input.get();
+
+                        // if (!input.atEOF()) {
+                        //     const nextToken = input.peek();
+
+                        //     if (nextToken.type === UNIT) {
+                        //         input.get();
+                        //     }
+                        // }
                     }
                     break;
                 default:
@@ -196,7 +223,7 @@ export class Parser {
         let s = state;
         let succeeded = false;
         if (builder.hasEntity()) {
-            const quantity = Parser.quantityFromTokens(quantifiers);
+            const quantity = builder.getQuantity();
             const pid = builder.getPID();
 
             if (pid !== undefined) {
@@ -215,8 +242,8 @@ export class Parser {
             }
         }
 
-        for (const pid of builder.getOptions()) {
-            s = this.ops.updateCart(s, pid, 1);
+        for (const [pid, quantity] of builder.getOptions()) {
+            s = this.ops.updateCart(s, pid, quantity);
         }
 
         if (succeeded) {
@@ -230,42 +257,5 @@ export class Parser {
         }
         const actions = [{ type: CONFUSED }, ...state.actions];
         return { ...state, actions };
-    }
-
-    // // TODO: is there some way to inject a different version of this function
-    // // for unit testing. Want unit test to just record the calls to this method.
-    // // Is it ok to rely on monkey patch form sinon or rewire?
-    // addEntityToCart(cart: Cart, entity: EntityToken, quantifiers: QuantityToken[], attributes: AttributeToken[]) {
-    //     const quantity = Parser.quantityFromTokens(quantifiers);
-
-    //     // TODO: handle attributes here.
-
-    //     return this.ops.updateCart(cart, entity.pid, quantity);
-    // }
-
-    // https://medium.com/@ustunozgur/object-oriented-functional-programming-or-how-can-you-use-classes-as-redux-reducers-23462a5cae85
-
-    private static quantityFromTokens(quantifiers: QuantifierToken[]) {
-        if (quantifiers.length === 0) {
-            // Default is 1.
-            return 1;
-        }
-        else if (quantifiers.length === 1) {
-            // If there is one quantifier, just return it.
-            return quantifiers[0].value;
-        }
-        else if (quantifiers.find(x => x.value === 0)) {
-            // If there are multiple quantifiers and at least one is zero,
-            // return zero. This handles cases like "with no", where "with"
-            // becomes 1 and "no" becomes 0.
-            // TODO: should this be solved here or in intents.yaml?
-            return 0;
-        }
-        else {
-            // Otherwise, return the maximum quantifer. This handles cases
-            // like "with five", where "with" becomes 1 and "five" becomes 5.
-            // TODO: should this be solved here or in intents.yaml?
-            return Math.max(...quantifiers.map(x => x.value));
-        }
     }
 }
