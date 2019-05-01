@@ -1,12 +1,14 @@
 # TODO List
 
+* x Speech-to-text filter does replacements after filtering punctuation
+    * x Unit tests
 * IndexibleItem should be related to Item by extension
-* Remove unused sample data.
+* x Remove unused sample data.
 * Test suite should not compare item names, just quantities and PIDs.
 * Plan for leading options.
-    * Quantified leading options "three five pump pumpkin decaf lattes"
+    * x Quantified leading options "three five pump pumpkin decaf lattes"
     * Annotations for quantifiable? Or is this in the menu's min/max quantities.
-    * Options really need to be part of the menu (or at least reference items on the menu) insteqd of in a separate file.
+    * x Options really need to be part of the menu (or at least reference items on the menu) insteqd of in a separate file.
 * Attributing options - e.g. extra vanilla syrup, add vanilla syrup, etc.
 * Fuzzer - generate machine verifiable TestCase permutations
 

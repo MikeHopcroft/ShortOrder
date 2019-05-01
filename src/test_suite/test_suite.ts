@@ -437,16 +437,20 @@ export class TestSuite {
         // Generate a test case for each input line.
         // Use speechToTextFilter to clean up each input line.
         let counter = 0;
-        const tests = lines.map((line) => {
-            return new TestCase(
-                counter++,
-                priority.toString(),
-                suites,
-                '',
-                [speechToTextFilter(line)],
-                [emptyOrder]
-            );
-        });
+        const tests = [];
+        for (const rawLine of lines) {
+            const line = rawLine.trim();
+            if (line.length > 0) {
+                tests.push(new TestCase(
+                    counter++,
+                    priority.toString(),
+                    suites,
+                    '',
+                    [speechToTextFilter(line)],
+                    [emptyOrder]
+                ));
+            }
+        }
 
         // Create a TestSuite from the TestCases, and then run it to collect
         // the observed output.
