@@ -61,7 +61,7 @@ export class Result {
 
         return {
             priority: Number(t.priority),
-            suites: t.suites.join(' '),
+            suites: suites.join(' '),
             comment: t.comment,
             inputs: t.inputs,
             expected: this.observed

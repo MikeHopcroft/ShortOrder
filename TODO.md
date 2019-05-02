@@ -1,5 +1,6 @@
 # TODO List
 
+* x test_importer not adding 'unverified' to suites.
 * x Speech-to-text filter does replacements after filtering punctuation
     * x Unit tests
 * IndexibleItem should be related to Item by extension
