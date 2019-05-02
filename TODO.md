@@ -1,5 +1,6 @@
 # TODO List
 
+* CreateAttribute(), etc. should not use 'as' to cast type. Specify return value instead.
 * x test_importer not adding 'unverified' to suites.
 * x Speech-to-text filter does replacements after filtering punctuation
     * x Unit tests

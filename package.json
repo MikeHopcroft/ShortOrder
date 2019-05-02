@@ -41,6 +41,7 @@
     "typescript": "~2.8.0"
   },
   "dependencies": {
+    "@types/pluralize": "0.0.29",
     "ajv": "^6.5.4",
     "ansi-styles": "^3.2.1",
     "chalk": "^2.4.2",
@@ -49,6 +50,7 @@
     "minimist": "^1.2.0",
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
+    "pluralize": "^7.0.0",
     "readline-sync": "^1.4.9",
     "token-flow": "0.0.30"
   }
