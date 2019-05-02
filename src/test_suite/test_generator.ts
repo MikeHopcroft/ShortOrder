@@ -59,6 +59,11 @@ type AnyInstance =
     ModifierInstance |
     OptionInstance;
 
+interface CodedInstances {
+    id: number;
+    instances: AnyInstance[];
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Pluralizer
@@ -82,7 +87,7 @@ class Pluralizer {
 //
 ///////////////////////////////////////////////////////////////////////////////
 interface Generator {
-    versions(): IterableIterator<AnyInstance[]>;
+    versions(): IterableIterator<CodedInstances>;
     count(): number;
     version(id: number): AnyInstance[];
 }
@@ -93,133 +98,20 @@ class ModifierGenerator implements Generator {
 
     constructor(dimension: Dimension) {
         this.dimension = dimension;
-        this.instances = [...this.versions()];
-    }
 
-    *versions(): IterableIterator<AnyInstance[]> {
-        yield [];
-    
+        // First instance is the empty list, corresponding to the no modifier choice.
+        this.instances = [[]];
+
+        // Add remaining modifier choices.
         for (const modifier of this.dimension.attributes) {
             // TODO: generate aliases
-            yield [CreateModifier(modifier.pid, modifier.aliases[0])];
+            this.instances.push([CreateModifier(modifier.pid, modifier.aliases[0])]);
         }
     }
 
-    count(): number {
-        // return this.dimension.attributes.length + 1;
-        return this.instances.length;
-    }
-
-    version(id: number): AnyInstance[] {
-        return this.instances[id];
-        // if (id === 0) {
-        //     return [];
-        // }
-        // else {
-        //     const modifier = this.dimension.attributes[id - 1];
-        //     return [CreateModifier(modifier.pid, modifier.aliases[0])];
-        // }
-    }
-}
-
-class OptionGenerator implements Generator {
-    private readonly pid: PID;
-    private readonly instances: AnyInstance[][];
-
-    // Aliases for units
-    // List of quantities
-    // Some way to specify omitted option vs removed option ('no anchovies', 'without').
-    constructor(pid: PID) {
-        this.pid = pid;
-        this.instances = [...this.versions()];
-    }
-
-    *versions(): IterableIterator<AnyInstance[]> {
-        // yield [];
-    
-        // for (const modifier of this.dimension.attributes) {
-        //     // TODO: generate aliases
-        //     yield [CreateModifier(modifier.pid, modifier.aliases[0])];
-        // }
-    }
-
-    count(): number {
-        return this.instances.length;
-    }
-
-    version(id: number): AnyInstance[] {
-        return this.instances[id];
-    }
-}
-
-class EntityGenerator implements Generator {
-    private readonly info: AttributeInfo;
-    private readonly entityId: PID;
-    private readonly matrix: Matrix;
-
-    private readonly dimensionIdToAttributeId = new Map<PID, PID>();
-    private readonly attributes: AttributeItem[] = [];
-
-    private readonly instances: AnyInstance[][];
-
-    constructor(attributeInfo: AttributeInfo, entityId: PID) {
-        this.info = attributeInfo;
-        this.entityId = entityId;
-        const matrix = this.info.getMatrixForEntity(this.entityId);
-        if (!matrix) {
-            const message = `Product ${entityId} does not have a matrix.`;
-            throw TypeError(message);
-        }
-        this.matrix = matrix;
-
-        this.instances = [...this.versions()];
-    }
-
-    private pushAttribute(dimension: Dimension, attribute: AttributeItem) {
-        if (attribute.hidden !== true) {
-            this.attributes.push(attribute);
-        }
-        this.dimensionIdToAttributeId.set(dimension.id, attribute.pid);
-    }
-
-    private popAttribute(dimension: Dimension, attribute: AttributeItem) {
-        if (attribute.hidden !== true) {
-            this.attributes.pop();
-        }
-    }
-
-    private getPID(): PID | undefined {
-        const key = this.matrix.getKey(this.entityId, this.dimensionIdToAttributeId, this.info);
-        const pid = this.info.getPID(key);
-        return pid;
-    }
-
-    *versions(): IterableIterator<AnyInstance[]> {
-        yield* this.versionsRecursion(0);
-    }
-
-    private *versionsRecursion(d: number): IterableIterator<AnyInstance[]> {
-        const dimension = this.matrix.dimensions[d];
-    
-        for (const attribute of dimension.attributes) {
-            this.pushAttribute(dimension, attribute);
-    
-            if (d === this.matrix.dimensions.length - 1) {
-                const pid = this.getPID();
-                if (pid !== undefined) {
-                    yield [
-                        ...this.attributes.map(a => CreateAttribute(a.pid, a.name)),
-                        // TODO: need catalog to get alias
-                        // TODO: loop over generator for aliases
-                        CreateEntity(pid, alias)
-                    ];
-                }
-            }
-            else {
-                yield* this.versionsRecursion(d + 1);
-            }
-    
-            this.popAttribute(dimension, attribute);
+    *versions(): IterableIterator<CodedInstances> {
+        for (const [id, instances] of this.instances.entries()) {
+            yield { id, instances };
         }
     }
 
@@ -231,37 +123,191 @@ class EntityGenerator implements Generator {
         return this.instances[id];
     }
 }
+
+// class OptionGenerator implements Generator {
+//     private readonly pid: PID;
+//     private readonly instances: AnyInstance[][];
+
+//     // Aliases for units
+//     // List of quantities
+//     // Some way to specify omitted option vs removed option ('no anchovies', 'without').
+//     constructor(pid: PID) {
+//         this.pid = pid;
+// // TODO        this.instances = [...this.versions()];
+//     }
+
+//     *versions(): IterableIterator<CodedInstances> {
+//         for (const [id, instances] of this.instances.entries()) {
+//             yield { id, instances };
+//         }
+//     }
+
+//     count(): number {
+//         return this.instances.length;
+//     }
+
+//     version(id: number): AnyInstance[] {
+//         return this.instances[id];
+//     }
+// }
+
+// class EntityGenerator implements Generator {
+//     private readonly info: AttributeInfo;
+//     private readonly entityId: PID;
+//     private readonly matrix: Matrix;
+
+//     private readonly dimensionIdToAttributeId = new Map<PID, PID>();
+//     private readonly attributes: AttributeItem[] = [];
+
+//     private readonly instances: AnyInstance[][];
+
+//     constructor(attributeInfo: AttributeInfo, entityId: PID) {
+//         this.info = attributeInfo;
+//         this.entityId = entityId;
+//         const matrix = this.info.getMatrixForEntity(this.entityId);
+//         if (!matrix) {
+//             const message = `Product ${entityId} does not have a matrix.`;
+//             throw TypeError(message);
+//         }
+//         this.matrix = matrix;
+
+//         this.instances = [...this.versions2()];
+//     }
+
+//     private pushAttribute(dimension: Dimension, attribute: AttributeItem) {
+//         if (attribute.hidden !== true) {
+//             this.attributes.push(attribute);
+//         }
+//         this.dimensionIdToAttributeId.set(dimension.id, attribute.pid);
+//     }
+
+//     private popAttribute(dimension: Dimension, attribute: AttributeItem) {
+//         if (attribute.hidden !== true) {
+//             this.attributes.pop();
+//         }
+//     }
+
+//     private getPID(): PID | undefined {
+//         const key = this.matrix.getKey(this.entityId, this.dimensionIdToAttributeId, this.info);
+//         const pid = this.info.getPID(key);
+//         return pid;
+//     }
+
+//     private *versions2(): IterableIterator<AnyInstance[]> {
+//         yield* this.versionsRecursion(0);
+//     }
+
+//     private *versionsRecursion(d: number): IterableIterator<AnyInstance[]> {
+//         const dimension = this.matrix.dimensions[d];
+    
+//         for (const attribute of dimension.attributes) {
+//             this.pushAttribute(dimension, attribute);
+    
+//             if (d === this.matrix.dimensions.length - 1) {
+//                 const pid = this.getPID();
+//                 if (pid !== undefined) {
+//                     yield [
+//                         ...this.attributes.map(a => CreateAttribute(a.pid, a.name)),
+//                         // TODO: need catalog to get alias
+//                         // TODO: loop over generator for aliases
+//                         CreateEntity(pid, alias)
+//                     ];
+//                 }
+//             }
+//             else {
+//                 yield* this.versionsRecursion(d + 1);
+//             }
+    
+//             this.popAttribute(dimension, attribute);
+//         }
+//     }
+
+//     *versions(): IterableIterator<CodedInstances> {
+//         for (const [id, instances] of this.instances.entries()) {
+//             yield { id, instances };
+//         }
+//     }
+
+//     count(): number {
+//         return this.instances.length;
+//     }
+
+//     version(id: number): AnyInstance[] {
+//         return this.instances[id];
+//     }
+// }
 
 class QuantityGenerator {
-
+    // TODO: undefined
+    // TODO: no
+    // TODO: a, some
+    // TODO: one, two, three, . . .
 }
 
-class ProductGenerator implements Generator {
-    private readonly generators;
-    private readonly instanceCount;
+// class ProductGenerator implements Generator {
+//     private readonly generators;
+//     private readonly instanceCount;
 
-    constructor(generators: Generator[]) {
-        this.generators = generators;
-    }
+//     constructor(generators: Generator[]) {
+//         this.generators = generators;
+//     }
 
-    count(): number {
-        return this.instanceCount;
-    }
+//     count(): number {
+//         return this.instanceCount;
+//     }
 
-    version(id: number): AnyInstance[] {
-        // decode id
-        // pass to each generator
-        // concatenate results
+//     version(id: number): AnyInstance[] {
+//         // decode id
+//         // pass to each generator
+//         // concatenate results
+//     }
+// }
+
+export function factorial(n: number): number {
+    if (n === 0 || n === 1) {
+        return 1;
     }
+    else {
+        return n * factorial(n - 1);
+    }
+}
+
+
+export function permutation<T>(items: T[], lehmer: number) {
+    const head: T[] = [];
+    let tail = items;
+    let code = lehmer;
+    for (let divisor = items.length; divisor > 0; --divisor) {
+        const index = code % divisor;
+        // console.log(`code=${code}, divisor=${divisor}, index=${index}`);
+        code = Math.floor(code / divisor);
+        head.push(tail[index]);
+        tail = [...tail.slice(0, index), ...tail.slice(index + 1)];
+    }
+    return head;
 }
 
 class PermutedGenerator implements Generator {
     private readonly intances: AnyInstance[];
-    private readonly instanceCount: number;
+    private readonly permutationCount: number;
 
     constructor(instances: AnyInstance[]) {
         this.intances = instances;
-        // Initialize instanceCount
+        this.permutationCount = factorial(instances.length);
+    }
+
+    *versions(): IterableIterator<CodedInstances> {
+        for (let id = 0; id < this.permutationCount; ++id) {
+            yield { id, instances: this.version(id) };
+        }
+    }
+
+    count(): number {
+        return this.permutationCount;
+    }
+
+    version(id: number): AnyInstance[] {
+        return permutation(this.intances, id);
     }
 }
 
@@ -276,10 +322,11 @@ function renderAsText(instanes: AnyInstance[]): string {
     // insert 'and' between last two options.
     // choose between 'a' and 'an'. Perhaps this should be in the option generator.
     // pluralize units and options. Perhaps this should be in the option generator.
+    return "NOT IMPLEMENTED";
 }
 
-function renderAsTestCase(instanes: AnyInstance[]): TestCase {
-}
+// function renderAsTestCase(instanes: AnyInstance[]): TestCase {
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
