@@ -136,7 +136,7 @@ function matcherFromExpression(alias: string): Matcher {
 
 // Returns the pattern portion of an expression of the form
 //   ['exact' | 'prefix' | 'levenshtein' ':'] patten
-function patternFromExpression(alias: string) {
+export function patternFromExpression(alias: string) {
     const index = alias.indexOf(':');
     if (index !== -1) {
         return alias.slice(index + 1);
@@ -144,7 +144,7 @@ function patternFromExpression(alias: string) {
     return alias;
 }
 
-function* aliasesFromItems(items: IterableIterator<Item>, factory: TokenFactory) {
+export function* aliasesFromItems(items: IterableIterator<Item>, factory: TokenFactory) {
     for (const item of items) {
         for (const expression of item.aliases) {
             const matcher = matcherFromExpression(expression);

@@ -3,8 +3,8 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
-import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity } from '../src';
-import { CodedInstances, EntityGenerator, formatInstance, OptionGenerator, PermutedGenerator } from '../src';
+import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension } from '../src';
+import { CodedInstances, EntityGenerator, formatInstance, ModifierGenerator, OptionGenerator, PermutedGenerator } from '../src';
 
 function usage() {
     console.log(`TODO: print usage here.`);
@@ -53,6 +53,7 @@ async function go() {
     console.log(`${id}: ${text}`);
 
     console.log('');
+    console.log('Permutations');
 
     const permuted = new PermutedGenerator(instances);
     for (const version of permuted.versions()) {
@@ -60,10 +61,25 @@ async function go() {
         console.log(`(${id},${version.id}): ${text}`);
     }
 
-    console.log();
+    console.log('');
+    console.log('Modifiers');
 
+    const milk = 5;
+    const dimension = world.attributeInfo.getDimension(milk) as Dimension;
+    const modifiers = new ModifierGenerator(dimension);
+    for (const version of modifiers.versions()) {
+        const text = version.instances.map(formatInstance).join(' ');
+        console.log(`${version.id}: ${text}`);
+    }
+
+    console.log('');
+    console.log('Options:');
+
+    // TODO: make this text aliases, e.g. 'two [pumps,squirts]'
     const quantities: Quantity[] = [
         { value: 0, text: 'no'},
+        { value: 0, text: 'without'},
+        { value: 1, text: ''},
         { value: 1, text: 'a'},
         { value: 1, text: 'some'},
         { value: 1, text: 'one'},
@@ -76,10 +92,13 @@ async function go() {
         console.log(`${version.id}: ${text}`);
     }
 
+    console.log('');
+    console.log('Statistics:');
+
     console.log(`entities: ${entities.count()}`);
-    // console.log(`modifiers: ${modifiers.count}`);
+    console.log(`modifiers: ${modifiers.count()}`);
     console.log(`options: ${options.count()}`);
-    console.log(`product: ${entities.count() * options.count()}`);
+    console.log(`product: ${entities.count() * modifiers.count() * options.count()}`);
 
     // // Set up tokenizer
     // const tokenizer: TokenizerFunction = async (utterance: string): Promise<IterableIterator<AnyToken>> =>

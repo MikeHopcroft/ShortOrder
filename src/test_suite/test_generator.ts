@@ -1,9 +1,9 @@
 import * as pluralize from 'pluralize';
-import { PID } from 'token-flow';
+import { Item, generateAliases, PID } from 'token-flow';
 
 import { AttributeInfo, AttributeItem, Dimension, Matrix } from '../attributes';
 import { Catalog } from '../catalog';
-import { ATTRIBUTE, ENTITY, OPTION, QUANTITY, quantityTokenFactory } from '../unified';
+import { ATTRIBUTE, ENTITY, OPTION, patternFromExpression } from '../unified';
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -105,12 +105,21 @@ export interface Generator {
     versions(): IterableIterator<CodedInstances>;
 }
 
+export function* aliasesFromOneItem(item: Item) {
+    for (const expression of item.aliases) {
+        const pattern = patternFromExpression(expression);
+        for (const text of generateAliases(pattern)) {
+            yield text;
+        }
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // ModifierGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-class ModifierGenerator implements Generator {
+export class ModifierGenerator implements Generator {
     private readonly dimension: Dimension;
     private readonly instances: AnyInstance[][];
 
@@ -122,8 +131,9 @@ class ModifierGenerator implements Generator {
 
         // Add remaining modifier choices.
         for (const modifier of this.dimension.attributes) {
-            // TODO: generate aliases
-            this.instances.push([CreateModifierInstance(modifier.pid, modifier.aliases[0])]);
+            for (const alias of aliasesFromOneItem(modifier)) {
+                this.instances.push([CreateModifierInstance(modifier.pid, alias)]);
+            }
         }
     }
 
@@ -168,7 +178,9 @@ export class OptionGenerator implements Generator {
 
     private *entityVersions(): IterableIterator<EntityInstance> {
         const item = this.catalog.get(this.pid);
-        for (const alias of item.aliases) {
+        for (const alias of aliasesFromOneItem(item)) {
+
+        // for (const alias of item.aliases) {
             yield CreateEntityInstance(this.pid, alias);
         }
     }
