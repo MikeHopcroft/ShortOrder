@@ -52,6 +52,15 @@ export interface Quantity {
     text: string;
 }
 
+export interface QuantityInstance extends Instance {
+    type: QUANTITY;
+    value: number;
+}
+
+export function CreateQuantityInstance(quantity: Quantity): QuantityInstance {
+    return { type: QUANTITY, alias: quantity.text, value: quantity.value };
+}
+
 export interface OptionInstance extends Instance {
     type: OPTION;
     pid: PID;
@@ -76,6 +85,7 @@ export type  AnyInstance =
     EntityInstance |
     ModifierInstance |
     OptionInstance |
+    QuantityInstance |
     WordInstance;
 
 export interface CodedInstances {
@@ -83,7 +93,7 @@ export interface CodedInstances {
     instances: AnyInstance[];
 }
 
-export function formatInstance(instance: AnyInstance): string {
+export function formatInstanceDebug(instance: AnyInstance): string {
     switch (instance.type) {
         case ATTRIBUTE:
             return `ATTRIBUTE(${instance.alias},${instance.id})`;
@@ -98,12 +108,36 @@ export function formatInstance(instance: AnyInstance): string {
             else {
                 return `OPTION(${instance.alias},${instance.pid})`;
             }
+        case QUANTITY:
+            return `QUANTITY(${instance.alias},${instance.value})`;
         case WORD:
             return `WORD(${instance.alias})`;
         default:
             return 'UNKNOWN';
     }
 }
+
+export function formatInstanceAsText(instance: AnyInstance): string {
+    switch (instance.type) {
+        case ATTRIBUTE:
+        case ENTITY:
+        case MODIFIER:
+        case QUANTITY:
+        case WORD:
+            return instance.alias;
+        case OPTION:
+            if (instance.quantity.text.length > 0) {
+                return `${instance.quantity.text} ${instance.alias}`;
+            }
+            else {
+                return instance.alias;
+            }
+        default:
+            return 'UNKNOWN';
+    }
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -182,7 +216,16 @@ export class OptionGenerator implements Generator {
     constructor(catalog: Catalog, pid: PID, quantifiers: Quantity[]) {
         this.catalog = catalog;
         this.pid = pid;
-        this.quantifiers = quantifiers;
+
+        // TODO: refactor so that all OptionGenerators can share expanded aliases.
+        this.quantifiers = [];
+        for (const quantifier of quantifiers) {
+            const expression = quantifier.text;
+            const pattern = patternFromExpression(expression);
+            for (const text of generateAliases(pattern)) {
+                this.quantifiers.push({text, value: quantifier.value});
+            }
+        }
 
         this.instances = [...this.createInstances()];
     }
@@ -190,8 +233,6 @@ export class OptionGenerator implements Generator {
     private *entityVersions(): IterableIterator<EntityInstance> {
         const item = this.catalog.get(this.pid);
         for (const alias of aliasesFromOneItem(item)) {
-
-        // for (const alias of item.aliases) {
             yield CreateEntityInstance(this.pid, alias);
         }
     }
@@ -324,11 +365,13 @@ export class EntityGenerator implements Generator {
     }
 }
 
-// class QuantityGenerator {
-//     // TODO: undefined
-//     // TODO: no
-//     // TODO: a, some
-//     // TODO: one, two, three, . . .
+export class QuantityGenerator implements Generator {
+    private readonly instances: AnyInstance[][] = [];
+
+    // TODO: undefined
+    // TODO: no
+    // TODO: a, some
+    // TODO: one, two, three, . . .
 // const quantities: Quantity[] = [
 //     { value: 0, text: 'no'},
 //     { value: 0, text: 'without [any]'},
@@ -338,28 +381,34 @@ export class EntityGenerator implements Generator {
 //     { value: 1, text: 'one (pump,squirt) [of]'},
 //     { value: 2, text: 'two (pumps,squirts) [of]'}
 // ];
-//     count(): number {
-//         return this.instances.length;
-//     }
+    constructor(quantifiers: Quantity[]) {
+        for (const quantity of quantifiers) {
+            this.instances.push([CreateQuantityInstance(quantity)]);
+        }
+    }
+
+    count(): number {
+        return this.instances.length;
+    }
     
-//     version(id: number): AnyInstance[] {
-//         return this.instances[id];
-//     }
+    version(id: number): AnyInstance[] {
+        return this.instances[id];
+    }
 
-//     *versions(): IterableIterator<CodedInstances> {
-//         for (const [id, instances] of this.instances.entries()) {
-//             yield { id, instances };
-//         }
-//     }
-// }
+    *versions(): IterableIterator<CodedInstances> {
+        for (const [id, instances] of this.instances.entries()) {
+            yield { id, instances };
+        }
+    }
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// ProductGenerator
+// CompositeGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class ProductGenerator implements Generator {
+export class CompositeGenerator implements Generator {
     private readonly generators: Generator[];
     private readonly instanceCount: number;
 
@@ -396,17 +445,94 @@ export class ProductGenerator implements Generator {
 }
 
 
+// ///////////////////////////////////////////////////////////////////////////////
+// //
+// // OrderGenerator
+// //
+// ///////////////////////////////////////////////////////////////////////////////
+// export class QuantifiedProductGenerator implements Generator {
+//     private readonly quantities: Generator;
+//     private readonly products: Generator;
+//     private readonly instanceCount: number;
+
+//     constructor(quantities: Generator, generators: Generator[]) {
+//         this.quantities = quantities;
+//         this.generators = generators;
+
+//         let count = 1;
+//         for (const generator of generators) {
+//             count *= generator.count();
+//         }
+//         this.instanceCount = count;
+//     }
+
+//     count(): number {
+//         return this.instanceCount;
+//     }
+
+//     version(id: number): AnyInstance[] {
+//         let code = id;
+//         let instances: AnyInstance[] = [];
+//         for (const generator of this.generators) {
+//             const x = code % generator.count();
+//             code = Math.floor(code / generator.count());
+//             instances = instances.concat(generator.version(x));
+//         }
+//         return instances;
+//     }
+
+//     *versions(): IterableIterator<CodedInstances> {
+//         for (let id = 0; id < this.instanceCount; ++id) {
+//             yield { id, instances: this.version(id) };
+//         }
+//     }
+// }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// AliasGenerator
+//
+///////////////////////////////////////////////////////////////////////////////
+export class AliasGenerator implements Generator {
+    private readonly instances: AnyInstance[];
+
+    constructor(aliases: string[]) {
+        this.instances = [];
+        for (const alias of aliases) {
+            const pattern = patternFromExpression(alias);
+            for (const text of generateAliases(pattern)) {
+                this.instances.push(CreateWordInstance(text));
+            }
+        }
+    }
+
+    *versions(): IterableIterator<CodedInstances> {
+        for (const [id, instance] of this.instances.entries()) {
+            yield { id, instances: [instance] };
+        }
+    }
+
+    count(): number {
+        return this.instances.length;
+    }
+
+    version(id: number): AnyInstance[] {
+        return [this.instances[id]];
+    }
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // PermutedGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class PermutedGenerator implements Generator {
-    private readonly intances: AnyInstance[];
+export class PermutationGenerator implements Generator {
+    private readonly instances: AnyInstance[];
     private readonly permutationCount: number;
 
     constructor(instances: AnyInstance[]) {
-        this.intances = instances;
+        this.instances = instances;
         this.permutationCount = factorial(instances.length);
     }
 
@@ -421,7 +547,7 @@ export class PermutedGenerator implements Generator {
     }
 
     version(id: number): AnyInstance[] {
-        return permutation(this.intances, id);
+        return permutation(this.instances, id);
     }
 }
 
@@ -458,20 +584,32 @@ export function linguisticFixup(instances: AnyInstance[]): AnyInstance[] {
     let pastEntity = false;
     let pastPostEntityOption = false;
 
+    // Get the entity quantity to decide whether to pluralize.
+    let quantity = 1;
+    if (instances.length > 0) {
+        const x = instances[0];
+        if (x.type === QUANTITY) {
+            quantity = x.value;
+        }
+    }
+
     for (let i = 0; i < instances.length; ++i) {
-        const instance = instances[i];
+        let instance = instances[i];
         if (pastEntity) {
             if (pastPostEntityOption) {
                 if (i === instances.length - 1) {
                     result.push(CreateWordInstance('and'));
                 }
             }
-            else if (instance.type === OPTION) {
+            else if (instance.type === OPTION && !instance.quantity.text.startsWith('without')) {
                 pastPostEntityOption = true;
                 result.push(CreateWordInstance('with'));
             }
         }
         else  if (instance.type === ENTITY) {
+            if (quantity > 1) {
+                instance = {...instance, alias: pluralize(instance.alias, quantity)};
+            }
             pastEntity = true;
         }
 

@@ -1,22 +1,23 @@
 # TODO List
 
 * Fuzzer
+    * share alias expansion for option quantities across OptionGenerators
     * OrderGenerator
-    * PrologueGenerator
-    * EpilogueGenerator
-    * QuantityGenerator
+    * x PrologueGenerator
+    * x EpilogueGenerator
+    * x QuantityGenerator
     * x ProductGenerator
     * Units
-        * Aliases for units
+        * x Aliases for units
         * Data-driven from file?
     * Render as text
         * a/an
-        * pluralize entities
+        * pluralize entities - need to handle multi-word entities
         * x with A B and C
         * no with before without
     * Render as test case
-    * Quantities for entity
-    * Intro text
+    * x Quantities for entity
+    * x Intro text
 * CreateAttribute(), etc. should not use 'as' to cast type. Specify return value instead.
 * x test_importer not adding 'unverified' to suites.
 * x Speech-to-text filter does replacements after filtering punctuation

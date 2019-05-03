@@ -3,8 +3,8 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
-import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, ProductGenerator } from '../src';
-import { CodedInstances, EntityGenerator, formatInstance, linguisticFixup, ModifierGenerator, OptionGenerator, PermutedGenerator } from '../src';
+import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, CompositeGenerator, AliasGenerator } from '../src';
+import { CodedInstances, EntityGenerator, formatInstanceAsText, formatInstanceDebug, linguisticFixup, ModifierGenerator, OptionGenerator, PermutationGenerator, QuantityGenerator } from '../src';
 
 function usage() {
     console.log(`TODO: print usage here.`);
@@ -41,7 +41,7 @@ async function go() {
 
     const entities = new EntityGenerator(world.attributeInfo, world.catalog, 9000);
     for (const version of entities.versions()) {
-        const text = version.instances.map(formatInstance).join(' ');
+        const text = version.instances.map(formatInstanceDebug).join(' ');
         console.log(`${version.id}: ${text}`);
     }
 
@@ -49,15 +49,15 @@ async function go() {
 
     const id = 17;
     const instances = entities.version(id);
-    const text = instances.map(formatInstance).join(' ');
+    const text = instances.map(formatInstanceDebug).join(' ');
     console.log(`${id}: ${text}`);
 
     console.log('');
     console.log('Permutations');
 
-    const permuted = new PermutedGenerator(instances);
+    const permuted = new PermutationGenerator(instances);
     for (const version of permuted.versions()) {
-        const text = version.instances.map(formatInstance).join(' ');
+        const text = version.instances.map(formatInstanceDebug).join(' ');
         console.log(`(${id},${version.id}): ${text}`);
     }
 
@@ -68,7 +68,7 @@ async function go() {
     const dimension = world.attributeInfo.getDimension(milk) as Dimension;
     const modifiers = new ModifierGenerator(dimension);
     for (const version of modifiers.versions()) {
-        const text = version.instances.map(formatInstance).join(' ');
+        const text = version.instances.map(formatInstanceDebug).join(' ');
         console.log(`${version.id}: ${text}`);
     }
 
@@ -76,7 +76,7 @@ async function go() {
     console.log('Options:');
 
     // TODO: make this text aliases, e.g. 'two [pumps,squirts]'
-    const quantities: Quantity[] = [
+    const optionQuantities: Quantity[] = [
         { value: 0, text: 'no'},
         { value: 0, text: 'without [any]'},
         { value: 1, text: ''},
@@ -86,9 +86,54 @@ async function go() {
         { value: 2, text: 'two (pumps,squirts) [of]'}
     ];
 
-    const options = new OptionGenerator(world.catalog, 200000, quantities);
+    const options = new OptionGenerator(world.catalog, 200000, optionQuantities);
     for (const version of options.versions()) {
-        const text = version.instances.map(formatInstance).join(' ');
+        const text = version.instances.map(formatInstanceDebug).join(' ');
+        console.log(`${version.id}: ${text}`);
+    }
+
+    console.log('');
+    console.log('Quantities:');
+
+    const entityQuantities: Quantity[] = [
+        { value: 1, text: 'a'},
+        { value: 1, text: 'one'},
+        { value: 2, text: 'two'}
+    ];
+    const quantities = new QuantityGenerator(entityQuantities);
+    for (const version of quantities.versions()) {
+        const text = version.instances.map(formatInstanceDebug).join(' ');
+        console.log(`${version.id}: ${text}`);
+    }
+
+
+    console.log('');
+    console.log('Prologues:');
+
+    const prologueAliases = [
+        "(I'd,I would) like",
+        "(I'll,I will) (do,get,have,take)",
+        "[please] (get,give) me"
+    ];
+    const prologues = new AliasGenerator(prologueAliases);
+    for (const version of prologues.versions()) {
+        const text = version.instances.map(formatInstanceDebug).join(' ');
+        console.log(`${version.id}: ${text}`);
+    }
+
+
+    console.log('');
+    console.log('Epilogues:');
+
+    const epilogueAliases = [
+        "that's (all,it)",
+        "[and] (that'll,that will) (do it,be all)",
+        "thanks",
+        "thank you"
+    ];
+    const epilogues = new AliasGenerator(epilogueAliases);
+    for (const version of epilogues.versions()) {
+        const text = version.instances.map(formatInstanceDebug).join(' ');
         console.log(`${version.id}: ${text}`);
     }
 
@@ -103,14 +148,18 @@ async function go() {
     console.log('');
     console.log('Product:');
 
-    const product = new ProductGenerator([
-        entities, modifiers, options
+    const product = new CompositeGenerator([
+        // prologues, quantities, entities, modifiers, options, epilogues
+        quantities, entities, modifiers, options, epilogues
     ]);
 
-    console.log(`options: ${product.count()}`);
-    for (const id of [0, 1, 10, 100, 1000, 2000, 3000]) {
+    console.log(`total: ${product.count()}`);
+
+    for (const id of [0, 1, 10, 100, 123, 1000, 1234, 2000, 2345, 3000, 5000, 7000, 9000, 10000, 20000, 40000, 80000, 160000,300000]) {
         const instances = linguisticFixup(product.version(id));
-        const text = instances.map(formatInstance).join(' ');
+        const text = instances.map(formatInstanceAsText).join(' ');
+        // const text = instances.map(formatInstance).join(' ');
+        // const text = instances.map(x => x.alias).join(' ');
         console.log(`${id}: ${text}`);
     }
 
