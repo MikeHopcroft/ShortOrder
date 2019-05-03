@@ -114,6 +114,14 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch Test Generator",
+            "program": "${workspaceFolder}/build/samples/test_generator_demo.js",
+            "outputCapture": "std",
+            "args": ["./data/restaurant-en/test_utterances.txt", "./data/restaurant-en/generated_tests.yaml"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Test Runner",
             "program": "${workspaceFolder}/build/samples/test_runner.js",
             "outputCapture": "std",

@@ -29,7 +29,7 @@ export class Catalog {
     }
 
     // TODO: modify get to throw if not available.
-    get(pid: PID) {
+    get(pid: PID): ItemDescription {
         const item = this.map.get(pid);
         if (!item) {
             throw TypeError(`Catalog.get(): cannot find pid=${pid}`);
