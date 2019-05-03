@@ -1,5 +1,18 @@
 # TODO List
 
+* Fuzzer
+    * ProductGenerator
+    * Units
+        * Aliases for units
+        * Data-driven from file?
+    * Render as text
+        * a/an
+        * pluralize
+        * with A B and C
+        * no with before without
+    * Render as test case
+    * Quantities for entity
+    * Intro text
 * CreateAttribute(), etc. should not use 'as' to cast type. Specify return value instead.
 * x test_importer not adding 'unverified' to suites.
 * x Speech-to-text filter does replacements after filtering punctuation

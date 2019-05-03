@@ -298,18 +298,18 @@ export class EntityGenerator implements Generator {
         }
     }
 
-    *versions(): IterableIterator<CodedInstances> {
-        for (const [id, instances] of this.instances.entries()) {
-            yield { id, instances };
-        }
-    }
-
     count(): number {
         return this.instances.length;
     }
 
     version(id: number): AnyInstance[] {
         return this.instances[id];
+    }
+
+    *versions(): IterableIterator<CodedInstances> {
+        for (const [id, instances] of this.instances.entries()) {
+            yield { id, instances };
+        }
     }
 }
 
@@ -318,6 +318,15 @@ export class EntityGenerator implements Generator {
 //     // TODO: no
 //     // TODO: a, some
 //     // TODO: one, two, three, . . .
+// const quantities: Quantity[] = [
+//     { value: 0, text: 'no'},
+//     { value: 0, text: 'without [any]'},
+//     { value: 1, text: ''},
+//     { value: 1, text: 'a (pump,squirt) [of]'},
+//     { value: 1, text: 'some'},
+//     { value: 1, text: 'one (pump,squirt) [of]'},
+//     { value: 2, text: 'two (pumps,squirts) [of]'}
+// ];
 //     count(): number {
 //         return this.instances.length;
 //     }
@@ -339,24 +348,37 @@ export class EntityGenerator implements Generator {
 // ProductGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-// class ProductGenerator implements Generator {
-//     private readonly generators;
-//     private readonly instanceCount;
+class ProductGenerator implements Generator {
+    private readonly generators: Generator[];
+    private readonly instanceCount: number;
 
-//     constructor(generators: Generator[]) {
-//         this.generators = generators;
-//     }
+    constructor(generators: Generator[]) {
+        this.generators = generators;
 
-//     count(): number {
-//         return this.instanceCount;
-//     }
+        let count = 1;
+        for (const generator of generators) {
+            count *= generator.count();
+        }
+        this.instanceCount = count;
+    }
 
-//     version(id: number): AnyInstance[] {
-//         // decode id
-//         // pass to each generator
-//         // concatenate results
-//     }
-// }
+    count(): number {
+        return this.instanceCount;
+    }
+
+    version(id: number): AnyInstance[] {
+        // decode id
+        // pass to each generator
+        // concatenate results
+        return [];
+    }
+
+    *versions(): IterableIterator<CodedInstances> {
+        for (let id = 0; id < this.instanceCount; ++id) {
+            yield { id, instances: this.version(id) };
+        }
+    }
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

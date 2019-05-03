@@ -78,12 +78,12 @@ async function go() {
     // TODO: make this text aliases, e.g. 'two [pumps,squirts]'
     const quantities: Quantity[] = [
         { value: 0, text: 'no'},
-        { value: 0, text: 'without'},
+        { value: 0, text: 'without [any]'},
         { value: 1, text: ''},
-        { value: 1, text: 'a'},
+        { value: 1, text: 'a (pump,squirt) [of]'},
         { value: 1, text: 'some'},
-        { value: 1, text: 'one'},
-        { value: 2, text: 'two'}
+        { value: 1, text: 'one (pump,squirt) [of]'},
+        { value: 2, text: 'two (pumps,squirts) [of]'}
     ];
 
     const options = new OptionGenerator(world.catalog, 200000, quantities);
