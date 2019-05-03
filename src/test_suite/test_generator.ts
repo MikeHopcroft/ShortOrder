@@ -3,7 +3,7 @@ import { Item, generateAliases, PID } from 'token-flow';
 
 import { AttributeInfo, AttributeItem, Dimension, Matrix } from '../attributes';
 import { Catalog } from '../catalog';
-import { ATTRIBUTE, ENTITY, OPTION, patternFromExpression } from '../unified';
+import { ATTRIBUTE, ENTITY, OPTION, patternFromExpression, WORD, QUANTITY } from '../unified';
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -63,11 +63,20 @@ export function CreateOptionInstance(pid: PID, alias: string, quantity: Quantity
     return { type: OPTION, pid, alias, quantity };
 }
 
+export interface WordInstance extends Instance {
+    type: WORD;
+}
+
+export function CreateWordInstance(text: string): WordInstance {
+    return { type: WORD, alias: text };
+}
+
 export type  AnyInstance = 
     AttributeInstance |
     EntityInstance |
     ModifierInstance |
-    OptionInstance;
+    OptionInstance |
+    WordInstance;
 
 export interface CodedInstances {
     id: number;
@@ -89,6 +98,8 @@ export function formatInstance(instance: AnyInstance): string {
             else {
                 return `OPTION(${instance.alias},${instance.pid})`;
             }
+        case WORD:
+            return `WORD(${instance.alias})`;
         default:
             return 'UNKNOWN';
     }
@@ -348,7 +359,7 @@ export class EntityGenerator implements Generator {
 // ProductGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-class ProductGenerator implements Generator {
+export class ProductGenerator implements Generator {
     private readonly generators: Generator[];
     private readonly instanceCount: number;
 
@@ -367,10 +378,14 @@ class ProductGenerator implements Generator {
     }
 
     version(id: number): AnyInstance[] {
-        // decode id
-        // pass to each generator
-        // concatenate results
-        return [];
+        let code = id;
+        let instances: AnyInstance[] = [];
+        for (const generator of this.generators) {
+            const x = code % generator.count();
+            code = Math.floor(code / generator.count());
+            instances = instances.concat(generator.version(x));
+        }
+        return instances;
     }
 
     *versions(): IterableIterator<CodedInstances> {
@@ -433,6 +448,46 @@ export function factorial(n: number): number {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// LinguisticFixup
+//
+///////////////////////////////////////////////////////////////////////////////
+export function linguisticFixup(instances: AnyInstance[]): AnyInstance[] {
+    const result = [];
+    let pastEntity = false;
+    let pastPostEntityOption = false;
+
+    for (let i = 0; i < instances.length; ++i) {
+        const instance = instances[i];
+        if (pastEntity) {
+            if (pastPostEntityOption) {
+                if (i === instances.length - 1) {
+                    result.push(CreateWordInstance('and'));
+                }
+            }
+            else if (instance.type === OPTION) {
+                pastPostEntityOption = true;
+                result.push(CreateWordInstance('with'));
+            }
+        }
+        else  if (instance.type === ENTITY) {
+            pastEntity = true;
+        }
+
+        // // TODO: implement QUANTITY token
+        // if (instance.type === QUANTITY && instance.alias === 'a') {
+        //     if (i < instances.length - 2) {
+        //         if (startsWithEnglishVowel(instances[i + 1].alias)) {
+        //             instances.push({...instance, alias: 'an'});
+        //         }
+        //     }            
+        // }
+        result.push(instance);
+    }
+
+    return result;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //

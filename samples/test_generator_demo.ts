@@ -3,8 +3,8 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
-import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension } from '../src';
-import { CodedInstances, EntityGenerator, formatInstance, ModifierGenerator, OptionGenerator, PermutedGenerator } from '../src';
+import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, ProductGenerator } from '../src';
+import { CodedInstances, EntityGenerator, formatInstance, linguisticFixup, ModifierGenerator, OptionGenerator, PermutedGenerator } from '../src';
 
 function usage() {
     console.log(`TODO: print usage here.`);
@@ -99,6 +99,21 @@ async function go() {
     console.log(`modifiers: ${modifiers.count()}`);
     console.log(`options: ${options.count()}`);
     console.log(`product: ${entities.count() * modifiers.count() * options.count()}`);
+
+    console.log('');
+    console.log('Product:');
+
+    const product = new ProductGenerator([
+        entities, modifiers, options
+    ]);
+
+    console.log(`options: ${product.count()}`);
+    for (const id of [0, 1, 10, 100, 1000, 2000, 3000]) {
+        const instances = linguisticFixup(product.version(id));
+        const text = instances.map(formatInstance).join(' ');
+        console.log(`${id}: ${text}`);
+    }
+
 
     // // Set up tokenizer
     // const tokenizer: TokenizerFunction = async (utterance: string): Promise<IterableIterator<AnyToken>> =>
