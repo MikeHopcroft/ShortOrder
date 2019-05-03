@@ -1,14 +1,18 @@
 # TODO List
 
 * Fuzzer
-    * ProductGenerator
+    * OrderGenerator
+    * PrologueGenerator
+    * EpilogueGenerator
+    * QuantityGenerator
+    * x ProductGenerator
     * Units
         * Aliases for units
         * Data-driven from file?
     * Render as text
         * a/an
-        * pluralize
-        * with A B and C
+        * pluralize entities
+        * x with A B and C
         * no with before without
     * Render as test case
     * Quantities for entity
