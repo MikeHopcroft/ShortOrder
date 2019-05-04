@@ -2,10 +2,10 @@ import * as pluralize from 'pluralize';
 import * as seedrandom from 'seedrandom';
 import { Item, generateAliases, PID } from 'token-flow';
 
-import { AttributeInfo, AttributeItem, Dimension, Matrix, Attributes, attributesFromYamlString } from '../attributes';
+import { AttributeInfo, AttributeItem, Dimension, Matrix, Attributes } from '../attributes';
 import { Catalog } from '../catalog';
 import { ATTRIBUTE, ENTITY, OPTION, patternFromExpression, WORD, QUANTITY } from '../unified';
-import { dim } from 'ansi-styles';
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -15,8 +15,6 @@ import { dim } from 'ansi-styles';
 export interface Instance {
     type: symbol;
     alias: string;
-    // TODO: reinstate/implement version
-    // version: number;
 }
 
 export const MODIFIER: unique symbol = Symbol('MODIFIER');
@@ -221,7 +219,6 @@ export class OptionGenerator implements Generator {
     private readonly instances: AnyInstance[][];
 
     // Aliases for units
-    // List of quantities
     // Some way to specify omitted option vs removed option ('no anchovies', 'without').
     constructor(catalog: Catalog, pid: PID, quantifiers: Quantity[]) {
         this.catalog = catalog;
@@ -334,7 +331,6 @@ export class EntityGenerator implements Generator {
         }
 
         const item = this.catalog.get(this.entityId);
-        // for (let alias of item.aliases) {
         for (let alias of aliasesFromOneItem(item)) {
             for (const quantity of this.quantifiers) {
                 if (quantity.value > 1) {
@@ -463,49 +459,6 @@ export class MapGenerator implements Generator {
         }
     }
 }
-
-// ///////////////////////////////////////////////////////////////////////////////
-// //
-// // OrderGenerator
-// //
-// ///////////////////////////////////////////////////////////////////////////////
-// export class QuantifiedProductGenerator implements Generator {
-//     private readonly quantities: Generator;
-//     private readonly products: Generator;
-//     private readonly instanceCount: number;
-
-//     constructor(quantities: Generator, generators: Generator[]) {
-//         this.quantities = quantities;
-//         this.generators = generators;
-
-//         let count = 1;
-//         for (const generator of generators) {
-//             count *= generator.count();
-//         }
-//         this.instanceCount = count;
-//     }
-
-//     count(): number {
-//         return this.instanceCount;
-//     }
-
-//     version(id: number): AnyInstance[] {
-//         let code = id;
-//         let instances: AnyInstance[] = [];
-//         for (const generator of this.generators) {
-//             const x = code % generator.count();
-//             code = Math.floor(code / generator.count());
-//             instances = instances.concat(generator.version(x));
-//         }
-//         return instances;
-//     }
-
-//     *versions(): IterableIterator<CodedInstances> {
-//         for (let id = 0; id < this.instanceCount; ++id) {
-//             yield { id, instances: this.version(id) };
-//         }
-//     }
-// }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -711,15 +664,6 @@ class Pluralizer {
 // ProductGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-// class ProductGenerator extends MapGenerator {
-//     constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
-//         const unquantifiedProduct = new CompositeGenerator([
-//             entities, modifiers, options
-//         ]);
-
-//         super(unquantifiedProduct, [addQuantity, linguisticFixup]);
-//     }
-// }
 export class ProductGenerator extends MapGenerator {
     constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
         const unquantifiedProduct = new CompositeGenerator([
@@ -767,11 +711,10 @@ export class Random {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// MenuGenerators
+// RandomProducts
 //
 ///////////////////////////////////////////////////////////////////////////////
 export class RandomProducts {
-//    private readonly entityQuantities: Quantity[];
     private readonly random: Random;
 
     private readonly entities: EntityGenerator[] = [];
@@ -858,9 +801,4 @@ export class RandomOrders {
             ];
         }
     }
-
-    // private randomInstanceSequence(generator: Generator): AnyInstance[] {
-    //     const id = Math.floor(generator.count() * this.random());
-    //     return generator.version(id);
-    // }
 }
