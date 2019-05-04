@@ -1,10 +1,17 @@
 # TODO List
 
+* In attributes.yaml, there is no good way of identifying dimensions used as modifiers.
 * Update documentation
 * Fuzzer
-    * issue with entity quantity and pluralization - should quantity be in the entity?
-        * Seems like it should be for render to cart.
-        * Consequence: remove QuantityInstance. Replace with Word after permutation.
+    * Convert RandomProducts into a generator
+    * Apply permutations
+    * x expand aliases for entities
+    * only generate legal modifiers and options
+    * option quantities include units that should be consistent with the options
+    * some options are not quantifiable
+    * x issue with entity quantity and pluralization - should quantity be in the entity?
+        * x Seems like it should be for render to cart.
+        * x Consequence: remove QuantityInstance. Replace with Word after permutation.
     * share alias expansion for option quantities across OptionGenerators
     * OrderGenerator
     * x PrologueGenerator

@@ -2,9 +2,10 @@ import * as pluralize from 'pluralize';
 import * as seedrandom from 'seedrandom';
 import { Item, generateAliases, PID } from 'token-flow';
 
-import { AttributeInfo, AttributeItem, Dimension, Matrix } from '../attributes';
+import { AttributeInfo, AttributeItem, Dimension, Matrix, Attributes, attributesFromYamlString } from '../attributes';
 import { Catalog } from '../catalog';
 import { ATTRIBUTE, ENTITY, OPTION, patternFromExpression, WORD, QUANTITY } from '../unified';
+import { dim } from 'ansi-styles';
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -333,7 +334,8 @@ export class EntityGenerator implements Generator {
         }
 
         const item = this.catalog.get(this.entityId);
-        for (let alias of item.aliases) {
+        // for (let alias of item.aliases) {
+        for (let alias of aliasesFromOneItem(item)) {
             for (const quantity of this.quantifiers) {
                 if (quantity.value > 1) {
                     alias = pluralize(alias);
@@ -685,17 +687,6 @@ function renderAsText(instanes: AnyInstance[]): string {
 // function renderAsTestCase(instanes: AnyInstance[]): TestCase {
 // }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Id encoder/decoder
-//
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Permuter
-//
-///////////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -713,4 +704,163 @@ class Pluralizer {
     convert(word: string, count: number): string {
         return pluralize(word, count);
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// ProductGenerator
+//
+///////////////////////////////////////////////////////////////////////////////
+// class ProductGenerator extends MapGenerator {
+//     constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
+//         const unquantifiedProduct = new CompositeGenerator([
+//             entities, modifiers, options
+//         ]);
+
+//         super(unquantifiedProduct, [addQuantity, linguisticFixup]);
+//     }
+// }
+export class ProductGenerator extends MapGenerator {
+    constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
+        const unquantifiedProduct = new CompositeGenerator([
+            entities, modifiers, options
+        ]);
+
+        super(unquantifiedProduct, [addQuantity, linguisticFixup]);
+    }
+}
+
+export class Random {
+    private readonly random: seedrandom.prng;
+
+    constructor(seed: string) {
+        this.random = seedrandom('seed1'); 
+    }
+
+    // Returns random integer in range [start, end).
+    randomInRange(start:number, end:number): number {
+        if (end < start) {
+            const message = "end must be less than start";
+            throw TypeError(message);
+        }
+        return start + Math.floor(this.random() * (end - start));
+    }
+
+    // Returns a random natural number less than max.
+    randomNonNegative(max: number): number {
+        if (max < 0) {
+            const message = "max cannot be less than 0";
+            throw TypeError(message);
+        }
+        return Math.floor(this.random() * max);
+    }
+
+    randomChoice<T>(items: T[]): T {
+        return items[this.randomNonNegative(items.length)];
+    }
+
+    randomInstanceSequence(generator: Generator): AnyInstance[] {
+        return generator.version(this.randomNonNegative(generator.count()));
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// MenuGenerators
+//
+///////////////////////////////////////////////////////////////////////////////
+export class RandomProducts {
+//    private readonly entityQuantities: Quantity[];
+    private readonly random: Random;
+
+    private readonly entities: EntityGenerator[] = [];
+    private readonly modifiers: ModifierGenerator[] = [];
+    private readonly options: OptionGenerator[] = [];
+
+    constructor(
+        catalog: Catalog,
+        attributeInfo: AttributeInfo,
+        attributes: Attributes,
+        entityQuantities: Quantity[],
+        optionIds: PID[],
+        optionQuantities: Quantity[],
+        random: Random
+    ) {
+        this.random = random;
+
+        for (const [pid, item] of catalog.map.entries()) {
+            if (item.matrix !== undefined) {
+                this.entities.push(new EntityGenerator(attributeInfo, catalog, item.pid, entityQuantities));
+            }
+        }
+
+        for (const dimension of attributes.dimensions) {
+            // Hack to determine if dimension is a modifier.
+            if (dimension.items[0].sku !== undefined) {
+                const d = attributeInfo.getDimension(dimension.did);
+                if (d === undefined) {
+                    const message = `unknown did ${dimension.did}`;
+                    throw TypeError(message);
+                }
+                this.modifiers.push(new ModifierGenerator(d));
+            }
+        }
+
+        for (const pid of optionIds) {
+            this.options.push(new OptionGenerator(catalog, pid, optionQuantities));
+        }
+    }
+
+    oneProduct(): AnyInstance[] {
+        const entity = this.random.randomChoice(this.entities);
+        const modifier = this.random.randomChoice(this.modifiers);
+        const option = this.random.randomChoice(this.options);
+
+        const product = new ProductGenerator(entity, modifier, option);
+
+        return this.random.randomInstanceSequence(product);
+    }
+
+    *products(): IterableIterator<AnyInstance[]> {
+        while (true) {
+            yield this.oneProduct();
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// RandomOrders
+//
+///////////////////////////////////////////////////////////////////////////////
+export class RandomOrders {
+    private readonly prologues: Generator;
+    private readonly products: RandomProducts;
+    private readonly epilogues: Generator;
+
+    private readonly random: Random;
+
+    constructor(prologues: Generator, products: RandomProducts, epilogues: Generator) {
+        this.prologues = prologues;
+        this.products = products;
+        this.epilogues = epilogues;
+
+        this.random = new Random('seed1');
+    }
+
+    *orders(): IterableIterator<AnyInstance[]> {
+        while (true) {
+            yield [
+                ...this.random.randomInstanceSequence(this.prologues),
+                ...this.products.oneProduct(),
+                ...this.random.randomInstanceSequence(this.epilogues),
+            ];
+        }
+    }
+
+    // private randomInstanceSequence(generator: Generator): AnyInstance[] {
+    //     const id = Math.floor(generator.count() * this.random());
+    //     return generator.version(id);
+    // }
 }

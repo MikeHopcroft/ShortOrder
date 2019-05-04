@@ -1,10 +1,22 @@
 import * as fs from 'fs';
 import * as minimist from 'minimist';
 import * as path from 'path';
+// import * as seedrandom from 'seedrandom';
 // import * as yaml from 'js-yaml';
 
-import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, CompositeGenerator, AliasGenerator, MapGenerator, addQuantity } from '../src';
-import { CodedInstances, EntityGenerator, formatInstanceAsText, formatInstanceDebug, linguisticFixup, ModifierGenerator, OptionGenerator, PermutationGenerator } from '../src';
+import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, CompositeGenerator, AliasGenerator, MapGenerator, addQuantity, ProductGenerator } from '../src';
+import {
+    EntityGenerator,
+    formatInstanceAsText,
+    formatInstanceDebug,
+    linguisticFixup,
+    ModifierGenerator,
+    OptionGenerator,
+    PermutationGenerator,
+    Random,
+    RandomOrders,
+    RandomProducts
+} from '../src';
 
 function usage() {
     console.log(`TODO: print usage here.`);
@@ -45,9 +57,9 @@ async function go() {
     const entityId = 9000;
 
     const entityQuantities: Quantity[] = [
-        { value: 1, text: 'a'},
-        { value: 1, text: 'one'},
-        { value: 2, text: 'two'}
+        { value: 1, text: 'a' },
+        { value: 1, text: 'one' },
+        { value: 2, text: 'two' }
     ];
 
     const entities = new EntityGenerator(world.attributeInfo, world.catalog, entityId, entityQuantities);
@@ -96,13 +108,13 @@ async function go() {
 
     // TODO: make this text aliases, e.g. 'two [pumps,squirts]'
     const optionQuantities: Quantity[] = [
-        { value: 0, text: 'no'},
-        { value: 0, text: 'without [any]'},
-        { value: 1, text: ''},
-        { value: 1, text: 'a (pump,squirt) [of]'},
-        { value: 1, text: 'some'},
-        { value: 1, text: 'one (pump,squirt) [of]'},
-        { value: 2, text: 'two (pumps,squirts) [of]'}
+        { value: 0, text: 'no' },
+        { value: 0, text: 'without [any]' },
+        { value: 1, text: '' },
+        { value: 1, text: 'a (pump,squirt) [of]' },
+        { value: 1, text: 'some' },
+        { value: 1, text: 'one (pump,squirt) [of]' },
+        { value: 2, text: 'two (pumps,squirts) [of]' }
     ];
 
     const options = new OptionGenerator(world.catalog, modifierId, optionQuantities);
@@ -172,6 +184,7 @@ async function go() {
 
     const order = new CompositeGenerator([prologues, product, epilogues]);
 
+    const product2 = new ProductGenerator(entities, modifiers, options);
 
     console.log('');
     console.log('Statistics:');
@@ -181,19 +194,47 @@ async function go() {
     console.log(`options: ${options.count()}`);
     console.log(`productA: ${entities.count() * modifiers.count() * options.count()}`);
     console.log(`productB: ${product.count()}`);
+    console.log(`product2: ${product2.count()}`);
     console.log(`order: ${order.count()}`);
+
 
     //
     // Generate and print a selection of utterances.
     //
-    for (const id of [0, 1, 10, 100, 123, 1000, 1234, 2000, 2345, 3000, 5000, 7000, 9000, 10000, 20000, 40000, 80000, 160000,300000]) {
-        const instances = order.version(id);
-        // const instances = linguisticFixup(product.version(id));
+    const optionIds = [200000, 200001];
+
+    const random = new Random('seed1');
+    const product3 = new RandomProducts(
+        world.catalog,
+        world.attributeInfo,
+        world.attributes,
+        entityQuantities,
+        optionIds,
+        optionQuantities,
+        random);
+
+    const orders = new RandomOrders(prologues, product3, epilogues);
+    let counter = 0;
+    const limit = 50;
+    for (const instances of orders.orders()) {
+        if (counter >= limit) {
+            break;
+        }
+        counter++;
         const text = instances.map(formatInstanceAsText).join(' ');
-        // const text = instances.map(formatInstance).join(' ');
-        // const text = instances.map(x => x.alias).join(' ');
-        console.log(`${id}: ${text}`);
+        console.log(text);
     }
+    // const random = seedrandom('seed1');
+    // for (let i = 0; i < 10; ++i) {
+    //     const id = Math.floor(random() * 300000);
+    //     // for (const id of [0, 1, 10, 100, 123, 1000, 1234, 2000, 2345, 3000, 5000, 7000, 9000, 10000, 20000, 40000, 80000, 160000,300000]) {
+    //     const instances = order.version(id);
+    //     // const instances = linguisticFixup(product.version(id));
+    //     const text = instances.map(formatInstanceAsText).join(' ');
+    //     // const text = instances.map(formatInstance).join(' ');
+    //     // const text = instances.map(x => x.alias).join(' ');
+    //     console.log(`${id}: ${text}`);
+    // }
 
 
     // // Set up tokenizer

@@ -2410,3 +2410,16 @@ items:
       choices: []
       substitutions: []
       options: []
+  - pid: 200001
+    name: hazelnut syrup
+    aliases:
+      - hazelnut [syrup]
+    price: 0
+    standalone: false
+    isOption: true
+    isQuantifiable: true
+    composition:
+      defaults: []
+      choices: []
+      substitutions: []
+      options: []
