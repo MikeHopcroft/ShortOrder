@@ -429,7 +429,7 @@ export class MapGenerator implements Generator {
 // AliasGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class AliasGenerator implements Generator {
+class AliasGenerator implements Generator {
     private readonly instances: AnyInstance[];
 
     constructor(aliases: string[]) {
@@ -580,18 +580,8 @@ export function linguisticFixup(instances: AnyInstance[]): AnyInstance[] {
 // Renderers
 //
 ///////////////////////////////////////////////////////////////////////////////
-function renderAsText(instanes: AnyInstance[]): string {
-    // insert 'with' before first option after entity.
-    // special case 'with no' can also be 'no'
-    // insert 'and' between last two options.
-    // choose between 'a' and 'an'. Perhaps this should be in the option generator.
-    // pluralize units and options. Perhaps this should be in the option generator.
-    return "NOT IMPLEMENTED";
-}
-
 // function renderAsTestCase(instanes: AnyInstance[]): TestCase {
 // }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -736,19 +726,23 @@ export class RandomOrders {
 
     private readonly random: Random;
 
-    constructor(prologues: Generator, products: RandomProducts, epilogues: Generator) {
-        this.prologues = prologues;
+    constructor(prologueAliases: string[], products: RandomProducts, epilogueAliases: string[]) {
+        this.prologues = new AliasGenerator(prologueAliases);
         this.products = products;
-        this.epilogues = epilogues;
+        this.epilogues = new AliasGenerator(epilogueAliases);
 
         this.random = new Random('seed1');
     }
 
     *orders(): IterableIterator<AnyInstance[]> {
         while (true) {
+                const product = this.products.oneProduct();
+                const n = factorial(product.length);
+                const permutedProduct = permutation(product, this.random.randomNonNegative(n));
             yield [
                 ...this.random.randomInstanceSequence(this.prologues),
-                ...this.products.oneProduct(),
+                ...permutedProduct,
+                // ...this.products.oneProduct(),
                 ...this.random.randomInstanceSequence(this.epilogues),
             ];
         }

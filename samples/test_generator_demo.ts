@@ -3,10 +3,10 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
-import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, CompositeGenerator, AliasGenerator, MapGenerator, addQuantity, ProductGenerator } from '../src';
+import { AnyToken, setup, TestSuite, TokenizerFunction } from '../src';
 import {
     formatInstanceAsText,
-    formatInstanceDebug,
+    Quantity,
     Random,
     RandomOrders,
     RandomProducts
@@ -60,7 +60,6 @@ async function go() {
         "[please] (get,give) me",
         "could I (have,get)"
     ];
-    const prologues = new AliasGenerator(prologueAliases);
 
     const epilogueAliases = [
         "that's (all,it)",
@@ -68,7 +67,6 @@ async function go() {
         "thanks",
         "thank you"
     ];
-    const epilogues = new AliasGenerator(epilogueAliases);
 
     //
     // Generate and print a selection of utterances.
@@ -76,7 +74,7 @@ async function go() {
     const optionIds = [200000, 200001];
 
     const random = new Random('seed1');
-    const product3 = new RandomProducts(
+    const randomProducts = new RandomProducts(
         world.catalog,
         world.attributeInfo,
         world.attributes,
@@ -85,7 +83,7 @@ async function go() {
         optionQuantities,
         random);
 
-    const orders = new RandomOrders(prologues, product3, epilogues);
+    const orders = new RandomOrders(prologueAliases, randomProducts, epilogueAliases);
     let counter = 0;
     const limit = 50;
     for (const instances of orders.orders()) {
