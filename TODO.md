@@ -3,6 +3,7 @@
 * In attributes.yaml, there is no good way of identifying dimensions used as modifiers.
 * Update documentation
 * Fuzzer
+    * Remove PermutationGenerator???
     * Issues
         * Bug? with before entity. Looks like permuation happing after addQuantity
             * I'd like one pump raspberry syrup with two percent ice cream cones vanilla two small and that'll be all

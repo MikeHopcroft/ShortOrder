@@ -2,6 +2,7 @@ export * from './actions';
 export * from './attributes';
 export * from './cart';
 export * from './catalog';
+export * from './fuzzer';
 export * from './order';
 export * from './parser';
 export * from './repl';
