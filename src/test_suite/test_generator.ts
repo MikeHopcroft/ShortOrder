@@ -1,4 +1,5 @@
 import * as pluralize from 'pluralize';
+import * as seedrandom from 'seedrandom';
 import { Item, generateAliases, PID } from 'token-flow';
 
 import { AttributeInfo, AttributeItem, Dimension, Matrix } from '../attributes';
@@ -32,10 +33,12 @@ export function CreateAttributeInstance(id: PID, alias: string): AttributeInstan
 export interface EntityInstance extends Instance {
     type: ENTITY;
     id: PID;
+
+    quantity: Quantity;
 }
 
-export function CreateEntityInstance(id: PID, alias: string): EntityInstance {
-    return { type: ENTITY, id, alias };
+export function CreateEntityInstance(id: PID, alias: string, quantity: Quantity): EntityInstance {
+    return { type: ENTITY, id, alias, quantity };
 }
 
 export interface ModifierInstance extends Instance {
@@ -63,13 +66,13 @@ export function CreateQuantityInstance(quantity: Quantity): QuantityInstance {
 
 export interface OptionInstance extends Instance {
     type: OPTION;
-    pid: PID;
+    id: PID;
 
     quantity: Quantity;
 }
 
 export function CreateOptionInstance(pid: PID, alias: string, quantity: Quantity): OptionInstance {
-    return { type: OPTION, pid, alias, quantity };
+    return { type: OPTION, id: pid, alias, quantity };
 }
 
 export interface WordInstance extends Instance {
@@ -98,15 +101,20 @@ export function formatInstanceDebug(instance: AnyInstance): string {
         case ATTRIBUTE:
             return `ATTRIBUTE(${instance.alias},${instance.id})`;
         case ENTITY:
-            return `ENTITY(${instance.alias},${instance.id})`;
+            if (instance.quantity.text.length > 0) {
+                return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) ENTITY(${instance.alias},${instance.id})`;
+            }
+            else {
+                return `ENTITY(${instance.alias},${instance.id})`;
+            }
         case MODIFIER:
             return `MODIFIER(${instance.alias},${instance.id})`;
         case OPTION:
             if (instance.quantity.text.length > 0) {
-                return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) OPTION(${instance.alias},${instance.pid})`;
+                return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) OPTION(${instance.alias},${instance.id})`;
             }
             else {
-                return `OPTION(${instance.alias},${instance.pid})`;
+                return `OPTION(${instance.alias},${instance.id})`;
             }
         case QUANTITY:
             return `QUANTITY(${instance.alias},${instance.value})`;
@@ -141,7 +149,8 @@ export function formatInstanceAsText(instance: AnyInstance): string {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Generators
+// Generator
+// Base class for all utterance generators.
 //
 ///////////////////////////////////////////////////////////////////////////////
 export interface Generator {
@@ -230,17 +239,11 @@ export class OptionGenerator implements Generator {
         this.instances = [...this.createInstances()];
     }
 
-    private *entityVersions(): IterableIterator<EntityInstance> {
-        const item = this.catalog.get(this.pid);
-        for (const alias of aliasesFromOneItem(item)) {
-            yield CreateEntityInstance(this.pid, alias);
-        }
-    }
-
     private *createInstances(): IterableIterator<AnyInstance[]> {
+        const item = this.catalog.get(this.pid);
         for (const quantity of this.quantifiers) {
-            for (const entity of this.entityVersions()) {
-                yield [CreateOptionInstance(this.pid, entity.alias, quantity)];
+            for (const alias of aliasesFromOneItem(item)) {
+               yield [CreateOptionInstance(this.pid, alias, quantity)];
             }
         }
     }
@@ -270,6 +273,8 @@ export class EntityGenerator implements Generator {
     private readonly info: AttributeInfo;
     private readonly catalog: Catalog;
     private readonly entityId: PID;
+    private readonly quantifiers: Quantity[];
+
     private readonly matrix: Matrix;
 
     private readonly dimensionIdToAttributeId = new Map<PID, PID>();
@@ -277,10 +282,20 @@ export class EntityGenerator implements Generator {
 
     private readonly instances: AnyInstance[][];
 
-    constructor(attributeInfo: AttributeInfo, catalog: Catalog, entityId: PID) {
+    constructor(attributeInfo: AttributeInfo, catalog: Catalog, entityId: PID, quantifiers: Quantity[]) {
         this.info = attributeInfo;
         this.catalog = catalog;
         this.entityId = entityId;
+
+        // TODO: refactor so that all OptionGenerators can share expanded aliases.
+        this.quantifiers = [];
+        for (const quantifier of quantifiers) {
+            const expression = quantifier.text;
+            const pattern = patternFromExpression(expression);
+            for (const text of generateAliases(pattern)) {
+                this.quantifiers.push({text, value: quantifier.value});
+            }
+        }
 
         const matrix = this.info.getMatrixForEntity(this.entityId);
         if (!matrix) {
@@ -318,8 +333,13 @@ export class EntityGenerator implements Generator {
         }
 
         const item = this.catalog.get(this.entityId);
-        for (const alias of item.aliases) {
-            yield CreateEntityInstance(pid, alias);
+        for (let alias of item.aliases) {
+            for (const quantity of this.quantifiers) {
+                if (quantity.value > 1) {
+                    alias = pluralize(alias);
+                }
+                yield CreateEntityInstance(pid, alias, quantity);
+            }
         }
     }
 
@@ -365,44 +385,6 @@ export class EntityGenerator implements Generator {
     }
 }
 
-export class QuantityGenerator implements Generator {
-    private readonly instances: AnyInstance[][] = [];
-
-    // TODO: undefined
-    // TODO: no
-    // TODO: a, some
-    // TODO: one, two, three, . . .
-// const quantities: Quantity[] = [
-//     { value: 0, text: 'no'},
-//     { value: 0, text: 'without [any]'},
-//     { value: 1, text: ''},
-//     { value: 1, text: 'a (pump,squirt) [of]'},
-//     { value: 1, text: 'some'},
-//     { value: 1, text: 'one (pump,squirt) [of]'},
-//     { value: 2, text: 'two (pumps,squirts) [of]'}
-// ];
-    constructor(quantifiers: Quantity[]) {
-        for (const quantity of quantifiers) {
-            this.instances.push([CreateQuantityInstance(quantity)]);
-        }
-    }
-
-    count(): number {
-        return this.instances.length;
-    }
-    
-    version(id: number): AnyInstance[] {
-        return this.instances[id];
-    }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (const [id, instances] of this.instances.entries()) {
-            yield { id, instances };
-        }
-    }
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CompositeGenerator
@@ -444,6 +426,41 @@ export class CompositeGenerator implements Generator {
     }
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// MapGenerator
+//
+///////////////////////////////////////////////////////////////////////////////
+export type InstanceSequenceTransformer = (instances: AnyInstance[]) => AnyInstance[];
+
+export class MapGenerator implements Generator {
+    private readonly generator: Generator;
+    private readonly transformers: InstanceSequenceTransformer[];
+
+    constructor(generator: Generator, transformers: InstanceSequenceTransformer[]) {
+        this.generator = generator;
+        this.transformers = transformers;
+    }
+
+    count(): number {
+        return this.generator.count();
+    }
+
+    version(id: number): AnyInstance[] {
+        let instances = this.generator.version(id);
+        for (const transformer of this.transformers) {
+            instances = transformer(instances);
+        }
+        return instances;
+    }
+
+    *versions(): IterableIterator<CodedInstances> {
+        for (let id = 0; id < this.generator.count(); ++id) {
+            yield { id, instances: this.version(id) };
+        }
+    }
+}
 
 // ///////////////////////////////////////////////////////////////////////////////
 // //
@@ -557,7 +574,6 @@ export function permutation<T>(items: T[], lehmer: number) {
     let code = lehmer;
     for (let divisor = items.length; divisor > 0; --divisor) {
         const index = code % divisor;
-        // console.log(`code=${code}, divisor=${divisor}, index=${index}`);
         code = Math.floor(code / divisor);
         head.push(tail[index]);
         tail = [...tail.slice(0, index), ...tail.slice(index + 1)];
@@ -576,7 +592,32 @@ export function factorial(n: number): number {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// addQuantity
+//
+// InstanceSequenceTransformer for MapGenerator
+// Determines the quantity for the first EntityInstance and adds this value
+// to the head of the sequence of instances.
+//
+///////////////////////////////////////////////////////////////////////////////
+export function addQuantity(instances: AnyInstance[]): AnyInstance[] {
+    for (const instance of instances) {
+        if (instance.type === ENTITY) {
+            return [CreateQuantityInstance(instance.quantity), ...instances];
+        }
+    }
+    return instances;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // LinguisticFixup
+//
+// InstanceSequenceTransformer for MapGenerator
+// Performs small linguistic tranformations like
+//   * Pluralize entity, based on quantity
+//   * Choose between 'a' and 'an' based on following word
+//   * Add 'with' and 'and' to list of trailing modifiers and options.
+//   * Special case to suppress 'with' before 'without'. 
 //
 ///////////////////////////////////////////////////////////////////////////////
 export function linguisticFixup(instances: AnyInstance[]): AnyInstance[] {

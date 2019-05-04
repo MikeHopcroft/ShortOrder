@@ -3,8 +3,8 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
-import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, CompositeGenerator, AliasGenerator } from '../src';
-import { CodedInstances, EntityGenerator, formatInstanceAsText, formatInstanceDebug, linguisticFixup, ModifierGenerator, OptionGenerator, PermutationGenerator, QuantityGenerator } from '../src';
+import { AnyToken, setup, TestSuite, TokenizerFunction, Quantity, Dimension, CompositeGenerator, AliasGenerator, MapGenerator, addQuantity } from '../src';
+import { CodedInstances, EntityGenerator, formatInstanceAsText, formatInstanceDebug, linguisticFixup, ModifierGenerator, OptionGenerator, PermutationGenerator } from '../src';
 
 function usage() {
     console.log(`TODO: print usage here.`);
@@ -39,7 +39,18 @@ async function go() {
         false
     );
 
-    const entities = new EntityGenerator(world.attributeInfo, world.catalog, 9000);
+    //
+    // Configure EntityGenerator for a single entity.
+    //
+    const entityId = 9000;
+
+    const entityQuantities: Quantity[] = [
+        { value: 1, text: 'a'},
+        { value: 1, text: 'one'},
+        { value: 2, text: 'two'}
+    ];
+
+    const entities = new EntityGenerator(world.attributeInfo, world.catalog, entityId, entityQuantities);
     for (const version of entities.versions()) {
         const text = version.instances.map(formatInstanceDebug).join(' ');
         console.log(`${version.id}: ${text}`);
@@ -61,6 +72,9 @@ async function go() {
         console.log(`(${id},${version.id}): ${text}`);
     }
 
+    //
+    // Configure ModifierGenerator for a single dimension.
+    //
     console.log('');
     console.log('Modifiers');
 
@@ -72,8 +86,13 @@ async function go() {
         console.log(`${version.id}: ${text}`);
     }
 
+    //
+    // Configure OptionGenerator for a single option.
+    //
     console.log('');
     console.log('Options:');
+
+    const modifierId = 200000;
 
     // TODO: make this text aliases, e.g. 'two [pumps,squirts]'
     const optionQuantities: Quantity[] = [
@@ -86,34 +105,24 @@ async function go() {
         { value: 2, text: 'two (pumps,squirts) [of]'}
     ];
 
-    const options = new OptionGenerator(world.catalog, 200000, optionQuantities);
+    const options = new OptionGenerator(world.catalog, modifierId, optionQuantities);
     for (const version of options.versions()) {
         const text = version.instances.map(formatInstanceDebug).join(' ');
         console.log(`${version.id}: ${text}`);
     }
 
-    console.log('');
-    console.log('Quantities:');
 
-    const entityQuantities: Quantity[] = [
-        { value: 1, text: 'a'},
-        { value: 1, text: 'one'},
-        { value: 2, text: 'two'}
-    ];
-    const quantities = new QuantityGenerator(entityQuantities);
-    for (const version of quantities.versions()) {
-        const text = version.instances.map(formatInstanceDebug).join(' ');
-        console.log(`${version.id}: ${text}`);
-    }
-
-
+    //
+    // Configure AliasGenerator for prologues.
+    //
     console.log('');
     console.log('Prologues:');
 
     const prologueAliases = [
         "(I'd,I would) like",
         "(I'll,I will) (do,get,have,take)",
-        "[please] (get,give) me"
+        "[please] (get,give) me",
+        "could I (have,get)"
     ];
     const prologues = new AliasGenerator(prologueAliases);
     for (const version of prologues.versions()) {
@@ -122,6 +131,10 @@ async function go() {
     }
 
 
+
+    //
+    // Configure AliasGenerator for epilogues.
+    //
     console.log('');
     console.log('Epilogues:');
 
@@ -137,26 +150,45 @@ async function go() {
         console.log(`${version.id}: ${text}`);
     }
 
+    //
+    // Configure CompositeGenerator that combines the entity with its modifiers
+    // and options.
+    //
+    console.log('');
+    console.log('Product:');
+
+    const unquantifiedProduct = new CompositeGenerator([
+        // prologues, quantities, entities, modifiers, options, epilogues
+        // entities, modifiers, options, epilogues
+        entities, modifiers, options
+    ]);
+
+    //
+    // Configure MapGenerator that adds the entity's quantity and performs
+    // linguistic fixup for the phrase.
+    //
+    const product = new MapGenerator(unquantifiedProduct, [addQuantity, linguisticFixup]);
+    console.log(`total: ${product.count()}`);
+
+    const order = new CompositeGenerator([prologues, product, epilogues]);
+
+
     console.log('');
     console.log('Statistics:');
 
     console.log(`entities: ${entities.count()}`);
     console.log(`modifiers: ${modifiers.count()}`);
     console.log(`options: ${options.count()}`);
-    console.log(`product: ${entities.count() * modifiers.count() * options.count()}`);
+    console.log(`productA: ${entities.count() * modifiers.count() * options.count()}`);
+    console.log(`productB: ${product.count()}`);
+    console.log(`order: ${order.count()}`);
 
-    console.log('');
-    console.log('Product:');
-
-    const product = new CompositeGenerator([
-        // prologues, quantities, entities, modifiers, options, epilogues
-        quantities, entities, modifiers, options, epilogues
-    ]);
-
-    console.log(`total: ${product.count()}`);
-
+    //
+    // Generate and print a selection of utterances.
+    //
     for (const id of [0, 1, 10, 100, 123, 1000, 1234, 2000, 2345, 3000, 5000, 7000, 9000, 10000, 20000, 40000, 80000, 160000,300000]) {
-        const instances = linguisticFixup(product.version(id));
+        const instances = order.version(id);
+        // const instances = linguisticFixup(product.version(id));
         const text = instances.map(formatInstanceAsText).join(' ');
         // const text = instances.map(formatInstance).join(' ');
         // const text = instances.map(x => x.alias).join(' ');

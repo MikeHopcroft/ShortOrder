@@ -1,6 +1,10 @@
 # TODO List
 
+* Update documentation
 * Fuzzer
+    * issue with entity quantity and pluralization - should quantity be in the entity?
+        * Seems like it should be for render to cart.
+        * Consequence: remove QuantityInstance. Replace with Word after permutation.
     * share alias expansion for option quantities across OptionGenerators
     * OrderGenerator
     * x PrologueGenerator

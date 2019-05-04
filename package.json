@@ -34,6 +34,7 @@
     "@types/node": "^10.11.4",
     "@types/number-to-words": "^1.2.0",
     "@types/readline-sync": "^1.4.3",
+    "@types/seedrandom": "^2.4.28",
     "chai": "^4.2.0",
     "copyfiles": "^2.1.0",
     "gts": "^0.8.0",
@@ -52,6 +53,7 @@
     "number-to-words": "^1.2.4",
     "pluralize": "^7.0.0",
     "readline-sync": "^1.4.9",
+    "seedrandom": "^3.0.1",
     "token-flow": "0.0.30"
   }
 }
