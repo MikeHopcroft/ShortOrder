@@ -3,9 +3,12 @@
 * In attributes.yaml, there is no good way of identifying dimensions used as modifiers.
 * Update documentation
 * Fuzzer
+    * Intersting cases
+        * I'd like two one pump raspberry syrup two percent ice cream cones small vanilla and that'll be all
+        * I will have a halfcaf low fat milk small hazelnut latte thanks
     * Remove PermutationGenerator???
     * Issues
-        * Bug? with before entity. Looks like permuation happing after addQuantity
+        * Bug? with before entity. Looks like permutation happing after addQuantity
             * I'd like one pump raspberry syrup with two percent ice cream cones vanilla two small and that'll be all
         * size after option
             * please get me low fat milk latte no hazelnut with one decaf medium thanks

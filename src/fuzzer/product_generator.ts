@@ -12,19 +12,25 @@ import {
     CreateQuantityInstance,
     CreateWordInstance,
 } from './instances';
+import { factorial, permutation, Random } from './utilities';
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // ProductGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class ProductGenerator extends MapGenerator {
+export class ProductGenerator extends CompositeGenerator {
     constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
-        const unquantifiedProduct = new CompositeGenerator([
-            entities, modifiers, options
-        ]);
+        super([entities, modifiers, options]);
+    }
 
-        super(unquantifiedProduct, [addQuantity, linguisticFixup]);
+    static permute(instances: AnyInstance[], random: Random): AnyInstance[] {
+        const n = factorial(instances.length);
+        return permutation(instances, random.randomNonNegative(n));
+    }
+
+    static complete(instances: AnyInstance[]): AnyInstance[] {
+        return linguisticFixup(addQuantity(instances));
     }
 }
 
@@ -37,7 +43,7 @@ export class ProductGenerator extends MapGenerator {
 // to the head of the sequence of instances.
 //
 ///////////////////////////////////////////////////////////////////////////////
-export function addQuantity(instances: AnyInstance[]): AnyInstance[] {
+function addQuantity(instances: AnyInstance[]): AnyInstance[] {
     for (const instance of instances) {
         if (instance.type === ENTITY) {
             return [CreateQuantityInstance(instance.quantity), ...instances];
@@ -58,7 +64,7 @@ export function addQuantity(instances: AnyInstance[]): AnyInstance[] {
 //   * Special case to suppress 'with' before 'without'. 
 //
 ///////////////////////////////////////////////////////////////////////////////
-export function linguisticFixup(instances: AnyInstance[]): AnyInstance[] {
+function linguisticFixup(instances: AnyInstance[]): AnyInstance[] {
     const result = [];
     let pastEntity = false;
     let pastPostEntityOption = false;

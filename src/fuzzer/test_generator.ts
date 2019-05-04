@@ -109,12 +109,11 @@ export class RandomOrders {
     *orders(): IterableIterator<AnyInstance[]> {
         while (true) {
                 const product = this.products.oneProduct();
-                const n = factorial(product.length);
-                const permutedProduct = permutation(product, this.random.randomNonNegative(n));
+                const permutedProduct = ProductGenerator.permute(product, this.random);
+                const completedProduct = ProductGenerator.complete(permutedProduct);
             yield [
                 ...this.random.randomInstanceSequence(this.prologues),
-                ...permutedProduct,
-                // ...this.products.oneProduct(),
+                ...completedProduct,
                 ...this.random.randomInstanceSequence(this.epilogues),
             ];
         }
