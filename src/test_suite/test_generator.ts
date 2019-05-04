@@ -90,11 +90,6 @@ export type  AnyInstance =
     QuantityInstance |
     WordInstance;
 
-export interface CodedInstances {
-    id: number;
-    instances: AnyInstance[];
-}
-
 export function formatInstanceDebug(instance: AnyInstance): string {
     switch (instance.type) {
         case ATTRIBUTE:
@@ -155,7 +150,6 @@ export function formatInstanceAsText(instance: AnyInstance): string {
 export interface Generator {
     count(): number;
     version(id: number): AnyInstance[];
-    versions(): IterableIterator<CodedInstances>;
 }
 
 export function* aliasesFromOneItem(item: Item) {
@@ -197,12 +191,6 @@ export class ModifierGenerator implements Generator {
     version(id: number): AnyInstance[] {
         return this.instances[id];
     }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (const [id, instances] of this.instances.entries()) {
-            yield { id, instances };
-        }
-    }
 }
 
 
@@ -243,12 +231,6 @@ export class OptionGenerator implements Generator {
             for (const alias of aliasesFromOneItem(item)) {
                yield [CreateOptionInstance(this.pid, alias, quantity)];
             }
-        }
-    }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (const [id, instances] of this.instances.entries()) {
-            yield { id, instances };
         }
     }
 
@@ -375,12 +357,6 @@ export class EntityGenerator implements Generator {
     version(id: number): AnyInstance[] {
         return this.instances[id];
     }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (const [id, instances] of this.instances.entries()) {
-            yield { id, instances };
-        }
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -416,12 +392,6 @@ export class CompositeGenerator implements Generator {
         }
         return instances;
     }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (let id = 0; id < this.instanceCount; ++id) {
-            yield { id, instances: this.version(id) };
-        }
-    }
 }
 
 
@@ -452,12 +422,6 @@ export class MapGenerator implements Generator {
         }
         return instances;
     }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (let id = 0; id < this.generator.count(); ++id) {
-            yield { id, instances: this.version(id) };
-        }
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -475,12 +439,6 @@ export class AliasGenerator implements Generator {
             for (const text of generateAliases(pattern)) {
                 this.instances.push(CreateWordInstance(text));
             }
-        }
-    }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (const [id, instance] of this.instances.entries()) {
-            yield { id, instances: [instance] };
         }
     }
 
@@ -506,12 +464,6 @@ export class PermutationGenerator implements Generator {
     constructor(instances: AnyInstance[]) {
         this.instances = instances;
         this.permutationCount = factorial(instances.length);
-    }
-
-    *versions(): IterableIterator<CodedInstances> {
-        for (let id = 0; id < this.permutationCount; ++id) {
-            yield { id, instances: this.version(id) };
-        }
     }
 
     count(): number {
