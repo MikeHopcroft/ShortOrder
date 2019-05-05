@@ -31,7 +31,7 @@ export function createTestCase(catalog: Catalog, attributeInfo: AttributeInfo, i
             lines.push({
                 indent: 1,
                 quantity: 1,
-                pid: instance.id,
+                pid: sku as number,
                 name: catalog.get(sku as number).name
             });
         }
@@ -56,8 +56,6 @@ export function createTestCase(catalog: Catalog, attributeInfo: AttributeInfo, i
         'synthetic',        // TODO: put info in comment?
         [instances.map(formatInstanceAsText).join(' ')],
         [order]);
-
-    console.log(order);
 
     return testCase;
 }

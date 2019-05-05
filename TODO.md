@@ -1,9 +1,20 @@
 # TODO List
 
+* Bugs
+    * isomorphic tree comparison
+    * detects word(low)
+        * .tokenize I will do a low fat milk latte halfcaf small iced with some raspberry that will be all
+    * 'no' might be suppressed
+        * please get me one no hazelnut low fat milk medium latte decaf thanks
+    * Get tripped up by 'and'?
+        * "I'll get one latte fat free milk large with two pumps hazelnut syrup and halfcaf and that will do it"
+
+* speech to text filter false positive for lowercasing, e.g. "I will have a halfcaf low fat milk small hazelnut latte thanks"
 * In attributes.yaml, there is no good way of identifying dimensions used as modifiers.
 * Update documentation
 * Fuzzer
     * Intersting cases
+        * could I get a without any hazelnut syrup medium latte iced halfcaf that will be all
         * I'd like two one pump raspberry syrup two percent ice cream cones small vanilla and that'll be all
         * I will have a halfcaf low fat milk small hazelnut latte thanks
         * I'll get two whole lattes without raspberry iced large thanks

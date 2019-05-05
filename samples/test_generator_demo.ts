@@ -3,7 +3,8 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
-import { AnyToken, setup, TestSuite, TokenizerFunction } from '../src';
+import { PID } from 'token-flow';
+import { AnyToken, Catalog, explainDifferences, setup, TestSuite, TokenizerFunction } from '../src';
 import {
     createTestCase,
     formatInstanceAsText,
@@ -12,7 +13,13 @@ import {
     RandomOrders,
     RandomProducts,
 } from '../src';
-import { create } from 'domain';
+
+function setOptionOfPredicate(catalog: Catalog, child: PID, parent: PID) {
+    const childInfo = catalog.get(child);
+    const parentInfo = catalog.get(parent);
+
+    return parentInfo.standalone && !childInfo.standalone;
+}
 
 function usage() {
     console.log(`TODO: print usage here.`);
@@ -39,6 +46,8 @@ async function go() {
         path.join(__dirname, './data/restaurant-en/stopwords.yaml'),
         false
     );
+
+    world.catalog.setOptionOfPredicate(setOptionOfPredicate);
 
     // Set up tokenizer
     const tokenizer: TokenizerFunction = async (utterance: string): Promise<IterableIterator<AnyToken>> =>
@@ -92,17 +101,21 @@ async function go() {
 
     const orders = new RandomOrders(prologueAliases, randomProducts, epilogueAliases);
     let counter = 0;
-    const limit = 5;
+    const limit = 50;
     for (const instances of orders.orders()) {
         if (counter >= limit) {
             break;
         }
         counter++;
         const text = instances.map(formatInstanceAsText).join(' ');
+        console.log(text);
         const testCase = createTestCase(world.catalog, world.attributeInfo, instances);
         const result = await testCase.run(world, tokenizer);
         console.log(`Test status: ${result.passed?"PASSED":"FAILED"}`);
-        console.log(text);
+        if (!result.passed) {
+            explainDifferences(result.observed[0], testCase.expected[0]);
+        }
+        console.log();
     }
 
     // // Set up tokenizer

@@ -163,7 +163,7 @@ export class AggregatedResults {
     }
 }
 
-function explainDifferences(observed: TestOrder, expected: TestOrder) {
+export function explainDifferences(observed: TestOrder, expected: TestOrder) {
     const o = observed.lines;
     const e = expected.lines;
     const n = Math.max(o.length, e.length);
