@@ -1,13 +1,19 @@
 # TODO List
 
 * Bugs
-    * isomorphic tree comparison
-    * detects word(low)
+    * 'with', 'and' ends entity before all attributes
+        * get me a ice cream cone with one squirt raspberry medium chocolate and fat free milk and that will do it
+        * could I get a strawberry cone whole milk with two squirts of hazelnut and large and that'll do it
+        * I would like two ice cream cones without raspberry syrup whole milk small strawberry that will be all
+    * createInstancesRecursion() needs to expand attribute aliases.
+    * detects word(low) - THIS IS REALLY WEIRD - TOKENIZER ISSUE
         * .tokenize I will do a low fat milk latte halfcaf small iced with some raspberry that will be all
     * 'no' might be suppressed
         * please get me one no hazelnut low fat milk medium latte decaf thanks
+        * I'll get two whole lattes without raspberry iced large thanks
     * Get tripped up by 'and'?
         * "I'll get one latte fat free milk large with two pumps hazelnut syrup and halfcaf and that will do it"
+    * x isomorphic tree comparison
 
 * speech to text filter false positive for lowercasing, e.g. "I will have a halfcaf low fat milk small hazelnut latte thanks"
 * In attributes.yaml, there is no good way of identifying dimensions used as modifiers.

@@ -10,7 +10,7 @@ import { EntityGenerator } from './entity_generator';
 import { ModifierGenerator } from './modifier_generator';
 import { OptionGenerator } from './option_generator';
 import { ProductGenerator } from './product_generator';
-import { factorial, permutation, Random } from './utilities';
+import { Random } from './utilities';
 
 
 

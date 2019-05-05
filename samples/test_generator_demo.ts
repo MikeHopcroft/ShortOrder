@@ -4,7 +4,7 @@ import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
 import { PID } from 'token-flow';
-import { AnyToken, Catalog, explainDifferences, setup, TestSuite, TokenizerFunction } from '../src';
+import { AnyToken, Catalog, explainDifferences, setup, TestSuite, TokenizerFunction, testOrdersIdentical } from '../src';
 import {
     createTestCase,
     formatInstanceAsText,
@@ -102,6 +102,8 @@ async function go() {
     const orders = new RandomOrders(prologueAliases, randomProducts, epilogueAliases);
     let counter = 0;
     const limit = 50;
+    let passedCount = 0;
+    let failedCount = 0;
     for (const instances of orders.orders()) {
         if (counter >= limit) {
             break;
@@ -111,12 +113,30 @@ async function go() {
         console.log(text);
         const testCase = createTestCase(world.catalog, world.attributeInfo, instances);
         const result = await testCase.run(world, tokenizer);
-        console.log(`Test status: ${result.passed?"PASSED":"FAILED"}`);
-        if (!result.passed) {
-            explainDifferences(result.observed[0], testCase.expected[0]);
+        // console.log(`Test status: ${result.passed?"PASSED":"FAILED"}`);
+
+        const ok = testOrdersIdentical(testCase.expected[0], result.observed[0]);
+        console.log(`Test status: ${ok?"PASSED":"FAILED"}`);
+        if (ok) {
+            passedCount++;
         }
+        else {
+            failedCount++;
+        }
+        console.log('');
+
+        // if (!result.passed) {
+        // if (!ok) {
+        //         explainDifferences(result.observed[0], testCase.expected[0]);
+        // }
+
         console.log();
     }
+
+    console.log('');
+    console.log(`failed: ${failedCount}`);
+    console.log(`passed: ${passedCount}`);
+    console.log(`fraction: ${passedCount}/${passedCount + failedCount}`);
 
     // // Set up tokenizer
     // const tokenizer: TokenizerFunction = async (utterance: string): Promise<IterableIterator<AnyToken>> =>

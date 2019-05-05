@@ -102,7 +102,7 @@ export class EntityGenerator implements Generator {
             if (d === this.matrix.dimensions.length - 1) {
                 const pid = this.getPID();
                 if (pid !== undefined) {
-                    const attributes = this.attributes.map(a => CreateAttributeInstance(a.pid, a.name));
+                    const attributes = this.attributes.map(a => CreateAttributeInstance(a.pid, a.aliases[0]));
                     for (const entity of this.entityVersions()) {
                         yield [...attributes, entity];
                     }
