@@ -4,7 +4,6 @@ import { ENTITY, OPTION, QUANTITY } from '../unified';
 
 import { CompositeGenerator } from './composite_generator';
 import { EntityGenerator } from './entity_generator';
-import { MapGenerator } from './map_generator';
 import { ModifierGenerator } from './modifier_generator';
 import { OptionGenerator } from './option_generator';
 import {

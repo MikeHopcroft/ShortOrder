@@ -8,5 +8,6 @@ export * from './modifier_generator';
 export * from './option_generator';
 export * from './product_generator';
 export * from './permutation_generator';
+export * from './test_case';
 export * from './test_generator';
 export * from './utilities';

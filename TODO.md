@@ -6,6 +6,7 @@
     * Intersting cases
         * I'd like two one pump raspberry syrup two percent ice cream cones small vanilla and that'll be all
         * I will have a halfcaf low fat milk small hazelnut latte thanks
+        * I'll get two whole lattes without raspberry iced large thanks
     * Remove PermutationGenerator???
     * Issues
         * Bug? with before entity. Looks like permutation happing after addQuantity
