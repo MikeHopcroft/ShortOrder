@@ -4,7 +4,6 @@ import { TestCase, TestLineItem, TestOrder } from "../test_suite";
 import { ENTITY, OPTION } from "../unified";
 
 import { AnyInstance, MODIFIER, formatInstanceAsText } from "./instances";
-import { Result } from 'token-flow/build/src/relevance_suite/relevance_suite';
 
 // TODO: perhaps createTestCase should be a class?
 let counter = 0;

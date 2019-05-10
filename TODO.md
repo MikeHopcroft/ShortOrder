@@ -1,5 +1,50 @@
 # TODO List
 
+* Synthetic test suite / simulator
+    * What is legal?
+    * What is not legal?
+    * Issue with leading/trailing attributes
+    * 'and' triggered by multi-word modifiers?
+* Refactoring
+    * package structure
+        * Lexical analysis: token-flow
+        * Parsing, segmentation, composite entity extraction: short-order
+        * Menu, Rules checking, Cart updates
+            * le-menu
+            * prix-fixe
+        * Integration
+            * REPL
+            * (Cart, string) => (Cart', Actions)
+        * Consider multiple packages in single repo?
+    * token-flow
+        * Examine all short-order imports from token-flow
+            * keep
+                * Token
+                * generateAliases()
+                * NUMBERTOKEN
+            * Maybe
+                * UNKNOWNTOKEN - what is this used for?
+            * remove
+                * PID - where does this definition go in short-order?
+                * Item
+        * Examine token-flow exports of types no-longer imported by short-order
+            * These should probably go into token-flow samples
+        * Remove coupling via Item
+            * Looks like Item is just used to define token-factories
+            * YAML files based on local IndexableItem which has no formal relationship with item. Duck typed.
+        * Remove coupling via PID
+        * Extract stand-alone relaxed matcher
+    * short-order
+        * standalone CartOps and menu
+        * consider removing choices - or just leave and don't use
+        * consdier removing substitutions - or just leave and don't use
+        * fake menu generator tools
+        * separate CartOps API from parser
+        * separate CartOps find methods from update methods
+        * remove prices
+        * mutual exclusivity
+        * rules checker
+
 * Bugs
     * 'with', 'and' ends entity before all attributes
         * get me a ice cream cone with one squirt raspberry medium chocolate and fat free milk and that will do it
