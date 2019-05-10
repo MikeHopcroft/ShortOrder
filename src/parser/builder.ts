@@ -1,4 +1,5 @@
-import { NumberToken, PID } from 'token-flow';
+import { PID } from 'prix-fixe';
+import { NumberToken } from 'token-flow';
 
 import { AttributeInfo, MatrixEntityBuilder } from "../attributes";
 import { OptionToken, QuantityToken } from "../unified";

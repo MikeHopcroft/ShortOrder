@@ -1,4 +1,4 @@
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 import { AttributeInfo, Attributes } from '../attributes';
 import { Catalog } from '../catalog';

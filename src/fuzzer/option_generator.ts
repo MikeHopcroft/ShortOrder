@@ -1,4 +1,5 @@
-import { generateAliases, PID } from 'token-flow';
+import { PID } from 'prix-fixe';
+import { generateAliases } from 'token-flow';
 
 import { Catalog } from '../catalog';
 import { patternFromExpression } from '../unified';

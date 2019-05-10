@@ -1,4 +1,5 @@
-import { Item, PID, Token } from 'token-flow';
+import { Item, PID } from 'prix-fixe';
+import { Token } from 'token-flow';
 import { CreateOption } from './options';
 import { ItemDescription } from '../catalog';
 

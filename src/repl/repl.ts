@@ -3,7 +3,8 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as replServer from 'repl';
 
-import { PID, Token } from 'token-flow';
+import { PID } from 'prix-fixe';
+import { Token } from 'token-flow';
 
 import { actionToString, AnyAction } from '../actions';
 import { attributesFromYamlString, AttributeInfo } from '../attributes';

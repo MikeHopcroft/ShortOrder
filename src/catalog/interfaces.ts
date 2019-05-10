@@ -16,7 +16,7 @@
 // unique across top-level menu items, choices, and ingredients.
 // TODO: rationalize this with PID type from token-flow.
 // export type PID = number;
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 export interface ComponentDescription {
     pid: PID;

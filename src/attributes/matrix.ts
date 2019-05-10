@@ -1,4 +1,4 @@
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 import { AttributeInfo } from './attribute_info';
 import { Dimension } from './dimension';

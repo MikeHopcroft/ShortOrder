@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
 
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 import { attributesFromYamlString, AttributeInfo, AttributeItem, itemsFromAttributes, Matrix } from '../src/attributes';
 import { Catalog, ItemDescription } from '../src/catalog';

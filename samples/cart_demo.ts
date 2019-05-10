@@ -3,7 +3,7 @@ import * as yaml from 'js-yaml';
 import { actionToString, AnyAction } from '../src';
 import { Catalog, CatalogItems, validateCatalogItems, ConvertDollarsToPennies } from '../src';
 import { Cart, CartOps, State } from '../src';
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 
 function go(infile: string, operations: Array<{pid: PID, quantity: number}>) {

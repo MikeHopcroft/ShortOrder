@@ -1,5 +1,5 @@
 
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 import { ATTRIBUTE, ENTITY, OPTION, WORD, QUANTITY } from '../unified';
 

@@ -1,4 +1,4 @@
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 import { ItemDescription, ChoiceDescription, ComponentDescription, SubstitutionDescription } from "../src";
 
 export interface ItemDescriptionTemplate {

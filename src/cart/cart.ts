@@ -1,7 +1,7 @@
 import { Action, ChoiceAction, CHOICE, CONFUSED, COMPLETE, OK } from '../actions';
 import { Catalog, ComponentDescription, ItemDescription } from '../catalog';
 import { LineItem, Order, OrderOps } from '../order';
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 
 // DESIGN INTENT: most objects are POJOs, instead of classes to allow for

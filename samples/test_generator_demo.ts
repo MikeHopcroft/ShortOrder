@@ -3,7 +3,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 import { AnyToken, Catalog, explainDifferences, setup, TestSuite, TokenizerFunction, testOrdersIdentical } from '../src';
 import {
     createTestCase,

@@ -1,4 +1,5 @@
-import { Item, PID, Token } from 'token-flow';
+import { Item, PID } from 'prix-fixe';
+import { Token } from 'token-flow';
 
 export const OPTION: unique symbol = Symbol('OPTION');
 export type OPTION = typeof OPTION;

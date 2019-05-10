@@ -1,4 +1,5 @@
-import { Item, Token, NUMBERTOKEN, NumberToken } from 'token-flow';
+import { Item } from 'prix-fixe';
+import { Token, NUMBERTOKEN, NumberToken } from 'token-flow';
 
 export const QUANTITY: unique symbol = Symbol('QUANTITY');
 export type QUANTITY = typeof QUANTITY;

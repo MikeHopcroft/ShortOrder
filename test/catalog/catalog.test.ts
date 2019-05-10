@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import 'mocha';
 
 import { ItemDescription, Catalog } from '../../src/catalog';
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 const anyPrice = 0.99;
 const anyDefaultQuantity = 1;

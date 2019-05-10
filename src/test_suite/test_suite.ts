@@ -1,7 +1,7 @@
 import * as AJV from 'ajv';
 import * as Debug from 'debug';
 import * as yaml from 'js-yaml';
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 import { AnyToken, Cart, Catalog, ItemInstance, State, World } from '..';
 import { speechToTextFilter } from '../repl';
 

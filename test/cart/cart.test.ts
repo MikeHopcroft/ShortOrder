@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import 'mocha';
 import { Cart, CartOps, Catalog, ChoiceDescription, ConvertDollarsToPennies, ItemInstance, State, SubstitutionDescription } from '../../src';
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 
 function makeComponent(pid: PID) {

@@ -1,5 +1,5 @@
 import { CatalogItems, ItemDescription, ComponentDescription } from './interfaces';
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 export type OptionOfPredicate = (catalog: Catalog, child: PID, parent: PID) => boolean;
 

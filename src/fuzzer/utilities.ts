@@ -1,5 +1,6 @@
 import * as seedrandom from 'seedrandom';
-import { Item, generateAliases } from 'token-flow';
+import { Item } from 'prix-fixe';
+import { generateAliases } from 'token-flow';
 import { patternFromExpression } from '../unified';
 import { Generator } from './generator';
 import { AnyInstance } from './instances';

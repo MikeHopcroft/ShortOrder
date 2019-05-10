@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import 'mocha';
 
-import { PID } from 'token-flow';
+import { PID } from 'prix-fixe';
 
 import { ENTITY, EntityToken, ATTRIBUTE, AttributeToken } from '../../src';
 import { AttributeInfo } from '../../src/attributes/attribute_info';

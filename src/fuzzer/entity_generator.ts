@@ -1,5 +1,6 @@
 import * as pluralize from 'pluralize';
-import { generateAliases, PID } from 'token-flow';
+import { PID } from 'prix-fixe';
+import { generateAliases } from 'token-flow';
 
 import { AttributeInfo, AttributeItem, Dimension, Matrix } from '../attributes';
 import { Catalog } from '../catalog';
