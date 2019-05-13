@@ -44,6 +44,14 @@
         * remove prices
         * mutual exclusivity
         * rules checker
+    * prix-fix
+        * test-harness
+            * lives in prix-fix or short-order?
+            * runs on Cart or Order?
+            * Don't compare text names.
+    * MochaJava
+        * Order probably belongs here
+            * Does Host use Order today?
 
 * Bugs
     * 'with', 'and' ends entity before all attributes
