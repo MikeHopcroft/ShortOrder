@@ -8,6 +8,7 @@ import {
     BasicInstance,
     CreateQuantityInstance,
     CreateWordInstance,
+    MODIFIER,
 } from './instances';
 import { ModifierGenerator } from './modifier_generator';
 import { OptionGenerator } from './option_generator';
@@ -82,7 +83,14 @@ function linguisticFixup(instances: BasicInstance[]): BasicInstance[] {
         if (pastEntity) {
             if (pastPostEntityOption) {
                 if (i === instances.length - 1) {
-                    result.push(CreateWordInstance('and'));
+                    if (instance.type !== OPTION) {
+                        if (instance.alias.search(' ') >= 0) {
+                            result.push(CreateWordInstance('and'));
+                        }
+                    }
+                    else {
+                        result.push(CreateWordInstance('and'));
+                    }
                 }
             }
             else if (instance.type === OPTION && !instance.quantity.text.startsWith('without')) {
