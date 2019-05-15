@@ -228,6 +228,13 @@ export class Parser {
                 s = this.ops.updateCart(s, sku, 1);
                 succeeded = true;
             }
+            else {
+                // This new attribute might be changing the PID of an existing item.
+                //   1. Find item in cart whose matrix contains this attribute's dimension.
+                //   2. Generate new key string.
+                //   3. Find new item PID.
+                //   4. Update item.
+            }
         }
 
         for (const [pid, quantity] of builder.getOptions()) {

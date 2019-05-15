@@ -1,6 +1,6 @@
 import { Dimension } from '../attributes';
 import { Generator } from './generator';
-import { AnyInstance, CreateModifierInstance } from './instances';
+import { CreateModifierInstance, ModifierInstance } from './instances';
 import { aliasesFromOneItem } from './utilities';
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -8,9 +8,9 @@ import { aliasesFromOneItem } from './utilities';
 // ModifierGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class ModifierGenerator implements Generator {
+export class ModifierGenerator implements Generator<ModifierInstance> {
     private readonly dimension: Dimension;
-    private readonly instances: AnyInstance[][];
+    private readonly instances: ModifierInstance[][];
 
     constructor(dimension: Dimension) {
         this.dimension = dimension;
@@ -30,7 +30,7 @@ export class ModifierGenerator implements Generator {
         return this.instances.length;
     }
     
-    version(id: number): AnyInstance[] {
+    version(id: number): ModifierInstance[] {
         return this.instances[id];
     }
 }

@@ -7,7 +7,13 @@ import { Catalog } from '../catalog';
 import { patternFromExpression } from '../unified';
 
 import { Generator } from './generator';
-import { AnyInstance, CreateAttributeInstance, CreateEntityInstance, EntityInstance, Quantity } from './instances';
+import {
+    BasicInstance,
+    CreateAttributeInstance,
+    CreateEntityInstance,
+    EntityInstance,
+    Quantity
+} from './instances';
 import { aliasesFromOneItem } from './utilities';
 
 
@@ -16,7 +22,7 @@ import { aliasesFromOneItem } from './utilities';
 // EntityGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class EntityGenerator implements Generator {
+export class EntityGenerator implements Generator<BasicInstance> {
     private readonly info: AttributeInfo;
     private readonly catalog: Catalog;
     private readonly entityId: PID;
@@ -27,7 +33,7 @@ export class EntityGenerator implements Generator {
     private readonly dimensionIdToAttributeId = new Map<PID, PID>();
     private readonly attributes: AttributeItem[] = [];
 
-    private readonly instances: AnyInstance[][];
+    private readonly instances: BasicInstance[][];
 
     constructor(attributeInfo: AttributeInfo, catalog: Catalog, entityId: PID, quantifiers: Quantity[]) {
         this.info = attributeInfo;
@@ -40,7 +46,7 @@ export class EntityGenerator implements Generator {
             const expression = quantifier.text;
             const pattern = patternFromExpression(expression);
             for (const text of generateAliases(pattern)) {
-                this.quantifiers.push({text, value: quantifier.value});
+                this.quantifiers.push({ text, value: quantifier.value });
             }
         }
 
@@ -90,16 +96,16 @@ export class EntityGenerator implements Generator {
         }
     }
 
-    private *createInstances(): IterableIterator<AnyInstance[]> {
+    private *createInstances(): IterableIterator<BasicInstance[]> {
         yield* this.createInstancesRecursion(0);
     }
 
-    private *createInstancesRecursion(d: number): IterableIterator<AnyInstance[]> {
+    private *createInstancesRecursion(d: number): IterableIterator<BasicInstance[]> {
         const dimension = this.matrix.dimensions[d];
-    
+
         for (const attribute of dimension.attributes) {
             this.pushAttribute(dimension, attribute);
-    
+
             if (d === this.matrix.dimensions.length - 1) {
                 const pid = this.getPID();
                 if (pid !== undefined) {
@@ -112,7 +118,7 @@ export class EntityGenerator implements Generator {
             else {
                 yield* this.createInstancesRecursion(d + 1);
             }
-    
+
             this.popAttribute(dimension, attribute);
         }
     }
@@ -121,7 +127,7 @@ export class EntityGenerator implements Generator {
         return this.instances.length;
     }
 
-    version(id: number): AnyInstance[] {
+    version(id: number): BasicInstance[] {
         return this.instances[id];
     }
 }

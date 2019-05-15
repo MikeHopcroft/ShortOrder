@@ -4,13 +4,13 @@ import { ENTITY, OPTION, QUANTITY } from '../unified';
 
 import { CompositeGenerator } from './composite_generator';
 import { EntityGenerator } from './entity_generator';
-import { ModifierGenerator } from './modifier_generator';
-import { OptionGenerator } from './option_generator';
 import {
-    AnyInstance,
+    BasicInstance,
     CreateQuantityInstance,
     CreateWordInstance,
 } from './instances';
+import { ModifierGenerator } from './modifier_generator';
+import { OptionGenerator } from './option_generator';
 import { factorial, permutation, Random } from './utilities';
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -18,17 +18,17 @@ import { factorial, permutation, Random } from './utilities';
 // ProductGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class ProductGenerator extends CompositeGenerator {
+export class ProductGenerator extends CompositeGenerator<BasicInstance> {
     constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
         super([entities, modifiers, options]);
     }
 
-    static permute(instances: AnyInstance[], random: Random): AnyInstance[] {
+    static permute(instances: BasicInstance[], random: Random): BasicInstance[] {
         const n = factorial(instances.length);
         return permutation(instances, random.randomNonNegative(n));
     }
 
-    static complete(instances: AnyInstance[]): AnyInstance[] {
+    static complete(instances: BasicInstance[]): BasicInstance[] {
         return linguisticFixup(addQuantity(instances));
     }
 }
@@ -42,7 +42,7 @@ export class ProductGenerator extends CompositeGenerator {
 // to the head of the sequence of instances.
 //
 ///////////////////////////////////////////////////////////////////////////////
-function addQuantity(instances: AnyInstance[]): AnyInstance[] {
+function addQuantity(instances: BasicInstance[]): BasicInstance[] {
     for (const instance of instances) {
         if (instance.type === ENTITY) {
             return [CreateQuantityInstance(instance.quantity), ...instances];
@@ -63,7 +63,7 @@ function addQuantity(instances: AnyInstance[]): AnyInstance[] {
 //   * Special case to suppress 'with' before 'without'. 
 //
 ///////////////////////////////////////////////////////////////////////////////
-function linguisticFixup(instances: AnyInstance[]): AnyInstance[] {
+function linguisticFixup(instances: BasicInstance[]): BasicInstance[] {
     const result = [];
     let pastEntity = false;
     let pastPostEntityOption = false;

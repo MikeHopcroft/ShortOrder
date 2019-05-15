@@ -10,13 +10,20 @@ import { ATTRIBUTE, ENTITY, OPTION, WORD, QUANTITY } from '../unified';
 ///////////////////////////////////////////////////////////////////////////////
 export interface Instance {
     type: symbol;
+}
+
+export interface AliasedInstance extends Instance {
+    type: symbol;
     alias: string;
 }
 
 export const MODIFIER: unique symbol = Symbol('MODIFIER');
 export type MODIFIER = typeof MODIFIER;
 
-export interface AttributeInstance extends Instance {
+export const PRODUCT: unique symbol = Symbol('PRODUCT');
+export type PRODUCT = typeof PRODUCT;
+
+export interface AttributeInstance extends AliasedInstance {
     type: ATTRIBUTE;
     id: PID;
 }
@@ -25,7 +32,7 @@ export function CreateAttributeInstance(id: PID, alias: string): AttributeInstan
     return { type: ATTRIBUTE, id, alias };
 }
 
-export interface EntityInstance extends Instance {
+export interface EntityInstance extends AliasedInstance {
     type: ENTITY;
     id: PID;
 
@@ -36,7 +43,7 @@ export function CreateEntityInstance(id: PID, alias: string, quantity: Quantity)
     return { type: ENTITY, id, alias, quantity };
 }
 
-export interface ModifierInstance extends Instance {
+export interface ModifierInstance extends AliasedInstance {
     type: MODIFIER;
     id: PID;
 }
@@ -50,7 +57,7 @@ export interface Quantity {
     text: string;
 }
 
-export interface QuantityInstance extends Instance {
+export interface QuantityInstance extends AliasedInstance {
     type: QUANTITY;
     value: number;
 }
@@ -59,7 +66,7 @@ export function CreateQuantityInstance(quantity: Quantity): QuantityInstance {
     return { type: QUANTITY, alias: quantity.text, value: quantity.value };
 }
 
-export interface OptionInstance extends Instance {
+export interface OptionInstance extends AliasedInstance {
     type: OPTION;
     id: PID;
 
@@ -70,7 +77,7 @@ export function CreateOptionInstance(pid: PID, alias: string, quantity: Quantity
     return { type: OPTION, id: pid, alias, quantity };
 }
 
-export interface WordInstance extends Instance {
+export interface WordInstance extends AliasedInstance {
     type: WORD;
 }
 
@@ -78,13 +85,26 @@ export function CreateWordInstance(text: string): WordInstance {
     return { type: WORD, alias: text };
 }
 
-export type  AnyInstance = 
+export interface ProductInstance extends Instance {
+    type: PRODUCT;
+    instances: BasicInstance[];
+}
+
+export function CreateProductInstance(instances: BasicInstance[]): ProductInstance {
+    return { type: PRODUCT, instances };
+}
+
+export type BasicInstance = 
     AttributeInstance |
     EntityInstance |
     ModifierInstance |
     OptionInstance |
     QuantityInstance |
     WordInstance;
+
+export type WordOrProductInstance = WordInstance | ProductInstance;
+
+export type AnyInstance = BasicInstance | ProductInstance;
 
 export function formatInstanceDebug(instance: AnyInstance): string {
     switch (instance.type) {
@@ -106,6 +126,9 @@ export function formatInstanceDebug(instance: AnyInstance): string {
             else {
                 return `OPTION(${instance.alias},${instance.id})`;
             }
+        case PRODUCT:
+            const product = instance.instances.map(formatInstanceDebug).join('');
+            return `PRODUCT[${product}]`;
         case QUANTITY:
             return `QUANTITY(${instance.alias},${instance.value})`;
         case WORD:
@@ -130,6 +153,8 @@ export function formatInstanceAsText(instance: AnyInstance): string {
             else {
                 return instance.alias;
             }
+        case PRODUCT:
+            return instance.instances.map(formatInstanceAsText).join(' ');
         default:
             return 'UNKNOWN';
     }

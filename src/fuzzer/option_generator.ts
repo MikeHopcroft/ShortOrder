@@ -5,7 +5,7 @@ import { Catalog } from '../catalog';
 import { patternFromExpression } from '../unified';
 
 import { Generator } from './generator';
-import { AnyInstance, CreateOptionInstance, Quantity } from './instances';
+import { BasicInstance, CreateOptionInstance, Quantity } from './instances';
 import { aliasesFromOneItem } from './utilities';
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,12 +13,12 @@ import { aliasesFromOneItem } from './utilities';
 // OptionGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class OptionGenerator implements Generator {
+export class OptionGenerator implements Generator<BasicInstance> {
     private readonly catalog: Catalog;
     private readonly pid: PID;
     private readonly quantifiers: Quantity[];
     
-    private readonly instances: AnyInstance[][];
+    private readonly instances: BasicInstance[][];
 
     // Aliases for units
     // Some way to specify omitted option vs removed option ('no anchovies', 'without').
@@ -39,7 +39,7 @@ export class OptionGenerator implements Generator {
         this.instances = [...this.createInstances()];
     }
 
-    private *createInstances(): IterableIterator<AnyInstance[]> {
+    private *createInstances(): IterableIterator<BasicInstance[]> {
         const item = this.catalog.get(this.pid);
         for (const quantity of this.quantifiers) {
             for (const alias of aliasesFromOneItem(item)) {
@@ -52,7 +52,7 @@ export class OptionGenerator implements Generator {
         return this.instances.length;
     }
 
-    version(id: number): AnyInstance[] {
+    version(id: number): BasicInstance[] {
         return this.instances[id];
     }
 }

@@ -3,7 +3,7 @@ import { Item } from 'prix-fixe';
 import { generateAliases } from 'token-flow';
 import { patternFromExpression } from '../unified';
 import { Generator } from './generator';
-import { AnyInstance } from './instances';
+import { BasicInstance } from './instances';
 
 export function* aliasesFromOneItem(item: Item) {
     for (const expression of item.aliases) {
@@ -65,7 +65,7 @@ export class Random {
         return items[this.randomNonNegative(items.length)];
     }
 
-    randomInstanceSequence(generator: Generator): AnyInstance[] {
+    randomInstanceSequence<T>(generator: Generator<T>): T[] {
         return generator.version(this.randomNonNegative(generator.count()));
     }
 }

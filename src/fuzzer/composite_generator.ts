@@ -1,16 +1,15 @@
 import { Generator } from './generator';
-import { AnyInstance } from './instances';
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CompositeGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class CompositeGenerator implements Generator {
-    private readonly generators: Generator[];
+export class CompositeGenerator<T> implements Generator<T> {
+    private readonly generators: Array<Generator<T>>;
     private readonly instanceCount: number;
 
-    constructor(generators: Generator[]) {
+    constructor(generators: Array<Generator<T>>) {
         this.generators = generators;
 
         let count = 1;
@@ -24,9 +23,9 @@ export class CompositeGenerator implements Generator {
         return this.instanceCount;
     }
 
-    version(id: number): AnyInstance[] {
+    version(id: number): T[] {
         let code = id;
-        let instances: AnyInstance[] = [];
+        let instances: T[] = [];
         for (const generator of this.generators) {
             const x = code % generator.count();
             code = Math.floor(code / generator.count());

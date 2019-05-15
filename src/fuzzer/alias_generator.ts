@@ -3,15 +3,15 @@ import { generateAliases } from 'token-flow';
 import { patternFromExpression } from '../unified';
 
 import { Generator } from './generator';
-import { AnyInstance, CreateWordInstance } from './instances';
+import { CreateWordInstance, WordInstance } from './instances';
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // AliasGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class AliasGenerator implements Generator {
-    private readonly instances: AnyInstance[];
+export class AliasGenerator implements Generator<WordInstance> {
+    private readonly instances: WordInstance[];
 
     constructor(aliases: string[]) {
         this.instances = [];
@@ -27,7 +27,7 @@ export class AliasGenerator implements Generator {
         return this.instances.length;
     }
 
-    version(id: number): AnyInstance[] {
+    version(id: number): WordInstance[] {
         return [this.instances[id]];
     }
 }

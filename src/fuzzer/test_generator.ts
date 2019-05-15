@@ -2,25 +2,22 @@ import { PID } from 'prix-fixe';
 
 import { AttributeInfo, Attributes } from '../attributes';
 import { Catalog } from '../catalog';
-import { AnyInstance, Quantity } from '../fuzzer';
+import { BasicInstance, Quantity } from '../fuzzer';
 
 import { AliasGenerator } from './alias_generator';
 import { Generator } from './generator';
+import {
+    ProductInstance,
+    CreateProductInstance,
+    WordInstance,
+    WordOrProductInstance,
+    CreateWordInstance
+} from './instances';
 import { EntityGenerator } from './entity_generator';
 import { ModifierGenerator } from './modifier_generator';
 import { OptionGenerator } from './option_generator';
 import { ProductGenerator } from './product_generator';
 import { Random } from './utilities';
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Renderers
-//
-///////////////////////////////////////////////////////////////////////////////
-// function renderAsTestCase(instanes: AnyInstance[]): TestCase {
-// }
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,7 +66,7 @@ export class RandomProducts {
         }
     }
 
-    oneProduct(): AnyInstance[] {
+    oneProduct(): BasicInstance[] {
         const entity = this.random.randomChoice(this.entities);
         const modifier = this.random.randomChoice(this.modifiers);
         const option = this.random.randomChoice(this.options);
@@ -79,7 +76,15 @@ export class RandomProducts {
         return this.random.randomInstanceSequence(product);
     }
 
-    *products(): IterableIterator<AnyInstance[]> {
+    onePermutedProduct(): ProductInstance {
+        const product = this.oneProduct();
+        const permutedProduct = ProductGenerator.permute(product, this.random);
+        const completedProduct = ProductGenerator.complete(permutedProduct);
+        const productInstance = CreateProductInstance(completedProduct);
+        return productInstance;
+    }
+
+    *products(): IterableIterator<BasicInstance[]> {
         while (true) {
             yield this.oneProduct();
         }
@@ -92,13 +97,17 @@ export class RandomProducts {
 //
 ///////////////////////////////////////////////////////////////////////////////
 export class RandomOrders {
-    private readonly prologues: Generator;
+    private readonly prologues: Generator<WordInstance>;
     private readonly products: RandomProducts;
-    private readonly epilogues: Generator;
+    private readonly epilogues: Generator<WordInstance>;
 
     private readonly random: Random;
 
-    constructor(prologueAliases: string[], products: RandomProducts, epilogueAliases: string[]) {
+    constructor(
+        prologueAliases: string[],
+        products: RandomProducts,
+        epilogueAliases: string[]
+    ) {
         this.prologues = new AliasGenerator(prologueAliases);
         this.products = products;
         this.epilogues = new AliasGenerator(epilogueAliases);
@@ -106,14 +115,15 @@ export class RandomOrders {
         this.random = new Random('seed1');
     }
 
-    *orders(): IterableIterator<AnyInstance[]> {
+    *orders(): IterableIterator<WordOrProductInstance[]> {
         while (true) {
-                const product = this.products.oneProduct();
-                const permutedProduct = ProductGenerator.permute(product, this.random);
-                const completedProduct = ProductGenerator.complete(permutedProduct);
+            const productInstance1 = this.products.onePermutedProduct();
+            const productInstance2 = this.products.onePermutedProduct();
             yield [
                 ...this.random.randomInstanceSequence(this.prologues),
-                ...completedProduct,
+                productInstance1,
+                CreateWordInstance('and'),
+                productInstance2,
                 ...this.random.randomInstanceSequence(this.epilogues),
             ];
         }

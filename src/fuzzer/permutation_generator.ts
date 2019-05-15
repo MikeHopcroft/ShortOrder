@@ -1,5 +1,4 @@
 import { Generator } from './generator';
-import { AnyInstance } from './instances';
 import { factorial, permutation } from './utilities';
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -7,11 +6,11 @@ import { factorial, permutation } from './utilities';
 // PermutedGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
-export class PermutationGenerator implements Generator {
-    private readonly instances: AnyInstance[];
+export class PermutationGenerator<T> implements Generator<T> {
+    private readonly instances: T[];
     private readonly permutationCount: number;
 
-    constructor(instances: AnyInstance[]) {
+    constructor(instances: T[]) {
         this.instances = instances;
         this.permutationCount = factorial(instances.length);
     }
@@ -20,7 +19,7 @@ export class PermutationGenerator implements Generator {
         return this.permutationCount;
     }
 
-    version(id: number): AnyInstance[] {
+    version(id: number): T[] {
         return permutation(this.instances, id);
     }
 }

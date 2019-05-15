@@ -4,14 +4,22 @@ import * as path from 'path';
 // import * as yaml from 'js-yaml';
 
 import { PID } from 'prix-fixe';
-import { AnyToken, Catalog, explainDifferences, setup, TestSuite, TokenizerFunction, testOrdersIdentical } from '../src';
+
 import {
+    AnyToken,
+    Catalog,
     createTestCase,
+    explainDifferences,
     formatInstanceAsText,
     Quantity,
     Random,
     RandomOrders,
     RandomProducts,
+    setup,
+    TestSuite,
+    TokenizerFunction,
+    testOrdersIdentical,
+    formatInstanceDebug
 } from '../src';
 
 function setOptionOfPredicate(catalog: Catalog, child: PID, parent: PID) {
@@ -104,6 +112,7 @@ async function go() {
     const limit = 50;
     let passedCount = 0;
     let failedCount = 0;
+
     for (const instances of orders.orders()) {
         if (counter >= limit) {
             break;
@@ -111,12 +120,14 @@ async function go() {
         counter++;
         const text = instances.map(formatInstanceAsText).join(' ');
         console.log(text);
+        // console.log(instances.map(formatInstanceDebug).join(' '));
+
         const testCase = createTestCase(world.catalog, world.attributeInfo, instances);
         const result = await testCase.run(world, tokenizer);
         // console.log(`Test status: ${result.passed?"PASSED":"FAILED"}`);
 
         const ok = testOrdersIdentical(testCase.expected[0], result.observed[0]);
-        console.log(`Test status: ${ok?"PASSED":"FAILED"}`);
+        console.log(`Test status: ${ok ? "PASSED" : "FAILED"}`);
         if (ok) {
             passedCount++;
         }

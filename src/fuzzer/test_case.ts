@@ -3,14 +3,45 @@ import { Catalog } from '../catalog';
 import { TestCase, TestLineItem, TestOrder } from "../test_suite";
 import { ENTITY, OPTION } from "../unified";
 
-import { AnyInstance, MODIFIER, formatInstanceAsText } from "./instances";
+import { BasicInstance, MODIFIER, formatInstanceAsText, WordOrProductInstance, PRODUCT } from "./instances";
 
-// TODO: perhaps createTestCase should be a class?
+// TODO: perhaps createTestCase should be a class? (instead of side-effecting counter)
 let counter = 0;
 
-export function createTestCase(catalog: Catalog, attributeInfo: AttributeInfo, instances: AnyInstance[]): TestCase {
+export function createTestCase(
+    catalog: Catalog,
+    attributeInfo: AttributeInfo,
+    instances: WordOrProductInstance[]
+): TestCase {
     const lines: TestLineItem[] = [];
 
+    for (const instance of instances) {
+        if (instance.type === PRODUCT) {
+            appendProductLines(catalog, attributeInfo, lines, instance.instances);
+        }
+    }
+
+    const order: TestOrder = {
+        lines
+    };
+
+    const testCase = new TestCase(
+        counter++,
+        '1',
+        ['unverified'],
+        'synthetic',        // TODO: put info in comment?
+        [instances.map(formatInstanceAsText).join(' ')],
+        [order]);
+
+    return testCase;
+}
+
+export function appendProductLines(
+    catalog: Catalog,
+    attributeInfo: AttributeInfo,
+    lines: TestLineItem[],
+    instances: BasicInstance[]
+): TestCase {
     // Get top-level entity and quantity
     for (const instance of instances) {
         if (instance.type === ENTITY) {

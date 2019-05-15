@@ -1,12 +1,10 @@
-import { AnyInstance } from './instances';
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Generator
 // Base class for all utterance generators.
 //
 ///////////////////////////////////////////////////////////////////////////////
-export interface Generator {
+export interface Generator<T> {
     count(): number;
-    version(id: number): AnyInstance[];
+    version(id: number): T[];
 }
