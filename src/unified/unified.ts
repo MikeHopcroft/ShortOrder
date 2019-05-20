@@ -2,6 +2,7 @@ import * as fs from 'fs';
 
 import { Item } from 'prix-fixe';
 import {
+    DiffResults,
     DownstreamTermPredicate,
     EqualityPredicate,
     exactPrefix,
@@ -88,13 +89,13 @@ export function tokenToString(t: Token) {
 export type TokenFactory = (item: Item) => Token;
 
 // An exact Matcher.
-function exact(
+function exact (
     query: Hash[],
     prefix: Hash[],
     isDownstreamTerm: DownstreamTermPredicate<Hash>,
     isToken: TokenPredicate<Hash>,
     predicate: EqualityPredicate<Hash> = GenericEquality
-) {
+): DiffResults<number> {
     return exactPrefix(query, prefix, false, isDownstreamTerm, isToken, predicate);
 }
 
@@ -105,14 +106,14 @@ function prefix(
     isDownstreamTerm: DownstreamTermPredicate<Hash>,
     isToken: TokenPredicate<Hash>,
     predicate: EqualityPredicate<Hash> = GenericEquality
-) {
+): DiffResults<number> {
     return exactPrefix(query, prefix, true, isDownstreamTerm, isToken, predicate);
 }
 
 // Returns the matching function specified by an expression of the form
 //   ['exact' | 'prefix' | 'levenshtein' ':'] patten
 // If no function is specified, defaults to levenshtein.
-function matcherFromExpression(alias: string): Matcher {
+export function matcherFromExpression(alias: string): Matcher {
     const index = alias.indexOf(':');
     if (index !== -1) {
         const left = alias.slice(0, index).trim();

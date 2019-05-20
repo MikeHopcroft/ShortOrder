@@ -1,5 +1,6 @@
 export * from './attributes';
 export * from './entities';
+export * from './fuzzy_text_matcher';
 export * from './intents';
 export * from './options';
 export * from './quantities';

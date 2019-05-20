@@ -105,16 +105,28 @@ function linguisticFixup(instances: BasicInstance[]): BasicInstance[] {
             pastEntity = true;
         }
 
-        // // TODO: implement QUANTITY token
-        // if (instance.type === QUANTITY && instance.alias === 'a') {
-        //     if (i < instances.length - 2) {
-        //         if (startsWithEnglishVowel(instances[i + 1].alias)) {
-        //             instances.push({...instance, alias: 'an'});
-        //         }
-        //     }            
-        // }
+        if (instance.type === QUANTITY && instance.alias === 'a') {
+            if (i < instances.length - 2) {
+                if (startsWithEnglishVowel(instances[i + 1].alias)) {
+                    instance = {...instance, alias: 'an'};
+                    // instances.push({...instance, alias: 'an'});
+                }
+            }
+        }
+
         result.push(instance);
     }
 
     return result;
+}
+
+function startsWithEnglishVowel(text: string): boolean {
+    if (text === 'ice cream') {
+        const index = ['a', 'e', 'i', 'o', 'u'].indexOf(text[0].toLowerCase());
+        console.log(index);
+    }
+    return (
+        text.length > 0 &&
+        ['a', 'e', 'i', 'o', 'u'].indexOf(text[0].toLowerCase()) !== -1
+    );
 }
