@@ -1,5 +1,25 @@
 # TODO List
 
+* prix-fixe integration
+    * products.yaml
+    * options.yaml
+    * modifiers.yaml
+    * attributes.yaml
+    * rules.yaml
+    * unified2
+        * calls prix-fixe setup.
+        * ingests aliases from catalog, attributeInfo
+        * Rename to Tokenizer? TokenizerPipeline? LexicalAnalyzer? TokenizationStage?
+    * parser2
+        * uses unified2
+    * recipes
+        * enumerating aliases
+        * AttributeInfo.getKey()
+        * cartOps2
+
+* fuzzer
+
+
 * Synthetic test suite / simulator
     * What is legal?
     * What is not legal?

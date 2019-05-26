@@ -1,0 +1,53 @@
+genericItems:
+  - pid: 7000
+    cid: 600
+    name: sprinkles
+    aliases:
+      - sprinkle
+    defaultKey: '7000:2'
+    matrix: 4
+  - pid: 6000
+    cid: 700
+    name: drizzle
+    aliases:
+      - drizz
+    defaultKey: '6000:0:1'
+    matrix: 5
+
+specificItems:
+  - sku: 7001
+    name: circle sprinkles
+    key: '7000:0'
+  - sku: 7002
+    name: box sprinkles
+    key: '7000:1'
+  - sku: 7003
+    name: star sprinkles
+    key: '7000:2'
+  - sku: 6001
+    name: extra vanilla drizzle
+    key: '6000:0:0'
+  - sku: 6002
+    name: extra chocolate drizzle
+    key: '6000:0:1'
+  - sku: 6003
+    name: extra strawberry drizzle
+    key: '6000:0:2'
+  - sku: 6004
+    name: light vanilla drizzle
+    key: '6000:1:0'
+  - sku: 6005
+    name: light chocolate drizzle
+    key: '6000:1:1'
+  - sku: 6006
+    name: light strawberry drizzle
+    key: '6000:1:2'
+  - sku: 6007
+    name: no vanilla drizzle
+    key: '6000:2:0'
+  - sku: 6008
+    name: no chocolate drizzle
+    key: '6000:2:1'
+  - sku: 6009
+    name: no strawberry drizzle
+    key: '6000:2:2'

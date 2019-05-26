@@ -1,0 +1,121 @@
+genericItems:
+###############################################################################
+#
+# Generic Ice Cream Cones
+#
+###############################################################################
+  - pid: 8000
+    cid: 100
+    name: cone
+    aliases:
+      - cone
+      - 'ice cream [cone]'
+    defaultKey: '8000:0:0'
+    matrix: 2
+###############################################################################
+#
+# Generic Coffees
+#
+###############################################################################
+  - pid: 9000
+    cid: 200
+    name: latte
+    aliases:
+      - latte
+    defaultKey: '9000:0:0:0'
+    matrix: 1
+
+specificItems:
+###############################################################################
+#
+# Ice Cream Cones
+#
+###############################################################################
+  - sku: 8001
+    name: small vanilla cone
+    key: '8000:0:0'
+  - sku: 8002
+    name: small chocolate cone
+    key: '8000:0:1'
+  - sku: 8003
+    name: small strawberry cone
+    key: '8000:0:2'
+  - sku: 8004
+    name: medium vanilla cone
+    key: '8000:1:0'
+  - sku: 8005
+    name: medium chocolate cone
+    key: '8000:1:1'
+  - sku: 8006
+    name: medium strawberry cone
+    key: '8000:1:2'
+  - sku: 8007
+    name: large vanilla cone
+    key: '8000:2:0'
+  - sku: 8008
+    name: large chocolate cone
+    key: '8000:2:1'
+  - sku: 8009
+    name: large strawberry cone
+    key: '8000:2:2'
+
+###############################################################################
+#
+# Lattes
+#
+###############################################################################
+
+  - sku: 9001
+    name: small latte
+    key: '9000:0:0:0'
+  - sku: 9002
+    name: small iced latte
+    key: '9000:1:0:0'
+  - sku: 9003
+    name: small halfcaf latte
+    key: '9000:0:0:1'
+  - sku: 9004
+    name: small halfcaf iced latte
+    key: '9000:1:0:1'
+  - sku: 9005
+    name: small decaf latte
+    key: '9000:0:0:2'
+  - sku: 9006
+    name: small decaf iced latte
+    key: '9000:1:0:2'
+  - sku: 9007
+    name: medium latte
+    key: '9000:0:1:0'
+  - sku: 9008
+    name: medium iced latte
+    key: '9000:1:1:0'
+  - sku: 9009
+    name: medium halfcaf latte
+    key: '9000:0:1:1'
+  - sku: 9010
+    name: medium halfcaf iced latte
+    key: '9000:1:1:1'
+  - sku: 9011
+    name: medium decaf latte
+    key: '9000:0:1:2'
+  - sku: 9012
+    name: medium decaf iced latte
+    key: '9000:1:1:2'
+  - sku: 9013
+    name: large latte
+    key: '9000:0:2:0'
+  - sku: 9014
+    name: large iced latte
+    key: '9000:1:2:0'
+  - sku: 9015
+    name: large halfcaf latte
+    key: '9000:0:2:1'
+  - sku: 9016
+    name: large halfcaf iced latte
+    key: '9000:1:2:1'
+  - sku: 9017
+    name: large decaf latte
+    key: '9000:0:2:2'
+  - sku: 9018
+    name: large decaf iced latte
+    key: '9000:1:2:2'

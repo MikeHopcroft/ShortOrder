@@ -1,0 +1,140 @@
+dimensions:
+  - did: 1
+    name: temperature
+    items:
+      - aid: 10
+        name: hot
+        hidden: true
+        isDefault: true
+        aliases:
+          - hot
+      - aid: 11
+        name: iced
+        aliases:
+          - iced
+  - did: 2
+    name: flavor
+    items:
+      - aid: 4
+        name: vanilla
+        isDefault: true
+        aliases:
+          - vanilla
+      - aid: 5
+        name: chocolate
+        aliases:
+          - chocolate
+      - aid: 6
+        name: strawberry
+        aliases:
+          - strawberry
+  - did: 3
+    name: caffeine
+    items:
+      - aid: 7
+        name: caffinated
+        hidden: true
+        isDefault: true
+        aliases:
+        - caf
+        - caffinated
+        - full caf
+        - full caffeine
+        - regular
+      - aid: 8
+        name: halfcaf
+        aliases:
+          - half caf
+          - split shot
+      - aid: 9
+        name: decaf
+        aliases:
+          - decaf
+          - decaffeinated
+  - did: 4
+    name: size
+    items:
+      - aid: 1
+        name: small
+        aliases:
+          - small
+      - aid: 2
+        name: medium
+        isDefault: true
+        aliases:
+          - medium
+      - aid: 3
+        name: large
+        aliases:
+          - large
+  - did: 5
+    name: milk
+    items:
+      - aid: 100
+        name: whole milk
+        isDefault: true
+        aliases:
+          - whole [milk]
+      - aid: 101
+        name: two percent milk
+        aliases:
+          - (two percent,low fat) [milk]
+      - aid: 102
+        name: nonfat milk
+        aliases:
+          - fat free [milk]
+          - skinny
+          - nonfat [milk]
+      - aid: 103
+        name: soy milk
+        aliases:
+          - soy [milk]
+  - did: 6
+    name: shape
+    items:
+      - aid: 200
+        name: round
+        isDefault: true
+        aliases:
+          - circle
+      - aid: 201
+        name: square
+        aliases:
+          - box
+      - aid: 202
+        name: star
+        aliases:
+          - starry
+  - did: 7
+    name: relative
+    items:
+      - aid: 300
+        name: extra
+        aliases:
+          - more
+      - aid: 301
+        name: light
+        aliases:
+          - less
+      - aid: 302
+        name: no
+        isDefault: true
+        aliases:
+          - nada
+
+matrices:
+  - mid: 1
+    name: coffees
+    dimensions: [1,3,4]
+  - mid: 2
+    name: cones
+    dimensions: [1,2]
+  - mid: 3
+    name: milk
+    dimensions: [5]
+  - mid: 4
+    name: sprinkles
+    dimensions: [6]
+  - mid: 5
+    name: drizzles
+    dimensions: [7,2]
