@@ -1,9 +1,7 @@
 import * as seedrandom from 'seedrandom';
-import { Item } from 'prix-fixe';
-import { generateAliases } from 'token-flow';
+import { generateAliases, Item } from 'token-flow';
 import { patternFromExpression } from '../unified';
 import { Generator } from './generator';
-import { BasicInstance } from './instances';
 
 export function* aliasesFromOneItem(item: Item) {
     for (const expression of item.aliases) {

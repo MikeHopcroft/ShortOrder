@@ -1,5 +1,4 @@
-import { Item } from 'prix-fixe';
-import { Token } from 'token-flow';
+import { Item, Token } from 'token-flow';
 
 export const ADD_TO_ORDER: unique symbol = Symbol.for('ADD_TO_ORDER');
 export type ADD_TO_ORDER = typeof ADD_TO_ORDER;

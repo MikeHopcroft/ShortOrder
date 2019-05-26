@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 
-import { Item } from 'prix-fixe';
 import {
     DiffResults,
     DownstreamTermPredicate,
@@ -9,6 +8,7 @@ import {
     generateAliases,
     GenericEquality,
     Hash,
+    Item,
     itemMapFromYamlString,
     levenshtein,
     Lexicon,
