@@ -5,8 +5,8 @@ import {
     ADD_TO_ORDER,
     AnyAction,
     AnyToken,
-    CreateAttribute,
-    CreateEntity,
+    createAttribute,
+    createEntity,
     CreateIntent,
     CreateNumber,
     responses,
@@ -66,15 +66,15 @@ const utterances = [
     [
         CreateIntent(ADD_TO_ORDER) as AnyToken,
         CreateNumber(1),
-        CreateAttribute(1, 'small'),
-        CreateAttribute(5, 'chocolate'),
-        CreateEntity(8000, 'cone')
+        createAttribute(1, 'small'),
+        createAttribute(5, 'chocolate'),
+        createEntity(8000, 'cone')
     ],
     // [ADD_TO_ORDER] [QUANTITY:1] [ENTITY:CONE,8000]
     [
         CreateIntent(ADD_TO_ORDER) as AnyToken,
         CreateNumber(1),
-        CreateEntity(8000, 'cone')
+        createEntity(8000, 'cone')
     ]
 ];
 
