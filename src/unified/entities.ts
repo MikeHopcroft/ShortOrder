@@ -17,10 +17,10 @@ export function entityTokenFactory(item: Item): Token {
         return CreateOption(item.pid, item.name);
     }
     else {
-        return CreateEntity(item.pid, item.name);
+        return createEntity(item.pid, item.name);
     }
 }
 
-export function CreateEntity(pid: PID, name: string) {
+export function createEntity(pid: PID, name: string) {
     return { type: ENTITY, pid, name } as EntityToken;
 }

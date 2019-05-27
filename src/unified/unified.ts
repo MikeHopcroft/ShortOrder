@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 
+import { AID, AttributeInfo, Catalog, DID } from 'prix-fixe';
+
 import {
     DiffResults,
     DownstreamTermPredicate,
@@ -23,8 +25,8 @@ import {
 
 import { attributesFromYamlString, itemsFromAttributes } from '../attributes/schema';
 
-import { ATTRIBUTE, AttributeToken, attributeTokenFactory } from './attributes';
-import { ENTITY, EntityToken, entityTokenFactory } from './entities';
+import { ATTRIBUTE, AttributeToken, attributeTokenFactory, createAttribute } from './attributes';
+import { createEntity, ENTITY, EntityToken, entityTokenFactory } from './entities';
 import { intentTokenFactory } from './intents';
 import { OPTION, OptionToken } from './options';
 import { QUANTITY, QuantityToken, quantityTokenFactory } from './quantities';
@@ -145,7 +147,16 @@ export function patternFromExpression(alias: string) {
     return alias;
 }
 
-export function* aliasesFromItems(items: IterableIterator<Item>, factory: TokenFactory) {
+export interface AliasDescription {
+    token: Token;
+    text: string;
+    matcher: Matcher;
+}
+
+export function* aliasesFromItems(
+    items: IterableIterator<Item>,
+    factory: TokenFactory
+): IterableIterator<AliasDescription> {
     for (const item of items) {
         for (const expression of item.aliases) {
             const matcher = matcherFromExpression(expression);
@@ -161,12 +172,17 @@ export function* aliasesFromItems(items: IterableIterator<Item>, factory: TokenF
     }
 }
 
-function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
+function* aliasesFromYamlString(
+    yamlText: string,
+    factory: TokenFactory
+): IterableIterator<AliasDescription> {
     const items = itemMapFromYamlString(yamlText);
     yield * aliasesFromItems(items.values(), factory);
 }
 
-function* tokensFromStopwords(stopwords: Stopwords) {
+function* tokensFromStopwords(
+    stopwords: Stopwords
+): IterableIterator<AliasDescription> {
     for (const word of stopwords) {
         const text = word.trim();
         yield {
@@ -261,5 +277,111 @@ export class Unified {
         }
 
         return tokens;
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+function* attributes(
+    info: AttributeInfo,
+    dimensions: Set<DID>
+): IterableIterator<AliasDescription> {
+    for (const did of dimensions.values()) {
+        const d = info.getDimension(did);
+        // console.log(`  Dimension(${d.did}): ${d.name}`);
+        for (const attribute of d.attributes) {
+            const token = createAttribute(attribute.aid, attribute.name);
+            // console.log(`    Attribute(${attribute.aid})`);
+            for (const alias of attribute.aliases) {
+                const matcher = matcherFromExpression(alias);
+                const pattern = patternFromExpression(alias);
+                for (const text of generateAliases(pattern)) {
+                    yield {
+                        token,
+                        text,
+                        matcher
+                    };
+                }
+            }
+        }
+    }
+}
+
+function* entities(
+    catalog: Catalog
+): IterableIterator<AliasDescription> {
+    for (const item of catalog.genericEntities()) {
+        const token = createEntity(item.pid, item.name);
+        // console.log(`    Entity(${item.pid})`);
+        for (const alias of item.aliases) {
+            const matcher = matcherFromExpression(alias);
+            const pattern = patternFromExpression(alias);
+            for (const text of generateAliases(pattern)) {
+                yield {
+                    token,
+                    text,
+                    matcher
+                };
+            }
+        }
+    }
+}
+
+
+class LexicalAnalyzer {
+    lexicon: Lexicon;
+    tokenizer: Tokenizer;
+
+    constructor(
+        info: AttributeInfo,
+        catalog: Catalog,
+        dimensions: Set<DID>,
+        intentsFile: string,
+        quantifiersFile: string,
+        unitsFile: string,
+        stopwordsFile: string,
+        debugMode = false
+    ) {
+        this.lexicon = new Lexicon();
+        this.tokenizer = new Tokenizer(
+            this.lexicon.termModel,
+            this.lexicon.numberParser,
+            debugMode
+        );
+
+        // Attributes
+        this.lexicon.addDomain(attributes(info, dimensions));
+
+        // Entities
+        this.lexicon.addDomain(entities(catalog));
+
+        // Quantifiers
+        const quantifiers = aliasesFromYamlString(
+            fs.readFileSync(quantifiersFile, 'utf8'),
+            quantityTokenFactory);
+        this.lexicon.addDomain(quantifiers);
+
+        // Units
+        const units = aliasesFromYamlString(
+            fs.readFileSync(unitsFile, 'utf8'),
+            unitTokenFactory);
+        this.lexicon.addDomain(units);
+
+        // Intents
+        const intents = aliasesFromYamlString(
+            fs.readFileSync(intentsFile, 'utf8'),
+            intentTokenFactory);
+        this.lexicon.addDomain(intents);
+        
+        // Stopwords
+        const stopwords = stopwordsFromYamlString(
+            fs.readFileSync(stopwordsFile, 'utf8'));
+        const stopwordTokens = tokensFromStopwords(stopwords);
+        this.lexicon.addDomain(stopwordTokens, false);
+
+        this.lexicon.ingest(this.tokenizer);
     }
 }

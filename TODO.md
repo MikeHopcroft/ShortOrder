@@ -1,6 +1,9 @@
 # TODO List
 
 * prix-fixe integration
+    * cartOps2
+        * create item from builder
+    * Who owns/manages State and Actions?
     * products.yaml
     * options.yaml
     * modifiers.yaml

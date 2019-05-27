@@ -1,11 +1,14 @@
+import { AttributeInfo, Cart, CartOps2, Catalog } from 'prix-fixe';
 import { NUMBERTOKEN, PeekableSequence } from 'token-flow';
 
+import { Action } from '../actions';
 import { Builder, QuantifierToken } from './builder';
 
 import { CONFUSED, DONE, WAIT, WELCOME } from '../actions';
-import { AttributeInfo } from '../attributes';
-import { CartOps, State } from '../cart';
-import { Catalog } from '../catalog';
+// import { AttributeInfo } from '../attributes';
+// import { CartOps, State } from '../cart';
+// import { Catalog } from '../catalog';
+
 import { Unified } from '../unified';
 
 // General tokens
@@ -25,6 +28,12 @@ import {
     CONJUNCTION, END_OF_ORDER, NEED_MORE_TIME, PREPOSITION, REMOVE_ITEM, RESTATE,
     SALUTATION, SEPERATOR, SUBSTITUTE
 } from '../unified';
+
+// TODO: Where does this definition belong, now that Cart is in PrixFixe?
+export interface State {
+    cart: Cart;
+    actions: Action[];
+}
 
 const endOfEntity = [
     ADD_TO_ORDER, ANSWER_AFFIRMATIVE, ANSWER_NEGATIVE, CANCEL_LAST_ITEM, CANCEL_ORDER,
@@ -48,18 +57,19 @@ export class Parser {
     private readonly attributeInfo: AttributeInfo;
     private readonly unified: Unified;
     private readonly debugMode: boolean;
-    private readonly ops: CartOps;
+    private readonly ops: CartOps2;
 
     constructor(
         catalog: Catalog,
         attributeInfo: AttributeInfo,
         unified: Unified,
+        cartOps: CartOps2,
         debugMode: boolean
     ) {
         this.attributeInfo = attributeInfo;
         this.unified = unified;
         this.debugMode = debugMode;
-        this.ops = new CartOps(catalog, false);
+        this.ops = cartOps;
     }
 
     parseText(input: string, state: State): State {
@@ -135,7 +145,7 @@ export class Parser {
 
             switch (token.type) {
                 case ATTRIBUTE:
-                    if (builder.addAttribute(token)) {
+                    if (builder.addAttribute(token.id)) {
                         input.get();
                     }
                     else {
@@ -143,11 +153,11 @@ export class Parser {
                     }
                     break;
                 case ENTITY:
-                    if (builder.hasEntity()) {
+                    if (builder.hasPID()) {
                         stop = true;
                     }
                     else {
-                        builder.setEntity(token);
+                        builder.setPID(token.pid);
                         input.get();
                     }
                     break;
@@ -162,7 +172,7 @@ export class Parser {
                 case NUMBERTOKEN:
                 case QUANTITY:
                     // TODO: do we really want to collect non-adjacent quantities?
-                    if (builder.hasEntity()) {
+                    if (builder.hasPID()) {
                         stop = true;
                     }
                     else {
@@ -210,14 +220,15 @@ export class Parser {
 
         let s = state;
         let succeeded = false;
-        if (builder.hasEntity()) {
+        if (builder.hasPID()) {
             const quantity = builder.getQuantity();
-            const pid = builder.getPID();
+//            const pid = builder.getPID();
+            const key = builder.getKey();
 
-            if (pid !== undefined) {
-                s = this.ops.updateCart(s, pid, quantity);
-                succeeded = true;
-            }
+            s = this.ops.updateCart(s, pid, quantity);
+//            const item = this.ops.createItem(quantity, )
+//            s = this.ops.updateCart(s, pid, quantity);
+            succeeded = true;
         }
 
         // Whether we saw an entity or not, add entities associated with any
