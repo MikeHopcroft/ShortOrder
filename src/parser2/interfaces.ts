@@ -5,20 +5,23 @@ import {
     AttributeToken,
     EntityToken,
     OptionToken,
+    UnitToken,
 } from '../unified';
 
 export type SequenceToken = 
     AttributeToken |
     EntityToken |
     OptionToken |
-    NumberToken;
+    NumberToken |
+    UnitToken;
 
 // TODO: conjunction token
 export type GapToken = 
     AttributeToken |
     EntityToken |
     OptionToken |
-    NumberToken;
+    NumberToken |
+    UnitToken;
 
 
 export interface Segment {

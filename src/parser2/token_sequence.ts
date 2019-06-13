@@ -9,7 +9,7 @@ export class TokenSequence<T extends Token> {
     }
 
     startsWith(tags: Symbol[]): boolean {
-        if (tags.length < this.tokens.length) {
+        if (tags.length > this.tokens.length) {
             return false;
         }
 
@@ -36,7 +36,7 @@ export class TokenSequence<T extends Token> {
             const message = 'TokenSequence.peek(): beyond end of sequence.';
             throw TypeError(message);
         }
-        return this.tokens[0] as U;
+        return this.tokens[index] as U;
     }
 
     discard(count: number) {

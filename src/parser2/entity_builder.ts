@@ -1,11 +1,21 @@
-import { AID, AttributeInfo, DID, ICartOps, ItemInstance, PID, RuleCheckerOps, Tensor } from 'prix-fixe';
+import {
+    AID,
+    AttributeInfo,
+    DID,
+    ICartOps,
+    ItemInstance,
+    PID,
+    RuleCheckerOps,
+    Tensor
+} from 'prix-fixe';
+
 import { NumberToken, NUMBERTOKEN } from 'token-flow';
 
 import {
     AttributeToken,
     OPTION,
     OptionToken,
-    QUANTITY,
+//    QUANTITY,
     UNIT,
     ATTRIBUTE,
 } from '../unified';
@@ -103,7 +113,7 @@ export class EntityBuilder {
     //
     // Returns true if the number was sucessfully parsed.
     processQuantity(tokens: TokenSequence<GapToken>): boolean {
-        if (tokens.startsWith([QUANTITY])) {
+        if (tokens.startsWith([NUMBERTOKEN])) {
             const quantity = tokens.peek(0) as NumberToken;
             this.quantity = quantity.value;
             tokens.take(1);
@@ -198,6 +208,7 @@ export class EntityBuilder {
                 // Ensure that we hacven't already seen an attribute on this dimension.
                 if (!this.didToAID.has(coordinates.dimension.did)) {
                     this.didToAID.set(coordinates.dimension.did, attribute.id);
+                    this.aids.push(attribute.id);
                     tokens.take(1);
                     return true;
                 }
