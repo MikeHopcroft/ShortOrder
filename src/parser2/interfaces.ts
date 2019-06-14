@@ -6,10 +6,16 @@ import {
     EntityToken,
     OptionToken,
     UnitToken,
+    CONJUNCTION,
 } from '../unified';
+
+export interface ConjunctionToken {
+    type: CONJUNCTION;
+}
 
 export type SequenceToken = 
     AttributeToken |
+    ConjunctionToken |
     EntityToken |
     OptionToken |
     NumberToken |
@@ -18,6 +24,7 @@ export type SequenceToken =
 // TODO: conjunction token
 export type GapToken = 
     AttributeToken |
+    ConjunctionToken |
     EntityToken |
     OptionToken |
     NumberToken |

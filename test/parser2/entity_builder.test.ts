@@ -7,6 +7,8 @@ import { NumberToken, NUMBERTOKEN } from 'token-flow';
 import {
     ATTRIBUTE,
     AttributeToken,
+    CONJUNCTION,
+    CreateIntent,
     ENTITY,
     EntityToken,
     OPTION,
@@ -15,7 +17,7 @@ import {
     UnitToken
 } from '../../src';
 
-import { EntityBuilder, Segment } from '../../src/parser2';
+import { EntityBuilder, Segment, ConjunctionToken } from '../../src/parser2';
 
 import {
     caffeineDecaf,
@@ -57,6 +59,10 @@ const quantityTwo: NumberToken = {
 const quantityFive: NumberToken = {
     type: NUMBERTOKEN,
     value: 5,
+};
+
+const conjunction: ConjunctionToken = {
+    type: CONJUNCTION
 };
 
 const unitPumps: UnitToken = {
@@ -157,7 +163,7 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('attribute attribute entity', () => {
+        it('attribute attribute product', () => {
             const segment: Segment = {
                 left: [attributeMedium, attributeChocolate],
                 entity: productCone,
@@ -176,7 +182,7 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('attribute entity attribute', () => {
+        it('attribute product attribute', () => {
             const segment: Segment = {
                 left: [attributeSmall],
                 entity: productCone,
@@ -195,7 +201,7 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('bad-attribute entity attribute', () => {
+        it('bad-attribute product attribute', () => {
             const segment: Segment = {
                 left: [attributeDecaf],
                 entity: productCone,
@@ -214,7 +220,7 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('quantity attribute entity attribute', () => {
+        it('quantity attribute product attribute', () => {
             const segment: Segment = {
                 left: [quantityTwo, attributeMedium],
                 entity: productCone,
@@ -233,7 +239,7 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('option entity', () => {
+        it('option product', () => {
             const segment: Segment = {
                 left: [optionMilk],
                 entity: productCoffee,
@@ -258,7 +264,33 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('option-attribute option entity', () => {
+
+        it('product conjunction option', () => {
+            const segment: Segment = {
+                left: [],
+                entity: productCoffee,
+                right: [conjunction, optionMilk],
+            };
+
+            const expected = {
+                score: 3,
+                item: {
+                    key: '9000:0:0:0',
+                    quantity: 1,
+                    children: [
+                        {
+                            key: '5000:1',
+                            quantity: 1,
+                            children: [],
+                        }
+                    ]
+                }
+            };
+
+            assert.deepEqual(process(segment), expected);
+        });
+
+        it('option-attribute option product', () => {
             const segment: Segment = {
                 left: [attributeSoy, optionMilk],
                 entity: productCoffee,
@@ -283,7 +315,7 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('quantity units option entity', () => {
+        it('quantity units option product', () => {
             const segment: Segment = {
                 left: [quantityTwo, unitPumps, optionMilk],
                 entity: productCoffee,
@@ -308,7 +340,7 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        it('quantity quantity units option entity', () => {
+        it('quantity quantity units option product', () => {
             const segment: Segment = {
                 left: [quantityFive, quantityTwo, unitPumps, optionMilk],
                 entity: productCoffee,
@@ -333,10 +365,35 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
+        it('attribute product conjunction quantity unit option', () => {
+            const segment: Segment = {
+                left: [attributeDecaf],
+                entity: productCoffee,
+                right: [conjunction, quantityTwo, unitPumps, optionMilk],
+            };
+
+            const expected = {
+                score: 6,
+                item: {
+                    key: '9000:0:0:1',
+                    quantity: 1,
+                    children: [
+                        {
+                            key: '5000:1',
+                            quantity: 2,
+                            children: [],
+                        }
+                    ]
+                }
+            };
+
+            assert.deepEqual(process(segment), expected);
+        });
+
 
         // TODO: mutual exclusion on attributes
         // TODO: mutual exclusion on options
-        // TODO: conjunctions
+        // x TODO: conjunctions
         // TODO: number after entity
         // TODO: number after number
     });

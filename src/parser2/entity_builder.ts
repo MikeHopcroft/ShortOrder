@@ -13,6 +13,7 @@ import { NumberToken, NUMBERTOKEN } from 'token-flow';
 
 import {
     AttributeToken,
+    CONJUNCTION,
     OPTION,
     OptionToken,
 //    QUANTITY,
@@ -99,11 +100,31 @@ export class EntityBuilder {
 
     processRemaining(tokens: TokenSequence<GapToken>): boolean {
         while (!tokens.atEOS()) {
+            this.processConjunction(tokens);
+
+            if (tokens.atEOS()) {
+                break;
+            }
+
             if (!this.processOption(tokens) && !this.processAttribute(tokens)) {
                 return false;
             }
         }
         return true;
+    }
+
+    // Attempts to process the next token as a conjunction. Accepts
+    // seqeuences of the following form:
+    //
+    //  <CONJUNCTION>
+    //
+    // Returns true if the conjunction was successfully parsed.
+    processConjunction(tokens: TokenSequence<GapToken>): boolean {
+        if (tokens.startsWith([CONJUNCTION])) {
+            tokens.take(1);
+            return true;
+        }
+        return false;
     }
 
     // Attempts to process the next token as an item quantifier. Accepts
