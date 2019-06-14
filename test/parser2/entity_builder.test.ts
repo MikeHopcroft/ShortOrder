@@ -30,7 +30,8 @@ import {
     smallWorldAttributes,
     smallWorldCatalog,
     smallWorldRuleChecker,
-    milkSoy
+    milkSoy,
+    caffeineRegular
 } from '../shared';
 
 const productCone: EntityToken = {
@@ -75,6 +76,12 @@ const attributeDecaf: AttributeToken = {
     type: ATTRIBUTE,
     id: caffeineDecaf,
     name: 'decaf',
+};
+
+const attributeRegular: AttributeToken = {
+    type: ATTRIBUTE,
+    id: caffeineRegular,
+    name: 'regular',
 };
 
 const attributeSmall: AttributeToken = {
@@ -394,8 +401,104 @@ describe('Parser2', () => {
         // TODO: mutual exclusion on attributes
         // TODO: mutual exclusion on options
         // x TODO: conjunctions
-        // TODO: number after entity
-        // TODO: number after number
+        // x TODO: number after entity
+        // x TODO: number after number
+
+        ///////////////////////////////////////////////////////////////////////
+        //
+        // Error handling cases
+        //
+
+        // Second attribute on caffeine dimension is ignored.
+        it('attribute !attribute product', () => {
+            const segment: Segment = {
+                left: [attributeDecaf, attributeRegular],
+                entity: productCoffee,
+                right: [],
+            };
+
+            const expected = {
+                score: 2,
+                item: {
+                    key: '9000:0:0:1',
+                    quantity: 1,
+                    children: []
+                }
+            };
+
+            assert.deepEqual(process(segment), expected);
+        });
+
+        // TODO: enable this test one exclusion zones are implemented.
+        // // Second option in exclusion zone is ignored.
+        // it('option-attribute option !option product', () => {
+        //     const segment: Segment = {
+        //         left: [attributeSoy, optionMilk, optionMilk],
+        //         entity: productCoffee,
+        //         right: [],
+        //     };
+
+        //     const expected = {
+        //         score: 3,
+        //         item: {
+        //             key: '9000:0:0:0',
+        //             quantity: 1,
+        //             children: [
+        //                 {
+        //                     key: '5000:3',
+        //                     quantity: 1,
+        //                     children: [],
+        //                 }
+        //             ]
+        //         }
+        //     };
+
+        //     assert.deepEqual(process(segment), expected);
+        // });
+
+
+        // Dangling quantifier is ignored.
+        it('product quanitfier', () => {
+            const segment: Segment = {
+                left: [],
+                entity: productCoffee,
+                right: [quantityTwo],
+            };
+
+            const expected = {
+                score: 1,
+                item: {
+                    key: '9000:0:0:0',
+                    quantity: 1,
+                    children: []
+                }
+            };
+
+            assert.deepEqual(process(segment), expected);
+        });
+
+        // Second product quantifier.
+        // Note that 'quantifier quantifier unit option product' would be
+        // legal because the second quantifier applies to an option.
+        it('quanitfier quantifier product', () => {
+            const segment: Segment = {
+                left: [quantityTwo, quantityFive],
+                entity: productCoffee,
+                right: [],
+            };
+
+            const expected = {
+                score: 2,
+                item: {
+                    key: '9000:0:0:0',
+                    quantity: 2,
+                    children: []
+                }
+            };
+
+            assert.deepEqual(process(segment), expected);
+        });
+
     });
 });
 
