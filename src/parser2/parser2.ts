@@ -23,6 +23,7 @@ import {
     enumerateSplits,
     splitOnEntities,
 } from './parser_utilities';
+import { deepEqual } from 'assert';
 
 function printSegment(segment: Segment) {
     const left = segment.left.map(tokenToString).join('');
@@ -57,6 +58,7 @@ export class Parser2 {
 
         for (const splits of enumerateSplits(lengths)) {
             console.log(`split = [${splits}]`);
+
             // Construct the sequence of Segments associated with a particular
             // choice of split points.
             const segments: Segment[] = entities.map( (entity: EntityToken, index: number) => ({

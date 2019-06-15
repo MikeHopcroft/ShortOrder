@@ -251,7 +251,7 @@ describe('Parser Utilities', () => {
                 [0],
             ];
             const f = () => [...enumerateSplits(lengths)];
-            assert.throws(f, 'enumerateSplits: must have at least two lengths.')
+            assert.throws(f, 'enumerateSplits: must have at least two lengths.');
         });
     });
 });

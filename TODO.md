@@ -1,17 +1,40 @@
 # TODO List
 
+* Minimal menu to get started
+    * Fix milk attributes
+    * Remove modifiers?
+    * attributes
+        * remove isDefault?
+* Hookup new parser
+    * LexicalAnalyzer should consume a prix-fixe World.
+* Test harness from prix-fixe
+* Test harness drives new parser
+* Test cases
+* Repl
+* Rehabilitate alias collision detection tool
+
+* Fuzzer
+    * Port to prix-fixe
+    * Adopt segmentation model
+    * Consider moving to prix-fixe
+
+* Rename unified directory
+* Remove references to old unified
+
 * prix-fixe integration
     * products.yaml
     * options.yaml
     * modifiers.yaml
     * attributes.yaml
     * rules.yaml
-    * unified2
-        * calls prix-fixe setup.
-        * ingests aliases from catalog, attributeInfo
-        * Rename to Tokenizer? TokenizerPipeline? LexicalAnalyzer? TokenizationStage?
+    * LexicalAnalyzer
+        * x calls prix-fixe setup.
+        * x ingests aliases from catalog, attributeInfo
+        * x Rename to Tokenizer? TokenizerPipeline? LexicalAnalyzer? TokenizationStage?
     * parser2
-        * uses unified2
+        * x uses output of LexicalAnalyzer
+        * NumberToken vs QuantifierToken
+        * Multiple edge interpretations for top scoring edges (e.g. "extra" as QUANTIFIER or ATTRIBUTE)
     * recipes
         * enumerating aliases
         * AttributeInfo.getKey()

@@ -11,7 +11,7 @@ genericItems:
       - cone
       - 'ice cream [cone]'
     defaultKey: '8000:0:0'
-    matrix: 2
+    tensor: 2
 ###############################################################################
 #
 # Generic Coffees
@@ -23,7 +23,7 @@ genericItems:
     aliases:
       - latte
     defaultKey: '9000:0:0:0'
-    matrix: 1
+    tensor: 1
 
 specificItems:
 ###############################################################################
@@ -64,7 +64,6 @@ specificItems:
 # Lattes
 #
 ###############################################################################
-
   - sku: 9001
     name: small latte
     key: '9000:0:0:0'

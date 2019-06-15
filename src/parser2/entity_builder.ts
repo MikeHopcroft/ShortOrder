@@ -108,6 +108,7 @@ export class EntityBuilder {
     // only apply to options as in "3 5 pump vanilla latte with 2 pumps of
     // chocolate".
     processLeft(tokens: TokenSequence<GapToken>) {
+        this.processConjunction(tokens);
         if (tokens.startsWith([NUMBERTOKEN, UNIT, OPTION])) {
             // In this case, the NumberToken quantifies the units of an option,
             // so the entity gets a default quantity of 1 (which was set in the

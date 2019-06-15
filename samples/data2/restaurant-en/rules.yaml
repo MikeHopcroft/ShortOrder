@@ -15,11 +15,11 @@ rules:
       500:
         - 5000
     specificExceptions: []
-  # For hot lattes, we have no valid catagories of options
-  - partialKey: '9000:0'
-    validCatagoryMap: {}
-    exclusionZones: {}
-    specificExceptions: []
+  # # For hot lattes, we have no valid catagories of options
+  # - partialKey: '9000:0'
+  #   validCatagoryMap: {}
+  #   exclusionZones: {}
+  #   specificExceptions: []
   # For iced lattes, we may add drizzles as a valid catagory of options
   - partialKey: '9000:1'
     validCatagoryMap:
@@ -44,4 +44,3 @@ rules:
             maxQty: 20
     exclusionZones: {}
     specificExceptions: []
-      

@@ -8,12 +8,6 @@ import {
     UNKNOWNTOKEN,
 } from 'token-flow';
 
-
-import { intentTokenFactory } from './intents';
-import { quantityTokenFactory } from './quantities';
-import { stopwordsFromYamlString } from '../stopwords';
-import { unitTokenFactory } from './units';
-
 import {
     aliasesFromPattern,
     MENUITEM,
@@ -22,9 +16,14 @@ import {
     World,
 } from 'prix-fixe';
 
+import { stopwordsFromYamlString } from '../stopwords';
+
 import { CreateAttribute } from './attributes';
 import { CreateEntity } from './entities';
+import { intentTokenFactory } from './intents';
 import { CreateOption } from './options';
+import { quantityTokenFactory } from './quantities';
+import { unitTokenFactory } from './units';
 
 import {
     aliasesFromYamlString,
@@ -91,23 +90,18 @@ function* generateOptions(world: World): IterableIterator<Alias> {
     }
 }
 
-class LexicalAnalyzer {
+export class LexicalAnalyzer {
     lexicon: Lexicon;
     tokenizer: Tokenizer;
 
     constructor(
-        productsFile: string,
-        optionsFile: string,
-        attributesFile: string,
-        rulesFile: string,
+        world: World,
         intentsFile: string,
         quantifiersFile: string,
         unitsFile: string,
         stopwordsFile: string,
         debugMode = false
     ) {
-        const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
-
         this.lexicon = new Lexicon();
         this.tokenizer = new Tokenizer(
             this.lexicon.termModel,
