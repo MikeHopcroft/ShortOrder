@@ -183,56 +183,48 @@ describe('Parser2', () => {
             assert.deepEqual(interpretation, expected);
         });
 
-        // TODO: enable this test when parser checks for legal options.
-        // it('segment ambiguous size based on options', () => {
-        //     const parser = new Parser2(ops, attributeInfo, smallWorldRuleChecker);
-        //     const tokens = [
-        //         productCoffee,
-        //         attributeMedium,
-        //         attributeSoy,
-        //         optionMilk,
-        //         // Should split here because soy milk can only apply to coffee.
-        //         // Therefore medium cannot apply to the cone.
-        //         productCone,
-        //     ];
+        it('segment ambiguous size based on options', () => {
+            const parser = new Parser2(ops, attributeInfo, smallWorldRuleChecker);
+            const tokens = [
+                productCoffee,
+                attributeMedium,
+                attributeSoy,
+                optionMilk,
+                // Should split here because soy milk can only apply to coffee.
+                // Therefore medium cannot apply to the cone.
+                productCone,
+            ];
 
-        //     const expected: Interpretation = {
-        //         score: 5,
-        //         items: [
-        //             {
-        //                 uid: 0,
-        //                 key: '9000:1:0:0',
-        //                 quantity: 1,
-        //                 children: [
-        //                     {
-        //                         uid: 0,
-        //                         key: '5000:3',
-        //                         quantity: 1,
-        //                         children: []
-        //                     }        
-        //                 ]
-        //             },
-        //             {
-        //                 uid: 0,
-        //                 key: '8000:0:0',
-        //                 quantity: 1,
-        //                 children: [
-        //                     {
-        //                         uid: 0,
-        //                         key: '5000:0',
-        //                         quantity: 1,
-        //                         children: []
-        //                     }        
-        //                 ]
-        //             }
-        //         ]
-        //     };
+            const expected: Interpretation = {
+                score: 5,
+                items: [
+                    {
+                        uid: 0,
+                        key: '9000:1:0:0',
+                        quantity: 1,
+                        children: [
+                            {
+                                uid: 0,
+                                key: '5000:3',
+                                quantity: 1,
+                                children: []
+                            }        
+                        ]
+                    },
+                    {
+                        uid: 0,
+                        key: '8000:0:0',
+                        quantity: 1,
+                        children: []
+                    }
+                ]
+            };
 
-        //     const interpretation = 
-        //         normalizeUIDs(parser.findBestInterpretation(tokens));
+            const interpretation = 
+                normalizeUIDs(parser.findBestInterpretation(tokens));
 
-        //     assert.deepEqual(interpretation, expected);
-        // });
+            assert.deepEqual(interpretation, expected);
+        });
 
     });
 });

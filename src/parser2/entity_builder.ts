@@ -63,18 +63,28 @@ export class EntityBuilder {
         const item = cartOps.createItem(this.quantity, this.pid, this.aids.values(), [].values());
 
         // TODO: filter out illegal options here.
+        const legalOptions: ItemInstance[] = [];
+        for (const [index, option] of this.options.entries()) {
+            if (this.rules.isValidChild(item.key, option.key)) {
+                legalOptions.push(option);
+            } else {
+                // This option cannot legally configure the item.
+                // Exclude it and adjust the used token count accordingly.
+                this.tokensUsed -= this.optionTokenCounts[index];
+            }
+        }
 
         // Use key to filter out options that violate mutual exclusivity.
         const f = this.rules.getIncrementalMutualExclusionPredicate(item.key);
         const filteredOptions: ItemInstance[] = [];
-        for (const [index, option] of this.options.entries()) {
-            if (!f(option.key)) {
+        for (const [index, option] of legalOptions.entries()) {
+            if (f(option.key)) {
+                filteredOptions.push(option);
+            } else {
                 // This option violated mutual exclusivity with the previous
                 // options. Exclude it and adjust the used token count
                 // accordingly.
                 this.tokensUsed -= this.optionTokenCounts[index];
-            } else {
-                filteredOptions.push(option);
             }
         }
 
