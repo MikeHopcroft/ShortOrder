@@ -161,12 +161,12 @@ export function* aliasesFromItems(items: IterableIterator<Item>, factory: TokenF
     }
 }
 
-function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
+export function* aliasesFromYamlString(yamlText: string, factory: TokenFactory) {
     const items = itemMapFromYamlString(yamlText);
     yield * aliasesFromItems(items.values(), factory);
 }
 
-function* tokensFromStopwords(stopwords: Stopwords) {
+export function* tokensFromStopwords(stopwords: Stopwords) {
     for (const word of stopwords) {
         const text = word.trim();
         yield {
