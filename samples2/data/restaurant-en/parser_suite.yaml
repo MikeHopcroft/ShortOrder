@@ -77,7 +77,7 @@
         key: '5000:3'
 
 - priority: 1
-  suites: core new
+  suites: core
   comment: two products that segment on repeated attribute dimension
   inputs:
     - can I get a small cafe latte decaf regular medium latte
@@ -91,4 +91,42 @@
         quantity: 1
         name: medium latte
         key: '9000:0:1:0'
+- priority: 1
+  suites: core
+  comment: two products that segment on product quantifier
+  inputs:
+    - can I get a small latte five decaf latte
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: small latte
+        key: '9000:0:0:0'
+      - indent: 0
+        quantity: 5
+        name: small decaf latte
+        key: '9000:0:0:2'
+- priority: 1
+  suites: core
+  comment: two products that segment on option exclusivity conflict
+  inputs:
+    - can I get a small soy milk decaf latte whole milk medium latte
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: small decaf latte
+        key: '9000:0:0:2'
+      - indent: 1
+        quantity: 1
+        name: soy milk
+        key: '5000:3'
+      - indent: 0
+        quantity: 1
+        name: medium latte
+        key: '9000:0:1:0'
+      - indent: 1
+        quantity: 1
+        name: whole milk
+        key: '5000:0'
 

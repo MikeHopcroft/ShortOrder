@@ -149,7 +149,7 @@
             "name": "AAA Parser Test",
             "program": "${workspaceFolder}/build/samples2/parser_test_demo.js",
             "outputCapture": "std",
-            "args": ["-a", "-s=new"]
+            "args": ["-a"]
             // "args": ["-a", "-s=bug"]
         }
     ]
