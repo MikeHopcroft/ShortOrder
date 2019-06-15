@@ -5,7 +5,7 @@ import {
     ICartOps,
     ItemInstance,
     PID,
-    RuleCheckerOps,
+    RuleChecker,
     Tensor
 } from 'prix-fixe';
 
@@ -27,7 +27,7 @@ import { TokenSequence } from './token_sequence';
 export class EntityBuilder {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
-    // private readonly rules: RuleCheckerOps;
+    private readonly rules: RuleChecker;
 
     private readonly didToAID = new Map<DID,AID>();
     private readonly tokensUsed = 0;
@@ -36,14 +36,16 @@ export class EntityBuilder {
     private readonly pid: PID;
     private readonly aids: AID[] = [];
     private readonly options: ItemInstance[] = [];
+    private readonly optionTokenCounts: number[] = [];
 
     private readonly tensor: Tensor;
 
     private readonly item: ItemInstance;
 
-    constructor(segment: Segment, cartOps: ICartOps, info: AttributeInfo) {
+    constructor(segment: Segment, cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker) {
         this.cartOps = cartOps;
         this.info = info;
+        this.rules = rules;
 
         this.pid = segment.entity.pid;
         this.tokensUsed += 1;
@@ -58,7 +60,25 @@ export class EntityBuilder {
         this.processRight(rightTokens);
         this.tokensUsed += rightTokens.tokensUsed;
 
-        this.item = cartOps.createItem(this.quantity, this.pid, this.aids.values(), this.options.values());
+        // Initially, create item without options, in order to get key.
+        const item = cartOps.createItem(this.quantity, this.pid, this.aids.values(), [].values());
+
+        // Use key to filter out options that violate mutual exclusivity.
+        const f = this.rules.getIncrementalMutualExclusionPredicate(item.key);
+        const filteredOptions: ItemInstance[] = [];
+        for (const [index, option] of this.options.entries()) {
+            if (!f(option.key)) {
+                // This option violated mutual exclusivity with the previous
+                // options. Exclude it and adjust the used token count
+                // accordingly.
+                this.tokensUsed -= this.optionTokenCounts[index];
+            } else {
+                filteredOptions.push(option);
+            }
+        }
+
+        // Construct item with filtered options.
+        this.item = {...item, children: filteredOptions};
     }
 
     getScore(): number {
@@ -158,6 +178,11 @@ export class EntityBuilder {
     // Returns true if an option was successfully parsed.
     processOption(tokens: TokenSequence<GapToken>): boolean {
         // TODO: check for mutual exclusivity.
+        //   Challenge is that we cannot check for exclusivity until we know
+        //   the product key, which we won't know until we have processed all
+        //   of the attributes.
+        // TODO: is every option mutually exclusive of itself?
+        //   e.g. latte with pumpkin syrup and pumpkin syrup
         // TODO: check whether option legally configures item.
         // compile_error();
 
@@ -171,8 +196,9 @@ export class EntityBuilder {
             if (AttributeInfo.hasDimension(tensor, coordinates.dimension.did)) {
                 const item = this.cartOps.createItem(1, option.id, [attribute.id].values(), [].values());
                 this.options.push(item);
+                this.optionTokenCounts.push(2);
                 tokens.take(2);
-                return true;    
+                return true;
             } else {
                 tokens.discard(2);
                 return false;
@@ -186,6 +212,7 @@ export class EntityBuilder {
             const option = tokens.peek(2) as OptionToken;
             const item = this.cartOps.createItem(quantity.value, option.id, [].values(), [].values());
             this.options.push(item);
+            this.optionTokenCounts.push(3);
             tokens.take(3);
             return true;
         }
@@ -195,6 +222,7 @@ export class EntityBuilder {
             const option = tokens.peek(1) as OptionToken;
             const item = this.cartOps.createItem(quantity.value, option.id, [].values(), [].values());
             this.options.push(item);
+            this.optionTokenCounts.push(2);
             tokens.take(2);
             return true;
         }
@@ -203,6 +231,7 @@ export class EntityBuilder {
             const option = tokens.peek(0) as OptionToken;
             const item = this.cartOps.createItem(1, option.id, [].values(), [].values());
             this.options.push(item);
+            this.optionTokenCounts.push(1);
             tokens.take(1);
             return true;
         }

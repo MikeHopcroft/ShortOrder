@@ -119,9 +119,6 @@ const ops: CartOps = new CartOps(
     smallWorldRuleChecker
 );
 
-// TODO: TokenSequence.startsWith()
-// TODO: syrups in Small World
-
 export interface SimpleItemInstance {
     key: Key;
     quantity: number;
@@ -138,7 +135,7 @@ function stripUIDs(item: ItemInstance): SimpleItemInstance {
 }
 
 function process(segment: Segment) {
-    const builder = new EntityBuilder(segment, ops, attributeInfo);
+    const builder = new EntityBuilder(segment, ops, attributeInfo, smallWorldRuleChecker);
 
     const score = builder.getScore();
     const item = builder.getItem();
@@ -398,12 +395,6 @@ describe('Parser2', () => {
         });
 
 
-        // TODO: mutual exclusion on attributes
-        // TODO: mutual exclusion on options
-        // x TODO: conjunctions
-        // x TODO: number after entity
-        // x TODO: number after number
-
         ///////////////////////////////////////////////////////////////////////
         //
         // Error handling cases
@@ -429,32 +420,57 @@ describe('Parser2', () => {
             assert.deepEqual(process(segment), expected);
         });
 
-        // TODO: enable this test one exclusion zones are implemented.
-        // // Second option in exclusion zone is ignored.
-        // it('option-attribute option !option product', () => {
-        //     const segment: Segment = {
-        //         left: [attributeSoy, optionMilk, optionMilk],
-        //         entity: productCoffee,
-        //         right: [],
-        //     };
+        // Second option in exclusion zone is ignored.
+        it('option-attribute option !option product', () => {
+            const segment: Segment = {
+                left: [attributeSoy, optionMilk, optionMilk],
+                entity: productCoffee,
+                right: [],
+            };
 
-        //     const expected = {
-        //         score: 3,
-        //         item: {
-        //             key: '9000:0:0:0',
-        //             quantity: 1,
-        //             children: [
-        //                 {
-        //                     key: '5000:3',
-        //                     quantity: 1,
-        //                     children: [],
-        //                 }
-        //             ]
-        //         }
-        //     };
+            const expected = {
+                score: 3,
+                item: {
+                    key: '9000:0:0:0',
+                    quantity: 1,
+                    children: [
+                        {
+                            key: '5000:3',
+                            quantity: 1,
+                            children: [],
+                        }
+                    ]
+                }
+            };
 
-        //     assert.deepEqual(process(segment), expected);
-        // });
+            assert.deepEqual(process(segment), expected);
+        });
+
+        // Second option in exclusion zone is ignored.
+        it('!option option-attribute option product', () => {
+            const segment: Segment = {
+                left: [optionMilk, attributeSoy, optionMilk],
+                entity: productCoffee,
+                right: [],
+            };
+
+            const expected = {
+                score: 2,
+                item: {
+                    key: '9000:0:0:0',
+                    quantity: 1,
+                    children: [
+                        {
+                            key: '5000:1',
+                            quantity: 1,
+                            children: [],
+                        }
+                    ]
+                }
+            };
+
+            assert.deepEqual(process(segment), expected);
+        });
 
 
         // Dangling quantifier is ignored.
@@ -502,3 +518,13 @@ describe('Parser2', () => {
     });
 });
 
+// TODO: TokenSequence.startsWith()
+// TODO: syrups in Small World
+// x TODO: mutual exclusion on attributes
+// x TODO: mutual exclusion on options
+// x TODO: conjunctions
+// x TODO: number after entity
+// x TODO: number after number
+// splitOnEntities
+// enumerateSplits
+// Parser2

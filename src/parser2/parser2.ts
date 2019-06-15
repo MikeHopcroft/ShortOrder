@@ -1,4 +1,4 @@
-import { AttributeInfo, ICartOps, ItemInstance } from 'prix-fixe';
+import { AttributeInfo, ICartOps, ItemInstance, RuleChecker } from 'prix-fixe';
 
 import {
     ENTITY,
@@ -68,11 +68,12 @@ function* enumerateSplits(lengths: number[]): IterableIterator<number[]> {
 class Parser2 {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
-    // private readonly rules: RuleCheckerOps;
+    private readonly rules: RuleChecker;
 
-    constructor(cartOps: ICartOps, info: AttributeInfo) {
+    constructor(cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker) {
         this.cartOps = cartOps;
         this.info = info;
+        this.rules = rules;
     }
 
     findBestInterpretation(tokens: SequenceToken[]): Interpretation {
@@ -128,7 +129,7 @@ class Parser2 {
     }
 
     interpretOneSegment = (segment: Segment): HypotheticalItem => {
-        const builder = new EntityBuilder(segment, this.cartOps, this.info);
+        const builder = new EntityBuilder(segment, this.cartOps, this.info, this.rules);
         return {
             score: builder.getScore(),
             item: builder.getItem()
