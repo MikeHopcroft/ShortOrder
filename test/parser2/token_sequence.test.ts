@@ -1,6 +1,8 @@
 import { assert } from 'chai';
 import 'mocha';
 
+import { AttributeToken } from '../../src';
+
 import { TokenSequence } from '../../src/parser2';
 
 import {
@@ -18,7 +20,7 @@ import {
     quantityFive,
     unitPumps,
 } from '../shared';
-import { AttributeToken } from '../../src';
+
 
 describe('TokenSequence', () => {
     it('startsWith()', () => {
@@ -79,22 +81,26 @@ describe('TokenSequence', () => {
 
         sequence.take(1);
         assert.equal(sequence.tokensUsed, 1);
-        assert.deepEqual(tokens, [attributeDecaf, attributeMedium, attributeRegular]);
+        assert.equal(sequence.peek(0), attributeDecaf);
+        // assert.deepEqual(tokens, [attributeDecaf, attributeMedium, attributeRegular]);
 
         sequence.take(2);
         assert.equal(sequence.tokensUsed, 3);
-        assert.deepEqual(tokens, [attributeRegular]);
+        assert.equal(sequence.peek(0), attributeRegular);
+        // assert.deepEqual(tokens, [attributeRegular]);
 
         sequence.take(0);
         assert.equal(sequence.tokensUsed, 3);
-        assert.deepEqual(tokens, [attributeRegular]);
+        assert.equal(sequence.peek(0), attributeRegular);
+        // assert.deepEqual(tokens, [attributeRegular]);
 
         const f = () => sequence.take(2);
         assert.throws(f, 'TokenSequence.take(): beyond end of sequence.');
 
         sequence.take(1);
         assert.equal(sequence.tokensUsed, 4);
-        assert.deepEqual(tokens, []);
+        assert.isTrue(sequence.atEOS());
+        // assert.deepEqual(tokens, []);
     });
 
     it('peek()', () => {
@@ -133,22 +139,26 @@ describe('TokenSequence', () => {
 
         sequence.discard(1);
         assert.equal(sequence.tokensUsed, 0);
-        assert.deepEqual(tokens, [attributeDecaf, attributeMedium, attributeRegular]);
+        assert.equal(sequence.peek(0), attributeDecaf);
+        // assert.deepEqual(tokens, [attributeDecaf, attributeMedium, attributeRegular]);
 
         sequence.discard(2);
         assert.equal(sequence.tokensUsed, 0);
-        assert.deepEqual(tokens, [attributeRegular]);
+        assert.equal(sequence.peek(0), attributeRegular);
+        // assert.deepEqual(tokens, [attributeRegular]);
 
         sequence.discard(0);
         assert.equal(sequence.tokensUsed, 0);
-        assert.deepEqual(tokens, [attributeRegular]);
+        assert.equal(sequence.peek(0), attributeRegular);
+        // assert.deepEqual(tokens, [attributeRegular]);
 
         const f = () => sequence.discard(2);
         assert.throws(f, 'TokenSequence.discard(): beyond end of sequence.');
 
         sequence.discard(1);
         assert.equal(sequence.tokensUsed, 0);
-        assert.deepEqual(tokens, []);
+        assert.isTrue(sequence.atEOS());
+        // assert.deepEqual(tokens, []);
     });
 
     it('atEOS()', () => {

@@ -126,9 +126,24 @@ export class EntityBuilder {
                 break;
             }
 
-            if (!this.processOption(tokens) && !this.processAttribute(tokens)) {
-                return false;
+            if (this.processOption(tokens)) {
+                continue;
             }
+
+            if (this.processAttribute(tokens)) {
+                continue;
+            }
+
+            // We were unable to consume the next token.
+            // Discard it and move forward.
+            tokens.discard(1);
+
+            // if (!this.processOption(tokens)) {
+            //     this.processAttribute(tokens);
+            // }
+            // if (!this.processOption(tokens) && !this.processAttribute(tokens)) {
+            //     return false;
+            // }
         }
         return true;
     }
@@ -175,7 +190,8 @@ export class EntityBuilder {
     //   2. the option doesn't violate mutual exclusivity with existing options
     //   3. the option legally configures the item
     //
-    // Returns true if an option was successfully parsed.
+    // Returns true if an option tokens were consumed, even if they couldn't be
+    // used for the item under construction.
     processOption(tokens: TokenSequence<GapToken>): boolean {
         // TODO: check for mutual exclusivity.
         //   Challenge is that we cannot check for exclusivity until we know
@@ -201,7 +217,7 @@ export class EntityBuilder {
                 return true;
             } else {
                 tokens.discard(2);
-                return false;
+                return true;
             }
 
             // Otherwise fall through to other cases.
@@ -247,7 +263,8 @@ export class EntityBuilder {
     // where the attribute can legally configure the item, and we haven't
     // previously processed an attribute on the same dimension.
     //
-    // Returns true if the number was sucessfully parsed.
+    // Returns true if attribute tokens were consumed, even if they could 
+    // not be used for the product.
     processAttribute(tokens: TokenSequence<GapToken>): boolean {
         if (tokens.startsWith([ATTRIBUTE])) {
             // Ensure that the attribute can configure the entity.
@@ -263,6 +280,10 @@ export class EntityBuilder {
                     return true;
                 }
             }
+
+            // Skip over this attribute since it cannot be consumed.
+            tokens.discard(1);
+            return true;
         }
 
         return false;

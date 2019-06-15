@@ -25,6 +25,7 @@ import {
     milkSoy,
     caffeineRegular
 } from '../shared';
+import { milkWhole } from './small_world';
 
 export const productCone: EntityToken = {
     type: ENTITY,
@@ -98,4 +99,10 @@ export const attributeSoy: AttributeToken = {
     type: ATTRIBUTE,
     id: milkSoy,
     name: 'soy',
+};
+
+export const attributeWhole: AttributeToken = {
+    type: ATTRIBUTE,
+    id: milkWhole,
+    name: 'whole',
 };

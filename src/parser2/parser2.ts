@@ -7,6 +7,7 @@ import {
 
 import {
     EntityToken,
+    tokenToString
 } from '../unified';
 
 import { EntityBuilder } from './entity_builder';
@@ -23,7 +24,18 @@ import {
     splitOnEntities,
 } from './parser_utilities';
 
-class Parser2 {
+function printSegment(segment: Segment) {
+    const left = segment.left.map(tokenToString).join('');
+    const entity = tokenToString(segment.entity);
+    const right = segment.right.map(tokenToString).join('');
+
+    console.log('  Segment');
+    console.log(`    left: ${left}`);
+    console.log(`    entity: ${entity}`);
+    console.log(`    right: ${right}`);
+}
+
+export class Parser2 {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
     private readonly rules: RuleChecker;
@@ -44,6 +56,7 @@ class Parser2 {
         const lengths: number[] = gaps.map(x => x.length);
 
         for (const splits of enumerateSplits(lengths)) {
+            console.log(`split = [${splits}]`);
             // Construct the sequence of Segments associated with a particular
             // choice of split points.
             const segments: Segment[] = entities.map( (entity: EntityToken, index: number) => ({
@@ -52,19 +65,28 @@ class Parser2 {
                 right: gaps[index + 1].slice(0, splits[index + 1]),
             }));
 
+            for (const segment of segments) {
+                printSegment(segment);
+            }
+
             // Parse these segments to produce an interpretation for this
             // choice of split points.
+            // TODO: BUGBUG: following line modifies segments[X].left, right
+            // TODO: BUGBUG: TokenSequence shouldn't modifiy tokens[].
             const interpretation = this.interpretSegmentArray(segments);
+            console.log(`  score: ${interpretation.score}`);
+            console.log('');
             interpretations.push(interpretation);
         }
 
         if (interpretations.length > 0) {
             // We found at least one interpretation.
             // Sort interpretations by decreasing score.
-            // TODO: verify sort order. 
-            interpretations.sort((a, b) => a.score - b.score);
+            interpretations.sort((a, b) => b.score - a.score);
 
             // Return the highest scoring interpretation.
+            // TODO: when there is more than one top-scoring interpretations,
+            // probably want to pick the one that associates right.
             return interpretations[0];
         } else {
             // We didn't find any interpretations.
@@ -73,7 +95,7 @@ class Parser2 {
         }
     }
 
-    interpretSegmentArray(segments: Segment[]): Interpretation {
+    private interpretSegmentArray(segments: Segment[]): Interpretation {
         let score = 0;
         const items: ItemInstance[] = [];
         for (const segment of segments) {
@@ -86,7 +108,7 @@ class Parser2 {
         return {score, items};
     }
 
-    interpretOneSegment = (segment: Segment): HypotheticalItem => {
+    private interpretOneSegment = (segment: Segment): HypotheticalItem => {
         const builder = new EntityBuilder(segment, this.cartOps, this.info, this.rules);
         return {
             score: builder.getScore(),
