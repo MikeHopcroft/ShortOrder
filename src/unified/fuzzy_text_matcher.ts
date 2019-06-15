@@ -6,7 +6,7 @@ import {
     Tokenizer,
 } from 'token-flow';
 
-import { matcherFromExpression, patternFromExpression} from './unified';
+import { matcherFromExpression, patternFromExpression} from './lexical_utilities';
 
 export interface FuzzyItem {
     id: number;

@@ -2,7 +2,6 @@ import * as fs from 'fs';
 
 import {
     Alias,
-    levenshtein,
     Lexicon,
     Tokenizer,
     Token,
@@ -10,45 +9,17 @@ import {
 } from 'token-flow';
 
 
-// import {
-//     DiffResults,
-//     DownstreamTermPredicate,
-//     EqualityPredicate,
-//     exactPrefix,
-//     generateAliases,
-//     GenericEquality,
-//     Hash,
-//     Item,
-//     itemMapFromYamlString,
-//     levenshtein,
-//     Lexicon,
-//     Matcher,
-//     NumberToken,
-//     Token,
-//     Tokenizer,
-//     TokenPredicate,
-//     UNKNOWNTOKEN,
-//     NUMBERTOKEN
-// } from 'token-flow';
-
-// import { attributesFromYamlString, itemsFromAttributes } from '../attributes/schema';
-
-// import { ATTRIBUTE, AttributeToken, attributeTokenFactory } from './attributes';
-// import { ENTITY, EntityToken, entityTokenFactory } from './entities';
 import { intentTokenFactory } from './intents';
-// import { OPTION, OptionToken } from './options';
-import { QUANTITY, QuantityToken, quantityTokenFactory } from './quantities';
-import { stopwordsFromYamlString, Stopwords } from '../stopwords';
-import { UNIT, UnitToken, unitTokenFactory } from './units';
+import { quantityTokenFactory } from './quantities';
+import { stopwordsFromYamlString } from '../stopwords';
+import { unitTokenFactory } from './units';
 
 import {
     aliasesFromPattern,
-    DID,
     MENUITEM,
     OPTION,
     setup,
     World,
-    DimensionAndTensorDescription,
 } from 'prix-fixe';
 
 import { CreateAttribute } from './attributes';
@@ -59,34 +30,11 @@ import {
     aliasesFromYamlString,
     matcherFromExpression,
     patternFromExpression,
-    tokensFromStopwords
-} from './unified';
+    tokensFromStopwords,
+    WORD,
+    WordToken
+} from './lexical_utilities';
 
-
-export const WORD: unique symbol = Symbol('WORD');
-export type WORD = typeof WORD;
-
-export interface WordToken extends Token {
-    type: WORD;
-    text: string;
-}
-
-
-// function attributeAliases(world: World, dimensions: Set<DID>) {
-//     for (const did of dimensions.values()) {
-//         const d = world.attributeInfo.getDimension(did);
-//         console.log(`  Dimension(${d.did}): ${d.name}`);
-//         for (const attribute of d.attributes) {
-//             console.log(`    Attribute(${attribute.aid})`);
-//             for (const alias of attribute.aliases) {
-//                 const pattern = patternFromExpression(alias);
-//                 for (const text of aliasesFromPattern(pattern)) {
-//                     console.log(`      ${text}`);
-//                 }
-//             }
-//         }
-//     }
-// }
 
 // Prints out information about dimensions associated with a set of DIDs.
 function* generateAttributes(world: World): IterableIterator<Alias> {
@@ -142,8 +90,6 @@ function* generateOptions(world: World): IterableIterator<Alias> {
         }
     }
 }
-
-
 
 class LexicalAnalyzer {
     lexicon: Lexicon;
