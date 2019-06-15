@@ -1,0 +1,94 @@
+- priority: 1
+  suites: core
+  comment: product
+  inputs:
+    - i'd like a ice cream cone
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: small vanilla cone
+        key: '8000:0:0'
+- priority: 1
+  suites: core
+  comment: product with one leading attribute
+  inputs:
+    - i'd like a chocolate ice cream cone
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: small chocolate cone
+        key: '8000:0:1'
+- priority: 1
+  suites: core
+  comment: product with leading and trailing attributes
+  inputs:
+    - give me a medium decaf latte iced
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: medium decaf iced latte
+        key: '9000:1:1:2'
+- priority: 1
+  suites: core bug
+  comment: quantified product
+  # This test fails because we don't extract the SequenceTokens from the Intent tokens.
+  # This will affect any test where the first entity has a leading quantifier
+  inputs:
+    - i'd like five cones
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 5
+        name: small vanilla cone
+        key: '8000:0:0'
+
+- priority: 1
+  suites: core
+  comment: product with leading attributed option
+  inputs:
+    - can I get whole milk latte
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: small latte
+        key: '9000:0:0:0'
+      - indent: 1
+        quantity: 1
+        name: whole milk
+        key: '5000:0'
+- priority: 1
+  suites: core
+  comment: product with trailing attributed option
+  inputs:
+    - can I get a latte with soy milk
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: small latte
+        key: '9000:0:0:0'
+      - indent: 1
+        quantity: 1
+        name: soy milk
+        key: '5000:3'
+
+- priority: 1
+  suites: core new
+  comment: two products that segment on repeated attribute dimension
+  inputs:
+    - can I get a small cafe latte decaf regular medium latte
+  expected:
+    - lines:
+      - indent: 0
+        quantity: 1
+        name: small decaf latte
+        key: '9000:0:0:2'
+      - indent: 0
+        quantity: 1
+        name: medium latte
+        key: '9000:0:1:0'
+

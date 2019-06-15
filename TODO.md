@@ -1,15 +1,16 @@
 # TODO List
 
 * Minimal menu to get started
-    * Fix milk attributes
+    * x Fix milk attributes
     * Remove modifiers?
-    * attributes
-        * remove isDefault?
-* Hookup new parser
-    * LexicalAnalyzer should consume a prix-fixe World.
-* Test harness from prix-fixe
-* Test harness drives new parser
-* Test cases
+    * x attributes
+        * x remove isDefault?
+* x Hookup new parser
+    * x LexicalAnalyzer should consume a prix-fixe World.
+* x Test harness from prix-fixe
+* x Test harness drives new parser
+* x Test cases
+* Test suite rebasing
 * Repl
 * Rehabilitate alias collision detection tool
 

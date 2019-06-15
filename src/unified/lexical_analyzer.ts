@@ -38,15 +38,15 @@ import {
 // Prints out information about dimensions associated with a set of DIDs.
 function* generateAttributes(world: World): IterableIterator<Alias> {
     for (const dimension of world.attributes.dimensions) {
-        console.log(`  Dimension(${dimension.did}): ${dimension.name}`);
+        // console.log(`  Dimension(${dimension.did}): ${dimension.name}`);
         for (const attribute of dimension.attributes) {
-            console.log(`    Attribute(${attribute.aid})`);
+            // console.log(`    Attribute(${attribute.aid})`);
             const token = CreateAttribute(attribute.aid, attribute.name);
             for (const alias of attribute.aliases) {
                 const matcher = matcherFromExpression(alias);
                 const pattern = patternFromExpression(alias);
                 for (const text of aliasesFromPattern(pattern)) {
-                    console.log(`      ${text}`);
+                    // console.log(`      ${text}`);
                     yield { token, text, matcher };
                 }
             }
@@ -55,8 +55,8 @@ function* generateAttributes(world: World): IterableIterator<Alias> {
 }
 
 function* generateProducts(world: World): IterableIterator<Alias> {
-    console.log();
-    console.log('=== Products ===');
+    // console.log();
+    // console.log('=== Products ===');
     for (const item of world.catalog.genericEntities()) {
         if (item.kind === MENUITEM) {
             const token = CreateEntity(item.pid, item.name);
@@ -64,7 +64,7 @@ function* generateProducts(world: World): IterableIterator<Alias> {
                 const matcher = matcherFromExpression(alias);
                 const pattern = patternFromExpression(alias);
                 for (const text of aliasesFromPattern(pattern)) {
-                    console.log(`  ${text}`);
+                    // console.log(`  ${text}`);
                     yield { token, text, matcher };
                 }
             }
@@ -73,8 +73,8 @@ function* generateProducts(world: World): IterableIterator<Alias> {
 }
 
 function* generateOptions(world: World): IterableIterator<Alias> {
-    console.log();
-    console.log('=== Options ===');
+    // console.log();
+    // console.log('=== Options ===');
     for (const item of world.catalog.genericEntities()) {
         if (item.kind === OPTION) {
             const token = CreateOption(item.pid, item.name);
@@ -82,7 +82,7 @@ function* generateOptions(world: World): IterableIterator<Alias> {
                 const matcher = matcherFromExpression(alias);
                 const pattern = patternFromExpression(alias);
                 for (const text of aliasesFromPattern(pattern)) {
-                    console.log(`  ${text}`);
+                    // console.log(`  ${text}`);
                     yield { token, text, matcher };
                 }
             }
