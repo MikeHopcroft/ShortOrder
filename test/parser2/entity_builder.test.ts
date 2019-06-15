@@ -2,111 +2,30 @@ import { assert } from 'chai';
 import 'mocha';
 
 import { AttributeInfo, CartOps, ItemInstance, Key } from 'prix-fixe';
-import { NumberToken, NUMBERTOKEN } from 'token-flow';
+
+import { EntityBuilder, Segment } from '../../src/parser2';
 
 import {
-    ATTRIBUTE,
-    AttributeToken,
-    CONJUNCTION,
-    CreateIntent,
-    ENTITY,
-    EntityToken,
-    OPTION,
-    OptionToken,
-    UNIT,
-    UnitToken
-} from '../../src';
-
-import { EntityBuilder, Segment, ConjunctionToken } from '../../src/parser2';
-
-import {
-    caffeineDecaf,
-    genericCoffeePID,
-    genericConePID,
-    genericMilkPID,
-    sizeMedium,
-    sizeSmall,
-    flavorChocolate,
     smallWorldAttributes,
     smallWorldCatalog,
     smallWorldRuleChecker,
-    milkSoy,
-    caffeineRegular
 } from '../shared';
 
-const productCone: EntityToken = {
-    type: ENTITY,
-    pid: genericConePID,
-    name: 'ice cream cone',
-};
-
-const productCoffee: EntityToken = {
-    type: ENTITY,
-    pid: genericCoffeePID,
-    name: 'coffee',
-};
-
-const optionMilk: OptionToken = {
-    type: OPTION,
-    id: genericMilkPID,
-    name: 'milk',
-};
-
-const quantityTwo: NumberToken = {
-    type: NUMBERTOKEN,
-    value: 2,
-};
-
-const quantityFive: NumberToken = {
-    type: NUMBERTOKEN,
-    value: 5,
-};
-
-const conjunction: ConjunctionToken = {
-    type: CONJUNCTION
-};
-
-const unitPumps: UnitToken = {
-    type: UNIT,
-    id: 0,
-    name: 'pumps'
-};
-
-const attributeDecaf: AttributeToken = {
-    type: ATTRIBUTE,
-    id: caffeineDecaf,
-    name: 'decaf',
-};
-
-const attributeRegular: AttributeToken = {
-    type: ATTRIBUTE,
-    id: caffeineRegular,
-    name: 'regular',
-};
-
-const attributeSmall: AttributeToken = {
-    type: ATTRIBUTE,
-    id: sizeSmall,
-    name: 'small',
-};
-
-const attributeMedium: AttributeToken = {
-    type: ATTRIBUTE,
-    id: sizeMedium,
-    name: 'medium',
-};
-
-const attributeChocolate: AttributeToken = {
-    type: ATTRIBUTE,
-    id: flavorChocolate,
-    name: 'chocolate',
-};
-
-const attributeSoy: AttributeToken = {
-    type: ATTRIBUTE,
-    id: milkSoy,
-    name: 'soy',
-};
+import {
+    attributeChocolate,
+    attributeDecaf,
+    attributeMedium,
+    attributeRegular,
+    attributeSmall,
+    attributeSoy,
+    conjunction,
+    optionMilk,
+    productCone,
+    productCoffee,
+    quantityTwo,
+    quantityFive,
+    unitPumps,
+} from '../shared';
 
 const attributeInfo = new AttributeInfo(
     smallWorldCatalog,
@@ -517,14 +436,3 @@ describe('Parser2', () => {
 
     });
 });
-
-// TODO: TokenSequence.startsWith()
-// TODO: syrups in Small World
-// x TODO: mutual exclusion on attributes
-// x TODO: mutual exclusion on options
-// x TODO: conjunctions
-// x TODO: number after entity
-// x TODO: number after number
-// splitOnEntities
-// enumerateSplits
-// Parser2

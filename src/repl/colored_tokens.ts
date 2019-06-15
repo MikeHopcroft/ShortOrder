@@ -4,7 +4,13 @@ import { NUMBERTOKEN, Token } from 'token-flow';
 
 import { AttributeInfo } from '../attributes';
 import { Catalog } from '../catalog';
-import { AnyToken, ATTRIBUTE, AttributeToken, ENTITY, OPTION, QUANTITY, UNIT, WORD, EntityToken } from '../unified';
+import {
+    AnyToken,
+    ATTRIBUTE,
+    AttributeToken,
+    ENTITY,
+    OPTION,
+    QUANTITY, UNIT, WORD, EntityToken } from '../unified';
 
 
 export function tokenToColoredString(t: Token, catalog: Catalog, attributeInfo: AttributeInfo) {
