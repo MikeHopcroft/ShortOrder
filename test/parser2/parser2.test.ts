@@ -235,11 +235,5 @@ describe('Parser2', () => {
         // });
 
     });
-
-    // it('interpretSegmentArray()', () => {
-    // });
-
-    // it('interpretOneSegment()', () => {
-    // });
 });
 

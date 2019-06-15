@@ -16,7 +16,6 @@ import {
     CONJUNCTION,
     OPTION,
     OptionToken,
-//    QUANTITY,
     UNIT,
     ATTRIBUTE,
 } from '../unified';
@@ -62,6 +61,8 @@ export class EntityBuilder {
 
         // Initially, create item without options, in order to get key.
         const item = cartOps.createItem(this.quantity, this.pid, this.aids.values(), [].values());
+
+        // TODO: filter out illegal options here.
 
         // Use key to filter out options that violate mutual exclusivity.
         const f = this.rules.getIncrementalMutualExclusionPredicate(item.key);
@@ -137,13 +138,6 @@ export class EntityBuilder {
             // We were unable to consume the next token.
             // Discard it and move forward.
             tokens.discard(1);
-
-            // if (!this.processOption(tokens)) {
-            //     this.processAttribute(tokens);
-            // }
-            // if (!this.processOption(tokens) && !this.processAttribute(tokens)) {
-            //     return false;
-            // }
         }
         return true;
     }
@@ -190,7 +184,7 @@ export class EntityBuilder {
     //   2. the option doesn't violate mutual exclusivity with existing options
     //   3. the option legally configures the item
     //
-    // Returns true if an option tokens were consumed, even if they couldn't be
+    // Returns true if option tokens were consumed, even if they couldn't be
     // used for the item under construction.
     processOption(tokens: TokenSequence<GapToken>): boolean {
         // TODO: check for mutual exclusivity.
