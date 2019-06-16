@@ -8,9 +8,7 @@ import {
     BasicInstance,
     CreateQuantityInstance,
     CreateWordInstance,
-    // MODIFIER,
 } from './instances';
-// import { ModifierGenerator } from './modifier_generator';
 import { OptionGenerator } from './option_generator';
 import { factorial, permutation, Random } from './utilities';
 
@@ -20,7 +18,6 @@ import { factorial, permutation, Random } from './utilities';
 //
 ///////////////////////////////////////////////////////////////////////////////
 export class ProductGenerator extends CompositeGenerator<BasicInstance> {
-    // constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
     constructor(entities: EntityGenerator, options: OptionGenerator) {
         super([entities, options]);
     }
@@ -110,7 +107,6 @@ function linguisticFixup(instances: BasicInstance[]): BasicInstance[] {
             if (i < instances.length - 2) {
                 if (startsWithEnglishVowel(instances[i + 1].alias)) {
                     instance = {...instance, alias: 'an'};
-                    // instances.push({...instance, alias: 'an'});
                 }
             }
         }

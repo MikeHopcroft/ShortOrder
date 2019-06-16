@@ -57,7 +57,8 @@ export class Parser2 {
         const lengths: number[] = gaps.map(x => x.length);
 
         for (const splits of enumerateSplits(lengths)) {
-            console.log(`split = [${splits}]`);
+            // TODO: split debug tracing
+            // console.log(`split = [${splits}]`);
 
             // Construct the sequence of Segments associated with a particular
             // choice of split points.
@@ -67,17 +68,21 @@ export class Parser2 {
                 right: gaps[index + 1].slice(0, splits[index + 1]),
             }));
 
-            for (const segment of segments) {
-                printSegment(segment);
-            }
+            // TODO: split debug tracing
+            // for (const segment of segments) {
+            //     printSegment(segment);
+            // }
 
             // Parse these segments to produce an interpretation for this
             // choice of split points.
             // TODO: BUGBUG: following line modifies segments[X].left, right
             // TODO: BUGBUG: TokenSequence shouldn't modifiy tokens[].
             const interpretation = this.interpretSegmentArray(segments);
-            console.log(`  score: ${interpretation.score}`);
-            console.log('');
+
+            // TODO: split debug tracing
+            // console.log(`  score: ${interpretation.score}`);
+            // console.log('');
+
             interpretations.push(interpretation);
         }
 

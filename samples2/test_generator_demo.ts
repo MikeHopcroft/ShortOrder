@@ -1,11 +1,8 @@
 import * as fs from 'fs';
 import * as minimist from 'minimist';
 import * as path from 'path';
-// import * as yaml from 'js-yaml';
 
 import {
-    Catalog,
-    PID,
     setup,
     State,
 } from 'prix-fixe';
@@ -20,32 +17,18 @@ import {
 } from '../src/fuzzer2';
 
 import {
-    // AnyToken,
-    // Catalog,
-    // explainDifferences,
     LexicalAnalyzer,
     Quantity,
-    // Random,
-    // RandomOrders,
-    // RandomProducts,
-    // setup,
-    // TestSuite,
-    // TokenizerFunction,
     tokenToString,
-    // formatInstanceDebug
+    ADD_TO_ORDER,
 } from '../src';
 
+// TODO: temporary direct import because of export conflict.
 import {
     Parser2,
     SequenceToken
 } from '../src/parser2';
 
-// function setOptionOfPredicate(catalog: Catalog, child: PID, parent: PID) {
-//     const childInfo = catalog.get(child);
-//     const parentInfo = catalog.get(parent);
-
-//     return parentInfo.standalone && !childInfo.standalone;
-// }
 
 function usage() {
     console.log(`TODO: print usage here.`);
@@ -73,19 +56,8 @@ async function go() {
     const stopwordsFile = path.join(__dirname, '../../samples2/data/restaurant-en/stopwords.yaml');
 
     const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
-    // const world = setup(
-    //     path.join(__dirname, './data/restaurant-en/menu.yaml'),
-    //     path.join(__dirname, './data/restaurant-en/intents.yaml'),
-    //     path.join(__dirname, './data/restaurant-en/attributes.yaml'),
-    //     path.join(__dirname, './data/restaurant-en/quantifiers.yaml'),
-    //     path.join(__dirname, './data/restaurant-en/units.yaml'),
-    //     path.join(__dirname, './data/restaurant-en/stopwords.yaml'),
-    //     false
-    // );
 
-    // world.catalog.setOptionOfPredicate(setOptionOfPredicate);
-
-    // Set up tokenizer
+    // Set up lexer
     const lexer = new LexicalAnalyzer(
         world,
         intentsFiles,
@@ -99,7 +71,14 @@ async function go() {
 
     const processor = async (text: string, state: State): Promise<State> => {
         const tokens = lexer.processOneQuery(text);
+        // TODO: split debug tracing
         console.log(tokens.map(tokenToString).join(''));
+
+        // TODO: HACK
+        // TODO: Remove this code once the parser handles intents.
+        if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
+            tokens.shift();
+        }
 
         const interpretation = parser.findBestInterpretation(tokens as SequenceToken[]);
 
@@ -110,10 +89,6 @@ async function go() {
 
         return {...state, cart: updated};
     };
-
-    // const tokenizer: TokenizerFunction = async (utterance: string): Promise<IterableIterator<AnyToken>> =>
-    //     (world.unified.processOneQuery(utterance) as AnyToken[]).values();
-
 
     const entityQuantities: Quantity[] = [
         { value: 1, text: 'a' },

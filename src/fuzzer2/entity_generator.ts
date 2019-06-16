@@ -5,7 +5,6 @@ import {
     AttributeInfo,
     DID,
     Dimension,
-    DimensionAndTensorDescription,
     ICatalog,
     Key,
     PID,
@@ -15,8 +14,6 @@ import {
 // TODO: can we get this from ./aliasGenerator
 import { generateAliases } from 'token-flow';
 
-// import { AttributeItem, Dimension, Matrix } from '../attributes';
-// import { Catalog } from '../catalog';
 import { patternFromExpression } from '../unified';
 
 import { Generator } from './generator';
@@ -41,7 +38,7 @@ export class EntityGenerator implements Generator<BasicInstance> {
     private readonly entityId: PID;
     private readonly quantifiers: Quantity[];
 
-    private readonly matrix: Tensor;
+    private readonly tensor: Tensor;
 
     private readonly dimensionIdToAttributeId = new Map<DID, AID>();
     private readonly attributes: AttributeDescription[] = [];
@@ -63,12 +60,7 @@ export class EntityGenerator implements Generator<BasicInstance> {
             }
         }
 
-        const tensor = this.info.getTensorForEntity(this.entityId);
-        // if (!tensor) {
-        //     const message = `Product ${entityId} does not have a matrix.`;
-        //     throw TypeError(message);
-        // }
-        this.matrix = tensor;
+        this.tensor = this.info.getTensorForEntity(this.entityId);
 
         this.instances = [...this.createInstances()];
     }
@@ -86,25 +78,15 @@ export class EntityGenerator implements Generator<BasicInstance> {
         }
     }
 
-    private getKey(): Key {
-        const key = this.info.getKey(this.entityId, this.dimensionIdToAttributeId);
-        return key;
-    }
-
     private *entityVersions(): IterableIterator<EntityInstance> {
-        // const pid = this.getPID();
-        // if (pid === undefined) {
-        //     return;
-        // }
-
-        // const item = this.catalog.get(this.entityId);
+        const key = this.info.getKey(this.entityId, this.dimensionIdToAttributeId);
         const item = this.catalog.getGeneric(this.entityId);
         for (let alias of aliasesFromOneItem(item)) {
             for (const quantity of this.quantifiers) {
                 if (quantity.value > 1) {
                     alias = pluralize(alias);
                 }
-                yield CreateEntityInstance(this.getKey(), alias, quantity);
+                yield CreateEntityInstance(key, alias, quantity);
             }
         }
     }
@@ -114,14 +96,12 @@ export class EntityGenerator implements Generator<BasicInstance> {
     }
 
     private *createInstancesRecursion(d: number): IterableIterator<BasicInstance[]> {
-        const dimension = this.matrix.dimensions[d];
+        const dimension = this.tensor.dimensions[d];
 
         for (const attribute of dimension.attributes) {
             this.pushAttribute(dimension, attribute);
 
-            if (d === this.matrix.dimensions.length - 1) {
-                const pid = this.getKey();
-
+            if (d === this.tensor.dimensions.length - 1) {
                 // TODO: include all aliases for attributes?
                 const attributes = this.attributes.map(a => CreateAttributeInstance(a.aid, a.aliases[0]));
                 for (const entity of this.entityVersions()) {

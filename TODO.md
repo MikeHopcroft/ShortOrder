@@ -15,7 +15,7 @@
 * Rehabilitate alias collision detection tool
 
 * Fuzzer
-    * Port to prix-fixe
+    * x Port to prix-fixe
     * Adopt segmentation model
     * Consider moving to prix-fixe
 
@@ -58,8 +58,11 @@
     * Exclusion sets when using multiple options
         * RuleChecker: enumerate exclusion sets and options within exclusion sets
 * Plan
-    * Work on clone in fuzzer2 directory
-    * Port onto prix-fixe
+    * x Work on clone in fuzzer2 directory
+    * x Port onto prix-fixe
+    * Fix obvious test failures
+        * Parser support for intents. HACK.
+        * Only generate legal options.
     * Enhance rules checker to enumerate legal options
     * Enhance left/right
     * Make sprint4 version - attributes, quantity, entity

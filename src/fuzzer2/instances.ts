@@ -17,9 +17,6 @@ export interface AliasedInstance extends Instance {
     alias: string;
 }
 
-// export const MODIFIER: unique symbol = Symbol('MODIFIER');
-// export type MODIFIER = typeof MODIFIER;
-
 export const PRODUCT: unique symbol = Symbol('PRODUCT');
 export type PRODUCT = typeof PRODUCT;
 
@@ -42,15 +39,6 @@ export interface EntityInstance extends AliasedInstance {
 export function CreateEntityInstance(key: Key, alias: string, quantity: Quantity): EntityInstance {
     return { type: ENTITY, key, alias, quantity };
 }
-
-// export interface ModifierInstance extends AliasedInstance {
-//     type: MODIFIER;
-//     id: PID;
-// }
-
-// export function CreateModifierInstance(id: PID, alias: string): ModifierInstance {
-//     return { type: MODIFIER, id, alias };
-// }
 
 export interface Quantity {
     value: number;
@@ -97,7 +85,6 @@ export function CreateProductInstance(instances: BasicInstance[]): ProductInstan
 export type BasicInstance = 
     AttributeInstance |
     EntityInstance |
-    // ModifierInstance |
     OptionInstance |
     QuantityInstance |
     WordInstance;
@@ -117,8 +104,6 @@ export function formatInstanceDebug(instance: AnyInstance): string {
             else {
                 return `ENTITY(${instance.alias},${instance.key})`;
             }
-        // case MODIFIER:
-        //     return `MODIFIER(${instance.alias},${instance.id})`;
         case OPTION:
             if (instance.quantity.text.length > 0) {
                 return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) OPTION(${instance.alias},${instance.key})`;
@@ -142,7 +127,6 @@ export function formatInstanceAsText(instance: AnyInstance): string {
     switch (instance.type) {
         case ATTRIBUTE:
         case ENTITY:
-        // case MODIFIER:
         case QUANTITY:
         case WORD:
             return instance.alias;

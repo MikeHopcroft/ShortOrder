@@ -1,10 +1,13 @@
 import { AttributeInfo, ICatalog, TestCase, TestLineItem, TestOrder } from "prix-fixe";
 
-// import { AttributeInfo } from '../attributes';
-// import { Catalog } from '../catalog';
 import { ENTITY, OPTION } from "../unified";
 
-import { BasicInstance, formatInstanceAsText, WordOrProductInstance, PRODUCT } from "./instances";
+import {
+    BasicInstance,
+    formatInstanceAsText,
+    WordOrProductInstance,
+    PRODUCT
+} from "./instances";
 
 // TODO: perhaps createTestCase should be a class? (instead of side-effecting counter)
 let counter = 0;
@@ -56,18 +59,8 @@ export function appendProductLines(
         }
     }
 
-    // Get modifiers and options
+    // Add options
     for (const instance of instances) {
-        // if (instance.type === MODIFIER) {
-        //     const sku = attributeInfo.getAttributeSKU(instance.id);
-        //     lines.push({
-        //         indent: 1,
-        //         quantity: 1,
-        //         key: sku as number,
-        //         name: catalog.get(sku as number).name
-        //     });
-        // }
-        // else
         if (instance.type === OPTION) {
             lines.push({
                 indent: 1,
