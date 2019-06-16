@@ -1,6 +1,7 @@
 export * from './alias_generator';
 export * from './composite_generator';
 export * from './entity_generator';
+export * from './fuzzer';
 export * from './generator';
 export * from './instances';
 export * from './map_generator';

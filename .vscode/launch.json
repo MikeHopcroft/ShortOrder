@@ -156,7 +156,7 @@
             "type": "node",
             "request": "launch",
             "name": "AAA Test Generator",
-            "program": "${workspaceFolder}/build/samples2/test_generator_demo.js",
+            "program": "${workspaceFolder}/build/samples2/test_generator_demo2.js",
             "outputCapture": "std"
         }
 

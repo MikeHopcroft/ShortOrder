@@ -1,5 +1,10 @@
 # TODO List
 
+* Fuzzer2
+    * Separate options from EntityX?
+    * Alias transformer for left/right
+    * Random generators
+
 * Minimal menu to get started
     * x Fix milk attributes
     * Remove modifiers?
@@ -60,6 +65,7 @@
 * Plan
     * x Work on clone in fuzzer2 directory
     * x Port onto prix-fixe
+    * Merge EntityGenerator and OptionGenerator.
     * Fix obvious test failures
         * Parser support for intents. HACK.
         * Only generate legal options.

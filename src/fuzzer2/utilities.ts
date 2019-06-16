@@ -66,5 +66,9 @@ export class Random {
     randomInstanceSequence<T>(generator: Generator<T>): T[] {
         return generator.version(this.randomNonNegative(generator.count()));
     }
+
+    randomBoolean(): boolean {
+        return this.random() < 0.5;
+    }
 }
 
