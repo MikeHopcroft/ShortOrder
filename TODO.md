@@ -19,6 +19,51 @@
     * Adopt segmentation model
     * Consider moving to prix-fixe
 
+* Notes
+    * RandomOrder - takes prologue, RandomProducts, epilog and stitches together
+    * RandomProducts
+        * Walks over catalog producing EntityGenerator for each ItemDescription
+        * Walks over dimensions producing ModifierGenerator for each Dimension
+        * Walks over list of option PIDs producing OptionGenerator for each option PID
+        * Stitches together random entity, modifier, and option.
+        * Calls ProductGenerator to produce BasicInstance[]
+        * Permutes product
+        * Complete product
+        * Returns ProductInstance
+    * ProductGenerator extends CompositeGenerator
+        * Permutes
+        * Completes (linguistic fixup)
+        * Adds entity quantity to the front
+    * EntityGenerator
+        * Expands aliases of quantifiers
+        * Enumerates all combinations of attributes cross product all quantified versions of all entity aliases.
+    * ModifierGenerator
+        * Obsolete - was used with modifiers
+        * Need something that enumerates all options in an exclusion set.
+    * OptionGenerator
+        * For one PID, enumerates and stores cross product of all aliases and quantity aliases.
+* New concepts
+    * Distinguish between left and right quantifiers
+        * size never/rarely comes to the right
+        * one word options like `nonfat` can be trailing more often than two word modifiers like `nonfat milk`
+        * right side has phrases like "pumps of" while left side has "pump"
+        * right side has words like "a" and "some"
+        * left
+            * two two pump raspberry lattes
+            * `two one pump raspberry lattes` or `two raspberry lattes`
+        * right
+            * two lattes with two pumps raspberry [syrup]
+            * two lattes with [(a pump,some,one pump)] raspberry [syrup]
+    * Option attributes
+    * Exclusion sets when using multiple options
+        * RuleChecker: enumerate exclusion sets and options within exclusion sets
+* Plan
+    * Work on clone in fuzzer2 directory
+    * Port onto prix-fixe
+    * Enhance rules checker to enumerate legal options
+    * Enhance left/right
+    * Make sprint4 version - attributes, quantity, entity
+
 * Rename unified directory
 * Remove references to old unified
 
