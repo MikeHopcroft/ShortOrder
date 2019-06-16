@@ -10,7 +10,7 @@ import {
     RIGHT,
     SegmentX,
     Random
-} from '../src/fuzzer2';
+} from '../src/fuzzer3';
 
 function go() {
     const quantity = new QuantityX(1, 'a', LEFT);
@@ -23,11 +23,13 @@ function go() {
 
     const fivePumps = new QuantityX(5, 'five pump', LEFT);
     const aPump = new QuantityX(1, 'a pump of', RIGHT);
+    const a = new QuantityX(1, 'a', RIGHT);
 
     const extra = new AttributeX(5, 'extra', LEFT);
 
     const options: OptionX[] = [
         new QuantifiedOptionX(fivePumps, '12:1', 'cinnamon dolce syrup'),
+        new QuantifiedOptionX(a, '120:1', 'lid'),
         new AttributedOptionX(extra, '14:2', 'vanilla syrup'),
     ];
 

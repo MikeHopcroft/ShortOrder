@@ -1,9 +1,19 @@
 # TODO List
 
 * Fuzzer2
+    * Make fuzzer3 directory
+    * Seems like LEFT, EITHER, RIGHT should go in OptionX, not QuantityX.
     * Separate options from EntityX?
+        * Rename EntityX to ProductX
+        * EntityX becomes container for QuantityX, key, text, AttributeX[]
+        * ProductX is container of EntityX and OptionX[]. EntityX generators ProductX.
+        * ProductX generates SegmentX
     * Alias transformer for left/right
+        * e.g. filters "syrup" out of left side use cases
     * Random generators
+        * Random generic in category? in list of pids?
+        * Attributes for tensor
+        * Select n options from category
 
 * Minimal menu to get started
     * x Fix milk attributes
