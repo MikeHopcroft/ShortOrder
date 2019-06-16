@@ -17,12 +17,12 @@ export type Position = LEFT | RIGHT | EITHER;
 export class QuantityX {
     value: number;
     text: string;
-    position: Position;
+    // position: Position;
 
-    constructor(value: number, text: string, position: Position) {
+    constructor(value: number, text: string) {
         this.value = value;
         this.text = text;
-        this.position = position;
+        // this.position = position;
     }
 }
 
@@ -63,7 +63,7 @@ export class QuantifiedOptionX implements OptionX {
     text: string;
     position: Position;
 
-    constructor(quantity: QuantityX, key: Key, text: string) {
+    constructor(quantity: QuantityX, key: Key, text: string, position: Position) {
         this.quantity = quantity;
         this.key = key;
 
@@ -73,7 +73,7 @@ export class QuantifiedOptionX implements OptionX {
             this.text = `${quantity.text} ${text}`;
         }
 
-        this.position = quantity.position;
+        this.position = position;
     }
 
     buildItem(): ItemInstance {
@@ -96,11 +96,11 @@ export class AttributedOptionX implements OptionX {
     text: string;
     position: Position;
 
-    constructor(attribute: AttributeX, key: Key, text: string) {
+    constructor(attribute: AttributeX, key: Key, text: string, position: Position) {
         this.attribute = attribute;
         this.key = key;
         this.text = `${attribute.text} ${text}`;
-        this.position = EITHER;
+        this.position = position;
     }
 
     buildItem(): ItemInstance {

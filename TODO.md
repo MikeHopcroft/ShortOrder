@@ -1,7 +1,10 @@
 # TODO List
 
 * Fuzzer2
-    * Make fuzzer3 directory
+    * x Make fuzzer3 directory
+    * Go back to "with" after an attribute, even after first "with"
+    * "with" and "without"
+    * Don't render isHidden attributes
     * Seems like LEFT, EITHER, RIGHT should go in OptionX, not QuantityX.
     * Separate options from EntityX?
         * Rename EntityX to ProductX
