@@ -1,9 +1,22 @@
 import * as pluralize from 'pluralize';
-import { PID } from 'prix-fixe';
+import {
+    AID,
+    AttributeDescription,
+    AttributeInfo,
+    DID,
+    Dimension,
+    DimensionAndTensorDescription,
+    ICatalog,
+    Key,
+    PID,
+    Tensor
+} from 'prix-fixe';
+
+// TODO: can we get this from ./aliasGenerator
 import { generateAliases } from 'token-flow';
 
-import { AttributeInfo, AttributeItem, Dimension, Matrix } from '../attributes';
-import { Catalog } from '../catalog';
+// import { AttributeItem, Dimension, Matrix } from '../attributes';
+// import { Catalog } from '../catalog';
 import { patternFromExpression } from '../unified';
 
 import { Generator } from './generator';
@@ -24,18 +37,18 @@ import { aliasesFromOneItem } from './utilities';
 ///////////////////////////////////////////////////////////////////////////////
 export class EntityGenerator implements Generator<BasicInstance> {
     private readonly info: AttributeInfo;
-    private readonly catalog: Catalog;
+    private readonly catalog: ICatalog;
     private readonly entityId: PID;
     private readonly quantifiers: Quantity[];
 
-    private readonly matrix: Matrix;
+    private readonly matrix: Tensor;
 
-    private readonly dimensionIdToAttributeId = new Map<PID, PID>();
-    private readonly attributes: AttributeItem[] = [];
+    private readonly dimensionIdToAttributeId = new Map<DID, AID>();
+    private readonly attributes: AttributeDescription[] = [];
 
     private readonly instances: BasicInstance[][];
 
-    constructor(attributeInfo: AttributeInfo, catalog: Catalog, entityId: PID, quantifiers: Quantity[]) {
+    constructor(attributeInfo: AttributeInfo, catalog: ICatalog, entityId: PID, quantifiers: Quantity[]) {
         this.info = attributeInfo;
         this.catalog = catalog;
         this.entityId = entityId;
@@ -50,48 +63,48 @@ export class EntityGenerator implements Generator<BasicInstance> {
             }
         }
 
-        const matrix = this.info.getMatrixForEntity(this.entityId);
-        if (!matrix) {
-            const message = `Product ${entityId} does not have a matrix.`;
-            throw TypeError(message);
-        }
-        this.matrix = matrix;
+        const tensor = this.info.getTensorForEntity(this.entityId);
+        // if (!tensor) {
+        //     const message = `Product ${entityId} does not have a matrix.`;
+        //     throw TypeError(message);
+        // }
+        this.matrix = tensor;
 
         this.instances = [...this.createInstances()];
     }
 
-    private pushAttribute(dimension: Dimension, attribute: AttributeItem) {
+    private pushAttribute(dimension: Dimension, attribute: AttributeDescription) {
         if (attribute.hidden !== true) {
             this.attributes.push(attribute);
         }
-        this.dimensionIdToAttributeId.set(dimension.id, attribute.pid);
+        this.dimensionIdToAttributeId.set(dimension.did, attribute.aid);
     }
 
-    private popAttribute(dimension: Dimension, attribute: AttributeItem) {
+    private popAttribute(dimension: Dimension, attribute: AttributeDescription) {
         if (attribute.hidden !== true) {
             this.attributes.pop();
         }
     }
 
-    private getPID(): PID | undefined {
-        const key = this.matrix.getKey(this.entityId, this.dimensionIdToAttributeId, this.info);
-        const pid = this.info.getPID(key);
-        return pid;
+    private getKey(): Key {
+        const key = this.info.getKey(this.entityId, this.dimensionIdToAttributeId);
+        return key;
     }
 
     private *entityVersions(): IterableIterator<EntityInstance> {
-        const pid = this.getPID();
-        if (pid === undefined) {
-            return;
-        }
+        // const pid = this.getPID();
+        // if (pid === undefined) {
+        //     return;
+        // }
 
-        const item = this.catalog.get(this.entityId);
+        // const item = this.catalog.get(this.entityId);
+        const item = this.catalog.getGeneric(this.entityId);
         for (let alias of aliasesFromOneItem(item)) {
             for (const quantity of this.quantifiers) {
                 if (quantity.value > 1) {
                     alias = pluralize(alias);
                 }
-                yield CreateEntityInstance(pid, alias, quantity);
+                yield CreateEntityInstance(this.getKey(), alias, quantity);
             }
         }
     }
@@ -107,12 +120,12 @@ export class EntityGenerator implements Generator<BasicInstance> {
             this.pushAttribute(dimension, attribute);
 
             if (d === this.matrix.dimensions.length - 1) {
-                const pid = this.getPID();
-                if (pid !== undefined) {
-                    const attributes = this.attributes.map(a => CreateAttributeInstance(a.pid, a.aliases[0]));
-                    for (const entity of this.entityVersions()) {
-                        yield [...attributes, entity];
-                    }
+                const pid = this.getKey();
+
+                // TODO: include all aliases for attributes?
+                const attributes = this.attributes.map(a => CreateAttributeInstance(a.aid, a.aliases[0]));
+                for (const entity of this.entityVersions()) {
+                    yield [...attributes, entity];
                 }
             }
             else {

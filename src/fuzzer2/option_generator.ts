@@ -1,7 +1,6 @@
-import { PID } from 'prix-fixe';
+import { AID, DID, ICatalog, PID, AttributeInfo } from 'prix-fixe';
 import { generateAliases } from 'token-flow';
 
-import { Catalog } from '../catalog';
 import { patternFromExpression } from '../unified';
 
 import { Generator } from './generator';
@@ -14,7 +13,8 @@ import { aliasesFromOneItem } from './utilities';
 //
 ///////////////////////////////////////////////////////////////////////////////
 export class OptionGenerator implements Generator<BasicInstance> {
-    private readonly catalog: Catalog;
+    private readonly info: AttributeInfo;
+    private readonly catalog: ICatalog;
     private readonly pid: PID;
     private readonly quantifiers: Quantity[];
     
@@ -22,7 +22,8 @@ export class OptionGenerator implements Generator<BasicInstance> {
 
     // Aliases for units
     // Some way to specify omitted option vs removed option ('no anchovies', 'without').
-    constructor(catalog: Catalog, pid: PID, quantifiers: Quantity[]) {
+    constructor(info: AttributeInfo, catalog: ICatalog, pid: PID, quantifiers: Quantity[]) {
+        this.info = info;
         this.catalog = catalog;
         this.pid = pid;
 
@@ -40,10 +41,11 @@ export class OptionGenerator implements Generator<BasicInstance> {
     }
 
     private *createInstances(): IterableIterator<BasicInstance[]> {
-        const item = this.catalog.get(this.pid);
+        const key = this.info.getKey(this.pid, new Map<DID, AID>());
+        const item = this.catalog.getGeneric(this.pid);
         for (const quantity of this.quantifiers) {
             for (const alias of aliasesFromOneItem(item)) {
-               yield [CreateOptionInstance(this.pid, alias, quantity)];
+               yield [CreateOptionInstance(key, alias, quantity)];
             }
         }
     }

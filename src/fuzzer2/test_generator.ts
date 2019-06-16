@@ -1,7 +1,7 @@
-import { PID } from 'prix-fixe';
+import { AttributeInfo, DimensionAndTensorDescription, ICatalog, PID } from 'prix-fixe';
 
-import { AttributeInfo, Attributes } from '../attributes';
-import { Catalog } from '../catalog';
+// import { Attributes } from '../attributes';
+// import {  } from '../catalog';
 import { BasicInstance, Quantity } from '../fuzzer2';
 
 import { AliasGenerator } from './alias_generator';
@@ -14,7 +14,7 @@ import {
     CreateWordInstance
 } from './instances';
 import { EntityGenerator } from './entity_generator';
-import { ModifierGenerator } from './modifier_generator';
+// import { ModifierGenerator } from './modifier_generator';
 import { OptionGenerator } from './option_generator';
 import { ProductGenerator } from './product_generator';
 import { Random } from './utilities';
@@ -29,49 +29,54 @@ export class RandomProducts {
     private readonly random: Random;
 
     private readonly entities: EntityGenerator[] = [];
-    private readonly modifiers: ModifierGenerator[] = [];
+    // private readonly modifiers: ModifierGenerator[] = [];
     private readonly options: OptionGenerator[] = [];
 
     constructor(
-        catalog: Catalog,
+        catalog: ICatalog,
         attributeInfo: AttributeInfo,
-        attributes: Attributes,
+        attributes: DimensionAndTensorDescription,
         entityQuantities: Quantity[],
+        entityIds: PID[],
         optionIds: PID[],
         optionQuantities: Quantity[],
         random: Random
     ) {
         this.random = random;
 
-        for (const [pid, item] of catalog.map.entries()) {
-            if (item.matrix !== undefined) {
-                this.entities.push(new EntityGenerator(attributeInfo, catalog, item.pid, entityQuantities));
-            }
-        }
-
-        for (const dimension of attributes.dimensions) {
-            // Hack to determine if dimension is a modifier.
-            if (dimension.items[0].sku !== undefined) {
-                const d = attributeInfo.getDimension(dimension.did);
-                if (d === undefined) {
-                    const message = `unknown did ${dimension.did}`;
-                    throw TypeError(message);
-                }
-                this.modifiers.push(new ModifierGenerator(d));
-            }
+        for (const pid of entityIds) {
+            this.entities.push(new EntityGenerator(attributeInfo, catalog, pid, entityQuantities));
         }
 
         for (const pid of optionIds) {
-            this.options.push(new OptionGenerator(catalog, pid, optionQuantities));
+            this.options.push(new OptionGenerator(attributeInfo, catalog, pid, optionQuantities));
         }
+
+        // for (const [pid, item] of catalog.getGenericMap().entries()) {
+        //     // if (item.tensor !== undefined) {
+        //     this.entities.push(new EntityGenerator(attributeInfo, catalog, item.pid, entityQuantities));
+        //     // }
+        // }
+
+        // for (const dimension of attributes.dimensions) {
+        //     // Hack to determine if dimension is a modifier.
+        //     if (dimension.items[0].sku !== undefined) {
+        //         const d = attributeInfo.getDimension(dimension.did);
+        //         if (d === undefined) {
+        //             const message = `unknown did ${dimension.did}`;
+        //             throw TypeError(message);
+        //         }
+        //         this.modifiers.push(new ModifierGenerator(d));
+        //     }
+        // }
     }
 
     oneProduct(): BasicInstance[] {
         const entity = this.random.randomChoice(this.entities);
-        const modifier = this.random.randomChoice(this.modifiers);
+        // const modifier = this.random.randomChoice(this.modifiers);
         const option = this.random.randomChoice(this.options);
 
-        const product = new ProductGenerator(entity, modifier, option);
+        const product = new ProductGenerator(entity, option);
 
         return this.random.randomInstanceSequence(product);
     }

@@ -8,9 +8,9 @@ import {
     BasicInstance,
     CreateQuantityInstance,
     CreateWordInstance,
-    MODIFIER,
+    // MODIFIER,
 } from './instances';
-import { ModifierGenerator } from './modifier_generator';
+// import { ModifierGenerator } from './modifier_generator';
 import { OptionGenerator } from './option_generator';
 import { factorial, permutation, Random } from './utilities';
 
@@ -20,8 +20,9 @@ import { factorial, permutation, Random } from './utilities';
 //
 ///////////////////////////////////////////////////////////////////////////////
 export class ProductGenerator extends CompositeGenerator<BasicInstance> {
-    constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
-        super([entities, modifiers, options]);
+    // constructor(entities: EntityGenerator, modifiers: ModifierGenerator, options: OptionGenerator) {
+    constructor(entities: EntityGenerator, options: OptionGenerator) {
+        super([entities, options]);
     }
 
     static permute(instances: BasicInstance[], random: Random): BasicInstance[] {

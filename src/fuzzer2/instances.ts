@@ -1,5 +1,5 @@
 
-import { PID } from 'prix-fixe';
+import { AID, Key, PID } from 'prix-fixe';
 
 import { ATTRIBUTE, ENTITY, OPTION, WORD, QUANTITY } from '../unified';
 
@@ -17,15 +17,15 @@ export interface AliasedInstance extends Instance {
     alias: string;
 }
 
-export const MODIFIER: unique symbol = Symbol('MODIFIER');
-export type MODIFIER = typeof MODIFIER;
+// export const MODIFIER: unique symbol = Symbol('MODIFIER');
+// export type MODIFIER = typeof MODIFIER;
 
 export const PRODUCT: unique symbol = Symbol('PRODUCT');
 export type PRODUCT = typeof PRODUCT;
 
 export interface AttributeInstance extends AliasedInstance {
     type: ATTRIBUTE;
-    id: PID;
+    id: AID;
 }
 
 export function CreateAttributeInstance(id: PID, alias: string): AttributeInstance {
@@ -34,23 +34,23 @@ export function CreateAttributeInstance(id: PID, alias: string): AttributeInstan
 
 export interface EntityInstance extends AliasedInstance {
     type: ENTITY;
-    id: PID;
+    key: Key;
 
     quantity: Quantity;
 }
 
-export function CreateEntityInstance(id: PID, alias: string, quantity: Quantity): EntityInstance {
-    return { type: ENTITY, id, alias, quantity };
+export function CreateEntityInstance(key: Key, alias: string, quantity: Quantity): EntityInstance {
+    return { type: ENTITY, key, alias, quantity };
 }
 
-export interface ModifierInstance extends AliasedInstance {
-    type: MODIFIER;
-    id: PID;
-}
+// export interface ModifierInstance extends AliasedInstance {
+//     type: MODIFIER;
+//     id: PID;
+// }
 
-export function CreateModifierInstance(id: PID, alias: string): ModifierInstance {
-    return { type: MODIFIER, id, alias };
-}
+// export function CreateModifierInstance(id: PID, alias: string): ModifierInstance {
+//     return { type: MODIFIER, id, alias };
+// }
 
 export interface Quantity {
     value: number;
@@ -68,13 +68,13 @@ export function CreateQuantityInstance(quantity: Quantity): QuantityInstance {
 
 export interface OptionInstance extends AliasedInstance {
     type: OPTION;
-    id: PID;
+    key: Key;
 
     quantity: Quantity;
 }
 
-export function CreateOptionInstance(pid: PID, alias: string, quantity: Quantity): OptionInstance {
-    return { type: OPTION, id: pid, alias, quantity };
+export function CreateOptionInstance(key: Key, alias: string, quantity: Quantity): OptionInstance {
+    return { type: OPTION, key, alias, quantity };
 }
 
 export interface WordInstance extends AliasedInstance {
@@ -97,7 +97,7 @@ export function CreateProductInstance(instances: BasicInstance[]): ProductInstan
 export type BasicInstance = 
     AttributeInstance |
     EntityInstance |
-    ModifierInstance |
+    // ModifierInstance |
     OptionInstance |
     QuantityInstance |
     WordInstance;
@@ -112,19 +112,19 @@ export function formatInstanceDebug(instance: AnyInstance): string {
             return `ATTRIBUTE(${instance.alias},${instance.id})`;
         case ENTITY:
             if (instance.quantity.text.length > 0) {
-                return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) ENTITY(${instance.alias},${instance.id})`;
+                return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) ENTITY(${instance.alias},${instance.key})`;
             }
             else {
-                return `ENTITY(${instance.alias},${instance.id})`;
+                return `ENTITY(${instance.alias},${instance.key})`;
             }
-        case MODIFIER:
-            return `MODIFIER(${instance.alias},${instance.id})`;
+        // case MODIFIER:
+        //     return `MODIFIER(${instance.alias},${instance.id})`;
         case OPTION:
             if (instance.quantity.text.length > 0) {
-                return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) OPTION(${instance.alias},${instance.id})`;
+                return `QUANTITY(${instance.quantity.text},${instance.quantity.value}) OPTION(${instance.alias},${instance.key})`;
             }
             else {
-                return `OPTION(${instance.alias},${instance.id})`;
+                return `OPTION(${instance.alias},${instance.key})`;
             }
         case PRODUCT:
             const product = instance.instances.map(formatInstanceDebug).join('');
@@ -142,7 +142,7 @@ export function formatInstanceAsText(instance: AnyInstance): string {
     switch (instance.type) {
         case ATTRIBUTE:
         case ENTITY:
-        case MODIFIER:
+        // case MODIFIER:
         case QUANTITY:
         case WORD:
             return instance.alias;

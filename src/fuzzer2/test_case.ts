@@ -1,15 +1,16 @@
-import { AttributeInfo } from '../attributes';
-import { Catalog } from '../catalog';
-import { TestCase, TestLineItem, TestOrder } from "../test_suite";
+import { AttributeInfo, ICatalog, TestCase, TestLineItem, TestOrder } from "prix-fixe";
+
+// import { AttributeInfo } from '../attributes';
+// import { Catalog } from '../catalog';
 import { ENTITY, OPTION } from "../unified";
 
-import { BasicInstance, MODIFIER, formatInstanceAsText, WordOrProductInstance, PRODUCT } from "./instances";
+import { BasicInstance, formatInstanceAsText, WordOrProductInstance, PRODUCT } from "./instances";
 
 // TODO: perhaps createTestCase should be a class? (instead of side-effecting counter)
 let counter = 0;
 
 export function createTestCase(
-    catalog: Catalog,
+    catalog: ICatalog,
     attributeInfo: AttributeInfo,
     instances: WordOrProductInstance[]
 ): TestCase {
@@ -37,7 +38,7 @@ export function createTestCase(
 }
 
 export function appendProductLines(
-    catalog: Catalog,
+    catalog: ICatalog,
     attributeInfo: AttributeInfo,
     lines: TestLineItem[],
     instances: BasicInstance[]
@@ -48,8 +49,8 @@ export function appendProductLines(
             lines.push({
                 indent: 0,
                 quantity: instance.quantity.value,
-                pid: instance.id,
-                name: catalog.get(instance.id).name
+                key: instance.key,
+                name: catalog.getSpecific(instance.key).name
             });
             break;
         }
@@ -57,21 +58,22 @@ export function appendProductLines(
 
     // Get modifiers and options
     for (const instance of instances) {
-        if (instance.type === MODIFIER) {
-            const sku = attributeInfo.getAttributeSKU(instance.id);
-            lines.push({
-                indent: 1,
-                quantity: 1,
-                pid: sku as number,
-                name: catalog.get(sku as number).name
-            });
-        }
-        else if ( instance.type === OPTION) {
+        // if (instance.type === MODIFIER) {
+        //     const sku = attributeInfo.getAttributeSKU(instance.id);
+        //     lines.push({
+        //         indent: 1,
+        //         quantity: 1,
+        //         key: sku as number,
+        //         name: catalog.get(sku as number).name
+        //     });
+        // }
+        // else
+        if (instance.type === OPTION) {
             lines.push({
                 indent: 1,
                 quantity: instance.quantity.value,
-                pid: instance.id,
-                name: catalog.get(instance.id).name
+                key: instance.key,
+                name: catalog.getSpecific(instance.key).name
             });
         }
     }
@@ -92,7 +94,7 @@ export function appendProductLines(
 }
 
 function formatLine(prefix: string, line: TestLineItem) {
-    return `${prefix} / ${line.indent}:${line.quantity}:${line.name}:${line.pid}`;
+    return `${prefix} / ${line.indent}:${line.quantity}:${line.name}:${line.key}`;
 }
 
 function canonicalize(order: TestOrder): string[] {

@@ -151,6 +151,14 @@
             "outputCapture": "std",
             "args": ["-a"]
             // "args": ["-a", "-s=bug"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "AAA Test Generator",
+            "program": "${workspaceFolder}/build/samples2/test_generator_demo.js",
+            "outputCapture": "std"
         }
+
     ]
 }
