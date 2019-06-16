@@ -10,7 +10,8 @@ genericItems:
     cid: 700
     name: drizzle
     aliases:
-      - drizz
+      - drizzle
+      - syrup
     defaultKey: '6000:0:1'
     tensor: 5
 ###############################################################################

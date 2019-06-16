@@ -182,7 +182,7 @@ Total                                        20.98
 SHORT-ORDER: "Thank you. Your total is $20.98. Please pull forward."
 ~~~
 
-## How Short-Order Worrks
+## How Short-Order Works
 
 As an example, consider the following utterance, which would typically come from a speech-to-text system:
 

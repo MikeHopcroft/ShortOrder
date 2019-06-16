@@ -130,3 +130,17 @@
         name: whole milk
         key: '5000:0'
 
+# Can I get a whole milk latte with two pumps of caramel
+# Can I get a whole milk latte with two ice cream cones
+# Thats a cinnamon dolce latte two pumps caramel latte and a taco
+
+# I'd like two five pump cinnamon dolce lattes
+# Give me a cinnamon dolce latte with five pumps <== TROUBLE
+# Give me a latte with five pumps of cinnamon dolce syrup
+
+# Actually make that two pumps <== IMPLIED OPTION
+# Actually make that two lattes
+# Actually make that two <== AMBIGUOUS
+
+# I'd like two five pump cinnamon dolce lattes decaf with three pumps cinnonmon dolce latte iced and a taco
+# I'd like two five pump cinnamon dolce lattes decaf with three pumps caramel small cone and a taco
