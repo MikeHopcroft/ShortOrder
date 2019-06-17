@@ -1,16 +1,33 @@
 # TODO List
 
 * Fuzzer2
+    * Select valid option for entity
+        * Use category id
+        * Mutual exclusivity
+    * Better rules file
+        * latte, cappuccino, americano
+        * specific product for each milk
+        * exclusion set for milks
+        * syrups
+    * Example
+        * (vanilla cream latte)
+        * (vanilla cream) latte
+        * vanilla cream latte
+    * REVIEW aliasesFromOneItem() - does this deal with matcher: prefix?
+    * REVIEW generateAliases() and other token-flow imports. Can these come from prix-fixe?
+    * REMOVE attributeInfo['tensorIdToTensor']
     * x Make fuzzer3 directory
     * Go back to "with" after an attribute, even after first "with"
     * "with" and "without"
-    * Don't render isHidden attributes
+    * x Don't render isHidden attributes
     * Seems like LEFT, EITHER, RIGHT should go in OptionX, not QuantityX.
     * Separate options from EntityX?
-        * Rename EntityX to ProductX
-        * EntityX becomes container for QuantityX, key, text, AttributeX[]
-        * ProductX is container of EntityX and OptionX[]. EntityX generators ProductX.
+        * x Rename EntityX to ProductX
+        * x EntityX becomes container for QuantityX, key, text, AttributeX[]
+        * x ProductX is container of EntityX and OptionX[].
+        * EntityX generates ProductX.
         * ProductX generates SegmentX
+    * x Aliases for attributes
     * Alias transformer for left/right
         * e.g. filters "syrup" out of left side use cases
     * Random generators

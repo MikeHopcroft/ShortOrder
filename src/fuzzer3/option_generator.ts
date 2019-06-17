@@ -9,8 +9,11 @@ import {
 import { AttributeGenerator } from './attribute_generator';
 
 import {
-    EntityX,
-    QuantityX
+    AttributedOptionX,
+    EITHER,
+    OptionX,
+    QuantifiedOptionX,
+    QuantityX,
 } from './fuzzer';
 
 import {
@@ -18,7 +21,7 @@ import {
     Random
 } from './utilities';
 
-export class EntityGenerator {
+export class OptionGenerator {
     attributeInfo: AttributeInfo;
     pid: PID;
     attributes: AttributeGenerator;
@@ -44,8 +47,7 @@ export class EntityGenerator {
         this.aliases = [...aliasesFromOneItem(item)];
     }
 
-    randomEntity(random: Random): EntityX {
-        const quantity = random.randomChoice(this.quantifiers);
+    randomAttributedOption(random: Random): OptionX {
         const attributes = this.attributes.randomCombination(this.tid, random);
         const alias = random.randomChoice(this.aliases);
 
@@ -56,11 +58,27 @@ export class EntityGenerator {
         }
         const key = builder.getKey();
 
-        return new EntityX(
-            quantity,
-            attributes,
+        return new AttributedOptionX(
+            attributes[0],
             key,
-            alias
+            alias,
+            EITHER
+        );
+    }
+
+    randomQuantifiedOption(random: Random): OptionX {
+        const quantity = random.randomChoice(this.quantifiers);
+        const alias = random.randomChoice(this.aliases);
+
+        const builder = new TensorEntityBuilder(this.attributeInfo);
+        builder.setPID(this.pid);
+        const key = builder.getKey();
+
+        return new QuantifiedOptionX(
+            quantity,
+            key,
+            alias,
+            EITHER
         );
     }
 }

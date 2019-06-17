@@ -1,13 +1,8 @@
-import * as pluralize from 'pluralize';
-
 import {
     AID,
-    AttributeDescription,
     AttributeInfo,
     DID,
-    Dimension,
     ICatalog,
-    PID,
     Tensor,
     TID
 } from 'prix-fixe';
@@ -17,7 +12,7 @@ import {
 } from 'token-flow';
 
 import {
-    patternFromExpression,
+    patternFromExpression
 } from '../unified';
 
 import {
@@ -27,7 +22,6 @@ import {
 } from './fuzzer';
 
 import {
-    aliasesFromOneItem,
     Random
 } from './utilities';
 
@@ -82,27 +76,33 @@ export class AttributeCombinations {
         const dimension = this.tensor.dimensions[d];
 
         for (const attribute of dimension.attributes) {
-            // TODO: include all aliases for attributes?
             let position: Position = EITHER;
             if (this.positions.has(attribute.aid)) {
                 position = this.positions.get(attribute.aid)!;
             }
-            const ax = new AttributeX(attribute.aid, attribute.aliases[0], position);
-            if (attribute.hidden !== true) {
-                this.attributes.push(ax);
-            }
-            this.dimensionIdToAttributeId.set(dimension.did, attribute.aid);
 
-            if (d === this.tensor.dimensions.length - 1) {
-                yield [...this.attributes];
-            }
-            else {
-                yield* this.combinationsRecursion(d + 1);
+            for (const alias of attribute.aliases) {
+                const pattern = patternFromExpression(alias);
+                for (const text of generateAliases(pattern)) {
+                    const ax = new AttributeX(attribute.aid, text, position);
+                    if (attribute.hidden !== true) {
+                        this.attributes.push(ax);
+                    }
+                    this.dimensionIdToAttributeId.set(dimension.did, attribute.aid);
+        
+                    if (d === this.tensor.dimensions.length - 1) {
+                        yield [...this.attributes];
+                    }
+                    else {
+                        yield* this.combinationsRecursion(d + 1);
+                    }
+        
+                    if (attribute.hidden !== true) {
+                        this.attributes.pop();
+                    }
+                }
             }
 
-            if (attribute.hidden !== true) {
-                this.attributes.pop();
-            }
         }
     }
 }
