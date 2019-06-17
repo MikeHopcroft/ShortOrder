@@ -120,6 +120,25 @@ export class AttributedOptionX implements OptionX {
 export class EntityX {
     quantity: QuantityX;
     attributes: AttributeX[];
+    key: Key;
+    text: string;
+
+    constructor(
+        quantity: QuantityX,
+        attributes: AttributeX[],
+        key: Key,
+        text: string
+    ) {
+        this.quantity = quantity;
+        this.attributes = attributes;
+        this.key = key;
+        this.text = pluralize(text, quantity.value);
+    }
+}
+
+export class ProductX {
+    quantity: QuantityX;
+    attributes: AttributeX[];
     options: OptionX[];
     key: Key;
     text: string;
@@ -178,13 +197,13 @@ export class EntityX {
 export class SegmentX {
     quantity: QuantityX;
     left: ModifierX[];
-    entity: EntityX;
+    entity: ProductX;
     right: ModifierX[];
 
     constructor(
         quantity: QuantityX,
         left: ModifierX[],
-        entity: EntityX,
+        entity: ProductX,
         right: ModifierX[]
     ) {
         this.quantity = quantity;
