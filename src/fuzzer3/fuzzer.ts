@@ -1,5 +1,5 @@
 import * as pluralize from 'pluralize';
-import { AID, CartOps, CID, ICatalog, ItemInstance, Key } from 'prix-fixe';
+import { AID, ItemInstance, Key } from 'prix-fixe';
 
 import { permutation, Random } from './utilities';
 
@@ -251,9 +251,15 @@ export class SegmentX {
         return words;
     }
 
-    buildItem(cartOps: CartOps): ItemInstance {
+    buildItem(): ItemInstance {
         const children: ItemInstance[] = [];
         for (const modifier of this.left) {
+            const item = modifier.buildItem();
+            if (item !== null) {
+                children.push(item);
+            }
+        }
+        for (const modifier of this.right) {
             const item = modifier.buildItem();
             if (item !== null) {
                 children.push(item);

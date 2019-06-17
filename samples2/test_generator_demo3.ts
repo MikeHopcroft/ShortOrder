@@ -3,13 +3,19 @@ import * as path from 'path';
 import {
     AID,
     setup,
+    State,
     World
 } from 'prix-fixe';
+
+import { LexicalAnalyzer, tokenToString } from '../src';
+
+import { Parser2, SequenceToken } from '../src/parser2';
 
 import {
     AttributeGenerator,
     AttributeX,
     AttributedOptionX,
+    createTestCase,
     EITHER,
     EntityGenerator,
     OptionGenerator,
@@ -21,6 +27,7 @@ import {
     QuantityX,
     RIGHT,
     Random,
+    testOrdersIdentical
 } from '../src/fuzzer3';
 
 function go() {
@@ -61,7 +68,7 @@ function go() {
     } 
 }
 
-function go2()
+async function go2()
 {
     const productsFile = path.join(__dirname, '../../samples2/data/restaurant-en/products.yaml');
     const optionsFile = path.join(__dirname, '../../samples2/data/restaurant-en/options.yaml');
@@ -73,6 +80,33 @@ function go2()
     const stopwordsFile = path.join(__dirname, '../../samples2/data/restaurant-en/stopwords.yaml');
 
     const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
+
+
+    const lexer = new LexicalAnalyzer(
+        world,
+        intentsFiles,
+        quantifiersFile,
+        unitsFile,
+        stopwordsFile,
+        false
+    );
+
+    const parser = new Parser2(world.cartOps, world.attributeInfo, world.ruleChecker);
+
+    const processor = async (text: string, state: State): Promise<State> => {
+        const tokens = lexer.processOneQuery(text);
+        // console.log(tokens.map(tokenToString).join(''));
+
+        const interpretation = parser.findBestInterpretation(tokens as SequenceToken[]);
+
+        let updated = state.cart;
+        for (const item of interpretation.items) {
+            updated = world.cartOps.addToCart(updated, item);
+        }
+
+        return {...state, cart: updated};
+    };
+
 
     // TODO: These should map DID to Position.
     const positions = new Map<AID, Position>();
@@ -137,11 +171,14 @@ function go2()
     //
     const random = new Random("1234");
 
-    for (let i = 0; i < 5; ++i) {
+    let passedCount = 0;
+    let failedCount = 0;
+
+    for (let i = 0; i < 50; ++i) {
         const entity = entityGenerator.randomEntity(random);
-        const options = [
+        const options: OptionX[] = [
             optionGenerator.randomAttributedOption(random),
-            optionGenerator.randomQuantifiedOption(random),
+            // optionGenerator.randomQuantifiedOption(random),
         ];
         const product = new ProductX(
             entity.quantity,
@@ -153,9 +190,31 @@ function go2()
         const segment = product.randomSegment(random);
         const text = segment.buildText().join(' ');
         console.log(text);
-    } 
 
-    console.log('hello');
+        const testCase = createTestCase(
+            world.catalog,
+            world.attributeInfo,
+            segment
+        );
+
+        const result = await testCase.run(processor, world.catalog);
+        // console.log(`Test status: ${result.passed?"PASSED":"FAILED"}`);
+
+        const ok = testOrdersIdentical(testCase.expected[0], result.observed[0]);
+        console.log(`Test status: ${ok ? "PASSED" : "FAILED"}`);
+        if (ok) {
+            passedCount++;
+        }
+        else {
+            failedCount++;
+        }
+        console.log('');
+    }
+
+    console.log('');
+    console.log(`failed: ${failedCount}`);
+    console.log(`passed: ${passedCount}`);
+    console.log(`fraction: ${passedCount}/${passedCount + failedCount}`);
 }
 
 go2();
