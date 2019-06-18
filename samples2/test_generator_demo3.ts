@@ -84,21 +84,6 @@ async function go()
         entityQuantities
     );
 
-    //
-    // Options
-    //
-    // const fivePumps = new QuantityX(5, 'five pump');
-    // const aPump = new QuantityX(1, 'a pump of');
-    // const a = new QuantityX(1, 'a');
-
-    // const extra = new AttributeX(5, 'extra', LEFT);
-
-    // const options: OptionX[] = [
-    //     new QuantifiedOptionX(fivePumps, '12:1', 'cinnamon dolce syrup', LEFT),
-    //     new QuantifiedOptionX(a, '120:1', 'lid', RIGHT),
-    //     new AttributedOptionX(extra, '14:2', 'vanilla syrup', EITHER),
-    // ];
-
     const optionLeftQuantites: QuantityX[] = [
         new QuantityX(1, ''),
         new QuantityX(1, 'one pump'),
@@ -124,8 +109,8 @@ async function go()
     );
 
     const productGenerator = new ProductGenerator(
-        entityGenerator,
-        optionGenerator
+        [entityGenerator],
+        [optionGenerator]
     );
 
     const prologues = [

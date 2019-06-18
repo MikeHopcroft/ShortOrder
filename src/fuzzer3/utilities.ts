@@ -60,6 +60,10 @@ export class Random {
     }
 
     randomChoice<T>(items: T[]): T {
+        if (items.length < 1) {
+            const message = "Random.randomChoice: item array is empty";
+            throw TypeError(message);
+        }
         return items[this.randomNonNegative(items.length)];
     }
 

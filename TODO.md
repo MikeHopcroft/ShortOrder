@@ -1,26 +1,32 @@
 # TODO List
 
 * Fuzzer2
-    * Concept of LEFTMOST for size attributes
-        * Perhaps use a number instead of a symbol?
-    * ProductGenerator should be able to make Quantified and Attributed options
-    * x Left and right quantifiers for OptionsGenerator
+    * Alias transformer/detector for left/right options
+        * e.g. filters "syrup" out of left side use cases
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
         * This might be ProductGenerator.
-    * Alias transformer for left/right
-        * e.g. filters "syrup" out of left side use cases
+    * x Ability to generate utterances without options/attributes
+    * x ProductGenerator: make Quantified and Attributed options
+    * x Left and right quantifiers for OptionsGenerator
+    * Composite generator (templated)
+    * Remove old code.
+    * Clean up test_generator_demo3.ts.
+    * Concept of LEFTMOST for size attributes
+        * Perhaps use a number instead of a symbol?
     * Go back to "with" after an attribute, even after first "with"
-    * Better rules file
+    * Better menu and rules file
         * latte, cappuccino, americano
         * specific product for each milk
         * exclusion set for milks
         * syrups
+        * extra, light, no/without
     * REMOVE attributeInfo['tensorIdToTensor']
     * "with" and "without"
     * . Write out generated tests.
     * Command-line arguments
+    * One-line output
     * Automatically grab prologues and epilogues from intents.yaml (or lexicon)
     * use instanceOf
     * REVIEW aliasesFromOneItem() - does this deal with matcher: prefix?

@@ -8,23 +8,32 @@ import { OptionGenerator } from './option_generator';
 import { Random } from './utilities';
 
 export class ProductGenerator {
-    entityGenerator: EntityGenerator;
-    optionGenerator: OptionGenerator;
+    entityGenerators: EntityGenerator[];
+    optionGenerators: OptionGenerator[];
 
     constructor(
-        entityGenerator: EntityGenerator,
-        optionGenerator: OptionGenerator
+        entityGenerators: EntityGenerator[],
+        optionGenerators: OptionGenerator[]
     ) {
-        this.entityGenerator = entityGenerator;
-        this.optionGenerator = optionGenerator;
+        if (entityGenerators.length < 1) {
+            const message = 'ProductGenerator: need at least one EntityGenerator';
+            throw TypeError(message);
+        }
+
+        this.entityGenerators = entityGenerators;
+        this.optionGenerators = optionGenerators;
     }
 
     randomProduct(random: Random): ProductX {
-        const entity = this.entityGenerator.randomEntity(random);
-        const options: OptionX[] = [
-            // this.optionGenerator.randomAttributedOption(random),
-            this.optionGenerator.randomQuantifiedOption(random),
-        ];
+        const entity = this.entityGenerators[0].randomEntity(random);
+
+        const options: OptionX[] = [];
+        if (this.optionGenerators.length > 0) {
+            const generator = random.randomChoice(this.optionGenerators);
+            // options.push(generator.randomAttributedOption(random));
+            options.push(generator.randomQuantifiedOption(random));
+        }
+
         const product = new ProductX(
             entity.quantity,
             entity.attributes,
