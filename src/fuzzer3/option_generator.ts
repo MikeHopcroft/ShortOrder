@@ -24,10 +24,13 @@ import {
     Random
 } from './utilities';
 
+export type PositionPredicate = (alias:string) => Position;
+
 export class OptionGenerator {
     attributeInfo: AttributeInfo;
     pid: PID;
     attributes: AttributeGenerator;
+    positionPredicate: PositionPredicate;
     leftQuantifiers: QuantityX[];
     rightQuantifiers: QuantityX[];
     tid: TID;
@@ -38,12 +41,14 @@ export class OptionGenerator {
         attributeGenerator: AttributeGenerator,
         catalog: ICatalog,
         pid: PID,
+        positionPredicate: PositionPredicate,
         leftQuantifiers: QuantityX[],
         rightQuantifiers: QuantityX[]
     ) {
         this.attributeInfo = attributeInfo;
         this.pid = pid;
         this.attributes = attributeGenerator;
+        this.positionPredicate = positionPredicate;
         this.leftQuantifiers = leftQuantifiers;
         this.rightQuantifiers = rightQuantifiers;
 
@@ -56,6 +61,7 @@ export class OptionGenerator {
     randomAttributedOption(random: Random): OptionX {
         const attributes = this.attributes.randomCombination(this.tid, random);
         const alias = random.randomChoice(this.aliases);
+        const position = this.positionPredicate(alias);
 
         const builder = new TensorEntityBuilder(this.attributeInfo);
         builder.setPID(this.pid);
@@ -68,7 +74,7 @@ export class OptionGenerator {
             attributes[0],
             key,
             alias,
-            EITHER
+            position
         );
     }
 

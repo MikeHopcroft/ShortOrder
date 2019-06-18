@@ -1,12 +1,13 @@
 # TODO List
 
 * Fuzzer2
-    * Alias transformer/detector for left/right options
-        * e.g. filters "syrup" out of left side use cases
+    * x Alias transformer/detector for left/right options
+        * x e.g. filters "syrup" out of left side use cases
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
         * This might be ProductGenerator.
+    * ProductGenerator - random number of options
     * x Ability to generate utterances without options/attributes
     * x ProductGenerator: make Quantified and Attributed options
     * x Left and right quantifiers for OptionsGenerator

@@ -99,11 +99,16 @@ async function go()
         new QuantityX(2, 'three pumps of'),
     ];
 
+    const optionPositionPredicate = (alias: string): Position => {
+        return EITHER;
+    };
+
     const optionGenerator = new OptionGenerator(
         world.attributeInfo,
         attributes,
         world.catalog,
         5000,
+        optionPositionPredicate,
         optionLeftQuantites,
         optionRightQuantites,
     );
