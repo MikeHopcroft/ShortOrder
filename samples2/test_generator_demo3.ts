@@ -3,18 +3,12 @@ import * as path from 'path';
 import {
     AID,
     setup,
-    State,
-    World
 } from 'prix-fixe';
 
-import { LexicalAnalyzer, tokenToString } from '../src';
-
-import { Parser2, SequenceToken } from '../src/parser2';
+import { createProcessor } from '../src';
 
 import {
     AttributeGenerator,
-    AttributeX,
-    AttributedOptionX,
     createTestCase,
     EITHER,
     EntityGenerator,
@@ -23,7 +17,6 @@ import {
     ProductX,
     LEFT,
     OptionX,
-    QuantifiedOptionX,
     QuantityX,
     RIGHT,
     Random,
@@ -32,87 +25,26 @@ import {
     WordX
 } from '../src/fuzzer3';
 
-function go() {
-    const quantity = new QuantityX(1, 'a');
-
-    const attributes: AttributeX[] = [
-        new AttributeX(1, 'grande', LEFT),
-        new AttributeX(2, 'decaf', EITHER),
-        new AttributeX(2, 'iced', EITHER),
-    ];
-
-    const fivePumps = new QuantityX(5, 'five pump');
-    const aPump = new QuantityX(1, 'a pump of');
-    const a = new QuantityX(1, 'a');
-
-    const extra = new AttributeX(5, 'extra', LEFT);
-
-    const options: OptionX[] = [
-        new QuantifiedOptionX(fivePumps, '12:1', 'cinnamon dolce syrup', LEFT),
-        new QuantifiedOptionX(a, '120:1', 'lid', RIGHT),
-        new AttributedOptionX(extra, '14:2', 'vanilla syrup', EITHER),
-    ];
-
-    const entity = new ProductX(
-        quantity,
-        attributes,
-        options,
-        '9000:0:0:1',
-        'latte'
-    );
-
-    const random = new Random("1234");
-
-    for (let i = 0; i < 10; ++i) {
-        const segment = entity.randomSegment(random);
-        const text = segment.buildText().join(' ');
-        console.log(text);
-    } 
-}
-
 async function go2()
 {
     const productsFile = path.join(__dirname, '../../samples2/data/restaurant-en/products.yaml');
     const optionsFile = path.join(__dirname, '../../samples2/data/restaurant-en/options.yaml');
     const attributesFile = path.join(__dirname, '../../samples2/data/restaurant-en/attributes.yaml');
     const rulesFile = path.join(__dirname, '../../samples2/data/restaurant-en/rules.yaml');
-    const intentsFiles = path.join(__dirname, '../../samples2/data/restaurant-en/intents.yaml');
+    const intentsFile = path.join(__dirname, '../../samples2/data/restaurant-en/intents.yaml');
     const quantifiersFile = path.join(__dirname, '../../samples2/data/restaurant-en/quantifiers.yaml');
     const unitsFile = path.join(__dirname, '../../samples2/data/restaurant-en/units.yaml');
     const stopwordsFile = path.join(__dirname, '../../samples2/data/restaurant-en/stopwords.yaml');
 
     const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // Configure Processor
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    const lexer = new LexicalAnalyzer(
+    const processor = createProcessor(
         world,
-        intentsFiles,
+        intentsFile,
         quantifiersFile,
         unitsFile,
         stopwordsFile,
-        false
     );
-
-    const parser = new Parser2(world.cartOps, world.attributeInfo, world.ruleChecker);
-
-    const processor = async (text: string, state: State): Promise<State> => {
-        const tokens = lexer.processOneQuery(text);
-        // console.log(tokens.map(tokenToString).join(''));
-
-        const interpretation = parser.findBestInterpretation(tokens as SequenceToken[]);
-
-        let updated = state.cart;
-        for (const item of interpretation.items) {
-            updated = world.cartOps.addToCart(updated, item);
-        }
-
-        return {...state, cart: updated};
-    };
-
 
     ///////////////////////////////////////////////////////////////////////////
     //

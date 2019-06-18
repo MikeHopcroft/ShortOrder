@@ -5,6 +5,7 @@ export * from './intents';
 export * from './lexical_analyzer';
 export * from './lexical_utilities';
 export * from './options';
+export * from './processor';
 export * from './quantities';
 export * from './unified';
 export * from './units';

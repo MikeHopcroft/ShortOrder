@@ -1,10 +1,13 @@
 # TODO List
 
 * Fuzzer2
-    * Processor configuration function.
+    * x Processor configuration function.
+    * Test running module
     * Left and right quantifiers for OptionsGenerator
     * use instanceOf
     * x OrderX is sequence of SegmentX | WordX
+    * OrderX inserts conjunctions
+    * OrderX holds prologue, epilogue.
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
