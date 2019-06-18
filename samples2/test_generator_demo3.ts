@@ -99,9 +99,19 @@ async function go()
     //     new AttributedOptionX(extra, '14:2', 'vanilla syrup', EITHER),
     // ];
 
-    const optionQuantites: QuantityX[] = [
+    const optionLeftQuantites: QuantityX[] = [
+        new QuantityX(1, ''),
+        new QuantityX(1, 'one pump'),
+        new QuantityX(2, 'two pump'),
+        new QuantityX(3, 'three pump'),
+    ];
+
+    const optionRightQuantites: QuantityX[] = [
+        new QuantityX(1, 'a pump of'),
+        new QuantityX(1, 'some'),
         new QuantityX(1, 'one pump of'),
         new QuantityX(2, 'two pumps of'),
+        new QuantityX(2, 'three pumps of'),
     ];
 
     const optionGenerator = new OptionGenerator(
@@ -109,7 +119,8 @@ async function go()
         attributes,
         world.catalog,
         5000,
-        optionQuantites,
+        optionLeftQuantites,
+        optionRightQuantites,
     );
 
     const productGenerator = new ProductGenerator(

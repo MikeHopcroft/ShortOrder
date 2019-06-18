@@ -1,47 +1,52 @@
 # TODO List
 
 * Fuzzer2
-    * Automatically grab prologues and epilogues from intents.yaml (or lexicon)
-    * x Processor configuration function.
-    * x Test running module
-    * Write out generated tests.
-    * Left and right quantifiers for OptionsGenerator
-    * use instanceOf
-    * x OrderX is sequence of SegmentX | WordX
-    * x OrderX inserts conjunctions
-    * x OrderX holds prologue, epilogue.
+    * Concept of LEFTMOST for size attributes
+        * Perhaps use a number instead of a symbol?
+    * ProductGenerator should be able to make Quantified and Attributed options
+    * x Left and right quantifiers for OptionsGenerator
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
         * This might be ProductGenerator.
-    * x Fuzzer runner - parameterized by Processor function
+    * Alias transformer for left/right
+        * e.g. filters "syrup" out of left side use cases
+    * Go back to "with" after an attribute, even after first "with"
     * Better rules file
         * latte, cappuccino, americano
         * specific product for each milk
         * exclusion set for milks
         * syrups
-    * Example
+    * REMOVE attributeInfo['tensorIdToTensor']
+    * "with" and "without"
+    * . Write out generated tests.
+    * Command-line arguments
+    * Automatically grab prologues and epilogues from intents.yaml (or lexicon)
+    * use instanceOf
+    * REVIEW aliasesFromOneItem() - does this deal with matcher: prefix?
+    * REVIEW generateAliases() and other token-flow imports. Can these come from prix-fixe?
+
+    * x Processor configuration function.
+    * x Test running module
+    * x OrderX is sequence of SegmentX | WordX
+    * x OrderX inserts conjunctions
+    * x OrderX holds prologue, epilogue.
+    * x Fuzzer runner - parameterized by Processor function
+    * Examples
         * one two percent latte
         * (vanilla cream latte)
         * (vanilla cream) latte
         * vanilla cream latte
-    * REVIEW aliasesFromOneItem() - does this deal with matcher: prefix?
-    * REVIEW generateAliases() and other token-flow imports. Can these come from prix-fixe?
-    * REMOVE attributeInfo['tensorIdToTensor']
     * x Make fuzzer3 directory
-    * Go back to "with" after an attribute, even after first "with"
-    * "with" and "without"
     * x Don't render isHidden attributes
     * x Seems like LEFT, EITHER, RIGHT should go in OptionX, not QuantityX.
     * Separate options from EntityX?
         * x Rename EntityX to ProductX
         * x EntityX becomes container for QuantityX, key, text, AttributeX[]
         * x ProductX is container of EntityX and OptionX[].
-        * EntityX generates ProductX.
-        * ProductX generates SegmentX
+        * x EntityX generates ProductX.
+        * x ProductX generates SegmentX
     * x Aliases for attributes
-    * Alias transformer for left/right
-        * e.g. filters "syrup" out of left side use cases
     * Random generators
         * Random generic in category? in list of pids?
         * Attributes for tensor

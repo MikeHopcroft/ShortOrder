@@ -22,8 +22,8 @@ export class ProductGenerator {
     randomProduct(random: Random): ProductX {
         const entity = this.entityGenerator.randomEntity(random);
         const options: OptionX[] = [
-            this.optionGenerator.randomAttributedOption(random),
-            // optionGenerator.randomQuantifiedOption(random),
+            // this.optionGenerator.randomAttributedOption(random),
+            this.optionGenerator.randomQuantifiedOption(random),
         ];
         const product = new ProductX(
             entity.quantity,

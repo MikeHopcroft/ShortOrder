@@ -11,9 +11,12 @@ import { AttributeGenerator } from './attribute_generator';
 import {
     AttributedOptionX,
     EITHER,
+    LEFT,
     OptionX,
     QuantifiedOptionX,
     QuantityX,
+    RIGHT,
+    Position,
 } from './fuzzer';
 
 import {
@@ -25,7 +28,8 @@ export class OptionGenerator {
     attributeInfo: AttributeInfo;
     pid: PID;
     attributes: AttributeGenerator;
-    quantifiers: QuantityX[] = [];
+    leftQuantifiers: QuantityX[];
+    rightQuantifiers: QuantityX[];
     tid: TID;
     aliases: string[];
 
@@ -34,12 +38,14 @@ export class OptionGenerator {
         attributeGenerator: AttributeGenerator,
         catalog: ICatalog,
         pid: PID,
-        quantifiers: QuantityX[]
+        leftQuantifiers: QuantityX[],
+        rightQuantifiers: QuantityX[]
     ) {
         this.attributeInfo = attributeInfo;
         this.pid = pid;
         this.attributes = attributeGenerator;
-        this.quantifiers = quantifiers;
+        this.leftQuantifiers = leftQuantifiers;
+        this.rightQuantifiers = rightQuantifiers;
 
         this.tid = attributeInfo.getTensorForEntity(pid).tid;
 
@@ -67,7 +73,14 @@ export class OptionGenerator {
     }
 
     randomQuantifiedOption(random: Random): OptionX {
-        const quantity = random.randomChoice(this.quantifiers);
+        let position: Position = LEFT;
+        if (random.randomBoolean()) {
+            position = RIGHT;
+        }
+
+        const quantity = random.randomChoice(
+            position === LEFT ? this.leftQuantifiers: this.rightQuantifiers);
+
         const alias = random.randomChoice(this.aliases);
 
         const builder = new TensorEntityBuilder(this.attributeInfo);
@@ -78,7 +91,7 @@ export class OptionGenerator {
             quantity,
             key,
             alias,
-            EITHER
+            position
         );
     }
 }

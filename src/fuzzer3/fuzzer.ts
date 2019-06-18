@@ -68,9 +68,12 @@ export class QuantifiedOptionX implements OptionX {
 
         if (quantity.text === 'a' && startsWithEnglishVowel(text)) {
             this.text = `an ${text}`;
-        } else {
+        } else if (quantity.text.length > 0) {
             this.text = `${quantity.text} ${text}`;
+        } else {
+            this.text = text;
         }
+
 
         this.position = position;
     }
@@ -267,8 +270,6 @@ export class SegmentX {
             }
         }
 
-        const aids: AID[] = this.entity.attributes.map(x => x.aid);
-
         return {
             uid: 0,
             quantity: this.quantity.value,
@@ -285,7 +286,7 @@ export class WordX {
         this.text = text;
     }
 
-    buildText = () => this.text;
+    buildText = ():string[] => [this.text];
 }
 
 export class OrderX {
@@ -309,7 +310,15 @@ export class OrderX {
     }
 
     buildText = ():string[] => {
-        return Array.prototype.concat.apply([], this.parts.map(x => x.buildText()));
+        const words: string[] = [];
+        for (const part of this.parts) {
+            for (const word of part.buildText()) {
+                if (word.length > 0) {
+                    words.push(word);
+                }
+            }
+        }
+        return words;
     }
 
     buildItems(): ItemInstance[] {
@@ -329,9 +338,3 @@ function startsWithEnglishVowel(text: string): boolean {
         ['a', 'e', 'i', 'o', 'u'].indexOf(text[0].toLowerCase()) !== -1
     );
 }
-
-
-// class RandomOption {
-//     constructor(categories: CID[], catalog: ICatalog) {
-//     }
-// }
