@@ -9,7 +9,6 @@ import { createProcessor } from '../src';
 
 import {
     AttributeGenerator,
-    createTestCase,
     EITHER,
     EntityGenerator,
     OptionGenerator,
@@ -20,12 +19,12 @@ import {
     QuantityX,
     RIGHT,
     Random,
-    testOrdersIdentical,
+    runTests,
     OrderX,
     WordX
 } from '../src/fuzzer3';
 
-async function go2()
+async function go()
 {
     const productsFile = path.join(__dirname, '../../samples2/data/restaurant-en/products.yaml');
     const optionsFile = path.join(__dirname, '../../samples2/data/restaurant-en/options.yaml');
@@ -108,60 +107,34 @@ async function go2()
         optionQuantites
     );
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // Generation loop
-    //
-    ///////////////////////////////////////////////////////////////////////////
     const random = new Random("1234");
 
-    let passedCount = 0;
-    let failedCount = 0;
-
-    for (let i = 0; i < 5; ++i) {
-        const entity = entityGenerator.randomEntity(random);
-        const options: OptionX[] = [
-            optionGenerator.randomAttributedOption(random),
-            // optionGenerator.randomQuantifiedOption(random),
-        ];
-        const product = new ProductX(
-            entity.quantity,
-            entity.attributes,
-            options,
-            entity.key,
-            entity.text
-        );
-        const segment = product.randomSegment(random);
-        const order = new OrderX([segment, new WordX('and'), segment]);
-
-        const testCase = createTestCase(
-            world.catalog,
-            world.attributeInfo,
-            order
-        );
-
-        const text = testCase.inputs[0];
-        console.log(text);
-
-
-        const result = await testCase.run(processor, world.catalog);
-        // console.log(`Test status: ${result.passed?"PASSED":"FAILED"}`);
-
-        const ok = testOrdersIdentical(testCase.expected[0], result.observed[0]);
-        console.log(`Test status: ${ok ? "PASSED" : "FAILED"}`);
-        if (ok) {
-            passedCount++;
+    function* orders(): IterableIterator<OrderX> {
+        for (let i = 0; i < 5; ++i) {
+            const entity = entityGenerator.randomEntity(random);
+            const options: OptionX[] = [
+                optionGenerator.randomAttributedOption(random),
+                // optionGenerator.randomQuantifiedOption(random),
+            ];
+            const product = new ProductX(
+                entity.quantity,
+                entity.attributes,
+                options,
+                entity.key,
+                entity.text
+            );
+            const segment = product.randomSegment(random);
+            yield new OrderX([segment, new WordX('and'), segment]);
         }
-        else {
-            failedCount++;
-        }
-        console.log('');
     }
 
-    console.log('');
-    console.log(`failed: ${failedCount}`);
-    console.log(`passed: ${passedCount}`);
-    console.log(`fraction: ${passedCount}/${passedCount + failedCount}`);
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Run tests as they are generated.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    const results = await runTests(orders(), world.catalog, processor);
+    results.print(true);
 }
 
-go2();
+go();

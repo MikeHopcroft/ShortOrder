@@ -2,7 +2,8 @@
 
 * Fuzzer2
     * x Processor configuration function.
-    * Test running module
+    * x Test running module
+    * Write out generated tests.
     * Left and right quantifiers for OptionsGenerator
     * use instanceOf
     * x OrderX is sequence of SegmentX | WordX

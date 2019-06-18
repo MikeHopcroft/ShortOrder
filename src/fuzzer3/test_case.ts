@@ -14,7 +14,6 @@ let counter = 0;
 
 export function createTestCase(
     catalog: ICatalog,
-    attributeInfo: AttributeInfo,
     order: OrderX
 ): TestCase {
     const lines: TestLineItem[] = [];
