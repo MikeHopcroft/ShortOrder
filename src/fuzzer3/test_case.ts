@@ -1,6 +1,13 @@
-import { AttributeInfo, ICatalog, ItemInstance, TestCase, TestLineItem, TestOrder } from 'prix-fixe';
+import {
+    AttributeInfo,
+    ICatalog,
+    ItemInstance,
+    TestCase,
+    TestLineItem, 
+    TestOrder
+} from 'prix-fixe';
 
-import { SegmentX } from './fuzzer';
+import { OrderX } from './fuzzer';
 
 // TODO: perhaps createTestCase should be a class? (instead of side-effecting counter)
 let counter = 0;
@@ -8,14 +15,15 @@ let counter = 0;
 export function createTestCase(
     catalog: ICatalog,
     attributeInfo: AttributeInfo,
-    segment: SegmentX
+    order: OrderX
 ): TestCase {
     const lines: TestLineItem[] = [];
+    const items = order.buildItems();
+    for (const item of items) {
+        appendItemLines(0, item, lines, catalog);
+    }
 
-    const item = segment.buildItem();
-    appendItemLines(0, item, lines, catalog);
-
-    const order: TestOrder = {
+    const testOrder: TestOrder = {
         lines
     };
 
@@ -24,8 +32,8 @@ export function createTestCase(
         '1',
         ['unverified'],
         'synthetic',        // TODO: put info in comment?
-        [segment.buildText().join(' ')],
-        [order]);
+        [order.buildText().join(' ')],
+        [testOrder]);
 
     return testCase;
 }

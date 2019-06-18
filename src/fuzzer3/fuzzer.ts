@@ -2,6 +2,7 @@ import * as pluralize from 'pluralize';
 import { AID, ItemInstance, Key } from 'prix-fixe';
 
 import { permutation, Random } from './utilities';
+import { TextDecoder } from 'util';
 
 export const LEFT: unique symbol = Symbol('LEFT');
 export type LEFT = typeof LEFT;
@@ -212,7 +213,7 @@ export class SegmentX {
         this.right = right;
     }
 
-    buildText(): string[] {
+    buildText = ():string[] => {
         const words: string[] = [];
 
         // Leading quantifier.
@@ -230,6 +231,7 @@ export class SegmentX {
         let beforeWith = true;
         for (const [index, modifier] of this.right.entries()) {
             if (beforeWith && 
+                // TODO: use instanceof
                 modifier.isOption()
             ) {
                 beforeWith = false;
@@ -237,6 +239,7 @@ export class SegmentX {
             }
             else if (
                 index === this.right.length - 1 &&
+                // TODO: use instanceOf
                 modifier.isOption()
             ) {
                 words.push('and');
@@ -277,8 +280,36 @@ export class SegmentX {
     }
 }
 
-interface WordX {
+export class WordX {
     text: string;
+
+    constructor(text: string) {
+        this.text = text;
+    }
+
+    buildText = () => this.text;
+}
+
+export class OrderX {
+    parts: Array<SegmentX | WordX>;
+
+    constructor(parts: Array<SegmentX | WordX>) {
+        this.parts = parts;
+    }
+
+    buildText = ():string[] => {
+        return Array.prototype.concat.apply([], this.parts.map(x => x.buildText()));
+    }
+
+    buildItems(): ItemInstance[] {
+        const items: ItemInstance[] = [];
+        for (const part of this.parts) {
+            if (part instanceof SegmentX) {
+                items.push(part.buildItem());
+            }
+        }
+        return items;
+    }
 }
 
 function startsWithEnglishVowel(text: string): boolean {

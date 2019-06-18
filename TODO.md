@@ -1,15 +1,22 @@
 # TODO List
 
 * Fuzzer2
+    * Processor configuration function.
+    * Left and right quantifiers for OptionsGenerator
+    * use instanceOf
+    * x OrderX is sequence of SegmentX | WordX
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
+        * This might be ProductGenerator.
+    * Fuzzer runner - parameterized by Processor function
     * Better rules file
         * latte, cappuccino, americano
         * specific product for each milk
         * exclusion set for milks
         * syrups
     * Example
+        * one two percent latte
         * (vanilla cream latte)
         * (vanilla cream) latte
         * vanilla cream latte

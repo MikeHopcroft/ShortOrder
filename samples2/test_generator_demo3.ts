@@ -27,7 +27,9 @@ import {
     QuantityX,
     RIGHT,
     Random,
-    testOrdersIdentical
+    testOrdersIdentical,
+    OrderX,
+    WordX
 } from '../src/fuzzer3';
 
 function go() {
@@ -81,7 +83,11 @@ async function go2()
 
     const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
 
-
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Configure Processor
+    //
+    ///////////////////////////////////////////////////////////////////////////
     const lexer = new LexicalAnalyzer(
         world,
         intentsFiles,
@@ -108,6 +114,11 @@ async function go2()
     };
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Configure generators
+    //
+    ///////////////////////////////////////////////////////////////////////////
     // TODO: These should map DID to Position.
     const positions = new Map<AID, Position>();
     positions.set(1, LEFT);
@@ -165,16 +176,17 @@ async function go2()
         optionQuantites
     );
 
-
+    ///////////////////////////////////////////////////////////////////////////
     //
     // Generation loop
     //
+    ///////////////////////////////////////////////////////////////////////////
     const random = new Random("1234");
 
     let passedCount = 0;
     let failedCount = 0;
 
-    for (let i = 0; i < 50; ++i) {
+    for (let i = 0; i < 5; ++i) {
         const entity = entityGenerator.randomEntity(random);
         const options: OptionX[] = [
             optionGenerator.randomAttributedOption(random),
@@ -188,14 +200,17 @@ async function go2()
             entity.text
         );
         const segment = product.randomSegment(random);
-        const text = segment.buildText().join(' ');
-        console.log(text);
+        const order = new OrderX([segment, new WordX('and'), segment]);
 
         const testCase = createTestCase(
             world.catalog,
             world.attributeInfo,
-            segment
+            order
         );
+
+        const text = testCase.inputs[0];
+        console.log(text);
+
 
         const result = await testCase.run(processor, world.catalog);
         // console.log(`Test status: ${result.passed?"PASSED":"FAILED"}`);
