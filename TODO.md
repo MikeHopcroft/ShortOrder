@@ -1,19 +1,20 @@
 # TODO List
 
 * Fuzzer2
+    * Automatically grab prologues and epilogues from intents.yaml (or lexicon)
     * x Processor configuration function.
     * x Test running module
     * Write out generated tests.
     * Left and right quantifiers for OptionsGenerator
     * use instanceOf
     * x OrderX is sequence of SegmentX | WordX
-    * OrderX inserts conjunctions
-    * OrderX holds prologue, epilogue.
+    * x OrderX inserts conjunctions
+    * x OrderX holds prologue, epilogue.
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
         * This might be ProductGenerator.
-    * Fuzzer runner - parameterized by Processor function
+    * x Fuzzer runner - parameterized by Processor function
     * Better rules file
         * latte, cappuccino, americano
         * specific product for each milk
@@ -31,7 +32,7 @@
     * Go back to "with" after an attribute, even after first "with"
     * "with" and "without"
     * x Don't render isHidden attributes
-    * Seems like LEFT, EITHER, RIGHT should go in OptionX, not QuantityX.
+    * x Seems like LEFT, EITHER, RIGHT should go in OptionX, not QuantityX.
     * Separate options from EntityX?
         * x Rename EntityX to ProductX
         * x EntityX becomes container for QuantityX, key, text, AttributeX[]

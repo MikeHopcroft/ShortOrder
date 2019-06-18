@@ -1,5 +1,6 @@
 import { State, World } from 'prix-fixe';
 
+import { ADD_TO_ORDER } from './intents';
 import { LexicalAnalyzer } from './lexical_analyzer';
 import { tokenToString } from './lexical_utilities';
 
@@ -29,7 +30,13 @@ export function createProcessor(
 
     const processor = async (text: string, state: State): Promise<State> => {
         const tokens = lexer.processOneQuery(text);
-        console.log(tokens.map(tokenToString).join(''));
+        // console.log(tokens.map(tokenToString).join(''));
+
+        // TODO: HACK: BUGBUG:
+        // TODO: Remove this code once the parser handles intents.
+        if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
+            tokens.shift();
+        }
 
         const interpretation = parser.findBestInterpretation(tokens as SequenceToken[]);
 

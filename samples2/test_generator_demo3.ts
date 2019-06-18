@@ -1,3 +1,4 @@
+import * as yaml from 'js-yaml';
 import * as path from 'path';
 
 import {
@@ -8,11 +9,14 @@ import {
 import { createProcessor } from '../src';
 
 import {
+    AliasGenerator,
     AttributeGenerator,
     EITHER,
     EntityGenerator,
     OptionGenerator,
+    OrderGenerator,
     Position,
+    ProductGenerator,
     ProductX,
     LEFT,
     OptionX,
@@ -99,32 +103,59 @@ async function go()
         new QuantityX(1, 'one pump of'),
         new QuantityX(2, 'two pumps of'),
     ];
+
     const optionGenerator = new OptionGenerator(
         world.attributeInfo,
         attributes,
         world.catalog,
         5000,
-        optionQuantites
+        optionQuantites,
+    );
+
+    const productGenerator = new ProductGenerator(
+        entityGenerator,
+        optionGenerator
+    );
+
+    const prologues = [
+        "(I'd,I would) like",
+        "(I'll,I will) (do,get,have,take)",
+        "I (need,want)",
+        "(get,give) me",
+        "(can,could,may) I [just,please] (do,get,have)",
+        "[please] set me up with",
+        "[please] hook me up with",
+        "we need",
+        "we want",
+        "(we'd,we would) like",
+        "(we'll, we will) have",
+        "how about",
+    ];
+    const prologueGenerator = new AliasGenerator(prologues);
+
+    const epilogues = [
+        "I'm (done,fine,good,ready)",
+        "thank you",
+        "thanks",
+        "that's (all,everything,it)",
+        "(that'll,that will,that should) (be,do) it",
+        "bye",
+    ];
+    const epilogueGenerator = new AliasGenerator(epilogues);
+
+    const maxSegmentCount = 3;
+    const orderGenerator = new OrderGenerator(
+        prologueGenerator,
+        productGenerator,
+        maxSegmentCount,
+        epilogueGenerator
     );
 
     const random = new Random("1234");
 
     function* orders(): IterableIterator<OrderX> {
         for (let i = 0; i < 5; ++i) {
-            const entity = entityGenerator.randomEntity(random);
-            const options: OptionX[] = [
-                optionGenerator.randomAttributedOption(random),
-                // optionGenerator.randomQuantifiedOption(random),
-            ];
-            const product = new ProductX(
-                entity.quantity,
-                entity.attributes,
-                options,
-                entity.key,
-                entity.text
-            );
-            const segment = product.randomSegment(random);
-            yield new OrderX([segment, new WordX('and'), segment]);
+            yield orderGenerator.randomOrder(random);
         }
     }
 
@@ -135,6 +166,18 @@ async function go()
     ///////////////////////////////////////////////////////////////////////////
     const results = await runTests(orders(), world.catalog, processor);
     results.print(true);
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // //
+    // // Output generated cases
+    // //
+    // ///////////////////////////////////////////////////////////////////////////
+    // const yamlCases = results.rebase();
+    // for (const yamlCase of yamlCases) {
+    //     yamlCase.suites = 'synthetic';
+    // }
+    // const yamlText = yaml.safeDump(yamlCases, { noRefs: true });
+    // console.log(yamlText);
 }
 
 go();

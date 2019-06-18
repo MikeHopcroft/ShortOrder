@@ -18,12 +18,10 @@ export type Position = LEFT | RIGHT | EITHER;
 export class QuantityX {
     value: number;
     text: string;
-    // position: Position;
 
     constructor(value: number, text: string) {
         this.value = value;
         this.text = text;
-        // this.position = position;
     }
 }
 
@@ -291,10 +289,23 @@ export class WordX {
 }
 
 export class OrderX {
-    parts: Array<SegmentX | WordX>;
+    parts: Array<SegmentX | WordX> = [];
 
-    constructor(parts: Array<SegmentX | WordX>) {
-        this.parts = parts;
+    constructor(
+        prologue: WordX,
+        segments: SegmentX[],
+        epilogue: WordX,
+    ) {
+        this.parts.push(prologue);
+
+        for (const [index, segment] of segments.entries()) {
+            if (segments.length > 1 && index === segments.length - 1) {
+                this.parts.push(new WordX('and'));
+            }
+            this.parts.push(segment);
+        }
+
+        this.parts.push(epilogue);
     }
 
     buildText = ():string[] => {
