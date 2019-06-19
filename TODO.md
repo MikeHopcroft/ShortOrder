@@ -1,12 +1,21 @@
 # TODO List
 
 * Fuzzer2
+    * x Update to latest token-flow
+    * . Write out generated tests.
+    * Command-line argument: -o file, -v (verify), -n count, save failures only
+    * Option to select LUIS version vs short-order
+    * Return code
+    * Remove old code.
+        * fuzzer2
+    * Only generate from items with aliases
+    * Test suite rebasing
+    * Publish
+    * Integrate into other repo
+
     * Sample generator for a single segment with attributes and a quantifier
     * Prevent quantifiers on milks
     * Consider combining EntityX and OptionX
-    * . Write out generated tests.
-    * Command-line arguments
-    * Remove old code.
     * Clean up test_generator_demo3.ts.
     * Better menu and rules file
         * x latte, cappuccino, americano

@@ -1,4 +1,4 @@
-import { AggregatedResults, ICatalog, Processor } from 'prix-fixe';
+import { AggregatedResults, ICatalog, Processor, Result } from 'prix-fixe';
 
 import { createTestCase } from './test_case';
 import { OrderX } from './fuzzer';
@@ -13,6 +13,21 @@ export async function runTests(
     for (const order of orders) {
         const testCase = createTestCase(catalog, order);
         const result = await testCase.run(processor, catalog);
+        results.recordResult(result);
+    }
+
+    return results;
+}
+
+export function makeTests(
+    orders: IterableIterator<OrderX>,
+    catalog: ICatalog
+): AggregatedResults {
+    const results = new AggregatedResults();
+
+    for (const order of orders) {
+        const testCase = createTestCase(catalog, order);
+        const result = new Result(testCase, testCase.expected, true);
         results.recordResult(result);
     }
 
