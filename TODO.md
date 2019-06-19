@@ -1,10 +1,12 @@
 # TODO List
 
 * Fuzzer2
+    * Document in README.md
     * x Update to latest token-flow
-    * . Write out generated tests.
-    * Command-line argument: -o file, -v (verify), -n count, save failures only
-    * Option to select LUIS version vs short-order
+    * x Write out generated tests.
+    * x Command-line argument: -o file, -v (verify), -n count
+    * Command-line argument - save failures only
+    * x Option to select LUIS version vs short-order
     * Return code
     * Remove old code.
         * fuzzer2
