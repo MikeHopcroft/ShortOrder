@@ -19,6 +19,7 @@
         * Use category id
         * Mutual exclusivity
         * This might be ProductGenerator.
+        * Remove milk options from espressos once this is done.
     * ProductGenerator - random number of options
     * x Ability to generate utterances without options/attributes
     * x ProductGenerator: make Quantified and Attributed options

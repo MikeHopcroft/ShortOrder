@@ -134,4 +134,11 @@ async function go(utterance: string) {
 //go("may I do one small iced soy latte half caf and two zero percent milk small caffe mochas that will do it");
 go("one soy latte half caf and two zero percent milk lattes");
 
+// Problem is again with "one two percent milk". Quantifier "one" associates with "two percent milk" instead of cappuccino.
+// Would work if we required units. Would work if we enforced rule against quantifiers for milk.
+// go("may I please do a large mocha with whole milk split shot one two percent milk large cappuccino and one medium caffe latte with whole milk that's all");
+
+// Truely ambiguous? Can split before or after "half caf". Conjunction "and" needs stronger signal. Quantifier "three" cannot modify soy.
+// go("we need one medium two percent milk mocha iced half caf and three soy iced medium cappuccinos bye");
+
 

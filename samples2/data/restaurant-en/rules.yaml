@@ -88,3 +88,23 @@ rules:
       500:
         - 5000
     specificExceptions: []
+  # Espressos
+  - partialKey: '9500'
+    validCatagoryMap:
+      500:
+        validOptions:
+          - 5000
+          - 5001
+          - 5002
+          - 5003
+          - 3000
+        qtyInfo:
+          # sizes for ALL lattes
+          '': 
+            defaultQty: 1
+            minQty: 1
+            maxQty: 1
+    exclusionZones:
+      500:
+        - 5000
+    specificExceptions: []

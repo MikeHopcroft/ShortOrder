@@ -39,6 +39,15 @@ genericItems:
     defaultKey: '9200:0:0:0'
     tensor: 1
 
+  - pid: 9500
+    cid: 200
+    name: espresso
+    aliases:
+      - '[caffe] espresso'
+    defaultKey: '9500:0:0'
+    tensor: 3
+
+
 specificItems:
 ###############################################################################
 #
@@ -195,7 +204,7 @@ specificItems:
 
 ###############################################################################
 #
-# mochas
+# Mochas
 #
 ###############################################################################
   - sku: 9201
@@ -252,3 +261,45 @@ specificItems:
   - sku: 9218
     name: large decaf iced mocha
     key: '9200:1:2:2'
+
+###############################################################################
+#
+# Espressos
+#
+###############################################################################
+  - sku: 9501
+    name: single espresso
+    key: '9500:0:0'
+  - sku: 9503
+    name: small halfcaf espresso
+    key: '9500:0:1'
+  - sku: 9505
+    name: small decaf espresso
+    key: '9500:0:2'
+  - sku: 9507
+    name: medium espresso
+    key: '9500:1:0'
+  - sku: 9509
+    name: medium halfcaf espresso
+    key: '9500:1:1'
+  - sku: 9511
+    name: medium decaf espresso
+    key: '9500:1:2'
+  - sku: 9513
+    name: large espresso
+    key: '9500:2:0'
+  - sku: 9515
+    name: large halfcaf espresso
+    key: '9500:2:1'
+  - sku: 9517
+    name: large decaf espresso
+    key: '9500:2:2'
+  - sku: 9519
+    name: quad espresso
+    key: '9500:3:0'
+  - sku: 9521
+    name: quad halfcaf espresso
+    key: '9500:3:1'
+  - sku: 9523
+    name: quad decaf espresso
+    key: '9500:3:2'

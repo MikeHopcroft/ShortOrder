@@ -84,7 +84,7 @@ async function go()
     //     9200,
     //     entityQuantities
     // );
-    const entityPIDs = [9000, 9100, 9200];
+    const entityPIDs = [9000, 9100, 9200, 9500];
     const entityGenerators: EntityGenerator[] = [];
     for (const pid of entityPIDs) {
         const generator = new EntityGenerator(
