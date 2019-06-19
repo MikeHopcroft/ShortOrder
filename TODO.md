@@ -1,6 +1,7 @@
 # TODO List
 
 * Fuzzer2
+    * Prevent quantifiers on milks
     * Consider combining EntityX and OptionX
     * . Write out generated tests.
     * Command-line arguments

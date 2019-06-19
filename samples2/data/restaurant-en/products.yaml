@@ -21,8 +21,22 @@ genericItems:
     cid: 200
     name: latte
     aliases:
-      - latte
+      - '[caffe] latte'
     defaultKey: '9000:0:0:0'
+    tensor: 1
+  - pid: 9100
+    cid: 200
+    name: cappuccino
+    aliases:
+      - cappuccino
+    defaultKey: '9100:0:0:0'
+    tensor: 1
+  - pid: 9200
+    cid: 200
+    name: mocha
+    aliases:
+      - '[caffe] mocha'
+    defaultKey: '9200:0:0:0'
     tensor: 1
 
 specificItems:
@@ -118,3 +132,123 @@ specificItems:
   - sku: 9018
     name: large decaf iced latte
     key: '9000:1:2:2'
+
+###############################################################################
+#
+# Cappuccinos
+#
+###############################################################################
+  - sku: 9101
+    name: small cappuccino
+    key: '9100:0:0:0'
+  - sku: 9102
+    name: small iced cappuccino
+    key: '9100:1:0:0'
+  - sku: 9103
+    name: small halfcaf cappuccino
+    key: '9100:0:0:1'
+  - sku: 9104
+    name: small halfcaf iced cappuccino
+    key: '9100:1:0:1'
+  - sku: 9105
+    name: small decaf cappuccino
+    key: '9100:0:0:2'
+  - sku: 9106
+    name: small decaf iced cappuccino
+    key: '9100:1:0:2'
+  - sku: 9107
+    name: medium cappuccino
+    key: '9100:0:1:0'
+  - sku: 9108
+    name: medium iced cappuccino
+    key: '9100:1:1:0'
+  - sku: 9109
+    name: medium halfcaf cappuccino
+    key: '9100:0:1:1'
+  - sku: 9110
+    name: medium halfcaf iced cappuccino
+    key: '9100:1:1:1'
+  - sku: 9111
+    name: medium decaf cappuccino
+    key: '9100:0:1:2'
+  - sku: 9112
+    name: medium decaf iced cappuccino
+    key: '9100:1:1:2'
+  - sku: 9113
+    name: large cappuccino
+    key: '9100:0:2:0'
+  - sku: 9114
+    name: large iced cappuccino
+    key: '9100:1:2:0'
+  - sku: 9115
+    name: large halfcaf cappuccino
+    key: '9100:0:2:1'
+  - sku: 9116
+    name: large halfcaf iced cappuccino
+    key: '9100:1:2:1'
+  - sku: 9117
+    name: large decaf cappuccino
+    key: '9100:0:2:2'
+  - sku: 9118
+    name: large decaf iced cappuccino
+    key: '9100:1:2:2'
+
+###############################################################################
+#
+# mochas
+#
+###############################################################################
+  - sku: 9201
+    name: small mocha
+    key: '9200:0:0:0'
+  - sku: 9202
+    name: small iced mocha
+    key: '9200:1:0:0'
+  - sku: 9203
+    name: small halfcaf mocha
+    key: '9200:0:0:1'
+  - sku: 9204
+    name: small halfcaf iced mocha
+    key: '9200:1:0:1'
+  - sku: 9205
+    name: small decaf mocha
+    key: '9200:0:0:2'
+  - sku: 9206
+    name: small decaf iced mocha
+    key: '9200:1:0:2'
+  - sku: 9207
+    name: medium mocha
+    key: '9200:0:1:0'
+  - sku: 9208
+    name: medium iced mocha
+    key: '9200:1:1:0'
+  - sku: 9209
+    name: medium halfcaf mocha
+    key: '9200:0:1:1'
+  - sku: 9210
+    name: medium halfcaf iced mocha
+    key: '9200:1:1:1'
+  - sku: 9211
+    name: medium decaf mocha
+    key: '9200:0:1:2'
+  - sku: 9212
+    name: medium decaf iced mocha
+    key: '9200:1:1:2'
+  - sku: 9213
+    name: large mocha
+    key: '9200:0:2:0'
+  - sku: 9214
+    name: large iced mocha
+    key: '9200:1:2:0'
+  - sku: 9215
+    name: large halfcaf mocha
+    key: '9200:0:2:1'
+  - sku: 9216
+    name: large halfcaf iced mocha
+    key: '9200:1:2:1'
+  - sku: 9217
+    name: large decaf mocha
+    key: '9200:0:2:2'
+  - sku: 9218
+    name: large decaf iced mocha
+    key: '9200:1:2:2'

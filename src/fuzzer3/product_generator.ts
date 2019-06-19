@@ -25,7 +25,8 @@ export class ProductGenerator {
     }
 
     randomProduct(random: Random): ProductX {
-        const entity = this.entityGenerators[0].randomEntity(random);
+        const entityGenerator = random.randomChoice(this.entityGenerators);
+        const entity = entityGenerator.randomEntity(random);
 
         const options: OptionX[] = [];
         if (this.optionGenerators.length > 0) {

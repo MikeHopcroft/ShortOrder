@@ -67,6 +67,28 @@ dimensions:
         name: large
         aliases:
           - large
+  - did: 5
+    name: espresso size
+    attributes:
+      - aid: 50
+        name: single
+        aliases:
+          - single
+          - solo
+      - aid: 51
+        name: double
+        isDefault: true
+        aliases:
+          - double
+          - dopio
+      - aid: 52
+        name: triple
+        aliases:
+          - triple
+      - aid: 53
+        name: quad
+        aliases:
+          - quad
   - did: 6
     name: shape
     attributes:
@@ -110,9 +132,9 @@ tensors:
   - tid: 2
     name: cones
     dimensions: [4,2]
-  # - tid: 3
-  #   name: milk
-  #   dimensions: [5]
+  - tid: 3
+    name: espressos
+    dimensions: [5,3]
   - tid: 4
     name: sprinkles
     dimensions: [6]

@@ -66,6 +66,7 @@ async function go()
         positions
     );
 
+
     const entityQuantities: QuantityX[] = [
         new QuantityX(1, 'a'),
         new QuantityX(1, 'one'),
@@ -76,13 +77,26 @@ async function go()
     //
     // Specific entity
     //
-    const entityGenerator = new EntityGenerator(
-        world.attributeInfo,
-        attributes,
-        world.catalog,
-        9000,
-        entityQuantities
-    );
+    // const entityGenerator = new EntityGenerator(
+    //     world.attributeInfo,
+    //     attributes,
+    //     world.catalog,
+    //     9200,
+    //     entityQuantities
+    // );
+    const entityPIDs = [9000, 9100, 9200];
+    const entityGenerators: EntityGenerator[] = [];
+    for (const pid of entityPIDs) {
+        const generator = new EntityGenerator(
+            world.attributeInfo,
+            attributes,
+            world.catalog,
+            pid,
+            entityQuantities
+        );
+        entityGenerators.push(generator);
+    }
+
 
     const optionLeftQuantites: QuantityX[] = [
         new QuantityX(1, ''),
@@ -103,19 +117,24 @@ async function go()
         return EITHER;
     };
 
-    const optionGenerator = new OptionGenerator(
-        world.attributeInfo,
-        attributes,
-        world.catalog,
-        5003,
-        optionPositionPredicate,
-        optionLeftQuantites,
-        optionRightQuantites,
-    );
+    const optionPIDs = [5000, 5001, 5002, 5003];
+    const optionGenerators: OptionGenerator[] = [];
+    for (const pid of optionPIDs) {
+        const generator = new OptionGenerator(
+            world.attributeInfo,
+            attributes,
+            world.catalog,
+            pid,
+            optionPositionPredicate,
+            optionLeftQuantites,
+            optionRightQuantites,
+        );
+        optionGenerators.push(generator);
+    }
 
     const productGenerator = new ProductGenerator(
-        [entityGenerator],
-        [optionGenerator]
+        entityGenerators,
+        optionGenerators
     );
 
     const prologues = [
@@ -135,7 +154,7 @@ async function go()
     const prologueGenerator = new AliasGenerator(prologues);
 
     const epilogues = [
-        "I'm (done,fine,good,ready)",
+        "I'm (done,fine,good)",
         "thank you",
         "thanks",
         "that's (all,everything,it)",

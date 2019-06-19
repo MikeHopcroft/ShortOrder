@@ -126,5 +126,12 @@ async function go(utterance: string) {
 // go("two large soy lattes iced");
 // go("we would like two large iced soy milk lattes and one decaffeinated iced medium soy milk latte I'm ready");
 // go("we will have one soy medium decaf latte iced two small lattes with soy and three large iced soy lattes thank you");
-go("can I just have one medium soy milk latte half caf I'm fine");
+// go("can I just have one medium soy milk latte half caf I'm fine");
+
+// This one fails because it takes "two zero percent milk" as a quantified attribute of the second
+// entity because it is the second milk. Should have taken "two" as an entity quantifier.
+// Also it takes "two zero percent milk", even though milk should not be quantified.
+//go("may I do one small iced soy latte half caf and two zero percent milk small caffe mochas that will do it");
+go("one soy latte half caf and two zero percent milk lattes");
+
 
