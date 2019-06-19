@@ -1,7 +1,5 @@
-import * as fs from 'fs';
-import * as minimist from 'minimist';
 import * as path from 'path';
-import { Result, setup, State, TestCase, TestLineItem, TestOrder } from 'prix-fixe';
+import { setup, TestCase, TestLineItem, TestOrder } from 'prix-fixe';
 
 import { createProcessor } from '../src';
 
@@ -19,7 +17,7 @@ export class OrderOps {
         const leftFieldWidth = 4 + item.indent * 2;
         const left = rightJustify(item.quantity + ' ', leftFieldWidth);
 
-        const rightFieldWidth = 10;  // Prices up to 999.99
+        const rightFieldWidth = 10;
         let right = '';
         right = rightJustify(item.key, rightFieldWidth);
 
@@ -54,29 +52,7 @@ function rightJustify(text: string, width: number) {
     }
 }
 
-// function printResult(result: Result) {
-//     for (const order of result.observed) {
-//         for (const line of order.lines) {
-//             line.
-//         }
-//     }
-// }
-
 async function go(utterance: string) {
-    const args = minimist(process.argv.slice(2));
-
-    const defaultTestFile = '../../samples2/data/restaurant-en/parser_suite.yaml';
-    const testFile = path.resolve(__dirname, args['f'] || defaultTestFile);
-
-    const showAll = args['a'] === true;
-    const suiteFilter = args['s'];
-
-    if (suiteFilter) {
-        console.log(`Running tests in suite: ${suiteFilter}`);
-    } else {
-        console.log('Running all tests.');
-    }
-
     const productsFile = path.join(__dirname, '../../samples2/data/restaurant-en/products.yaml');
     const optionsFile = path.join(__dirname, '../../samples2/data/restaurant-en/options.yaml');
     const attributesFile = path.join(__dirname, '../../samples2/data/restaurant-en/attributes.yaml');
@@ -96,13 +72,6 @@ async function go(utterance: string) {
         stopwordsFile,
     );
 
-    // let state: State = {
-    //     cart: {
-    //         items: [],
-    //     }
-    // };
-
-    // state = await processor(utterance, state);
     const testCase = new TestCase(
         0,
         'priority',
@@ -115,6 +84,10 @@ async function go(utterance: string) {
             }
         ]
     );
+
+    console.log(`UTTERANCE: "${utterance}"`);
+    console.log(' ');
+    console.log('Cart');
 
     const result = await testCase.run(processor, world.catalog);
 
@@ -132,7 +105,8 @@ async function go(utterance: string) {
 // entity because it is the second milk. Should have taken "two" as an entity quantifier.
 // Also it takes "two zero percent milk", even though milk should not be quantified.
 //go("may I do one small iced soy latte half caf and two zero percent milk small caffe mochas that will do it");
-go("one soy latte half caf and two zero percent milk lattes");
+// go("one soy latte half caf and two zero percent milk lattes");
+go("one soy latte half caf and two soy lattes");
 
 // Problem is again with "one two percent milk". Quantifier "one" associates with "two percent milk" instead of cappuccino.
 // Would work if we required units. Would work if we enforced rule against quantifiers for milk.

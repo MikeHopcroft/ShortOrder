@@ -1,6 +1,7 @@
 # TODO List
 
 * Fuzzer2
+    * Sample generator for a single segment with attributes and a quantifier
     * Prevent quantifiers on milks
     * Consider combining EntityX and OptionX
     * . Write out generated tests.
@@ -8,19 +9,19 @@
     * Remove old code.
     * Clean up test_generator_demo3.ts.
     * Better menu and rules file
-        * latte, cappuccino, americano
-        * specific product for each milk
+        * x latte, cappuccino, americano
+        * x specific product for each milk
         * exclusion set for milks
         * syrups
-        * extra, light, no/without
-    * x Alias transformer/detector for left/right options
-        * x e.g. filters "syrup" out of left side use cases
+        * extra, light, no/without, add
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
         * This might be ProductGenerator.
         * Remove milk options from espressos once this is done.
     * ProductGenerator - random number of options
+    * x Alias transformer/detector for left/right options
+        * x e.g. filters "syrup" out of left side use cases
     * x Ability to generate utterances without options/attributes
     * x ProductGenerator: make Quantified and Attributed options
     * x Left and right quantifiers for OptionsGenerator

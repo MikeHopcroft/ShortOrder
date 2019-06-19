@@ -17,15 +17,12 @@ import {
     OrderGenerator,
     Position,
     ProductGenerator,
-    ProductX,
     LEFT,
-    OptionX,
     QuantityX,
     RIGHT,
     Random,
     runTests,
     OrderX,
-    WordX
 } from '../src/fuzzer3';
 
 async function go()
@@ -56,9 +53,15 @@ async function go()
     ///////////////////////////////////////////////////////////////////////////
     // TODO: These should map DID to Position.
     const positions = new Map<AID, Position>();
+    // Latte sizes restricted to LEFT
     positions.set(1, LEFT);
     positions.set(2, LEFT);
     positions.set(3, LEFT);
+    // Espresso sizes restricted to LEFT
+    positions.set(50, LEFT);
+    positions.set(51, LEFT);
+    positions.set(52, LEFT);
+    positions.set(53, LEFT);
 
     const attributes = new AttributeGenerator(
         world.attributeInfo,
@@ -134,7 +137,8 @@ async function go()
 
     const productGenerator = new ProductGenerator(
         entityGenerators,
-        optionGenerators
+        []
+//        optionGenerators
     );
 
     const prologues = [
@@ -163,7 +167,8 @@ async function go()
     ];
     const epilogueGenerator = new AliasGenerator(epilogues);
 
-    const maxSegmentCount = 3;
+    const maxSegmentCount = 1;
+    // const maxSegmentCount = 3;
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
         productGenerator,
