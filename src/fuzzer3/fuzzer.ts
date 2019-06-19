@@ -93,15 +93,23 @@ export class QuantifiedOptionX implements OptionX {
 }
 
 export class AttributedOptionX implements OptionX {
-    attribute: AttributeX;
     key: Key;
     text: string;
     position: Position;
 
-    constructor(attribute: AttributeX, key: Key, text: string, position: Position) {
-        this.attribute = attribute;
+    constructor(attributes: AttributeX[], key: Key, text: string, position: Position) {
         this.key = key;
-        this.text = `${attribute.text} ${text}`;
+
+        // TODO: HACK: BUGBUG.
+        // This class is designed to have zero or one attributes,
+        // but API allows arbitrary number.
+        // Should either change the API to allow zero or one (e.g AttributeX?)
+        // or change the functionality, below, to support multiple attributes.
+        if (attributes.length > 0) {
+            this.text = `${attributes[0].text} ${text}`;
+        } else {
+            this.text = text;
+        }
         this.position = position;
     }
 

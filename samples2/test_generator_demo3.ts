@@ -107,7 +107,7 @@ async function go()
         world.attributeInfo,
         attributes,
         world.catalog,
-        5000,
+        5003,
         optionPositionPredicate,
         optionLeftQuantites,
         optionRightQuantites,
@@ -155,7 +155,7 @@ async function go()
     const random = new Random("1234");
 
     function* orders(): IterableIterator<OrderX> {
-        for (let i = 0; i < 5; ++i) {
+        for (let i = 0; i < 10; ++i) {
             yield orderGenerator.randomOrder(random);
         }
     }

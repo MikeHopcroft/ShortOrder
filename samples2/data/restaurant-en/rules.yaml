@@ -5,6 +5,10 @@ rules:
       500:
         validOptions:
           - 5000
+          - 5001
+          - 5002
+          - 5003
+          - 3000
         qtyInfo:
           # sizes for ALL lattes
           '': 

@@ -67,28 +67,6 @@ dimensions:
         name: large
         aliases:
           - large
-  - did: 5
-    name: milk
-    attributes:
-      - aid: 100
-        name: whole milk
-        isDefault: true
-        aliases:
-          - whole
-      - aid: 101
-        name: two percent milk
-        aliases:
-          - (two percent,low fat)
-      - aid: 102
-        name: nonfat milk
-        aliases:
-          - fat free
-          - skinny
-          - nonfat
-      - aid: 103
-        name: soy milk
-        aliases:
-          - soy
   - did: 6
     name: shape
     attributes:
@@ -123,15 +101,18 @@ dimensions:
           - nada
 
 tensors:
+  - tid: 0
+    name: 'null'
+    dimensions: []
   - tid: 1
     name: coffees
     dimensions: [1,4,3]
   - tid: 2
     name: cones
     dimensions: [4,2]
-  - tid: 3
-    name: milk
-    dimensions: [5]
+  # - tid: 3
+  #   name: milk
+  #   dimensions: [5]
   - tid: 4
     name: sprinkles
     dimensions: [6]

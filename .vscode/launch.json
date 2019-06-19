@@ -155,6 +155,13 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "AAA Process One Demo",
+            "program": "${workspaceFolder}/build/samples2/process_one_demo.js",
+            "outputCapture": "std",
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "AAA Test Generator",
             "program": "${workspaceFolder}/build/samples2/test_generator_demo3.js",
             "outputCapture": "std"

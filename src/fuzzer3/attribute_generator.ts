@@ -69,7 +69,10 @@ export class AttributeCombinations {
     }
 
     private *combinations(): IterableIterator<AttributeX[]> {
-        yield* this.combinationsRecursion(0);
+        // TODO: consider moving this if-statement into combinationRecursion().
+        if (this.tensor.dimensions.length > 0) {
+            yield* this.combinationsRecursion(0);
+        }
     }
 
     private *combinationsRecursion(d: number): IterableIterator<AttributeX[]> {
@@ -136,7 +139,11 @@ export class AttributeGenerator {
 
     randomCombination(tid: TID, random: Random): AttributeX[] {
         const combinations = this.combinations.get(tid)!;
-        return random.randomChoice(combinations);
+        if (combinations.length > 0) {
+            return random.randomChoice(combinations);
+        } else {
+            return [];
+        }
     }
 }
 

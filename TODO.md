@@ -1,6 +1,17 @@
 # TODO List
 
 * Fuzzer2
+    * Consider combining EntityX and OptionX
+    * . Write out generated tests.
+    * Command-line arguments
+    * Remove old code.
+    * Clean up test_generator_demo3.ts.
+    * Better menu and rules file
+        * latte, cappuccino, americano
+        * specific product for each milk
+        * exclusion set for milks
+        * syrups
+        * extra, light, no/without
     * x Alias transformer/detector for left/right options
         * x e.g. filters "syrup" out of left side use cases
     * Select valid option for entity
@@ -12,21 +23,11 @@
     * x ProductGenerator: make Quantified and Attributed options
     * x Left and right quantifiers for OptionsGenerator
     * Composite generator (templated)
-    * Remove old code.
-    * Clean up test_generator_demo3.ts.
     * Concept of LEFTMOST for size attributes
         * Perhaps use a number instead of a symbol?
     * Go back to "with" after an attribute, even after first "with"
-    * Better menu and rules file
-        * latte, cappuccino, americano
-        * specific product for each milk
-        * exclusion set for milks
-        * syrups
-        * extra, light, no/without
     * REMOVE attributeInfo['tensorIdToTensor']
     * "with" and "without"
-    * . Write out generated tests.
-    * Command-line arguments
     * One-line output
     * Automatically grab prologues and epilogues from intents.yaml (or lexicon)
     * use instanceOf

@@ -71,7 +71,7 @@ export class OptionGenerator {
         const key = builder.getKey();
 
         return new AttributedOptionX(
-            attributes[0],
+            attributes,
             key,
             alias,
             position

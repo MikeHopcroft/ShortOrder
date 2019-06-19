@@ -221,8 +221,9 @@ export class EntityBuilder {
                 tokens.take(2);
                 return true;
             } else {
-                tokens.discard(2);
-                return true;
+                // Fall back to outer loop to try processAttribute().
+                // Don't take or discard tokens.
+                return false;
             }
 
             // Otherwise fall through to other cases.
