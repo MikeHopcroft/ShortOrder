@@ -1,7 +1,11 @@
 # TODO List
 
 * Fuzzer2
-    * Document in README.md
+    * Rebasing support for TestSuite
+    * Return code for TestSuite
+    * TestSuite app
+    
+    * Document usage in README.md
     * x Update to latest token-flow
     * x Write out generated tests.
     * x Command-line argument: -o file, -v (verify), -n count

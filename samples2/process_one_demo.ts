@@ -104,9 +104,10 @@ async function go(utterance: string) {
 // This one fails because it takes "two zero percent milk" as a quantified attribute of the second
 // entity because it is the second milk. Should have taken "two" as an entity quantifier.
 // Also it takes "two zero percent milk", even though milk should not be quantified.
-//go("may I do one small iced soy latte half caf and two zero percent milk small caffe mochas that will do it");
+// STILL BROKEN
+// go("may I do one small iced soy latte half caf and two zero percent milk small caffe mochas that will do it");
 // go("one soy latte half caf and two zero percent milk lattes");
-go("one soy latte half caf and two soy lattes");
+// go("one soy latte half caf and two soy lattes");
 
 // Problem is again with "one two percent milk". Quantifier "one" associates with "two percent milk" instead of cappuccino.
 // Would work if we required units. Would work if we enforced rule against quantifiers for milk.
@@ -115,4 +116,41 @@ go("one soy latte half caf and two soy lattes");
 // Truely ambiguous? Can split before or after "half caf". Conjunction "and" needs stronger signal. Quantifier "three" cannot modify soy.
 // go("we need one medium two percent milk mocha iced half caf and three soy iced medium cappuccinos bye");
 
+// This seems to segment incorrectly because mutual exclusion is not enforced for whole milk and two percent milk
+// go("I'll get three dopio caffe espressos with whole milk decaf a large mocha with whole milk split shot and one two percent milk large cappuccino that's all");
+//
+// I'll get three dopio caffe espressos with whole milk decaf
+// a large mocha with whole milk
+// split shot and one two percent milk large cappuccino that's all"
+//
+//     "0/3/medium decaf espresso/9500:1:2" === "0/3/medium decaf espresso/9500:1:2" - OK
+//     "1/1/whole milk/5000" === "1/1/whole milk/5000" - OK
+//     "0/1/large halfcaf mocha/9200:0:2:1" !== "0/1/large mocha/9200:0:2:0" - <=== ERROR
+//     "1/1/whole milk/5000" !== "0/1/large halfcaf cappuccino/9100:0:2:1" - <=== ERROR
+//     "0/1/large cappuccino/9100:0:2:0" !== "1/1/whole milk/5000" - <=== ERROR
+//     "1/1/two percent milk/5001" === "1/1/two percent milk/5001" - OK
+//
+// UTTERANCE: "I'll get three dopio caffe espressos with whole milk decaf a large mocha with whole milk split shot and one two percent milk large cappuccino that's all"
+ 
+// Cart
+//   3 medium decaf espresso                 9500:1:2
+//     1 whole milk                              5000
+//   1 large mocha                         9200:0:2:0
+//   1 large halfcaf cappuccino            9100:0:2:1
+//     1 whole milk                              5000
+//     1 two percent milk                        5001
 
+go("may I do one small iced soy latte half caf and two zero percent milk single caffe espressos that will do it");
+// Utterance 0: "may I do one small iced soy latte half caf and two zero percent milk single caffe espressos that will do it"
+//     "0/1/small halfcaf iced latte/9000:1:0:1" !== "0/1/small iced latte/9000:1:0:0" - <=== ERROR
+//     "1/1/soy milk/5003" === "1/1/soy milk/5003" - OK
+//     "0/2/single espresso/9500:0:0" !== "0/1/small halfcaf espresso/9500:0:1" - <=== ERROR
+//     "1/1/fat free milk/5002" !== "1/2/fat free milk/5002" - <=== ERROR
+
+// UTTERANCE: "may I do one small iced soy latte half caf and two zero percent milk single caffe espressos that will do it"
+ 
+// Cart
+//   1 small iced latte                    9000:1:0:0
+//     1 soy milk                                5003
+//   1 small halfcaf espresso                9500:0:1
+//     2 fat free milk                           5002
