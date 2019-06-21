@@ -17,7 +17,10 @@ rules:
             maxQty: 1
     exclusionZones:
       500:
-        - 5000
+          - 5000
+          - 5001
+          - 5002
+          - 5003
     specificExceptions: []
   # # For hot lattes, we have no valid catagories of options
   # - partialKey: '9000:0'
@@ -66,7 +69,10 @@ rules:
             maxQty: 1
     exclusionZones:
       500:
-        - 5000
+          - 5000
+          - 5001
+          - 5002
+          - 5003
     specificExceptions: []
   # Mochas
   - partialKey: '9200'
@@ -86,7 +92,10 @@ rules:
             maxQty: 1
     exclusionZones:
       500:
-        - 5000
+          - 5000
+          - 5001
+          - 5002
+          - 5003
     specificExceptions: []
   # Espressos
   - partialKey: '9500'
@@ -106,5 +115,8 @@ rules:
             maxQty: 1
     exclusionZones:
       500:
-        - 5000
+          - 5000
+          - 5001
+          - 5002
+          - 5003
     specificExceptions: []

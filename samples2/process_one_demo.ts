@@ -101,6 +101,7 @@ async function go(utterance: string) {
 // go("we will have one soy medium decaf latte iced two small lattes with soy and three large iced soy lattes thank you");
 // go("can I just have one medium soy milk latte half caf I'm fine");
 
+// FIXED: 8bbd7455725c405b11a0df109c06537daf4f7ede
 // This one fails because it takes "two zero percent milk" as a quantified attribute of the second
 // entity because it is the second milk. Should have taken "two" as an entity quantifier.
 // Also it takes "two zero percent milk", even though milk should not be quantified.
@@ -155,7 +156,44 @@ async function go(utterance: string) {
 //   1 small halfcaf espresso                9500:0:1
 //     2 fat free milk                           5002
 
-go("may I just do an iced small cappuccino decaffeinated and three medium decaffeinated caffe lattes that's everything");
+// go("may I just do an iced small cappuccino decaffeinated and three medium decaffeinated caffe lattes that's everything");
 // Utterance 0: "may I just do an iced small cappuccino decaffeinated and three medium decaffeinated caffe lattes that's everything"
 //     "0/1/small decaf iced cappuccino/9100:1:0:2" !== "0/1/small decaf cappuccino/9100:0:0:2" - <=== ERROR
 //     "0/3/medium decaf latte/9000:0:1:2" === "0/3/medium decaf latte/9000:0:1:2" - OK
+
+// "I will take 
+//  one small latte with notfat milk 
+//  two iced small cappuccinos with zero percent
+//  and 
+//  an iced large mocha decaf with soy milk that's it"
+// 152 - FAILED
+//   Comment: synthetic
+//   Suites: unverified
+//   Utterance 0: "I will take one small latte with notfat milk two iced small cappuccinos with zero percent and an iced large mocha decaf with soy milk that's it"
+//     "0/1/small latte/9000:0:0:0" === "0/1/small latte/9000:0:0:0" - OK
+//     "1/1/fat free milk/5002" === "1/1/fat free milk/5002" - OK
+//     "0/2/small iced cappuccino/9100:1:0:0" === "0/2/small iced cappuccino/9100:1:0:0" - OK
+//     "1/1/fat free milk/5002" !== "0/1/large decaf iced mocha/9200:1:2:2" - <=== ERROR
+//     "0/1/large decaf iced mocha/9200:1:2:2" !== "1/1/fat free milk/5002" - <=== ERROR
+//     "1/1/soy milk/5003" === "1/1/soy milk/5003" - OK
+go("I will take one small latte with notfat milk two iced small cappuccinos with zero percent and an iced large mocha decaf with soy milk that's it");
+
+// 347 - FAILED
+//   Comment: synthetic
+//   Suites: unverified
+//   Utterance 0: "could I please have one small latte with zero percent milk an iced medium caffe mocha with whole milk split shot and three medium iced cappuccinos with whole milk that's it"
+//     "0/1/small latte/9000:0:0:0" === "0/1/small latte/9000:0:0:0" - OK
+//     "1/1/fat free milk/5002" !== "0/1/medium halfcaf iced mocha/9200:1:1:1" - <=== ERROR
+//     "0/1/medium halfcaf iced mocha/9200:1:1:1" !== "1/1/fat free milk/5002" - <=== ERROR
+//     "1/1/whole milk/5000" === "1/1/whole milk/5000" - OK
+//     "0/3/medium iced cappuccino/9100:1:1:0" === "0/3/medium iced cappuccino/9100:1:1:0" - OK
+//     "1/1/whole milk/5000" === "1/1/whole milk/5000" - OK
+
+// 387 - FAILED
+//   Comment: synthetic
+//   Suites: unverified
+//   Utterance 0: "hook me up with a medium caffe latte iced with zero percent milk and a large mocha with soy milk that's everything"
+//     "0/1/medium iced latte/9000:1:1:0" === "0/1/medium iced latte/9000:1:1:0" - OK
+//     "1/1/fat free milk/5002" !== "0/1/large mocha/9200:0:2:0" - <=== ERROR
+//     "0/1/large mocha/9200:0:2:0" !== "1/1/fat free milk/5002" - <=== ERROR
+//     "1/1/soy milk/5003" === "1/1/soy milk/5003" - OK

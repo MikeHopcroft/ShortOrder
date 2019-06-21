@@ -120,7 +120,13 @@ export class EntityBuilder {
         //   [NUMBERTOKEN, UNIT, OPTION]
         // over
         //   [NUMBERTOKEN]
-        // is ???
+        // is something like
+        //   "a large mocha with whole milk split shot one two percent milk large cappuccino and one medium caffe latte with whole milk that's all"
+        // In this case
+        //   "one two percent milk"
+        // matches
+        //   [NUMBERTOKEN, UNIT, OPTION]
+        // when "one" is realy an entity quantifier.
         //
         // if (tokens.startsWith([NUMBERTOKEN, UNIT, OPTION])) {
         //     // In this case, the NumberToken quantifies the units of an option,
