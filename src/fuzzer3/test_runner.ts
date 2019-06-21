@@ -28,6 +28,9 @@ export async function fuzzerMain(
 
     const outFile = args['o'] ? path.resolve(__dirname, args['o']) : undefined;
     const verify = args['v'];
+    const showOnlyFailingCases =
+        (args['f'] === true) ||
+        (args['failed'] === true);
 
     const defaultCount = 10;
     const count = (args['n'] || defaultCount);
@@ -41,7 +44,7 @@ export async function fuzzerMain(
         showUsage(factory);
     }
     else {
-        runFuzzer(generateOrders, factory, dataPath, count, verify, outFile);
+        runFuzzer(generateOrders, factory, dataPath, count, verify, showOnlyFailingCases, outFile);
     }
 }
 
@@ -57,6 +60,7 @@ function showUsage(factory: ProcessorFactory) {
     console.log('                Without -o, cases will be printed to the console.');
     console.log('-v [processor]  Run the generated cases with the specified processor.');
     console.log('                or the domain-specific-entity processor (dse).');
+    console.log('-f|failed       When verifying, show only failing cases.');
     console.log('-h|help|?       Show this message.');
     console.log(' ');
 
@@ -72,6 +76,7 @@ export async function runFuzzer(
     dataPath: string,
     count: number,
     verify: string | undefined,
+    showOnlyFailingCases: boolean,
     outFile: string | undefined
 ) {
     console.log(`Generating ${count} test case${count === 1 ? "":"s"}.`);
@@ -96,7 +101,7 @@ export async function runFuzzer(
         const processor = factory.get(verify, world, dataPath);
 
         results = await runTests(orders, world.catalog, processor);
-        results.print(true);
+        results.print(!showOnlyFailingCases);
     } else {
         results = makeTests(orders, world.catalog);
     }

@@ -1,10 +1,10 @@
 # TODO List
 
-* Fuzzer2
+* TestSuite
     * Rebasing support for TestSuite
     * Return code for TestSuite
     * TestSuite app
-    
+* Fuzzer2
     * Document usage in README.md
     * x Update to latest token-flow
     * x Write out generated tests.

@@ -140,7 +140,7 @@ async function go(utterance: string) {
 //     1 whole milk                              5000
 //     1 two percent milk                        5001
 
-go("may I do one small iced soy latte half caf and two zero percent milk single caffe espressos that will do it");
+// go("may I do one small iced soy latte half caf and two zero percent milk single caffe espressos that will do it");
 // Utterance 0: "may I do one small iced soy latte half caf and two zero percent milk single caffe espressos that will do it"
 //     "0/1/small halfcaf iced latte/9000:1:0:1" !== "0/1/small iced latte/9000:1:0:0" - <=== ERROR
 //     "1/1/soy milk/5003" === "1/1/soy milk/5003" - OK
@@ -154,3 +154,8 @@ go("may I do one small iced soy latte half caf and two zero percent milk single 
 //     1 soy milk                                5003
 //   1 small halfcaf espresso                9500:0:1
 //     2 fat free milk                           5002
+
+go("may I just do an iced small cappuccino decaffeinated and three medium decaffeinated caffe lattes that's everything");
+// Utterance 0: "may I just do an iced small cappuccino decaffeinated and three medium decaffeinated caffe lattes that's everything"
+//     "0/1/small decaf iced cappuccino/9100:1:0:2" !== "0/1/small decaf cappuccino/9100:0:0:2" - <=== ERROR
+//     "0/3/medium decaf latte/9000:0:1:2" === "0/3/medium decaf latte/9000:0:1:2" - OK

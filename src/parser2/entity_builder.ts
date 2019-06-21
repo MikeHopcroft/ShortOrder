@@ -12,12 +12,13 @@ import {
 import { NumberToken, NUMBERTOKEN } from 'token-flow';
 
 import {
+    ATTRIBUTE,
     AttributeToken,
     CONJUNCTION,
     OPTION,
     OptionToken,
+    QUANTITY,
     UNIT,
-    ATTRIBUTE,
 } from '../unified';
 
 import { GapToken, Segment } from './interfaces';
@@ -109,18 +110,32 @@ export class EntityBuilder {
     // chocolate".
     processLeft(tokens: TokenSequence<GapToken>) {
         this.processConjunction(tokens);
-        if (tokens.startsWith([NUMBERTOKEN, UNIT, OPTION])) {
-            // In this case, the NumberToken quantifies the units of an option,
-            // so the entity gets a default quantity of 1 (which was set in the
-            // member initializer).
-            this.processOption(tokens);
-        } else {
-            // Otherwise, use the NumberToken to quantify the entity.
-            this.processQuantity(tokens);
-        }
 
-        // The process the remaining tokens.
-        this.processRemaining(tokens);
+        // DESIGN NOTE:
+        // The following logic was originally included when entity quantifiers
+        // were considered optional. This would be important for cases like
+        //   "a burger fries and a coke"
+        // In that example, "fries" has an implied quantifier of 1.
+        // The challenge with prioritizing
+        //   [NUMBERTOKEN, UNIT, OPTION]
+        // over
+        //   [NUMBERTOKEN]
+        // is ???
+        //
+        // if (tokens.startsWith([NUMBERTOKEN, UNIT, OPTION])) {
+        //     // In this case, the NumberToken quantifies the units of an option,
+        //     // so the entity gets a default quantity of 1 (which was set in the
+        //     // member initializer).
+        //     this.processOption(tokens);
+        // } else {
+        //     // Otherwise, use the NumberToken to quantify the entity.
+        //     this.processQuantity(tokens);
+        // }
+
+        if (this.processQuantity(tokens)) {
+            // The process the remaining tokens.
+            this.processRemaining(tokens);
+        }
     }
 
     // Process tokens that lie to the right of the entity. This sequence is
@@ -175,6 +190,12 @@ export class EntityBuilder {
     // Returns true if the number was sucessfully parsed.
     processQuantity(tokens: TokenSequence<GapToken>): boolean {
         if (tokens.startsWith([NUMBERTOKEN])) {
+            const quantity = tokens.peek(0) as NumberToken;
+            this.quantity = quantity.value;
+            tokens.take(1);
+            return true;
+        }
+        else if (tokens.startsWith([QUANTITY])) {
             const quantity = tokens.peek(0) as NumberToken;
             this.quantity = quantity.value;
             tokens.take(1);
