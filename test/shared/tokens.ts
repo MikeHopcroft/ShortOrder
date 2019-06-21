@@ -45,6 +45,11 @@ export const optionMilk: OptionToken = {
     name: 'milk',
 };
 
+export const quantityOne: NumberToken = {
+    type: NUMBERTOKEN,
+    value: 1,
+};
+
 export const quantityTwo: NumberToken = {
     type: NUMBERTOKEN,
     value: 2,

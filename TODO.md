@@ -7,6 +7,13 @@
     * TestSuite app
     * Measure and report min, max, mean, percentile latency
     * Return code
+* Parser2
+    * Figure out how to reintroduce implied quantifiers. Then revert unit test changes. Parser change introduced in 8bbd7455.
+    * Group EntitySequenceTokens
+    * Add to order
+    * Remove
+    * Restate
+    * Start over
 * Fuzzer2
     * Document usage in README.md
     * Command-line argument - save failures only

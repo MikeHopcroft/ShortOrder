@@ -201,7 +201,7 @@ async function go(utterance: string) {
 //     "0/1/large mocha/9200:0:2:0" !== "1/1/fat free milk/5002" - <=== ERROR
 //     "1/1/soy milk/5003" === "1/1/soy milk/5003" - OK
 
-// ENABLED: this commit
+// ENABLED in 167c91170f6bdf5fdf03b7dbe795ee6ea1d7e0a8
 // go("three two pump hazelnut latte with five pumps caramel and ristretto");
 
 go("could I please get three dopio split shot skinny caffe espressos three medium cappuccinos with a pump of caramel and a large three pump whole milk mocha I'm fine");

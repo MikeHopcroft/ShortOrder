@@ -31,8 +31,8 @@ export class ProductGenerator {
         const options: OptionX[] = [];
         if (this.optionGenerators.length > 0) {
             const generator = random.randomChoice(this.optionGenerators);
-            options.push(generator.randomAttributedOption(random));
-            // options.push(generator.randomQuantifiedOption(random));
+            // options.push(generator.randomAttributedOption(random));
+            options.push(generator.randomQuantifiedOption(random));
         }
 
         const product = new ProductX(
