@@ -268,31 +268,31 @@ specificItems:
 #
 ###############################################################################
   - sku: 9501
-    name: single espresso
+    name: solo espresso
     key: '9500:0:0'
   - sku: 9503
-    name: small halfcaf espresso
+    name: solo halfcaf espresso
     key: '9500:0:1'
   - sku: 9505
-    name: small decaf espresso
+    name: solo decaf espresso
     key: '9500:0:2'
   - sku: 9507
-    name: medium espresso
+    name: dopio espresso
     key: '9500:1:0'
   - sku: 9509
-    name: medium halfcaf espresso
+    name: dopio halfcaf espresso
     key: '9500:1:1'
   - sku: 9511
-    name: medium decaf espresso
+    name: dopio decaf espresso
     key: '9500:1:2'
   - sku: 9513
-    name: large espresso
+    name: triple espresso
     key: '9500:2:0'
   - sku: 9515
-    name: large halfcaf espresso
+    name: triple halfcaf espresso
     key: '9500:2:1'
   - sku: 9517
-    name: large decaf espresso
+    name: triple decaf espresso
     key: '9500:2:2'
   - sku: 9519
     name: quad espresso

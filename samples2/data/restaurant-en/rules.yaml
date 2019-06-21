@@ -8,7 +8,19 @@ rules:
           - 5001
           - 5002
           - 5003
-          - 3000
+        qtyInfo:
+          # sizes for ALL lattes
+          '': 
+            defaultQty: 1
+            minQty: 1
+            maxQty: 1
+      10000:
+        validOptions:
+          - 10000
+          - 10001
+          - 10002
+          - 10003
+          - 20000
         qtyInfo:
           # sizes for ALL lattes
           '': 
@@ -60,7 +72,19 @@ rules:
           - 5001
           - 5002
           - 5003
-          - 3000
+        qtyInfo:
+          # sizes for ALL lattes
+          '': 
+            defaultQty: 1
+            minQty: 1
+            maxQty: 1
+      10000:
+        validOptions:
+          - 10000
+          - 10001
+          - 10002
+          - 10003
+          - 20000
         qtyInfo:
           # sizes for ALL lattes
           '': 
@@ -83,7 +107,19 @@ rules:
           - 5001
           - 5002
           - 5003
-          - 3000
+        qtyInfo:
+          # sizes for ALL lattes
+          '': 
+            defaultQty: 1
+            minQty: 1
+            maxQty: 1
+      10000:
+        validOptions:
+          - 10000
+          - 10001
+          - 10002
+          - 10003
+          - 20000
         qtyInfo:
           # sizes for ALL lattes
           '': 
@@ -106,7 +142,19 @@ rules:
           - 5001
           - 5002
           - 5003
-          - 3000
+        qtyInfo:
+          # sizes for ALL lattes
+          '': 
+            defaultQty: 1
+            minQty: 1
+            maxQty: 1
+      10000:
+        validOptions:
+          - 10000
+          - 10001
+          - 10002
+          - 10003
+          - 20000
         qtyInfo:
           # sizes for ALL lattes
           '': 

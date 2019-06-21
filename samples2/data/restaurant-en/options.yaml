@@ -56,6 +56,43 @@ genericItems:
     defaultKey: '7000:2'
     tensor: 4
 
+  - pid: 10000
+    cid: 10000
+    name: caramel syrup
+    aliases:
+      - caramel [syrup]
+    defaultKey: '10000'
+    tensor: 0
+  - pid: 10001
+    cid: 10000
+    name: cinnamon dolche syrup
+    aliases:
+      - cinnamon [dolche] [syrup]
+    defaultKey: '10001'
+    tensor: 0
+  - pid: 10002
+    cid: 10000
+    name: vanilla syrup
+    aliases:
+      - vanilla [syrup]
+    defaultKey: '10001'
+    tensor: 0
+  - pid: 10003
+    cid: 10000
+    name: hazelnut syrup
+    aliases:
+      - hazelnut [syrup]
+    defaultKey: '10003'
+    tensor: 0
+
+  - pid: 20000
+    cid: 10000
+    name: ristretto
+    aliases:
+      - ristretto
+    defaultKey: '20000'
+    tensor: 0
+
 specificItems:
   - sku: 3000
     name: foobar
@@ -110,4 +147,21 @@ specificItems:
   - sku: 6009
     name: no strawberry drizzle
     key: '6000:2:2'
+
+  - sku: 10000
+    name: caramel syrup
+    key: '10000'
+  - sku: 10001
+    name: cinnamon dolche syrup
+    key: '10001'
+  - sku: 10002
+    name: vanilla syrup
+    key: '10002'
+  - sku: 10003
+    name: hazelnut syrup
+    key: '10003'
+
+  - sku: 20000
+    name: ristretto
+    key: '20000'
 

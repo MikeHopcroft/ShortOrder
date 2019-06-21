@@ -1,40 +1,45 @@
 # TODO List
 
+* REMOVE attributeInfo['tensorIdToTensor']
 * TestSuite
     * Rebasing support for TestSuite
     * Return code for TestSuite
     * TestSuite app
+    * Measure and report min, max, mean, percentile latency
+    * Return code
 * Fuzzer2
     * Document usage in README.md
-    * x Update to latest token-flow
-    * x Write out generated tests.
-    * x Command-line argument: -o file, -v (verify), -n count
     * Command-line argument - save failures only
-    * x Option to select LUIS version vs short-order
-    * Return code
-    * Remove old code.
-        * fuzzer2
-    * Only generate from items with aliases
-    * Test suite rebasing
-    * Publish
-    * Integrate into other repo
-
-    * Sample generator for a single segment with attributes and a quantifier
-    * Prevent quantifiers on milks
-    * Consider combining EntityX and OptionX
-    * Clean up test_generator_demo3.ts.
+    * Create EntityGenerators from menu inspection
+    * Create OptionGenerators from menu inspection
+        * Need some way to annotate whether they are quantifiable
+        * Need some way to annotate with units
     * Better menu and rules file
         * x latte, cappuccino, americano
         * x specific product for each milk
-        * exclusion set for milks
-        * syrups
+        * x exclusion set for milks
+        * x syrups
         * extra, light, no/without, add
+    * Remove old code.
+        * fuzzer2
+    * Only generate from items with aliases
+    * ProductGenerator - random number of options
     * Select valid option for entity
         * Use category id
         * Mutual exclusivity
         * This might be ProductGenerator.
         * Remove milk options from espressos once this is done.
-    * ProductGenerator - random number of options
+    * x Update to latest token-flow
+    * x Write out generated tests.
+    * x Command-line argument: -o file, -v (verify), -n count
+    * x Option to select LUIS version vs short-order
+    * x Publish
+    * Integrate into other repo
+
+    * x Sample generator for a single segment with attributes and a quantifier
+    * Prevent quantifiers on milks
+    * Consider combining EntityX and OptionX
+    * Clean up test_generator_demo3.ts.
     * x Alias transformer/detector for left/right options
         * x e.g. filters "syrup" out of left side use cases
     * x Ability to generate utterances without options/attributes
@@ -44,9 +49,8 @@
     * Concept of LEFTMOST for size attributes
         * Perhaps use a number instead of a symbol?
     * Go back to "with" after an attribute, even after first "with"
-    * REMOVE attributeInfo['tensorIdToTensor']
     * "with" and "without"
-    * One-line output
+    * x One-line output
     * Automatically grab prologues and epilogues from intents.yaml (or lexicon)
     * use instanceOf
     * REVIEW aliasesFromOneItem() - does this deal with matcher: prefix?

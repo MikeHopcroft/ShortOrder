@@ -161,6 +161,7 @@ async function go(utterance: string) {
 //     "0/1/small decaf iced cappuccino/9100:1:0:2" !== "0/1/small decaf cappuccino/9100:0:0:2" - <=== ERROR
 //     "0/3/medium decaf latte/9000:0:1:2" === "0/3/medium decaf latte/9000:0:1:2" - OK
 
+// FIXED in 470bf5b5ebd8429a1759f54544600067f01bba31
 // "I will take 
 //  one small latte with notfat milk 
 //  two iced small cappuccinos with zero percent
@@ -176,8 +177,9 @@ async function go(utterance: string) {
 //     "1/1/fat free milk/5002" !== "0/1/large decaf iced mocha/9200:1:2:2" - <=== ERROR
 //     "0/1/large decaf iced mocha/9200:1:2:2" !== "1/1/fat free milk/5002" - <=== ERROR
 //     "1/1/soy milk/5003" === "1/1/soy milk/5003" - OK
-go("I will take one small latte with notfat milk two iced small cappuccinos with zero percent and an iced large mocha decaf with soy milk that's it");
+// go("I will take one small latte with notfat milk two iced small cappuccinos with zero percent and an iced large mocha decaf with soy milk that's it");
 
+// FIXED in 470bf5b5ebd8429a1759f54544600067f01bba31
 // 347 - FAILED
 //   Comment: synthetic
 //   Suites: unverified
@@ -189,6 +191,7 @@ go("I will take one small latte with notfat milk two iced small cappuccinos with
 //     "0/3/medium iced cappuccino/9100:1:1:0" === "0/3/medium iced cappuccino/9100:1:1:0" - OK
 //     "1/1/whole milk/5000" === "1/1/whole milk/5000" - OK
 
+// FIXED in 470bf5b5ebd8429a1759f54544600067f01bba31
 // 387 - FAILED
 //   Comment: synthetic
 //   Suites: unverified
@@ -197,3 +200,22 @@ go("I will take one small latte with notfat milk two iced small cappuccinos with
 //     "1/1/fat free milk/5002" !== "0/1/large mocha/9200:0:2:0" - <=== ERROR
 //     "0/1/large mocha/9200:0:2:0" !== "1/1/fat free milk/5002" - <=== ERROR
 //     "1/1/soy milk/5003" === "1/1/soy milk/5003" - OK
+
+// ENABLED: this commit
+// go("three two pump hazelnut latte with five pumps caramel and ristretto");
+
+go("could I please get three dopio split shot skinny caffe espressos three medium cappuccinos with a pump of caramel and a large three pump whole milk mocha I'm fine");
+// "could I please get 
+// three dopio split shot skinny caffe espressos
+// three medium cappuccinos with a pump of caramel
+// and
+// a large three pump whole milk mocha
+// I'm fine"
+
+// Utterance 0: "could I please get three dopio split shot skinny caffe espressos three medium cappuccinos with a pump of caramel and a large three pump whole milk mocha I'm fine"
+// "0/3/medium halfcaf espresso/9500:1:1" === "0/3/medium halfcaf espresso/9500:1:1" - OK
+// "1/1/fat free milk/5002" === "1/1/fat free milk/5002" - OK
+// "0/3/medium cappuccino/9100:0:1:0" === "0/3/medium cappuccino/9100:0:1:0" - OK
+// "1/1/caramel syrup/10000" !== "0/1/large mocha/9200:0:2:0" - <=== ERROR
+// "0/1/large mocha/9200:0:2:0" !== "1/1/caramel syrup/10000" - <=== ERROR
+// "1/3/whole milk/5000" === "1/3/whole milk/5000" - OK

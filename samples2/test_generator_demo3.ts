@@ -111,7 +111,7 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
         return EITHER;
     };
 
-    const optionPIDs = [5000, 5001, 5002, 5003];
+    const optionPIDs = [5000, 5001, 5002, 5003, 10000, 10001, 10002, 10003, 20000];
     const optionGenerators: OptionGenerator[] = [];
     for (const pid of optionPIDs) {
         const generator = new OptionGenerator(
@@ -171,8 +171,8 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
     //
     // Orders
     //
-    const maxSegmentCount = 1;
-    // const maxSegmentCount = 3;
+    // const maxSegmentCount = 1;
+    const maxSegmentCount = 3;
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
         productGenerator,

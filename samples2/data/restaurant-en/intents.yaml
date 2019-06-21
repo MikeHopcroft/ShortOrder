@@ -112,7 +112,7 @@ items:
   - pid: 100013
     name: END_OF_ORDER
     aliases:
-      - I'm (done,fine,good,ready)
+      - I'm (done,good,ready)
       # ISSUE: "you" is a partial match to "thank you".
       - thank you
       - thanks
