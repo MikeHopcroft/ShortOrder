@@ -58,7 +58,7 @@ export class Parser2 {
 
         for (const splits of enumerateSplits(lengths)) {
             // TODO: split debug tracing
-            console.log(`split = [${splits}]`);
+            // console.log(`split = [${splits}]`);
 
             // Construct the sequence of Segments associated with a particular
             // choice of split points.
@@ -69,9 +69,9 @@ export class Parser2 {
             }));
 
             // TODO: split debug tracing
-            for (const segment of segments) {
-                printSegment(segment);
-            }
+            // for (const segment of segments) {
+            //     printSegment(segment);
+            // }
 
             // Parse these segments to produce an interpretation for this
             // choice of split points.
@@ -80,8 +80,8 @@ export class Parser2 {
             const interpretation = this.interpretSegmentArray(segments);
 
             // TODO: split debug tracing
-            console.log(`  score: ${interpretation.score}`);
-            console.log('');
+            // console.log(`  score: ${interpretation.score}`);
+            // console.log('');
 
             interpretations.push(interpretation);
         }

@@ -179,7 +179,7 @@ function* generateTestCases(
     }
 }
 
-function createWorld(dataPath: string): World {
+export function createWorld(dataPath: string): World {
     const productsFile = path.join(dataPath, 'products.yaml');
     const optionsFile = path.join(dataPath, 'options.yaml');
     const attributesFile = path.join(dataPath, 'attributes.yaml');
@@ -190,7 +190,7 @@ function createWorld(dataPath: string): World {
     return world;
 }
 
-function createShortOrderProcessor(world: World, dataPath: string): Processor {
+export function createShortOrderProcessor(world: World, dataPath: string): Processor {
     const intentsFile = path.join(dataPath, 'intents.yaml');
     const quantifiersFile = path.join(dataPath, 'quantifiers.yaml');
     const unitsFile = path.join(dataPath, 'units.yaml');
@@ -231,7 +231,7 @@ export function makeTests(
 
     for (const order of orders) {
         const testCase = createTestCase(catalog, order);
-        const result = new Result(testCase, testCase.expected, true);
+        const result = new Result(testCase, testCase.expected, true, 0);
         results.recordResult(result);
     }
 

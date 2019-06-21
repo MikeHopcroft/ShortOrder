@@ -31,7 +31,7 @@
     "@types/minimist": "^1.2.0",
     "@types/mocha": "^5.2.5",
     "@types/murmurhash": "0.0.0",
-    "@types/node": "^10.11.4",
+    "@types/node": "^10.14.9",
     "@types/number-to-words": "^1.2.0",
     "@types/readline-sync": "^1.4.3",
     "@types/seedrandom": "^2.4.28",
@@ -52,7 +52,7 @@
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
     "pluralize": "^7.0.0",
-    "prix-fixe": "0.0.13",
+    "prix-fixe": "0.0.15",
     "readline-sync": "^1.4.9",
     "seedrandom": "^3.0.1",
     "token-flow": "0.0.30"

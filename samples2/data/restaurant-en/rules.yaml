@@ -1,7 +1,7 @@
 rules:
   # For all lattes, we can only add one type of milk
   - partialKey: '9000'
-    validCatagoryMap:
+    validCategoryMap:
       500:
         validOptions:
           - 5000
@@ -36,12 +36,12 @@ rules:
     specificExceptions: []
   # # For hot lattes, we have no valid catagories of options
   # - partialKey: '9000:0'
-  #   validCatagoryMap: {}
+  #   validCategoryMap: {}
   #   exclusionZones: {}
   #   specificExceptions: []
   # For iced lattes, we may add drizzles as a valid catagory of options
   - partialKey: '9000:1'
-    validCatagoryMap:
+    validCategoryMap:
       700:
         validOptions:
           - 6000
@@ -65,7 +65,7 @@ rules:
     specificExceptions: []
   # Cappuccinos
   - partialKey: '9100'
-    validCatagoryMap:
+    validCategoryMap:
       500:
         validOptions:
           - 5000
@@ -100,7 +100,7 @@ rules:
     specificExceptions: []
   # Mochas
   - partialKey: '9200'
-    validCatagoryMap:
+    validCategoryMap:
       500:
         validOptions:
           - 5000
@@ -135,7 +135,7 @@ rules:
     specificExceptions: []
   # Espressos
   - partialKey: '9500'
-    validCatagoryMap:
+    validCategoryMap:
       500:
         validOptions:
           - 5000
