@@ -9,7 +9,7 @@ import {
 // during refactoring. Change this import to '../src' once refactoring is done.
 import {
     AliasGenerator,
-    AttributeGenerator,
+    AttributeGenerator2,
     EITHER,
     EntityGenerator,
     fuzzerMain,
@@ -31,7 +31,8 @@ async function go()
     const factory = new ProcessorFactory([]);
 
     // TODO: move this into fuzzerMain and get dataPath from command-line.
-    const dataPath = path.join(__dirname, '../../samples2/data/restaurant-en/');
+    // const dataPath = path.join(__dirname, '../../samples2/data/restaurant-en/');
+    const dataPath = path.resolve(__dirname, '/Users/mhop/git/menudata');
 
     // Run the fuzzer application.
     fuzzerMain(generateOrders, factory, dataPath);
@@ -59,7 +60,7 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
     positions.set(52, LEFT);
     positions.set(53, LEFT);
 
-    const attributes = new AttributeGenerator(
+    const attributes = new AttributeGenerator2(
         world.attributeInfo,
         world.catalog,
         positions
@@ -76,7 +77,8 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
         new QuantityX(3, 'three'),
     ];
 
-    const entityPIDs = [9000, 9100, 9200, 9500];
+    // const entityPIDs = [9000, 9100, 9200, 9500];
+    const entityPIDs = [457];
     const entityGenerators: EntityGenerator[] = [];
     for (const pid of entityPIDs) {
         const generator = new EntityGenerator(
@@ -111,20 +113,20 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
         return EITHER;
     };
 
-    const optionPIDs = [5000, 5001, 5002, 5003, 10000, 10001, 10002, 10003, 20000];
-    const optionGenerators: OptionGenerator[] = [];
-    for (const pid of optionPIDs) {
-        const generator = new OptionGenerator(
-            world.attributeInfo,
-            attributes,
-            world.catalog,
-            pid,
-            optionPositionPredicate,
-            optionLeftQuantites,
-            optionRightQuantites,
-        );
-        optionGenerators.push(generator);
-    }
+    // const optionPIDs = [5000, 5001, 5002, 5003, 10000, 10001, 10002, 10003, 20000];
+    // const optionGenerators: OptionGenerator[] = [];
+    // for (const pid of optionPIDs) {
+    //     const generator = new OptionGenerator(
+    //         world.attributeInfo,
+    //         attributes,
+    //         world.catalog,
+    //         pid,
+    //         optionPositionPredicate,
+    //         optionLeftQuantites,
+    //         optionRightQuantites,
+    //     );
+    //     optionGenerators.push(generator);
+    // }
 
     //
     // Products
@@ -171,8 +173,8 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
     //
     // Orders
     //
-    // const maxSegmentCount = 1;
-    const maxSegmentCount = 3;
+    const maxSegmentCount = 1;
+    // const maxSegmentCount = 3;
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
         productGenerator,

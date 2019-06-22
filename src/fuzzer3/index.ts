@@ -1,5 +1,6 @@
 export * from './alias_generator';
 export * from './attribute_generator';
+export * from './attribute_generator2';
 export * from './entity_generator';
 export * from './fuzzer';
 export * from './order_generator';
