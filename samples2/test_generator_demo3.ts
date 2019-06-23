@@ -9,7 +9,7 @@ import {
 // during refactoring. Change this import to '../src' once refactoring is done.
 import {
     AliasGenerator,
-    AttributeGenerator2,
+    AttributeGenerator,
     EITHER,
     EntityGenerator,
     fuzzerMain,
@@ -60,9 +60,8 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
     positions.set(52, LEFT);
     positions.set(53, LEFT);
 
-    const attributes = new AttributeGenerator2(
+    const attributes = new AttributeGenerator(
         world.attributeInfo,
-        world.catalog,
         positions
     );
 
@@ -113,29 +112,30 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
         return EITHER;
     };
 
+    const optionPIDs = [62, 93];
     // const optionPIDs = [5000, 5001, 5002, 5003, 10000, 10001, 10002, 10003, 20000];
-    // const optionGenerators: OptionGenerator[] = [];
-    // for (const pid of optionPIDs) {
-    //     const generator = new OptionGenerator(
-    //         world.attributeInfo,
-    //         attributes,
-    //         world.catalog,
-    //         pid,
-    //         optionPositionPredicate,
-    //         optionLeftQuantites,
-    //         optionRightQuantites,
-    //     );
-    //     optionGenerators.push(generator);
-    // }
+    const optionGenerators: OptionGenerator[] = [];
+    for (const pid of optionPIDs) {
+        const generator = new OptionGenerator(
+            world.attributeInfo,
+            attributes,
+            world.catalog,
+            pid,
+            optionPositionPredicate,
+            optionLeftQuantites,
+            optionRightQuantites,
+        );
+        optionGenerators.push(generator);
+    }
 
     //
     // Products
     //
     const productGenerator = new ProductGenerator(
         entityGenerators,
-        []
+        // []
         // TEMPORARILY disable option generation.
-        // optionGenerators
+        optionGenerators
     );
 
     //

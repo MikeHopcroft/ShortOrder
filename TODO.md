@@ -1,5 +1,17 @@
 # TODO List
 
+* NEW
+    * quantified: NEVER, DEFAULT, ALWAYS
+    * units?: text
+        * option pluralized when no units
+    * customize/provide left and right quantifiers
+    * customize/provide units
+    * issue of 'some' with 'units' - 'some' never gets units
+    * positional name editor (e.g. remove syrup for LEFT)
+    * select products from menu
+    * select options from menu
+    * legal options of products
+
 * REMOVE attributeInfo['tensorIdToTensor']
 * TestSuite
     * Rebasing support for TestSuite

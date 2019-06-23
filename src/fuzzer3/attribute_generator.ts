@@ -2,9 +2,8 @@ import {
     AID,
     AttributeInfo,
     DID,
+    Dimension,
     ICatalog,
-    Tensor,
-    TID
 } from 'prix-fixe';
 
 import {
@@ -27,123 +26,46 @@ import {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// AttributeCombinations
-//
-///////////////////////////////////////////////////////////////////////////////
-export class AttributeCombinations {
-    private readonly info: AttributeInfo;
-    private readonly catalog: ICatalog;
-    private readonly positions: Map<AID, Position>;
-
-    private readonly tensor: Tensor;
-
-    private readonly dimensionIdToAttributeId = new Map<DID, AID>();
-    private readonly attributes: AttributeX[] = [];
-
-    static getCombinations(
-        attributeInfo: AttributeInfo,
-        catalog: ICatalog,
-        positions: Map<AID, Position>,
-        tensor: Tensor
-    ): AttributeX[][] {
-        const generator = new AttributeCombinations(
-            attributeInfo,
-            catalog,
-            positions,
-            tensor
-        );
-
-        return [...generator.combinations()];
-    }
-
-    private constructor(
-        attributeInfo: AttributeInfo,
-        catalog: ICatalog,
-        positions: Map<AID, Position>,
-        tensor: Tensor
-    ) {
-        this.info = attributeInfo;
-        this.catalog = catalog;
-        this.positions = positions;
-        this.tensor = tensor;
-    }
-
-    private *combinations(): IterableIterator<AttributeX[]> {
-        // TODO: consider moving this if-statement into combinationRecursion().
-        if (this.tensor.dimensions.length > 0) {
-            yield* this.combinationsRecursion(0);
-        }
-    }
-
-    private *combinationsRecursion(d: number): IterableIterator<AttributeX[]> {
-        const dimension = this.tensor.dimensions[d];
-
-        for (const attribute of dimension.attributes) {
-            let position: Position = EITHER;
-            if (this.positions.has(attribute.aid)) {
-                position = this.positions.get(attribute.aid)!;
-            }
-
-            for (const alias of attribute.aliases) {
-                const pattern = patternFromExpression(alias);
-                for (const text of generateAliases(pattern)) {
-                    const ax = new AttributeX(attribute.aid, text, position);
-                    if (attribute.hidden !== true) {
-                        this.attributes.push(ax);
-                    }
-                    this.dimensionIdToAttributeId.set(dimension.did, attribute.aid);
-        
-                    if (d === this.tensor.dimensions.length - 1) {
-                        yield [...this.attributes];
-                    }
-                    else {
-                        yield* this.combinationsRecursion(d + 1);
-                    }
-        
-                    if (attribute.hidden !== true) {
-                        this.attributes.pop();
-                    }
-                }
-            }
-
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // AttributeGenerator
 //
 ///////////////////////////////////////////////////////////////////////////////
 export class AttributeGenerator {
-    private readonly combinations = new Map<TID, AttributeX[][]>();
+    private readonly attributes = new Map<AID, AttributeX[]>();
 
     constructor(
         attributeInfo: AttributeInfo,
-        catalog: ICatalog,
         positions: Map<AID, Position>,
     ) {
-        // TODO: remove this hack once we have a version of prix-fixe that
-        // can enumerate TIDs.
-        const hack = attributeInfo['tensorIdToTensor'] as Map<TID, Tensor>;
-        for (const [tid, tensor] of hack.entries()) {
-            const combinations = AttributeCombinations.getCombinations(
-                attributeInfo,
-                catalog,
-                positions,
-                tensor
-            );
-            this.combinations.set(tid, combinations);
+        const hack2 = attributeInfo['dimensionIdToDimension'] as Map<DID, Dimension>;
+        for (const dimension of hack2.values()) {
+            for (const attribute of dimension.attributes) {
+                const ax: AttributeX[] = [];
+                if (!attribute.hidden) {
+                    let position: Position = EITHER;
+                    if (positions.has(attribute.aid)) {
+                        position = positions.get(attribute.aid)!;
+                    }
+
+                    for (const alias of attribute.aliases) {
+                        const pattern = patternFromExpression(alias);
+                        for (const text of generateAliases(pattern)) {
+                            ax.push(new AttributeX(attribute.aid, text, position));
+                        }
+                    }
+                }
+                this.attributes.set(attribute.aid, ax);
+            }
         }
     }
 
-    randomCombination(tid: TID, random: Random): AttributeX[] {
-        const combinations = this.combinations.get(tid)!;
-        if (combinations.length > 0) {
-            return random.randomChoice(combinations);
-        } else {
-            return [];
+    get(aids: AID[], random: Random): AttributeX[] {
+        const ax: AttributeX[] = [];
+        for (const aid of aids) {
+            const choices = this.attributes.get(aid);
+            if (choices && choices.length > 0) {
+                ax.push(random.randomChoice(choices));
+            }
         }
+        return ax;
     }
 }
-

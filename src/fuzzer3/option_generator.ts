@@ -1,8 +1,8 @@
 import {
     AttributeInfo,
     ICatalog,
+    Key,
     PID,
-    TensorEntityBuilder,
     TID
 } from 'prix-fixe';
 
@@ -28,12 +28,12 @@ export type PositionPredicate = (alias:string) => Position;
 
 export class OptionGenerator {
     attributeInfo: AttributeInfo;
-    pid: PID;
     attributes: AttributeGenerator;
+    pid: PID;
+    keys: Key[];
     positionPredicate: PositionPredicate;
     leftQuantifiers: QuantityX[];
     rightQuantifiers: QuantityX[];
-    tid: TID;
     aliases: string[];
 
     constructor(
@@ -47,28 +47,25 @@ export class OptionGenerator {
     ) {
         this.attributeInfo = attributeInfo;
         this.pid = pid;
+
+        this.keys = [...catalog.getSpecificsForGeneric(pid)];
+
         this.attributes = attributeGenerator;
         this.positionPredicate = positionPredicate;
         this.leftQuantifiers = leftQuantifiers;
         this.rightQuantifiers = rightQuantifiers;
-
-        this.tid = attributeInfo.getTensorForEntity(pid).tid;
 
         const item = catalog.getGeneric(pid);
         this.aliases = [...aliasesFromOneItem(item)];
     }
 
     randomAttributedOption(random: Random): OptionX {
-        const attributes = this.attributes.randomCombination(this.tid, random);
+        const key = random.randomChoice(this.keys);
+        const aids = this.attributeInfo.getAttributes(key);
+        const attributes = this.attributes.get(aids, random);
+
         const alias = random.randomChoice(this.aliases);
         const position = this.positionPredicate(alias);
-
-        const builder = new TensorEntityBuilder(this.attributeInfo);
-        builder.setPID(this.pid);
-        for (const attribute of attributes) {
-            builder.addAttribute(attribute.aid);
-        }
-        const key = builder.getKey();
 
         return new AttributedOptionX(
             attributes,
@@ -79,6 +76,8 @@ export class OptionGenerator {
     }
 
     randomQuantifiedOption(random: Random): OptionX {
+        const key = random.randomChoice(this.keys);
+
         let position: Position = LEFT;
         if (random.randomBoolean()) {
             position = RIGHT;
@@ -88,10 +87,6 @@ export class OptionGenerator {
             position === LEFT ? this.leftQuantifiers: this.rightQuantifiers);
 
         const alias = random.randomChoice(this.aliases);
-
-        const builder = new TensorEntityBuilder(this.attributeInfo);
-        builder.setPID(this.pid);
-        const key = builder.getKey();
 
         return new QuantifiedOptionX(
             quantity,
