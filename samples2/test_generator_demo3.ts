@@ -105,7 +105,7 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
         new QuantityX(1, 'some'),
         new QuantityX(1, 'one pump of'),
         new QuantityX(2, 'two pumps of'),
-        new QuantityX(2, 'three pumps of'),
+        new QuantityX(3, 'three pumps of'),
     ];
 
     const optionPositionPredicate = (alias: string): Position => {

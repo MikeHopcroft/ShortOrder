@@ -31,6 +31,7 @@ export class OptionGenerator {
     attributes: AttributeGenerator;
     pid: PID;
     keys: Key[];
+    defaultKey: Key;
     positionPredicate: PositionPredicate;
     leftQuantifiers: QuantityX[];
     rightQuantifiers: QuantityX[];
@@ -49,6 +50,7 @@ export class OptionGenerator {
         this.pid = pid;
 
         this.keys = [...catalog.getSpecificsForGeneric(pid)];
+        this.defaultKey = catalog.getGeneric(pid).defaultKey;
 
         this.attributes = attributeGenerator;
         this.positionPredicate = positionPredicate;
@@ -76,7 +78,7 @@ export class OptionGenerator {
     }
 
     randomQuantifiedOption(random: Random): OptionX {
-        const key = random.randomChoice(this.keys);
+        const key = this.defaultKey;
 
         let position: Position = LEFT;
         if (random.randomBoolean()) {
