@@ -19,14 +19,15 @@ import { createTestCase } from './test_case';
 import { OrderX } from './fuzzer';
 
 export async function fuzzerMain(
-    generateOrders: (world:World, count:number) => IterableIterator<OrderX>,
-    factory: ProcessorFactory,
+    testCaseGeneratorFactory: TestCaseGeneratorFactory,
+    processorFactory: ProcessorFactory,
     // TODO: get dataPath from command-line
     dataPath: string
 ) {
     const args = minimist(process.argv);
 
     const outFile = args['o'] ? path.resolve(__dirname, args['o']) : undefined;
+    const generator = args['t'];
     const verify = args['v'];
     const showOnlyFailingCases =
         (args['f'] === true) ||
@@ -41,14 +42,17 @@ export async function fuzzerMain(
         (args['h'] === true);
 
     if (help) {
-        showUsage(factory);
+        showUsage(processorFactory, testCaseGeneratorFactory);
     }
     else {
-        runFuzzer(generateOrders, factory, dataPath, count, verify, showOnlyFailingCases, outFile);
+        runFuzzer(testCaseGeneratorFactory, processorFactory, dataPath, generator, count, verify, showOnlyFailingCases, outFile);
     }
 }
 
-function showUsage(factory: ProcessorFactory) {
+function showUsage(
+    processorFactory: ProcessorFactory,
+    testCaseGeneratorFactory: TestCaseGeneratorFactory
+) {
     const program = path.basename(process.argv[1]);
 
     console.log('Test case generator');
@@ -58,27 +62,39 @@ function showUsage(factory: ProcessorFactory) {
     console.log('-n count        Number of test cases to generate.');
     console.log('-o outfile      Write cases to YAML file.');
     console.log('                Without -o, cases will be printed to the console.');
+    console.log('-t [generator]  Use the named test case generator.');
+    console.log('                (defaults to ???).');
     console.log('-v [processor]  Run the generated cases with the specified processor.');
     console.log('                or the domain-specific-entity processor (dse).');
     console.log('-f|failed       When verifying, show only failing cases.');
     console.log('-h|help|?       Show this message.');
     console.log(' ');
 
+    console.log('Available test case generators:');
+    for (const generator of testCaseGeneratorFactory.generators.values()) {
+        console.log(`  "-v=${generator.name}": ${generator.description}`);
+    }
+
+    console.log(' ');
     console.log('Available processors:');
-    for (const processor of factory.processors.values()) {
+    for (const processor of processorFactory.processors.values()) {
         console.log(`  "-v=${processor.name}": ${processor.description}`);
     }
 }
 
 export async function runFuzzer(
-    generateOrders: (world:World, count:number) => IterableIterator<OrderX>,
-    factory: ProcessorFactory,
+    testCaseGeneratorFactory: TestCaseGeneratorFactory,
+    processorFactory: ProcessorFactory,
     dataPath: string,
+    generatorName: string | undefined,
     count: number,
     verify: string | undefined,
     showOnlyFailingCases: boolean,
     outFile: string | undefined
 ) {
+    const name = (generatorName === undefined) ? testCaseGeneratorFactory.getDefaultName() : generatorName;
+
+    console.log(`Using generator ${name}.`);
     console.log(`Generating ${count} test case${count === 1 ? "":"s"}.`);
     if (verify) {
         console.log(`Performing test verification with "${verify}".`);
@@ -89,7 +105,8 @@ export async function runFuzzer(
     console.log('');
 
     const world = createWorld(dataPath);
-    const orders = generateOrders(world, count);
+
+    const orders: IterableIterator<OrderX> = testCaseGeneratorFactory.get(name, world, count);
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -98,7 +115,7 @@ export async function runFuzzer(
     ///////////////////////////////////////////////////////////////////////////
     let results: AggregatedResults;
     if (verify !== undefined) {
-        const processor = factory.get(verify, world, dataPath);
+        const processor = processorFactory.get(verify, world, dataPath);
 
         results = await runTests(orders, world.catalog, processor);
         results.print(!showOnlyFailingCases);
@@ -138,6 +155,53 @@ export async function runFuzzer(
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// TestCaseGeneratorFactory
+//
+///////////////////////////////////////////////////////////////////////////////
+export type TestCaseGenerator = (world: World, count: number) => IterableIterator<OrderX>;
+
+export interface TestCaseGeneratorDescription
+{
+    name: string;
+    description: string;
+    factory: TestCaseGenerator;
+}
+
+export class TestCaseGeneratorFactory {
+    generators = new Map<string, TestCaseGeneratorDescription>();
+
+    constructor(generators: TestCaseGeneratorDescription[]) {
+        if (generators.length < 1) {
+            const message = "TestCaseGeneratorFactory: expect at least one generator.";
+            throw TypeError(message);
+        }
+
+        for (const generator of generators) {
+            this.generators.set(generator.name, generator);
+        }
+    }
+
+    get(name: string, world: World, count: number): IterableIterator<OrderX> {
+        if (this.generators.has(name)) {
+            return this.generators.get(name)!.factory(world, count);
+        } else {
+            const message = `Unknown test case generator "${name}".`;
+            throw TypeError(message);
+        }
+    }
+
+    getDefaultName(): string {
+        return [...this.generators.values()][0].name;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// ProcessorFactory
+//
+///////////////////////////////////////////////////////////////////////////////
 export interface ProcessorDescription {
     name: string;
     description: string;

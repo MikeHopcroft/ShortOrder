@@ -24,19 +24,29 @@ import {
     QuantityX,
     RIGHT,
     Random,
+    TestCaseGeneratorFactory,
 } from '../src/fuzzer3';
 
 async function go()
 {
+    const testCaseGeneratorFactory = new TestCaseGeneratorFactory([
+        {
+            name: 'sprint4',
+            description: 'single product with attributes',
+            factory: generateOrders,
+        }
+    ]);
+
     // TODO: add your processors here to enable the "-v" test verification option.
-    const factory = new ProcessorFactory([]);
+    const processorFactory = new ProcessorFactory([]);
 
     // TODO: move this into fuzzerMain and get dataPath from command-line.
     // const dataPath = path.join(__dirname, '../../samples2/data/restaurant-en/');
+    // const dataPath = path.resolve(__dirname, 'd:\\git\\menudata');
     const dataPath = path.resolve(__dirname, '/Users/mhop/git/menudata');
 
     // Run the fuzzer application.
-    fuzzerMain(generateOrders, factory, dataPath);
+    fuzzerMain(testCaseGeneratorFactory, processorFactory, dataPath);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
