@@ -11,6 +11,7 @@
     * select products from menu
     * select options from menu
     * legal options of products
+    * unifiy EntityGenerator and OptionGenerator
 
 * REMOVE attributeInfo['tensorIdToTensor']
 * TestSuite

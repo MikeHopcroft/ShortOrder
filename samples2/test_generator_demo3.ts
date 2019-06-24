@@ -2,6 +2,7 @@ import * as path from 'path';
 
 import {
     AID,
+    PID,
     World,
 } from 'prix-fixe';
 
@@ -77,7 +78,24 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
     ];
 
     // const entityPIDs = [9000, 9100, 9200, 9500];
-    const entityPIDs = [457];
+    // const entityPIDs = [457];
+    // for (const entity of world.catalog.genericEntities)
+    const entityPIDs: PID[] = [];
+    // for (const entity of world.catalog.genericEntities()) {
+    //     entityPIDs.push(entity.pid);
+    // }
+    for (const entity of world.catalog.genericEntities()) {
+        // Skip over items that don't have aliases.
+        if (entity.aliases.length === 0 || entity.aliases[0].length === 0) {
+            continue;
+        }
+
+        // Only include items for Tensor 0.
+        if (entity.tensor === 0) {
+            entityPIDs.push(entity.pid);
+        }
+    }
+
     const entityGenerators: EntityGenerator[] = [];
     for (const pid of entityPIDs) {
         const generator = new EntityGenerator(
@@ -133,9 +151,9 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
     //
     const productGenerator = new ProductGenerator(
         entityGenerators,
-        // []
+        []
         // TEMPORARILY disable option generation.
-        optionGenerators
+        // optionGenerators
     );
 
     //
