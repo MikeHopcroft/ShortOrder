@@ -18,6 +18,7 @@ import {
 import { createTestCase } from './test_case';
 import { OrderX } from './fuzzer';
 
+// TODO: consider renaming file fuzzer_main.ts.
 export async function fuzzerMain(
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
     processorFactory: ProcessorFactory,
@@ -234,43 +235,6 @@ export class ProcessorFactory {
     }
 }
 
-function* generateTestCases(
-    orders: IterableIterator<OrderX>,
-    catalog: ICatalog
-): IterableIterator<TestCase> {
-    for (const order of orders) {
-        yield createTestCase(catalog, order);
-    }
-}
-
-export function createWorld(dataPath: string): World {
-    const productsFile = path.join(dataPath, 'products.yaml');
-    const optionsFile = path.join(dataPath, 'options.yaml');
-    const attributesFile = path.join(dataPath, 'attributes.yaml');
-    const rulesFile = path.join(dataPath, 'rules.yaml');
-
-    const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
-
-    return world;
-}
-
-export function createShortOrderProcessor(world: World, dataPath: string): Processor {
-    const intentsFile = path.join(dataPath, 'intents.yaml');
-    const quantifiersFile = path.join(dataPath, 'quantifiers.yaml');
-    const unitsFile = path.join(dataPath, 'units.yaml');
-    const stopwordsFile = path.join(dataPath, 'stopwords.yaml');
-
-    const processor = createProcessor(
-        world,
-        intentsFile,
-        quantifiersFile,
-        unitsFile,
-        stopwordsFile,
-    );
-
-    return processor;
-}
-
 export async function runTests(
     orders: IterableIterator<OrderX>,
     catalog: ICatalog,
@@ -300,4 +264,40 @@ export function makeTests(
     }
 
     return results;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Utility functions
+//
+// TODO: should these move to the utilities directory?
+//
+///////////////////////////////////////////////////////////////////////////////
+export function createWorld(dataPath: string): World {
+    const productsFile = path.join(dataPath, 'products.yaml');
+    const optionsFile = path.join(dataPath, 'options.yaml');
+    const attributesFile = path.join(dataPath, 'attributes.yaml');
+    const rulesFile = path.join(dataPath, 'rules.yaml');
+
+    const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
+
+    return world;
+}
+
+export function createShortOrderProcessor(world: World, dataPath: string): Processor {
+    const intentsFile = path.join(dataPath, 'intents.yaml');
+    const quantifiersFile = path.join(dataPath, 'quantifiers.yaml');
+    const unitsFile = path.join(dataPath, 'units.yaml');
+    const stopwordsFile = path.join(dataPath, 'stopwords.yaml');
+
+    const processor = createProcessor(
+        world,
+        intentsFile,
+        quantifiersFile,
+        unitsFile,
+        stopwordsFile,
+    );
+
+    return processor;
 }
