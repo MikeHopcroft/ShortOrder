@@ -3,6 +3,7 @@ import * as path from 'path';
 import {
     AID,
     PID,
+    TestCase,
     World,
 } from 'prix-fixe';
 
@@ -11,6 +12,7 @@ import {
 import {
     AliasGenerator,
     AttributeGenerator,
+    createTestCase,
     EITHER,
     EntityGenerator,
     fuzzerMain,
@@ -42,8 +44,8 @@ async function go()
 
     // TODO: move this into fuzzerMain and get dataPath from command-line.
     // const dataPath = path.join(__dirname, '../../samples2/data/restaurant-en/');
-    // const dataPath = path.resolve(__dirname, 'd:\\git\\menudata');
-    const dataPath = path.resolve(__dirname, '/Users/mhop/git/menudata');
+    const dataPath = path.resolve(__dirname, 'd:\\git\\menudata');
+    // const dataPath = path.resolve(__dirname, '/Users/mhop/git/menudata');
 
     // Run the fuzzer application.
     fuzzerMain(testCaseGeneratorFactory, processorFactory, dataPath);
@@ -54,7 +56,7 @@ async function go()
 // Configure generators
 //
 ///////////////////////////////////////////////////////////////////////////////
-function* generateOrders(world: World, count: number): IterableIterator<OrderX> {
+function* generateOrders(world: World, count: number): IterableIterator<TestCase> {
     //
     // Attributes
     //
@@ -213,7 +215,10 @@ function* generateOrders(world: World, count: number): IterableIterator<OrderX> 
     const random = new Random("1234");
 
     for (let i = 0; i < count; ++i) {
-        yield orderGenerator.randomOrder(random);
+        yield createTestCase(
+            world.catalog,
+            [orderGenerator.randomOrder(random)]
+        );
     }
 }
 

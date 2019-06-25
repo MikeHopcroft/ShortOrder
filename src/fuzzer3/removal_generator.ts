@@ -1,12 +1,13 @@
 import * as pluralize from 'pluralize';
 
-import { ICatalog, ItemInstance } from 'prix-fixe';
+import { ItemInstance } from 'prix-fixe';
 
 import { AliasGenerator } from './alias_generator';
 import { OrderX, WordX, SegmentX } from './fuzzer';
 import { OrderGenerator } from './order_generator';
 import { ProductGenerator } from './product_generator';
 import { Random } from './utilities';
+
 
 export class RemoveX {
     prologue: WordX;

@@ -107,7 +107,7 @@ export async function runFuzzer(
 
     const world = createWorld(dataPath);
 
-    const orders: IterableIterator<OrderX> = testCaseGeneratorFactory.get(name, world, count);
+    const tests: IterableIterator<TestCase> = testCaseGeneratorFactory.get(name, world, count);
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -118,10 +118,10 @@ export async function runFuzzer(
     if (verify !== undefined) {
         const processor = processorFactory.get(verify, world, dataPath);
 
-        results = await runTests(orders, world.catalog, processor);
+        results = await runTests(tests, world.catalog, processor);
         results.print(!showOnlyFailingCases);
     } else {
-        results = makeTests(orders, world.catalog);
+        results = makeTests(tests, world.catalog);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -155,13 +155,43 @@ export async function runFuzzer(
     }
 }
 
+export async function runTests(
+    tests: IterableIterator<TestCase>,
+    catalog: ICatalog,
+    processor: Processor
+): Promise<AggregatedResults> {
+    const results = new AggregatedResults();
+
+    for (const test of tests) {
+        const result = await test.run(processor, catalog);
+        results.recordResult(result);
+    }
+
+    return results;
+}
+
+export function makeTests(
+    tests: IterableIterator<TestCase>,
+    catalog: ICatalog
+): AggregatedResults {
+    const results = new AggregatedResults();
+
+    for (const test of tests) {
+        const result = new Result(test, test.expected, true, 0);
+        results.recordResult(result);
+    }
+
+    return results;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // TestCaseGeneratorFactory
 //
 ///////////////////////////////////////////////////////////////////////////////
-export type TestCaseGenerator = (world: World, count: number) => IterableIterator<OrderX>;
+export type TestCaseGenerator = 
+    (world: World, count: number) => IterableIterator<TestCase>;
 
 export interface TestCaseGeneratorDescription
 {
@@ -184,7 +214,7 @@ export class TestCaseGeneratorFactory {
         }
     }
 
-    get(name: string, world: World, count: number): IterableIterator<OrderX> {
+    get(name: string, world: World, count: number): IterableIterator<TestCase> {
         if (this.generators.has(name)) {
             return this.generators.get(name)!.factory(world, count);
         } else {
@@ -234,38 +264,6 @@ export class ProcessorFactory {
         }
     }
 }
-
-export async function runTests(
-    orders: IterableIterator<OrderX>,
-    catalog: ICatalog,
-    processor: Processor
-): Promise<AggregatedResults> {
-    const results = new AggregatedResults();
-
-    for (const order of orders) {
-        const testCase = createTestCase(catalog, order);
-        const result = await testCase.run(processor, catalog);
-        results.recordResult(result);
-    }
-
-    return results;
-}
-
-export function makeTests(
-    orders: IterableIterator<OrderX>,
-    catalog: ICatalog
-): AggregatedResults {
-    const results = new AggregatedResults();
-
-    for (const order of orders) {
-        const testCase = createTestCase(catalog, order);
-        const result = new Result(testCase, testCase.expected, true, 0);
-        results.recordResult(result);
-    }
-
-    return results;
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //

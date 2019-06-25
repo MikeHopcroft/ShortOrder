@@ -165,7 +165,7 @@
             "name": "AAA Test Generator",
             "program": "${workspaceFolder}/build/samples2/test_generator_demo3.js",
             "outputCapture": "std",
-            "args": ["-v=so", "-n 100"]
+            "args": ["-v=so", "-n 10"]
             // "args": ["-n=2", "-o=foo.yaml"]
         },
         {
