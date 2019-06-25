@@ -74,8 +74,8 @@ function showUsage(
     for (const generator of testCaseGeneratorFactory.generators.values()) {
         console.log(`  "-v=${generator.name}": ${generator.description}`);
     }
-
     console.log(' ');
+
     console.log('Available processors:');
     for (const processor of processorFactory.processors.values()) {
         console.log(`  "-v=${processor.name}": ${processor.description}`);
