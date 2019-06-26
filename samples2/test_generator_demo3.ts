@@ -3,6 +3,8 @@ import * as path from 'path';
 import {
     AID,
     PID,
+    MENUITEM,
+    OPTION,
     TestCase,
     World,
 } from 'prix-fixe';
@@ -102,8 +104,15 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
             continue;
         }
 
+        if (entity.kind !== MENUITEM) {
+            continue;
+        }
+
         // Only include items for Tensor 0.
-        if (entity.tensor === 0) {
+        // if (entity.tensor === 0) {
+        //     entityPIDs.push(entity.pid);
+        // }
+        if (entity.name.indexOf('latte') !== -1) {
             entityPIDs.push(entity.pid);
         }
     }
@@ -142,8 +151,22 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         return EITHER;
     };
 
-    const optionPIDs = [62, 93];
-    // const optionPIDs = [5000, 5001, 5002, 5003, 10000, 10001, 10002, 10003, 20000];
+    const optionPIDs: PID[] = [];
+    for (const entity of world.catalog.genericEntities()) {
+        // Skip over items that don't have aliases.
+        if (entity.aliases.length === 0 || entity.aliases[0].length === 0) {
+            continue;
+        }
+
+        if (entity.kind !== OPTION) {
+            continue;
+        }
+
+        optionPIDs.push(entity.pid);
+    }
+
+    // const optionPIDs = [62, 93];
+    // // const optionPIDs = [5000, 5001, 5002, 5003, 10000, 10001, 10002, 10003, 20000];
     const optionGenerators: OptionGenerator[] = [];
     for (const pid of optionPIDs) {
         const generator = new OptionGenerator(
@@ -163,9 +186,10 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
     //
     const productGenerator = new ProductGenerator(
         entityGenerators,
-        []
+        // [],
         // TEMPORARILY disable option generation.
-        // optionGenerators
+        optionGenerators,
+        world.ruleChecker
     );
 
     //

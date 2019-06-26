@@ -67,6 +67,24 @@ export class Random {
         return items[this.randomNonNegative(items.length)];
     }
 
+    randomChooseN<T>(items: T[], n: number): T[] {
+        // if (items.length < n) {
+        //     const message = "Random.randomChooseN: item array does not have enough elements.";
+        //     throw TypeError(message);
+        // }
+        const pool = [...items];
+        const choices: T[] = [];
+        const limit = Math.min(n, items.length);
+        for (let i = 0; i < limit; ++i) {
+            const index = this.randomNonNegative(pool.length);
+            choices.push(items[index]);
+            pool[index] = pool[items.length - 1];
+            pool.pop();
+        }
+        return choices;
+    }
+
+
     // randomInstanceSequence<T>(generator: Generator<T>): T[] {
     //     return generator.version(this.randomNonNegative(generator.count()));
     // }

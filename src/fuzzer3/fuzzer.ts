@@ -105,6 +105,8 @@ export class AttributedOptionX implements OptionX {
         // but API allows arbitrary number.
         // Should either change the API to allow zero or one (e.g AttributeX?)
         // or change the functionality, below, to support multiple attributes.
+        // TODO: HACK: BUGBUG. Remove special handling for 'modifier' and 'quantity'
+        // if (attributes.length > 0 && attributes[0].text !== 'modifier' && attributes[0].text !== 'quantity') {
         if (attributes.length > 0) {
             this.text = `${attributes[0].text} ${text}`;
         } else {
@@ -321,6 +323,13 @@ export class OrderX {
         const words: string[] = [];
         for (const part of this.parts) {
             for (const word of part.buildText()) {
+                // // TODO: HACK: BUGBUG: remove this hack!!!
+                // if (word.indexOf('modifier') !== -1 || word.startsWith('quantity')) {
+                //     // continue;
+                //     words.push(word.toUpperCase());
+                //     continue;
+                // }
+
                 if (word.length > 0) {
                     words.push(word);
                 }
