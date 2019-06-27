@@ -77,7 +77,7 @@ export class Random {
         const limit = Math.min(n, items.length);
         for (let i = 0; i < limit; ++i) {
             const index = this.randomNonNegative(pool.length);
-            choices.push(items[index]);
+            choices.push(pool[index]);
             pool[index] = pool[items.length - 1];
             pool.pop();
         }
