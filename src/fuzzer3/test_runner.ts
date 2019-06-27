@@ -15,9 +15,6 @@ import {
     World
 } from 'prix-fixe';
 
-import { createTestCase } from './test_case';
-import { OrderX } from './fuzzer';
-
 // TODO: consider renaming file fuzzer_main.ts.
 export async function fuzzerMain(
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
@@ -40,7 +37,7 @@ export async function fuzzerMain(
     const help = 
         (args['h'] === true) || 
         (args['help'] === true) ||
-        (args['h'] === true);
+        (args['?'] === true);
 
     if (help) {
         showUsage(processorFactory, testCaseGeneratorFactory);

@@ -1,7 +1,11 @@
+import * as dotenv from 'dotenv';
+import * as minimist from 'minimist';
 import * as path from 'path';
-import { setup, TestCase, TestLineItem, TestOrder } from 'prix-fixe';
+import { TestCase, TestLineItem, TestOrder } from 'prix-fixe';
 
-import { createProcessor } from '../src';
+import { createShortOrderProcessor, createWorld } from '../src';
+
+dotenv.config();
 
 export class OrderOps {
     // TODO: does this convenience method really belong here?
@@ -52,25 +56,48 @@ function rightJustify(text: string, width: number) {
     }
 }
 
+function showUsage() {
+    const program = path.basename(process.argv[1]);
+
+    console.log('Process one query');
+    console.log('');
+    console.log(`Usage: node ${program} [-d datapath] [-h|help|?]`);
+    console.log('');
+    console.log('-d datapath     Path to prix-fixe data files.');
+    console.log('                    attributes.yaml');
+    console.log('                    intents.yaml');
+    console.log('                    options.yaml');
+    console.log('                    products.yaml');
+    console.log('                    quantifiers.yaml');
+    console.log('                    rules.yaml');
+    console.log('                    stopwords.yaml');
+    console.log('                    units.yaml');
+    console.log('                The -d flag overrides the value specified');
+    console.log('                in the PRIX_FIXE_DATA environment variable.');
+    console.log('-h|help|?       Show this message.');
+    console.log(' ');
+}
+
 async function go(utterance: string) {
-    const productsFile = path.join(__dirname, '../../samples2/data/restaurant-en/products.yaml');
-    const optionsFile = path.join(__dirname, '../../samples2/data/restaurant-en/options.yaml');
-    const attributesFile = path.join(__dirname, '../../samples2/data/restaurant-en/attributes.yaml');
-    const rulesFile = path.join(__dirname, '../../samples2/data/restaurant-en/rules.yaml');
-    const intentsFile = path.join(__dirname, '../../samples2/data/restaurant-en/intents.yaml');
-    const quantifiersFile = path.join(__dirname, '../../samples2/data/restaurant-en/quantifiers.yaml');
-    const unitsFile = path.join(__dirname, '../../samples2/data/restaurant-en/units.yaml');
-    const stopwordsFile = path.join(__dirname, '../../samples2/data/restaurant-en/stopwords.yaml');
+    const args = minimist(process.argv.slice());
 
-    const world = setup(productsFile, optionsFile, attributesFile, rulesFile);
+    let dataPath = process.env.PRIX_FIXE_DATA;
+    if (args.d) {
+        dataPath = args.d;
+    }
 
-    const processor = createProcessor(
-        world,
-        intentsFile,
-        quantifiersFile,
-        unitsFile,
-        stopwordsFile,
-    );
+    if (args.h || args.help || args['?']) {
+        showUsage();
+        return;
+    }
+
+    if (dataPath === undefined) {
+        const message = 'PRIX_FIXE_DATA environment variable must be set to data path';
+        throw TypeError(dataPath);
+    }
+
+    const world = createWorld(dataPath);
+    const processor = createShortOrderProcessor(world, dataPath);
 
     const testCase = new TestCase(
         0,
@@ -204,7 +231,7 @@ async function go(utterance: string) {
 // ENABLED in 167c91170f6bdf5fdf03b7dbe795ee6ea1d7e0a8
 // go("three two pump hazelnut latte with five pumps caramel and ristretto");
 
-go("could I please get three dopio split shot skinny caffe espressos three medium cappuccinos with a pump of caramel and a large three pump whole milk mocha I'm fine");
+// go("could I please get three dopio split shot skinny caffe espressos three medium cappuccinos with a pump of caramel and a large three pump whole milk mocha I'm fine");
 // "could I please get 
 // three dopio split shot skinny caffe espressos
 // three medium cappuccinos with a pump of caramel
@@ -219,3 +246,11 @@ go("could I please get three dopio split shot skinny caffe espressos three mediu
 // "1/1/caramel syrup/10000" !== "0/1/large mocha/9200:0:2:0" - <=== ERROR
 // "0/1/large mocha/9200:0:2:0" !== "1/1/caramel syrup/10000" - <=== ERROR
 // "1/3/whole milk/5000" === "1/3/whole milk/5000" - OK
+
+// go("may I please have a regular cookie crumble topping hot tall one third decaf berry sangria syrup cinnamon dolce latte bye");
+
+// Fuzzer violated mutual exclusion on caffeine
+//go("I will take an iced two thirds decaf one third decaf upside down latte macchiato grande that'll do it");
+
+// go("could I do three iced sixteen ounce no pumpkin spice topping earl grey tea lattes with extra vanilla syrup sugar free and a pump of vanilla powder thank you");
+go("can I please get two iced regularx two pump hazelnut syrup sugar free three pump sugar nitro lattes with regular hazelnut drizzle thank you");

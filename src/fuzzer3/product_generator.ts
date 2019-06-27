@@ -47,7 +47,7 @@ export class ProductGenerator {
         //     options.push(generator.randomQuantifiedOption(random));
         // }
         const options: OptionX[] = [];
-        const generators = this.randomOptions(entity.key, 3,random);
+        const generators = this.randomOptions(entity.key, 3, random);
         for (const generator of generators) {
             if (random.randomBoolean()) {
                 options.push(generator.randomAttributedOption(random));
@@ -83,6 +83,8 @@ export class ProductGenerator {
                 generators.push(g);
             }
         }
+
+        // TODO: need to eliminate mutual exclusion violations.
 
         return generators;
     }
