@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as minimist from 'minimist';
 import * as path from 'path';
@@ -15,12 +16,12 @@ import {
     World
 } from 'prix-fixe';
 
+dotenv.config();
+
 // TODO: consider renaming file fuzzer_main.ts.
 export async function fuzzerMain(
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
-    processorFactory: ProcessorFactory,
-    // TODO: get dataPath from command-line
-    dataPath: string
+    processorFactory: ProcessorFactory
 ) {
     const args = minimist(process.argv);
 
@@ -39,11 +40,29 @@ export async function fuzzerMain(
         (args['help'] === true) ||
         (args['?'] === true);
 
+    let dataPath = process.env.PRIX_FIXE_DATA;
+    if (args.d) {
+        dataPath = args.d;
+    }
+    if (dataPath === undefined) {
+        console.log('Use -d flag or PRIX_FIXE_DATA environment variable to specify data path');
+        return;
+    }
+   
+
     if (help) {
         showUsage(processorFactory, testCaseGeneratorFactory);
     }
     else {
-        runFuzzer(testCaseGeneratorFactory, processorFactory, dataPath, generator, count, verify, showOnlyFailingCases, outFile);
+        runFuzzer(
+            testCaseGeneratorFactory,
+            processorFactory,
+            dataPath,
+            generator,
+            count,
+            verify,
+            showOnlyFailingCases,
+            outFile);
     }
 }
 
@@ -55,8 +74,15 @@ function showUsage(
 
     console.log('Test case generator');
     console.log('');
-    console.log(`Usage: node ${program} [-n count] [-o outfile] [-v] [-h|help|?]`);
+    console.log(`Usage: node ${program} [-d datapath] [-n count] [-o outfile] [-v] [-h|help|?]`);
     console.log('');
+    console.log('-d datapath     Path to prix-fixe data files.');
+    console.log('                    attributes.yaml');
+    console.log('                    options.yaml');
+    console.log('                    products.yaml');
+    console.log('                    rules.yaml');
+    console.log('                The -d flag overrides the value specified');
+    console.log('                in the PRIX_FIXE_DATA environment variable.');
     console.log('-n count        Number of test cases to generate.');
     console.log('-o outfile      Write cases to YAML file.');
     console.log('                Without -o, cases will be printed to the console.');

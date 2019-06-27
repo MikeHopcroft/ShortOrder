@@ -46,15 +46,8 @@ async function go()
     // TODO: add your processors here to enable the "-v" test verification option.
     const processorFactory = new ProcessorFactory([]);
 
-    // TODO: move this into fuzzerMain and get dataPath from command-line.
-    const dataPath = process.env.PRIX_FIXE_DATA;
-    if (dataPath === undefined) {
-        const message = 'PRIX_FIXE_DATA environment variable must be set to data path';
-        throw TypeError(dataPath);
-    }
-
     // Run the fuzzer application.
-    fuzzerMain(testCaseGeneratorFactory, processorFactory, dataPath);
+    fuzzerMain(testCaseGeneratorFactory, processorFactory);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ export function createProcessor(
 
     const processor = async (text: string, state: State): Promise<State> => {
         const tokens = lexer.processOneQuery(text);
-        // console.log(tokens.map(tokenToString).join(''));
+        console.log(tokens.map(tokenToString).join(''));
 
         // TODO: HACK: BUGBUG:
         // TODO: Remove this code once the parser handles intents.

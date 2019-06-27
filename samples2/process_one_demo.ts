@@ -92,8 +92,8 @@ async function go(utterance: string) {
     }
 
     if (dataPath === undefined) {
-        const message = 'PRIX_FIXE_DATA environment variable must be set to data path';
-        throw TypeError(dataPath);
+        console.log('Use -d flag or PRIX_FIXE_DATA environment variable to specify data path');
+        return;
     }
 
     const world = createWorld(dataPath);
@@ -247,10 +247,3 @@ async function go(utterance: string) {
 // "0/1/large mocha/9200:0:2:0" !== "1/1/caramel syrup/10000" - <=== ERROR
 // "1/3/whole milk/5000" === "1/3/whole milk/5000" - OK
 
-// go("may I please have a regular cookie crumble topping hot tall one third decaf berry sangria syrup cinnamon dolce latte bye");
-
-// Fuzzer violated mutual exclusion on caffeine
-//go("I will take an iced two thirds decaf one third decaf upside down latte macchiato grande that'll do it");
-
-// go("could I do three iced sixteen ounce no pumpkin spice topping earl grey tea lattes with extra vanilla syrup sugar free and a pump of vanilla powder thank you");
-go("can I please get two iced regularx two pump hazelnut syrup sugar free three pump sugar nitro lattes with regular hazelnut drizzle thank you");
