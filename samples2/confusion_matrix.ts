@@ -99,10 +99,10 @@ async function go() {
         world,
         debugMode,
         // DESIGN NOTE: the following four parameters are optional.
-        intentsFile,
-        quantifiersFile,
-        unitsFile,
-        stopwordsFile,
+        // intentsFile,
+        // quantifiersFile,
+        // unitsFile,
+        // stopwordsFile,
     );
 
     const confusionMatrix = new ConfusionMatrix();
