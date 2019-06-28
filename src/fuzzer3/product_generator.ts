@@ -40,26 +40,17 @@ export class ProductGenerator {
         const entityGenerator = random.randomChoice(this.entityGenerators);
         const entity = entityGenerator.randomEntity(random);
 
-        // const options: OptionX[] = [];
-        // if (this.optionGenerators.length > 0) {
-        //     const generator = random.randomChoice(this.optionGenerators);
-        //     // options.push(generator.randomAttributedOption(random));
-        //     options.push(generator.randomQuantifiedOption(random));
-        // }
         const options: OptionX[] = [];
+        // TODO: Don't hard-code number of options here.
         const generators = this.randomOptions(entity.key, 3, random);
         for (const generator of generators) {
+            // TODO: only quantify ADD options
             if (random.randomBoolean()) {
                 options.push(generator.randomAttributedOption(random));
             } else {
                 options.push(generator.randomQuantifiedOption(random));
             }
         }
-        // const generator = this.randomOption(entity.key, random);
-        // if (generator) {
-        //     options.push(generator.randomAttributedOption(random));
-        //     options.push(generator.randomQuantifiedOption(random));
-        // }
 
         const product = new ProductX(
             entity.quantity,
@@ -74,7 +65,7 @@ export class ProductGenerator {
 
     randomOptions(key: Key, count: number, random: Random): OptionGenerator[] {
         const pool = [...this.rules.getValidChildren(key)];
-        const pids = random.randomChooseN(pool, count);
+        const pids = this.randomChooseNCompatibleChildren(key, count, random);
 
         const generators: OptionGenerator[] = [];
         for (const pid of pids) {
@@ -84,11 +75,33 @@ export class ProductGenerator {
             }
         }
 
-        // TODO: need to eliminate mutual exclusion violations.
-
         return generators;
     }
 
+    private randomChooseNCompatibleChildren(parent: Key, count: number, random: Random): PID[] {
+        const pool = [...this.rules.getValidChildren(parent)];
+        const pids: PID[] = [];
+
+        const f = this.rules.getIncrementalMutualExclusionPredicate(parent);
+
+        while (pool.length > 0 && pids.length < count) {
+            // Remove one random PID from the pool.
+            const index = random.randomNonNegative(pool.length);
+            const pid = pool[index];
+            pool[index] = pool[pool.length - 1];
+            pool.pop();
+
+            // TODO: HACK: BUGBUG: remove this placeholder key once prix-fixe API is updated
+            // to use PIDs instead of Keys.
+            const child = String(pid);
+
+            if (f(child)) {
+                pids.push(pid);
+            }
+        }
+
+        return pids;
+    }
 
     randomOption(key: Key, random: Random): OptionGenerator | undefined {
         const pids = [...this.rules.getValidChildren(key)];
