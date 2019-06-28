@@ -19,11 +19,11 @@ export function createProcessor(
 ) {
     const lexer = new LexicalAnalyzer(
         world,
+        debugMode,
         intentsFile,
         quantifiersFile,
         unitsFile,
         stopwordsFile,
-        false
     );
 
     const parser = new Parser2(world.cartOps, world.attributeInfo, world.ruleChecker);

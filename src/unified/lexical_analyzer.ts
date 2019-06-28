@@ -96,11 +96,11 @@ export class LexicalAnalyzer {
 
     constructor(
         world: World,
-        intentsFile: string,
-        quantifiersFile: string,
-        unitsFile: string,
-        stopwordsFile: string,
-        debugMode = false
+        debugMode = false,
+        intentsFile: string | undefined = undefined,
+        quantifiersFile: string | undefined = undefined,
+        unitsFile: string | undefined = undefined,
+        stopwordsFile: string | undefined = undefined,
     ) {
         this.lexicon = new Lexicon();
         this.tokenizer = new Tokenizer(
@@ -119,28 +119,36 @@ export class LexicalAnalyzer {
         this.lexicon.addDomain(generateOptions(world));
 
         // Quantifiers
-        const quantifiers = aliasesFromYamlString(
-            fs.readFileSync(quantifiersFile, 'utf8'),
-            quantityTokenFactory);
-        this.lexicon.addDomain(quantifiers);
+        if (quantifiersFile) {
+            const quantifiers = aliasesFromYamlString(
+                fs.readFileSync(quantifiersFile, 'utf8'),
+                quantityTokenFactory);
+            this.lexicon.addDomain(quantifiers);
+        }
 
         // Units
-        const units = aliasesFromYamlString(
-            fs.readFileSync(unitsFile, 'utf8'),
-            unitTokenFactory);
-        this.lexicon.addDomain(units);
+        if (unitsFile) {
+            const units = aliasesFromYamlString(
+                fs.readFileSync(unitsFile, 'utf8'),
+                unitTokenFactory);
+            this.lexicon.addDomain(units);
+        }
 
         // Intents
-        const intents = aliasesFromYamlString(
-            fs.readFileSync(intentsFile, 'utf8'),
-            intentTokenFactory);
-        this.lexicon.addDomain(intents);
+        if (intentsFile) {
+            const intents = aliasesFromYamlString(
+                fs.readFileSync(intentsFile, 'utf8'),
+                intentTokenFactory);
+            this.lexicon.addDomain(intents);
+        }
         
         // Stopwords
-        const stopwords = stopwordsFromYamlString(
-            fs.readFileSync(stopwordsFile, 'utf8'));
-        const stopwordTokens = tokensFromStopwords(stopwords);
-        this.lexicon.addDomain(stopwordTokens, false);
+        if (stopwordsFile) {
+            const stopwords = stopwordsFromYamlString(
+                fs.readFileSync(stopwordsFile, 'utf8'));
+            const stopwordTokens = tokensFromStopwords(stopwords);
+            this.lexicon.addDomain(stopwordTokens, false);
+        }
 
         this.lexicon.ingest(this.tokenizer);
     }

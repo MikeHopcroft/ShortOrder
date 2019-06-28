@@ -1,5 +1,13 @@
 # TODO List
 
+* x Alias collision detection tool
+* Suppressing 'add'
+* Enforcing mutual exclusion
+* Units for options, by CID?
+* LEFT, RIGHT, EITHER for options, by CID?
+* short-order uses graph api
+* generate removals
+
 * NEW
     * quantified: NEVER, DEFAULT, ALWAYS
     * units?: text
