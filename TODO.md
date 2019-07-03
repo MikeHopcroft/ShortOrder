@@ -1,8 +1,10 @@
 # TODO List
 
 * x Alias collision detection tool
-* Suppressing 'add'
-* Enforcing mutual exclusion
+* . Suppressing 'add', 'hot', 'regular'?
+    * This is just an attribute.yaml issue.
+    * Document all hand-authored changes to attributes.
+* x Enforcing mutual exclusion in fuzzer
 * Units for options, by CID?
 * LEFT, RIGHT, EITHER for options, by CID?
 * short-order uses graph api

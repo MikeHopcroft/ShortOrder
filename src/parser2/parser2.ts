@@ -23,7 +23,7 @@ import {
     enumerateSplits,
     splitOnEntities,
 } from './parser_utilities';
-import { deepEqual } from 'assert';
+
 
 function printSegment(segment: Segment) {
     const left = segment.left.map(tokenToString).join('');

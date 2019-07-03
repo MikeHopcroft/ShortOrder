@@ -33,8 +33,8 @@ export class RemoveX {
 
     buildText = (): string[] => {
         const parts = [
-            this.prologue,
             ...this.before,
+            this.prologue,
             this.remove,
             ...this.after,
             this.epilogue

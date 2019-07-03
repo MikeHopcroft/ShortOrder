@@ -18,16 +18,17 @@ import {
     EITHER,
     EntityGenerator,
     fuzzerMain,
+    LEFT,
     OptionGenerator,
     OrderGenerator,
     OrderX,
     Position,
     ProcessorFactory,
     ProductGenerator,
-    LEFT,
     QuantityX,
-    RIGHT,
     Random,
+    RemovalGenerator,
+    RIGHT,
     TestCaseGeneratorFactory,
 } from '../src/fuzzer3';
 
@@ -88,13 +89,8 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         new QuantityX(3, 'three'),
     ];
 
-    // const entityPIDs = [9000, 9100, 9200, 9500];
-    // const entityPIDs = [457];
-    // for (const entity of world.catalog.genericEntities)
+    const entityBlackList = new Set<PID>([2122273]);
     const entityPIDs: PID[] = [];
-    // for (const entity of world.catalog.genericEntities()) {
-    //     entityPIDs.push(entity.pid);
-    // }
     for (const entity of world.catalog.genericEntities()) {
         // Skip over items that don't have aliases.
         if (entity.aliases.length === 0 || entity.aliases[0].length === 0) {
@@ -105,6 +101,10 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
             continue;
         }
 
+        if (entityBlackList.has(entity.pid)) {
+            continue;
+        }
+        
         // Only include items for Tensor 0.
         // if (entity.tensor === 0) {
         //     entityPIDs.push(entity.pid);
@@ -162,8 +162,6 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         optionPIDs.push(entity.pid);
     }
 
-    // const optionPIDs = [62, 93];
-    // // const optionPIDs = [5000, 5001, 5002, 5003, 10000, 10001, 10002, 10003, 20000];
     const optionGenerators: OptionGenerator[] = [];
     for (const pid of optionPIDs) {
         const generator = new OptionGenerator(
@@ -233,11 +231,52 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         epilogueGenerator
     );
 
+    //
+    // Removals
+    //
+
+    //
+    // Remove Prologues
+    //
+    const removePrologues = [
+        "(can,could,would) you [please] remove [the]",
+        "[please] remove [the]",
+        "I (don't,do not) (want,need) [the]",
+        "(lose,remove) the"
+    ];
+    const removePrologueGenerator = new AliasGenerator(removePrologues);
+
+    //
+    // Remove Epilogues
+    //
+    const removeEpilogues = [
+        "I'm (done,fine,good)",
+        "thank you",
+        "thanks",
+        "that's (all,everything,it)",
+        "(that'll,that will,that should) (be,do) it",
+        "bye",
+    ];
+    const removeEpilogueGenerator = new AliasGenerator(removeEpilogues);
+
+    const removalGenerator = new RemovalGenerator(
+        prologueGenerator,
+        productGenerator,
+        epilogueGenerator,
+        1,
+        removePrologueGenerator,
+        removeEpilogueGenerator
+    );
+
     const random = new Random("1234");
 
     for (let i = 0; i < count; ++i) {
+        if (i === 24) {
+            console.log('here');
+        }
         yield createTestCase(
             world.catalog,
+            // [removalGenerator.randomGenericEntityRemoval(random)]
             [orderGenerator.randomOrder(random)]
         );
     }

@@ -5,6 +5,7 @@ export * from './fuzzer';
 export * from './order_generator';
 export * from './option_generator';
 export * from './product_generator';
+export * from './removal_generator';
 export * from './test_case';
 export * from './test_runner';
 export * from './utilities';

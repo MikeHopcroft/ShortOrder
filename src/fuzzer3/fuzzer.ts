@@ -2,7 +2,6 @@ import * as pluralize from 'pluralize';
 import { AID, ItemInstance, Key } from 'prix-fixe';
 
 import { permutation, Random } from './utilities';
-import { TextDecoder } from 'util';
 
 export const LEFT: unique symbol = Symbol('LEFT');
 export type LEFT = typeof LEFT;
