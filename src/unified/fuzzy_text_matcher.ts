@@ -43,27 +43,6 @@ export class FuzzyTextMatcher {
 
         // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
-        const path = graph.findPath([], 0);
-
-        const tokens: FuzzyMatch[] = [];
-        for (const [index, edge] of path.entries()) {
-            const token = this.tokenizer.tokenFromEdge(edge) as FuzzyToken;
-            if (token.type === FUZZY) {
-                tokens.push({ id: token.id, score: edge.score });
-            }
-        }
-
-        // TODO: check sort order
-        return tokens.sort( (a: FuzzyMatch, b: FuzzyMatch) => b.score - a.score);
-    }
-
-    matches2(query: string): FuzzyMatch[] {
-        const terms = query.split(/\s+/);
-        const stemmed = terms.map(this.lexicon.termModel.stem);
-        const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-
-        // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
-        const graph = this.tokenizer.generateGraph(hashed, stemmed);
 
         const matches = new Map<number, FuzzyMatch>();
         for (const edges of graph.edgeLists) {
