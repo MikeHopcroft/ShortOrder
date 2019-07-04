@@ -271,9 +271,9 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
     const random = new Random("1234");
 
     for (let i = 0; i < count; ++i) {
-        if (i === 24) {
-            console.log('here');
-        }
+        // if (i === 24) {
+        //     console.log('here');
+        // }
         yield createTestCase(
             world.catalog,
             // removalGenerator.randomGenericEntityRemoval(random)

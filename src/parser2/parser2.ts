@@ -6,8 +6,10 @@ import {
 } from 'prix-fixe';
 
 import {
+    ADD_TO_ORDER,
     EntityToken,
-    tokenToString
+    tokenToString,
+    LexicalAnalyzer
 } from '../unified';
 
 import { EntityBuilder } from './entity_builder';
@@ -45,6 +47,35 @@ export class Parser2 {
         this.cartOps = cartOps;
         this.info = info;
         this.rules = rules;
+    }
+
+    parseRoot(lexer: LexicalAnalyzer, text: string): Interpretation {
+        const tokenizations = [...lexer.tokenizations(text)];
+        const interpretations: Interpretation[] = [];
+        for (const tokens of tokenizations) {
+            // TODO: HACK: BUGBUG:
+            // TODO: Remove this code once the parser handles intents.
+            if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
+                tokens.shift();
+            }
+            interpretations.push(
+                this.findBestInterpretation(tokens as SequenceToken[]));
+        }
+
+        if (interpretations.length > 0) {
+            // We found at least one interpretation.
+            // Sort interpretations by decreasing score.
+            interpretations.sort((a, b) => b.score - a.score);
+
+            // Return the highest scoring interpretation.
+            // TODO: when there is more than one top-scoring interpretations,
+            // probably want to pick the one that associates right.
+            return interpretations[0];
+        } else {
+            // We didn't find any interpretations.
+            // Return an empty interpretation.
+            return {score: 0, items: []}; 
+        }
     }
 
     findBestInterpretation(tokens: SequenceToken[]): Interpretation {

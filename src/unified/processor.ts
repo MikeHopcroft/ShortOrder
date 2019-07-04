@@ -29,16 +29,7 @@ export function createProcessor(
     const parser = new Parser2(world.cartOps, world.attributeInfo, world.ruleChecker);
 
     const processor = async (text: string, state: State): Promise<State> => {
-        const tokens = lexer.processOneQuery(text);
-        // console.log(tokens.map(tokenToString).join(''));
-
-        // TODO: HACK: BUGBUG:
-        // TODO: Remove this code once the parser handles intents.
-        if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
-            tokens.shift();
-        }
-
-        const interpretation = parser.findBestInterpretation(tokens as SequenceToken[]);
+        const interpretation = parser.parseRoot(lexer, text);
 
         let updated = state.cart;
         for (const item of interpretation.items) {

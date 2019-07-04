@@ -2,6 +2,7 @@ import * as fs from 'fs';
 
 import {
     Alias,
+    equivalentPaths,
     Lexicon,
     Tokenizer,
     Token,
@@ -153,29 +154,34 @@ export class LexicalAnalyzer {
         this.lexicon.ingest(this.tokenizer);
     }
 
-    processOneQuery(query: string): Token[] {
+    // Generator for tokenizations of the input string that are equivanent to
+    // the top-scoring tokenization.
+    *tokenizations(query: string): IterableIterator<Token[]> {
         const terms = query.split(/\s+/);
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
 
         // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
-        const path = graph.findPath([], 0);
+        const paths = equivalentPaths(graph.edgeLists, graph.findPath([], 0));
 
-        const tokens: Token[] = [];
-        for (const [index, edge] of path.entries()) {
-            let token = this.tokenizer.tokenFromEdge(edge);
-            if (token.type === UNKNOWNTOKEN) {
-                const end = index + 1;
-                const start = end - edge.length;
-                token = ({
-                    type: WORD,
-                    text: terms.slice(start, end).join('_').toUpperCase()
-                } as WordToken);
+        for (const path of paths) {
+            const tokens: Token[] = [];
+            let termIndex = 0;
+            for (const [index, edge] of path.entries()) {
+                let token = this.tokenizer.tokenFromEdge(edge);
+                if (token.type === UNKNOWNTOKEN) {
+                    const start = termIndex;
+                    const end = termIndex + edge.length;
+                    token = ({
+                        type: WORD,
+                        text: terms.slice(start, end).join('_').toUpperCase()
+                    } as WordToken);
+                }
+                termIndex += edge.length;
+                tokens.push(token);
             }
-            tokens.push(token);
+            yield tokens;
         }
-
-        return tokens;
     }
 }
