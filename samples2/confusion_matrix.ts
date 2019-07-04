@@ -1,16 +1,13 @@
 import * as dotenv from 'dotenv';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { TestCase, TestLineItem, TestOrder } from 'prix-fixe';
 import { IIngestor, Token, TokenizerAlias } from 'token-flow';
 
 import {
     createHistogram,
-    createShortOrderProcessor,
     createWorld,
     LexicalAnalyzer,
     tokenToString,
-    tokensFromStopwords
 } from '../src';
 
 function leftJustify(text: string, width: number) {

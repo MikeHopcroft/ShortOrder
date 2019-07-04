@@ -3,62 +3,12 @@ import * as pluralize from 'pluralize';
 import { ItemInstance } from 'prix-fixe';
 
 import { AliasGenerator } from './alias_generator';
-import { OrderX, WordX, SegmentX } from './fuzzer';
+import { OrderX, RemoveX, SegmentX, StepX, WordX } from './fuzzer';
 import { OrderGenerator } from './order_generator';
 import { ProductGenerator } from './product_generator';
 import { Random } from './utilities';
 
 
-export class RemoveX {
-    prologue: WordX;
-    before: OrderX[];
-    remove: WordX;
-    epilogue: WordX;
-
-    after: OrderX[];
-
-    constructor(
-        prologue: WordX,
-        before: OrderX[],
-        remove: WordX,
-        epilogue: WordX,
-        after: OrderX[],
-    ) {
-        this.prologue = prologue;
-        this.before = before;
-        this.remove = remove;
-        this.after = after;
-        this.epilogue = epilogue;
-    }
-
-    buildText = (): string[] => {
-        const parts = [
-            ...this.before,
-            this.prologue,
-            this.remove,
-            ...this.after,
-            this.epilogue
-        ];
-
-        const words: string[] = [];
-        for (const part of parts) {
-            for (const word of part.buildText()) {
-                if (word.length > 0) {
-                    words.push(word);
-                }
-            }
-        }
-        return words;
-    }
-
-    buildItems(): ItemInstance[] {
-        const items: ItemInstance[] = [];
-        for (const part of this.after) {
-            items.concat(part.buildItems());
-        }
-        return items;
-    }
-}
 
 export class RemovalGenerator {
     // catalog: ICatalog;
@@ -93,7 +43,7 @@ export class RemovalGenerator {
         this.removeEpilogues = removeEpilogues;
     }
 
-    randomGenericEntityRemoval(random: Random): RemoveX {
+    randomGenericEntityRemoval(random: Random): StepX[] {
         // First create a cart to remove something from.
         const before: OrderX[] = [];
         const itemCount = random.randomInRange(1, this.maxItemCount + 1);
@@ -109,17 +59,19 @@ export class RemovalGenerator {
 
         const prologue = this.removePrologues.randomAlias(random);
 
-        const remove: WordX = this.textFromGeneric(target);
+        const targetText: WordX = this.textFromGeneric(target);
 
         const epilogue = this.removeEpilogues.randomAlias(random);
 
-        return new RemoveX(
+        const remove = new RemoveX(
             prologue,
-            before,
-            remove,
+//            before,
+            targetText,
             epilogue,
             after
         );
+
+        return [...before, remove];
     }
 
     private textFromGeneric(target: OrderX): WordX {

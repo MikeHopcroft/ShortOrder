@@ -298,7 +298,12 @@ export class WordX {
     buildText = ():string[] => [this.text];
 }
 
-export class OrderX {
+export interface StepX {
+    buildText():string[];
+    buildItems(): ItemInstance[];
+}
+
+export class OrderX implements StepX {
     parts: Array<SegmentX | WordX> = [];
 
     constructor(
@@ -343,6 +348,57 @@ export class OrderX {
             if (part instanceof SegmentX) {
                 items.push(part.buildItem());
             }
+        }
+        return items;
+    }
+}
+
+export class RemoveX implements StepX {
+    prologue: WordX;
+    // before: OrderX[];
+    target: WordX;
+    epilogue: WordX;
+
+    after: OrderX[];
+
+    constructor(
+        prologue: WordX,
+        // before: OrderX[],
+        remove: WordX,
+        epilogue: WordX,
+        after: OrderX[],
+    ) {
+        this.prologue = prologue;
+        // this.before = before;
+        this.target = remove;
+        this.epilogue = epilogue;
+        this.after = after;
+    }
+
+    buildText = (): string[] => {
+        const parts = [
+            // ...this.before,
+            this.prologue,
+            this.target,
+            // ...this.after,
+            this.epilogue
+        ];
+
+        const words: string[] = [];
+        for (const part of parts) {
+            for (const word of part.buildText()) {
+                if (word.length > 0) {
+                    words.push(word);
+                }
+            }
+        }
+        return words;
+    }
+
+    buildItems(): ItemInstance[] {
+        const items: ItemInstance[] = [];
+        for (const part of this.after) {
+            items.concat(part.buildItems());
         }
         return items;
     }

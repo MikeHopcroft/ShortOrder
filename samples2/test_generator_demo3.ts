@@ -263,7 +263,7 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         prologueGenerator,
         productGenerator,
         epilogueGenerator,
-        1,
+        2,
         removePrologueGenerator,
         removeEpilogueGenerator
     );
@@ -276,7 +276,7 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         }
         yield createTestCase(
             world.catalog,
-            // [removalGenerator.randomGenericEntityRemoval(random)]
+            // removalGenerator.randomGenericEntityRemoval(random)
             [orderGenerator.randomOrder(random)]
         );
     }

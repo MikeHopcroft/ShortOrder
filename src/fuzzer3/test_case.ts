@@ -7,19 +7,15 @@ import {
 } from 'prix-fixe';
 
 import {
-    OrderX,
+    StepX
 } from './fuzzer';
-
-import {
-    RemoveX
-} from './removal_generator';
 
 // TODO: perhaps createTestCase should be a class? (instead of side-effecting counter)
 let counter = 0;
 
 export function createTestCase(
     catalog: ICatalog,
-    steps: OrderX[] | RemoveX[]
+    steps: StepX[]
 ): TestCase {
     const inputs: string[] = [];
     const results: TestOrder[] = [];
