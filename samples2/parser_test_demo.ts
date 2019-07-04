@@ -40,7 +40,8 @@ async function go() {
     );
 
     const suite = TestSuite.fromYamlString(fs.readFileSync(testFile, 'utf8'));
-    await suite.run(processor, world.catalog, showAll, suiteFilter);
+    const aggregator = await suite.run(processor, world.catalog, suiteFilter);
+    aggregator.print(showAll);
 }
 
 go();

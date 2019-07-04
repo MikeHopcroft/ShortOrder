@@ -200,7 +200,7 @@ export function makeTests(
     const results = new AggregatedResults();
 
     for (const test of tests) {
-        const result = new Result(test, test.expected, true, 0);
+        const result = new Result(test, test.expected, true, undefined, 0);
         results.recordResult(result);
     }
 
