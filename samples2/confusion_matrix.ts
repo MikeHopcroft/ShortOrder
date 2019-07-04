@@ -59,7 +59,6 @@ function showUsage() {
 
 // TODO: command line argument for stemming
 // TODO: print out stemmed versions
-// TODO: histogram
 async function go() {
     dotenv.config();
     const args = minimist(process.argv.slice());
@@ -106,7 +105,6 @@ async function go() {
     lexer.lexicon.ingest(confusionMatrix);
 
     confusionMatrix.print();
-
 }
 
 class ConfusionMatrix implements IIngestor {
@@ -128,10 +126,25 @@ class ConfusionMatrix implements IIngestor {
                 collisions.push({text, set});
             }
         }
-        collisions.sort( (a,b) => b.set.size - a.set.size);
+
+        collisions.sort( (a,b) => {
+            const delta = b.set.size - a.set.size;
+            if (delta === 0) {
+                return a.text.localeCompare(b.text);
+            }
+            else {
+                return delta;
+            }
+        });
 
         console.log('Collisions:');
+        let previousSize = Infinity;
         for (const {text, set} of collisions) {
+            if (set.size < previousSize) {
+                console.log();
+                console.log(`=== Aliases with ${set.size} collisions ===`);
+                previousSize = set.size;
+            }
             console.log(`"${text}":`);
             for (const token of set) {
                 console.log(`    ${tokenToString(token)}`);
@@ -139,7 +152,7 @@ class ConfusionMatrix implements IIngestor {
         }
 
         console.log('');
-        console.log('Histogram:');
+        console.log('Histogram of collision set sizes:');
         const histogram = createHistogram(collisions.map(x => x.set.size).values());
         for (const [size, count] of histogram) {
             console.log(`    ${size}: ${count}`);
