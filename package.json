@@ -57,6 +57,6 @@
     "prix-fixe": "0.0.20",
     "readline-sync": "^1.4.9",
     "seedrandom": "^3.0.1",
-    "token-flow": "0.0.31"
+    "token-flow": "0.0.32"
   }
 }
