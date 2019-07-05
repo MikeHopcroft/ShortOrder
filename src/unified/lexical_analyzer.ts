@@ -118,7 +118,7 @@ export class LexicalAnalyzer {
         stopwordsFile: string | undefined = undefined,
     ) {
         this.lexicon = new Lexicon();
-        // addCustomStemmer(this.lexicon.termModel);
+        addCustomStemmer(this.lexicon.termModel);
         this.tokenizer = new Tokenizer(
             this.lexicon.termModel,
             this.lexicon.numberParser,
