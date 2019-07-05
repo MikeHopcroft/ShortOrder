@@ -24,7 +24,11 @@ export function createProcessor(
         stopwordsFile,
     );
 
-    const parser = new Parser2(world.cartOps, world.attributeInfo, world.ruleChecker);
+    const parser = new Parser2(
+        world.cartOps,
+        world.attributeInfo,
+        world.ruleChecker,
+        false);
 
     const processor = async (text: string, state: State): Promise<State> => {
         const interpretation = parser.parseRoot(lexer, text);

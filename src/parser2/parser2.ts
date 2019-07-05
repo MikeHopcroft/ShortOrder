@@ -42,17 +42,37 @@ export class Parser2 {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
     private readonly rules: RuleChecker;
+    private readonly debugMode: boolean;
 
-    constructor(cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker) {
+    constructor(cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker, debugMode: boolean) {
         this.cartOps = cartOps;
         this.info = info;
         this.rules = rules;
+        this.debugMode = debugMode;
     }
 
     parseRoot(lexer: LexicalAnalyzer, text: string): Interpretation {
+        // XXX
+        if (this.debugMode) {
+            console.log(' ');
+            console.log(`Text: "${text}"`);
+        }
+
         const tokenizations = [...lexer.tokenizations(text)];
         const interpretations: Interpretation[] = [];
+
+        // TODO: figure out how to remove the type assertion to any.
+        // tslint:disable-next-line:no-any
+        const start = (process.hrtime as any).bigint();
+        let counter = 0;
         for (const tokens of tokenizations) {
+            // XXX
+            if (this.debugMode) {
+                console.log(' ');
+                console.log(tokens.map(tokenToString).join(''));
+                // console.log(`  interpretation ${counter}`);
+            }
+            counter++;
             // TODO: HACK: BUGBUG:
             // TODO: Remove this code once the parser handles intents.
             if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
@@ -60,6 +80,24 @@ export class Parser2 {
             }
             interpretations.push(
                 this.findBestInterpretation(tokens as SequenceToken[]));
+        }
+
+        // TODO: figure out how to remove the type assertion to any.
+        // tslint:disable-next-line:no-any
+        const end = (process.hrtime as any).bigint();
+        const delta = Number(end - start);
+        // XXX
+        if (this.debugMode) {
+            console.log(`${counter} interpretations.`);
+            console.log(`Time: ${delta/1.0e6}`);
+        }
+
+        // TODO: eventually place the following code under debug mode.
+        if (delta/1.0e6 > 65) {
+            console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+            console.log(`Time: ${delta/1.0e6}`);
+            console.log(`  "${text}"`);
+            lexer.analyzePaths(text);
         }
 
         if (interpretations.length > 0) {
@@ -116,6 +154,8 @@ export class Parser2 {
 
             interpretations.push(interpretation);
         }
+
+        // console.log(`  interpretations: ${interpretations.length}`);
 
         if (interpretations.length > 0) {
             // We found at least one interpretation.

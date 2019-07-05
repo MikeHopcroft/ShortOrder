@@ -180,7 +180,7 @@ export class LexicalAnalyzer {
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
 
         // XXX
-        // this.analyzePaths(
+        // this.analyzePathsInGraph(
         //     this.tokenizer,
         //     graph.edgeLists,
         //     graph.findPath([], 0)
@@ -189,7 +189,23 @@ export class LexicalAnalyzer {
         yield* equivalentPaths2(this.tokenizer, graph.edgeLists, graph.findPath([], 0));
     }
 
-    analyzePaths(
+    analyzePaths(query: string) {
+        const terms = query.split(/\s+/);
+        const stemmed = terms.map(this.lexicon.termModel.stem);
+        const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
+
+        // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
+        const graph = this.tokenizer.generateGraph(hashed, stemmed);
+
+        // XXX
+        this.analyzePathsInGraph(
+            this.tokenizer,
+            graph.edgeLists,
+            graph.findPath([], 0)
+        );
+    }
+
+    private analyzePathsInGraph(
         tokenizer: Tokenizer,
         edgeLists: Edge[][],
         path: Edge[]
