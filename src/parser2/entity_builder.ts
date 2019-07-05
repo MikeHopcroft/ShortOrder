@@ -38,8 +38,6 @@ export class EntityBuilder {
     private readonly options: ItemInstance[] = [];
     private readonly optionTokenCounts: number[] = [];
 
-    private readonly tensor: Tensor;
-
     private readonly item: ItemInstance;
 
     constructor(segment: Segment, cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker) {
@@ -49,8 +47,6 @@ export class EntityBuilder {
 
         this.pid = segment.entity.pid;
         this.tokensUsed += 1;
-
-        this.tensor = info.getTensorForEntity(this.pid);
 
         const leftTokens = new TokenSequence<GapToken>(segment.left);
         this.processLeft(leftTokens);

@@ -99,7 +99,7 @@ describe('Parser2', () => {
         // });
 
         it('segment on quantifier', () => {
-            const parser = new Parser2(ops, attributeInfo, smallWorldRuleChecker);
+            const parser = new Parser2(ops, attributeInfo, smallWorldRuleChecker, false);
             const tokens = [
                 quantityOne,
                 attributeSmall,
@@ -192,7 +192,7 @@ describe('Parser2', () => {
         // });
 
         it('segment ambiguous size based on options', () => {
-            const parser = new Parser2(ops, attributeInfo, smallWorldRuleChecker);
+            const parser = new Parser2(ops, attributeInfo, smallWorldRuleChecker, false);
             const tokens = [
                 productCoffee,
                 attributeMedium,
@@ -233,7 +233,6 @@ describe('Parser2', () => {
 
             assert.deepEqual(interpretation, expected);
         });
-
     });
 });
 

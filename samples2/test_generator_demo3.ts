@@ -39,8 +39,18 @@ async function go()
     const testCaseGeneratorFactory = new TestCaseGeneratorFactory([
         {
             name: 'sprint4',
-            description: 'single product with attributes',
-            factory: generateOrders,
+            description: 'single product with quantifiers and attributes',
+            factory: sprint4,
+        },
+        {
+            name: 'sprint5',
+            description: 'single product with quantifiers, attributes, and options',
+            factory: sprint5,
+        },
+        {
+            name: 'remove',
+            description: 'remove a single product',
+            factory: remove,
         }
     ]);
 
@@ -56,7 +66,21 @@ async function go()
 // Configure generators
 //
 ///////////////////////////////////////////////////////////////////////////////
-function* generateOrders(world: World, count: number): IterableIterator<TestCase> {
+interface ProductGenerators {
+    prologueGenerator: AliasGenerator;
+    productGenerator: ProductGenerator;
+    epilogueGenerator: AliasGenerator;
+}
+
+interface RemoveGenerators {
+    removePrologues: AliasGenerator;
+    removeEpilogues: AliasGenerator;
+}
+
+function configureProductGenerators(
+    world: World,
+    generateOptions: boolean
+): ProductGenerators {
     //
     // Attributes
     //
@@ -104,11 +128,7 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         if (entityBlackList.has(entity.pid)) {
             continue;
         }
-        
-        // Only include items for Tensor 0.
-        // if (entity.tensor === 0) {
-        //     entityPIDs.push(entity.pid);
-        // }
+
         if (entity.name.indexOf('latte') !== -1) {
             entityPIDs.push(entity.pid);
         }
@@ -181,9 +201,7 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
     //
     const productGenerator = new ProductGenerator(
         entityGenerators,
-        // [],
-        // TEMPORARILY disable option generation.
-        optionGenerators,
+        generateOptions ? optionGenerators : [],
         world.ruleChecker
     );
 
@@ -219,11 +237,34 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
     ];
     const epilogueGenerator = new AliasGenerator(epilogues);
 
+    return {
+        prologueGenerator,
+        productGenerator,
+        epilogueGenerator
+    };
+}
+
+function *sprint4(world: World, count: number) {
+    yield *generateOrders(world, false, count);
+}
+
+function *sprint5(world: World, count: number) {
+    yield *generateOrders(world, true, count);
+}
+
+function* generateOrders(
+    world: World,
+    generateOptions: boolean,
+    count: number
+): IterableIterator<TestCase> {
+    const {prologueGenerator, productGenerator, epilogueGenerator} =
+        configureProductGenerators(world, generateOptions);
+
     //
     // Orders
     //
-    const maxSegmentCount = 1;
-    // const maxSegmentCount = 3;
+    // const maxSegmentCount = 1;
+    const maxSegmentCount = 3;
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
         productGenerator,
@@ -231,9 +272,24 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
         epilogueGenerator
     );
 
-    //
-    // Removals
-    //
+    const random = new Random("1234");
+
+    for (let i = 0; i < count; ++i) {
+        yield createTestCase(
+            world.catalog,
+            // removalGenerator.randomGenericEntityRemoval(random)
+            [orderGenerator.randomOrder(random)]
+        );
+    }
+}
+
+function* remove(
+    world: World,
+    count: number
+): IterableIterator<TestCase> {
+    const generateOptions = true;
+    const {prologueGenerator, productGenerator, epilogueGenerator} =
+        configureProductGenerators(world, generateOptions);
 
     //
     // Remove Prologues
@@ -271,13 +327,9 @@ function* generateOrders(world: World, count: number): IterableIterator<TestCase
     const random = new Random("1234");
 
     for (let i = 0; i < count; ++i) {
-        // if (i === 24) {
-        //     console.log('here');
-        // }
         yield createTestCase(
             world.catalog,
-            // removalGenerator.randomGenericEntityRemoval(random)
-            [orderGenerator.randomOrder(random)]
+            removalGenerator.randomGenericEntityRemoval(random)
         );
     }
 }

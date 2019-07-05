@@ -5,6 +5,8 @@ import {
     RuleChecker
 } from 'prix-fixe';
 
+import { Token } from 'token-flow';
+
 import {
     ADD_TO_ORDER,
     EntityToken,
@@ -73,13 +75,8 @@ export class Parser2 {
                 // console.log(`  interpretation ${counter}`);
             }
             counter++;
-            // TODO: HACK: BUGBUG:
-            // TODO: Remove this code once the parser handles intents.
-            if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
-                tokens.shift();
-            }
-            interpretations.push(
-                this.findBestInterpretation(tokens as SequenceToken[]));
+
+            interpretations.push(this.parseRoot2(tokens));
         }
 
         // TODO: figure out how to remove the type assertion to any.
@@ -94,6 +91,7 @@ export class Parser2 {
 
         // TODO: eventually place the following code under debug mode.
         if (delta/1.0e6 > 65) {
+        // if (delta/1.0e6 > 1) {
             console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
             console.log(`Time: ${delta/1.0e6}`);
             console.log(`  "${text}"`);
@@ -114,6 +112,15 @@ export class Parser2 {
             // Return an empty interpretation.
             return {score: 0, items: []}; 
         }
+    }
+
+    parseRoot2(tokens: Token[]): Interpretation {
+        // TODO: HACK: BUGBUG:
+        // TODO: Remove this code once the parser handles intents.
+        if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
+            tokens.shift();
+        }
+        return this.findBestInterpretation(tokens as SequenceToken[]);
     }
 
     findBestInterpretation(tokens: SequenceToken[]): Interpretation {

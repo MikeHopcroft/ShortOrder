@@ -16,13 +16,13 @@ import {
     World
 } from 'prix-fixe';
 
-dotenv.config();
 
 // TODO: consider renaming file fuzzer_main.ts.
 export async function fuzzerMain(
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
     processorFactory: ProcessorFactory
 ) {
+    dotenv.config();
     const args = minimist(process.argv);
 
     const outFile = args['o'] ? path.resolve(__dirname, args['o']) : undefined;
@@ -96,7 +96,7 @@ function showUsage(
 
     console.log('Available test case generators:');
     for (const generator of testCaseGeneratorFactory.generators.values()) {
-        console.log(`  "-v=${generator.name}": ${generator.description}`);
+        console.log(`  "-t=${generator.name}": ${generator.description}`);
     }
     console.log(' ');
 
@@ -172,7 +172,12 @@ export async function runFuzzer(
 
         let counter = 0;
         for (const result of results.results) {
-            console.log(`${counter}: "${result.test.inputs[0]}"`);
+            for (let i = 0; i < result.test.inputs.length; ++i) {
+                console.log(`${counter}: "${result.test.inputs[i]}"`);
+            }
+            if (result.test.inputs.length > 1) {
+                console.log(' ');
+            }
             counter++;
         }
     }
