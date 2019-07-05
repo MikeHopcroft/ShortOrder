@@ -2,10 +2,13 @@ import * as fs from 'fs';
 
 import {
     Alias,
+    DefaultTermModel,
+    Edge,
     equivalentPaths,
     Lexicon,
     Tokenizer,
     Token,
+    TermModel,
     UNKNOWNTOKEN,
 } from 'token-flow';
 
@@ -13,11 +16,11 @@ import {
     aliasesFromPattern,
     MENUITEM,
     OPTION,
-    setup,
     World,
 } from 'prix-fixe';
 
 import { stopwordsFromYamlString } from '../stopwords';
+import { tokenToString } from '../unified';
 
 import { CreateAttribute } from './attributes';
 import { CreateEntity } from './entities';
@@ -91,6 +94,17 @@ function* generateOptions(world: World): IterableIterator<Alias> {
     }
 }
 
+function addCustomStemmer(model: TermModel) {
+    const stem = model.stem;
+    model.stem = (term: string): string => {
+        if (term.toLowerCase() === 'iced') {
+            return 'iced';
+        } else {
+            return stem(term);
+        }
+    };
+}
+
 export class LexicalAnalyzer {
     lexicon: Lexicon;
     tokenizer: Tokenizer;
@@ -104,6 +118,7 @@ export class LexicalAnalyzer {
         stopwordsFile: string | undefined = undefined,
     ) {
         this.lexicon = new Lexicon();
+        // addCustomStemmer(this.lexicon.termModel);
         this.tokenizer = new Tokenizer(
             this.lexicon.termModel,
             this.lexicon.numberParser,
@@ -163,25 +178,100 @@ export class LexicalAnalyzer {
 
         // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
-        const paths = equivalentPaths(graph.edgeLists, graph.findPath([], 0));
 
-        for (const path of paths) {
-            const tokens: Token[] = [];
-            let termIndex = 0;
-            for (const [index, edge] of path.entries()) {
-                let token = this.tokenizer.tokenFromEdge(edge);
-                if (token.type === UNKNOWNTOKEN) {
-                    const start = termIndex;
-                    const end = termIndex + edge.length;
-                    token = ({
-                        type: WORD,
-                        text: terms.slice(start, end).join('_').toUpperCase()
-                    } as WordToken);
+        // XXX
+        // this.analyzePaths(
+        //     this.tokenizer,
+        //     graph.edgeLists,
+        //     graph.findPath([], 0)
+        // );
+
+        yield* equivalentPaths2(this.tokenizer, graph.edgeLists, graph.findPath([], 0));
+    }
+
+    analyzePaths(
+        tokenizer: Tokenizer,
+        edgeLists: Edge[][],
+        path: Edge[]
+    ): void {
+        const groups: Token[][] = [];
+        let v = 0;
+        for (const currentEdge of path) {
+            const tokens = new Set<Token>();
+            const group: Token[] = [];
+            const vertex = edgeLists[v];
+            for (const edge of vertex) {
+                if (edge.score === currentEdge.score &&
+                    edge.length === currentEdge.length)
+                {
+                    const token: Token = tokenizer.tokenFromEdge(edge);
+                    if (!tokens.has(token)) {
+                        tokens.add(token);
+                        group.push(token);
+                    }
                 }
-                termIndex += edge.length;
-                tokens.push(token);
             }
-            yield tokens;
+            groups.push(group);
+            v += currentEdge.length;
+        }
+    
+        let product = 1;
+        for (const tokens of groups) {
+            if (tokens.length > 1) {
+                product *= tokens.length;
+                console.log(`${tokens.length}: ${tokens.map(tokenToString).join(', ')}`);
+            }
+        }
+
+        console.log(`Equivalent path count: ${product}`);
+    }
+}
+
+export function *equivalentPaths2(
+    tokenizer: Tokenizer,
+    edgeLists: Edge[][],
+    path: Edge[]
+): IterableIterator<Token[]> {
+    yield* equivalentPathsRecursion2(tokenizer, edgeLists, 0, 0, path, []);
+}
+
+function *equivalentPathsRecursion2(
+    tokenizer: Tokenizer,
+    edgeLists: Edge[][],
+    e: number,
+    v: number,
+    path: Edge[],
+    prefix: Token[]
+): IterableIterator<Token[]> {
+    if (prefix.length === path.length) {
+        // Recursive base case. Return the list of edges.
+        yield [...prefix];
+    }
+    else {
+        // Recursive case. Enumerate all equivalent edges from this vertex.
+        const tokens = new Set<Token>();
+        const currentEdge = path[e];
+        const vertex = edgeLists[v];
+        for (const edge of vertex) {
+            if (edge.score === currentEdge.score &&
+                edge.length === currentEdge.length)
+            {
+                const token: Token = tokenizer.tokenFromEdge(edge);
+                if (!tokens.has(token)) {
+                    tokens.add(token);
+                    prefix.push(token);
+                    yield* equivalentPathsRecursion2(
+                        tokenizer,
+                        edgeLists,
+                        e + 1,
+                        v + currentEdge.length,
+                        path,
+                        prefix
+                    );
+                    prefix.pop();
+                }
+            }
         }
     }
 }
+

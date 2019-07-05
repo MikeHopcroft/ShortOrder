@@ -1,8 +1,6 @@
 import { State, World } from 'prix-fixe';
 
-import { ADD_TO_ORDER } from './intents';
 import { LexicalAnalyzer } from './lexical_analyzer';
-import { tokenToString } from './lexical_utilities';
 
 // TODO: temporarily importing from parser2 directory because of export
 // conflicts during refactor.
