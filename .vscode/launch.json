@@ -184,6 +184,13 @@
             "name": "AAA Confusion",
             "program": "${workspaceFolder}/build/samples2/confusion_matrix.js",
             "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "AAA Test Maker",
+            "program": "${workspaceFolder}/build/samples2/test_maker.js",
+            "outputCapture": "std"
         }
 
     ]
