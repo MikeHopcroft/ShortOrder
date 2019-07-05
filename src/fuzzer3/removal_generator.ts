@@ -46,7 +46,8 @@ export class RemovalGenerator {
     randomGenericEntityRemoval(random: Random): StepX[] {
         // First create a cart to remove something from.
         const before: OrderX[] = [];
-        const itemCount = random.randomInRange(1, this.maxItemCount + 1);
+        // const itemCount = random.randomInRange(1, this.maxItemCount + 1);
+        const itemCount = 2;
         for (let i = 0; i < itemCount; ++i) {
             before.push(this.orderGenerator.randomOrder(random));
         }
@@ -65,7 +66,6 @@ export class RemovalGenerator {
 
         const remove = new RemoveX(
             prologue,
-//            before,
             targetText,
             epilogue,
             after

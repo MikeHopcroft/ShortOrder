@@ -20,9 +20,10 @@ export function createTestCase(
     const inputs: string[] = [];
     const results: TestOrder[] = [];
 
+    let items: ItemInstance[] = [];
     for (const order of steps) {
         const lines: TestLineItem[] = [];
-        const items = order.buildItems();
+        items = order.buildItems(items);
         for (const item of items) {
             appendItemLines(0, item, lines, catalog);
         }
