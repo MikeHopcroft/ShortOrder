@@ -111,7 +111,7 @@ export class LexicalAnalyzer {
 
     constructor(
         world: World,
-        debugMode = false,
+        debugMode = true,
         intentsFile: string | undefined = undefined,
         quantifiersFile: string | undefined = undefined,
         unitsFile: string | undefined = undefined,

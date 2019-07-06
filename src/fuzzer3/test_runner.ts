@@ -267,6 +267,10 @@ export interface ProcessorDescription {
     factory: (world: World, dataPath: string) => Processor;
 }
 
+function shortOrderFactory(world: World, dataPath: string) {
+    return createShortOrderProcessor(world, dataPath, false);
+}
+
 export class ProcessorFactory {
     processors = new Map<string, ProcessorDescription>();
 
@@ -275,7 +279,7 @@ export class ProcessorFactory {
         const shortOrder: ProcessorDescription =         {
             name: 'so',
             description: 'short-order processor',
-            factory: createShortOrderProcessor,
+            factory: shortOrderFactory,
         };
 
         for (const processor of [shortOrder, ...processors]) {
@@ -311,7 +315,11 @@ export function createWorld(dataPath: string): World {
     return world;
 }
 
-export function createShortOrderProcessor(world: World, dataPath: string): Processor {
+export function createShortOrderProcessor(
+    world: World,
+    dataPath: string,
+    debugMode: boolean
+): Processor {
     const intentsFile = path.join(dataPath, 'intents.yaml');
     const quantifiersFile = path.join(dataPath, 'quantifiers.yaml');
     const unitsFile = path.join(dataPath, 'units.yaml');
@@ -323,6 +331,7 @@ export function createShortOrderProcessor(world: World, dataPath: string): Proce
         quantifiersFile,
         unitsFile,
         stopwordsFile,
+        debugMode
     );
 
     return processor;

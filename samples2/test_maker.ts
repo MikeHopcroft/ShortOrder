@@ -86,7 +86,7 @@ async function go() {
     // Set up short-order processor
     //
     const world = createWorld(dataPath);
-    const processor = createShortOrderProcessor(world, dataPath);
+    const processor = createShortOrderProcessor(world, dataPath, false);
 
     // Run test suite to get new baseline.
     const priority = 0;

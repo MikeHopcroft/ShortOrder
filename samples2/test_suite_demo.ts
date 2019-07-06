@@ -28,7 +28,7 @@ async function go() {
 
     const dataPath = path.join(__dirname, '../../samples2/data/restaurant-en/');
     const world = createWorld(dataPath);
-    const processor = createShortOrderProcessor(world, dataPath);
+    const processor = createShortOrderProcessor(world, dataPath, false);
 
     const suite = TestSuite.fromYamlString(fs.readFileSync(testFile, 'utf8'));
     const aggregator = await suite.run(processor, world.catalog, suiteFilter);
