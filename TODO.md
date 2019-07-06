@@ -1,5 +1,14 @@
 # TODO List
 
+* Item removal fuzzing
+    * Item name generalizer based on term frequency and stop words
+    * Target item searching
+        * Keys with wildcards: 407:*:1
+        * Keys with options: [407,408]:0:1
+        * Keys with differnt tensors: [407:*:1,408:1:2:3]
+        * Children/options
+        * Key builder - group by tensor
+
 * x Alias collision detection tool
 * . Suppressing 'add', 'hot', 'regular'?
     * This is just an attribute.yaml issue.
@@ -18,9 +27,9 @@
     * customize/provide units
     * issue of 'some' with 'units' - 'some' never gets units
     * positional name editor (e.g. remove syrup for LEFT)
-    * select products from menu
-    * select options from menu
-    * legal options of products
+    * x select products from menu
+    * x select options from menu
+    * x legal options of products
     * unifiy EntityGenerator and OptionGenerator
 
 * REMOVE attributeInfo['tensorIdToTensor']
@@ -33,15 +42,15 @@
 * Parser2
     * Figure out how to reintroduce implied quantifiers. Then revert unit test changes. Parser change introduced in 8bbd7455.
     * Group EntitySequenceTokens
-    * Add to order
+    * x Add to order
     * Remove
     * Restate
     * Start over
 * Fuzzer2
     * Document usage in README.md
-    * Command-line argument - save failures only
-    * Create EntityGenerators from menu inspection
-    * Create OptionGenerators from menu inspection
+    * x Command-line argument - save failures only
+    * x Create EntityGenerators from menu inspection
+    * x Create OptionGenerators from menu inspection
         * Need some way to annotate whether they are quantifiable
         * Need some way to annotate with units
     * Better menu and rules file
