@@ -172,10 +172,10 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "AAA Test Suite",
-            "program": "${workspaceFolder}/build/samples2/test_suite_demo.js",
+            "name": "AAA Test Runner",
+            "program": "${workspaceFolder}/build/samples2/test_runner.js",
             "outputCapture": "std",
-            "args": ["-f=c:\\temp\\foo.yaml"]
+            "args": ["c:\\temp\\foo.yaml"]
             // "args": ["-n=2", "-o=foo.yaml"]
         },
         {
