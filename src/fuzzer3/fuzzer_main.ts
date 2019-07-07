@@ -17,7 +17,6 @@ import {
 } from 'prix-fixe';
 
 
-// TODO: consider renaming file fuzzer_main.ts.
 export async function fuzzerMain(
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
     processorFactory: ProcessorFactory
@@ -51,7 +50,7 @@ export async function fuzzerMain(
    
 
     if (help) {
-        showUsage(processorFactory, testCaseGeneratorFactory);
+        showUsage(processorFactory, testCaseGeneratorFactory, defaultCount);
     }
     else {
         runFuzzer(
@@ -68,7 +67,8 @@ export async function fuzzerMain(
 
 function showUsage(
     processorFactory: ProcessorFactory,
-    testCaseGeneratorFactory: TestCaseGeneratorFactory
+    testCaseGeneratorFactory: TestCaseGeneratorFactory,
+    defaultCount: number
 ) {
     const program = path.basename(process.argv[1]);
 
@@ -84,6 +84,7 @@ function showUsage(
     console.log('                The -d flag overrides the value specified');
     console.log('                in the PRIX_FIXE_DATA environment variable.');
     console.log('-n count        Number of test cases to generate.');
+    console.log(`                (default is ${defaultCount})`);
     console.log('-o outfile      Write cases to YAML file.');
     console.log('                Without -o, cases will be printed to the console.');
     console.log('-t [generator]  Use the named test case generator.');
@@ -130,7 +131,7 @@ export async function runFuzzer(
 
     const world = createWorld(dataPath);
 
-    const tests: IterableIterator<TestCase> = testCaseGeneratorFactory.get(name, world, count);
+    const tests: IterableIterator<TestCase> = testCaseGeneratorFactory.get(name, world);
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -141,7 +142,7 @@ export async function runFuzzer(
     if (verify !== undefined) {
         const processor = processorFactory.get(verify, world, dataPath);
 
-        results = await runTests(tests, world.catalog, processor);
+        results = await runTests(tests, world.catalog, processor, count);
         results.print(!showOnlyFailingCases);
     } else {
         results = makeTests(tests, world.catalog);
@@ -186,11 +187,17 @@ export async function runFuzzer(
 export async function runTests(
     tests: IterableIterator<TestCase>,
     catalog: ICatalog,
-    processor: Processor
+    processor: Processor,
+    testCount: number
 ): Promise<AggregatedResults> {
     const results = new AggregatedResults();
 
+    let count = 0;
     for (const test of tests) {
+        if (count === testCount) {
+            break;
+        }
+        count++;
         const result = await test.run(processor, catalog);
         results.recordResult(result);
     }
@@ -219,7 +226,7 @@ export function makeTests(
 //
 ///////////////////////////////////////////////////////////////////////////////
 export type TestCaseGenerator = 
-    (world: World, count: number) => IterableIterator<TestCase>;
+    (world: World) => IterableIterator<TestCase>;
 
 export interface TestCaseGeneratorDescription
 {
@@ -242,9 +249,9 @@ export class TestCaseGeneratorFactory {
         }
     }
 
-    get(name: string, world: World, count: number): IterableIterator<TestCase> {
+    get(name: string, world: World): IterableIterator<TestCase> {
         if (this.generators.has(name)) {
-            return this.generators.get(name)!.factory(world, count);
+            return this.generators.get(name)!.factory(world);
         } else {
             const message = `Unknown test case generator "${name}".`;
             throw TypeError(message);

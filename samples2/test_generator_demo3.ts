@@ -10,7 +10,7 @@ import {
 } from 'prix-fixe';
 
 // TODO: Currently importing directly from fuzzer3 because of export conflicts
-// during refactoring. Change this import to '../src' once refactoring is done.
+// during refactoring. Change this import to '../src' once refactoring is complete.
 import {
     AliasGenerator,
     AttributeGenerator,
@@ -32,10 +32,10 @@ import {
     TestCaseGeneratorFactory,
 } from '../src/fuzzer3';
 
-dotenv.config();
 
 async function go()
 {
+    dotenv.config();
     const testCaseGeneratorFactory = new TestCaseGeneratorFactory([
         {
             name: 'sprint4',
@@ -249,18 +249,17 @@ function configureProductGenerators(
     };
 }
 
-function *sprint4(world: World, count: number) {
-    yield *generateOrders(world, false, count);
+function *sprint4(world: World) {
+    yield *generateOrders(world, false);
 }
 
-function *sprint5(world: World, count: number) {
-    yield *generateOrders(world, true, count);
+function *sprint5(world: World) {
+    yield *generateOrders(world, true);
 }
 
 function* generateOrders(
     world: World,
-    generateOptions: boolean,
-    count: number
+    generateOptions: boolean
 ): IterableIterator<TestCase> {
     const {prologueGenerator, productGenerator, epilogueGenerator} =
         configureProductGenerators(world, generateOptions);
@@ -279,7 +278,7 @@ function* generateOrders(
 
     const random = new Random("1234");
 
-    for (let i = 0; i < count; ++i) {
+    while (true) {
         yield createTestCase(
             world.catalog,
             // removalGenerator.randomGenericEntityRemoval(random)
@@ -289,8 +288,7 @@ function* generateOrders(
 }
 
 function* remove(
-    world: World,
-    count: number
+    world: World
 ): IterableIterator<TestCase> {
     const generateOptions = true;
     const {prologueGenerator, productGenerator, epilogueGenerator} =
@@ -331,7 +329,7 @@ function* remove(
 
     const random = new Random("1234");
 
-    for (let i = 0; i < count; ++i) {
+    while (true) {
         yield createTestCase(
             world.catalog,
             removalGenerator.randomGenericEntityRemoval(random)
