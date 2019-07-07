@@ -18,7 +18,7 @@ import {
     OptionToken,
     QUANTITY,
     UNIT,
-} from '../unified';
+} from '../lexer';
 
 import { GapToken, Segment } from './interfaces';
 import { TokenSequence } from './token_sequence';

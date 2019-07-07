@@ -19,7 +19,7 @@ import {
     QUANTITY,
     UNIT,
     REMOVE_ITEM
-} from '../unified';
+} from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
 

@@ -7,7 +7,7 @@ import {
     EntityToken,
     OptionToken,
     UnitToken,
-} from '../unified';
+} from '../lexer';
 
 export interface ConjunctionToken extends Token {
     type: CONJUNCTION;

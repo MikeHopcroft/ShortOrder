@@ -1,6 +1,6 @@
 import { PID } from 'prix-fixe';
 
-import { AttributeToken, EntityToken, OptionToken } from '../unified';
+import { AttributeToken, EntityToken, OptionToken } from '../lexer';
 
 import { AttributeInfo } from './attribute_info';
 import { Matrix } from './matrix';

@@ -1,6 +1,6 @@
 import { generateAliases } from 'token-flow';
 
-import { patternFromExpression } from '../unified';
+import { patternFromExpression } from '../lexer';
 
 import { WordX } from './fuzzer';
 import { Random } from './utilities';

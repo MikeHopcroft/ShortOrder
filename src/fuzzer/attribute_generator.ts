@@ -12,7 +12,7 @@ import {
 
 import {
     patternFromExpression
-} from '../unified';
+} from '../lexer';
 
 import {
     AttributeX,

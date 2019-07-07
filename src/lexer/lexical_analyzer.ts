@@ -20,11 +20,11 @@ import {
 } from 'prix-fixe';
 
 import { stopwordsFromYamlString } from '../stopwords';
-import { tokenToString } from '../unified';
 
 import { CreateAttribute } from './attributes';
 import { CreateEntity } from './entities';
 import { intentTokenFactory } from './intents';
+import { tokenToString } from './lexical_utilities';
 import { CreateOption } from './options';
 import { quantityTokenFactory } from './quantities';
 import { unitTokenFactory } from './units';

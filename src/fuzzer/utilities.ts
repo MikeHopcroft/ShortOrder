@@ -1,7 +1,7 @@
 import * as seedrandom from 'seedrandom';
 import { generateAliases, Item } from 'token-flow';
-import { patternFromExpression } from '../unified';
-//import { Generator } from './generator';
+
+import { patternFromExpression } from '../lexer';
 
 export function* aliasesFromOneItem(item: Item) {
     for (const expression of item.aliases) {

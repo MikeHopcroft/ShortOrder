@@ -1,7 +1,7 @@
 import {
     ENTITY,
     EntityToken,
-} from '../unified';
+} from '../lexer';
 
 import {
     GapToken,
