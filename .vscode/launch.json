@@ -43,128 +43,15 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch relevance_demo_english",
-            "program": "${workspaceFolder}/build/samples/relevance_demo_english.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch relevance_demo_spanish",
-            "program": "${workspaceFolder}/build/samples/relevance_demo_spanish.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch relevance_demo_cars",
-            "program": "${workspaceFolder}/build/samples/relevance_demo_cars.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Unified Demo",
-            "program": "${workspaceFolder}/build/samples/unified_demo.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch REPL",
-            "program": "${workspaceFolder}/build/samples/repl_demo.js",
-            "outputCapture": "std",
-            "console": "externalTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Cart Demo",
-            "program": "${workspaceFolder}/build/samples/cart_demo.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Parser Demo",
-            "program": "${workspaceFolder}/build/samples/parser_demo.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Parse-Tokens Demo",
-            "program": "${workspaceFolder}/build/samples/parse_tokens_demo.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Menu Demo",
-            "program": "${workspaceFolder}/build/samples/menu_demo.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Test Maker",
-            "program": "${workspaceFolder}/build/samples/test_maker.js",
-            "outputCapture": "std",
-            "args": ["./data/restaurant-en/test_utterances.txt", "./data/restaurant-en/generated_tests.yaml"]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Test Generator",
-            "program": "${workspaceFolder}/build/samples/test_generator_demo.js",
-            "outputCapture": "std",
-            "args": ["./data/restaurant-en/test_utterances.txt", "./data/restaurant-en/generated_tests.yaml"]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Test Runner",
-            "program": "${workspaceFolder}/build/samples/test_runner.js",
-            "outputCapture": "std",
-            "args": ["-a"]
-            // "args": ["-a", "-s=car"]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Stemmer Confusion Demo",
-            "program": "${workspaceFolder}/build/samples/stemmer_confusion_demo.js",
-            "outputCapture": "std"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Matrix Demo",
-            "program": "${workspaceFolder}/build/samples/matrix_demo.js",
-            "outputCapture": "std"
-        },
-
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "AAA Parser Test",
-            "program": "${workspaceFolder}/build/samples2/parser_test_demo.js",
-            "outputCapture": "std",
-            "args": ["-a"]
-            // "args": ["-a", "-s=bug"]
-        },
-        {
-            "type": "node",
-            "request": "launch",
             "name": "AAA Process One Demo",
-            "program": "${workspaceFolder}/build/samples2/process_one_demo.js",
+            "program": "${workspaceFolder}/build/samples/process_one_demo.js",
             "outputCapture": "std",
         },
         {
             "type": "node",
             "request": "launch",
             "name": "AAA Test Generator",
-            "program": "${workspaceFolder}/build/samples2/test_generator_demo3.js",
+            "program": "${workspaceFolder}/build/samples/test_generator.js",
             "outputCapture": "std",
             "args": ["-n 25", "-v=so"]
             // "args": ["-v=so", "-n 100"]
@@ -174,7 +61,7 @@
             "type": "node",
             "request": "launch",
             "name": "AAA Test Runner",
-            "program": "${workspaceFolder}/build/samples2/test_runner.js",
+            "program": "${workspaceFolder}/build/samples/test_runner.js",
             "outputCapture": "std",
             "args": ["c:\\temp\\foo.yaml"]
             // "args": ["-n=2", "-o=foo.yaml"]
@@ -183,21 +70,21 @@
             "type": "node",
             "request": "launch",
             "name": "AAA Confusion",
-            "program": "${workspaceFolder}/build/samples2/confusion_matrix.js",
+            "program": "${workspaceFolder}/build/samples/confusion_matrix.js",
             "outputCapture": "std"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "AAA Test Maker",
-            "program": "${workspaceFolder}/build/samples2/test_maker.js",
+            "name": "AAA Tests From Text",
+            "program": "${workspaceFolder}/build/samples/tests_from_text.js",
             "outputCapture": "std"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "AAA REPL",
-            "program": "${workspaceFolder}/build/samples2/repl.js",
+            "program": "${workspaceFolder}/build/samples/repl.js",
             "outputCapture": "std",
             "console": "externalTerminal"
        }

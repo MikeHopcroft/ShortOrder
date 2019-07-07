@@ -41,7 +41,7 @@ Before using `short-order`, you must tell it where to find the menu data files, 
 * Set the `PRIX_FIXE_DATA` in a `.env` file at the root of the repo.
 * Using the `-d` command-line argument in tools like `confusion_matrix`, `test_maker.js`, and `test_runner.js`.
 
-`short-order` includes a number of working samples, based on a ficticious restaurant. These files can be found in [samples2/data](samples2/data).
+`short-order` includes a number of working samples, based on a ficticious restaurant. These files can be found in [samples/data](samples/data).
 
 These samples are not included in the [short-order npm package](https://www.npmjs.com/package/short-order). To use them, you must
 clone the [repo from GitHub](https://github.com/MikeHopcroft/ShortOrder).
