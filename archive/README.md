@@ -1,8 +1,7 @@
 # short-order [![Build Status](https://travis-ci.com/MikeHopcroft/ShortOrder.svg?branch=master)](https://travis-ci.com/MikeHopcroft/ShortOrder)
 
-<div style="color:lightsalmon;border:solid red">
-
-**NOTICE:** we're in the process of a major refactoring.
+<div style="color:red;border:solid red">
+NOTICE: we're in the process of a major refactoring.
 
 Commit [aa324a0f](commit/aa324a0ff72e01f23df7ea7f47edb3836fc7c308) is the last version that maintains the functionality described in the original
 [README.md](archive/README.md). This commit is tagged [deprecate-original]().
