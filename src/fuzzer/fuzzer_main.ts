@@ -32,7 +32,8 @@ export async function fuzzerMain(
         (args['failed'] === true);
 
     const defaultCount = 10;
-    const count = (args['n'] || defaultCount);
+    const countArg = Number(args['n']);
+    const count: number = (countArg || defaultCount);
 
     const help = 
         (args['h'] === true) || 
@@ -88,7 +89,7 @@ function showUsage(
     console.log('-o outfile      Write cases to YAML file.');
     console.log('                Without -o, cases will be printed to the console.');
     console.log('-t [generator]  Use the named test case generator.');
-    console.log('                (defaults to ???).');
+    console.log(`                (default is '-t=${testCaseGeneratorFactory.getDefaultName()}').`);
     console.log('-v [processor]  Run the generated cases with the specified processor.');
     console.log('                or the domain-specific-entity processor (dse).');
     console.log('-f|failed       When verifying, show only failing cases.');
@@ -145,7 +146,7 @@ export async function runFuzzer(
         results = await runTests(tests, world.catalog, processor, count);
         results.print(!showOnlyFailingCases);
     } else {
-        results = makeTests(tests, world.catalog);
+        results = makeTests(tests, world.catalog, count);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -207,11 +208,17 @@ export async function runTests(
 
 export function makeTests(
     tests: IterableIterator<TestCase>,
-    catalog: ICatalog
+    catalog: ICatalog,
+    testCount: number
 ): AggregatedResults {
     const results = new AggregatedResults();
 
+    let count = 0;
     for (const test of tests) {
+        if (count === testCount) {
+            break;
+        }
+        count++;
         const result = new Result(test, test.expected, true, undefined, 0);
         results.recordResult(result);
     }

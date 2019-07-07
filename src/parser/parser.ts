@@ -108,7 +108,7 @@ export class Parser {
         if (delta/1.0e6 > 65) {
         // if (delta/1.0e6 > 1) {
             console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
-            console.log(`Time: ${delta/1.0e6}`);
+            console.log(`Time: ${delta/1.0e6}ms`);
             console.log(`  "${text}"`);
             lexer.analyzePaths(text);
         }

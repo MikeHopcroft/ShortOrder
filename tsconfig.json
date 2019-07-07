@@ -13,8 +13,8 @@
   "include": [
     "samples/*.ts",
     "samples/**/*.ts",
-    "samples2/*.ts",
-    "samples2/**/*.ts",
+    "samples/*.ts",
+    "samples/**/*.ts",
     "src/*.ts",
     "src/**/*.ts",
     "test/*.ts",

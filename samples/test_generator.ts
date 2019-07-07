@@ -36,18 +36,23 @@ async function go()
     dotenv.config();
     const testCaseGeneratorFactory = new TestCaseGeneratorFactory([
         {
-            name: 'sprint4',
-            description: 'single product with quantifiers and attributes',
-            factory: sprint4,
+            name: 'a',
+            description: 'Level A: single product with quantifiers and attributes',
+            factory: levelA,
         },
         {
-            name: 'sprint5',
-            description: 'single product with quantifiers, attributes, and options',
-            factory: sprint5,
+            name: 'b',
+            description: 'Level B: single product with quantifiers, attributes, and options',
+            factory: levelB,
         },
         {
-            name: 'remove',
-            description: 'remove a single product',
+            name: 'c',
+            description: 'Level C: multiple products with quantifiers, attributes, and options',
+            factory: levelC,
+        },
+        {
+            name: 'd',
+            description: 'Level D: remove a single product by its generic name',
             factory: remove,
         }
     ]);
@@ -247,16 +252,21 @@ function configureProductGenerators(
     };
 }
 
-function *sprint4(world: World) {
-    yield *generateOrders(world, false);
+function *levelA(world: World) {
+    yield *generateOrders(world, 1, false);
 }
 
-function *sprint5(world: World) {
-    yield *generateOrders(world, true);
+function *levelB(world: World) {
+    yield *generateOrders(world, 1, true);
+}
+
+function *levelC(world: World) {
+    yield *generateOrders(world, 3, true);
 }
 
 function* generateOrders(
     world: World,
+    maxSegmentCount: number,
     generateOptions: boolean
 ): IterableIterator<TestCase> {
     const {prologueGenerator, productGenerator, epilogueGenerator} =
@@ -265,8 +275,6 @@ function* generateOrders(
     //
     // Orders
     //
-    // const maxSegmentCount = 1;
-    const maxSegmentCount = 3;
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
         productGenerator,
@@ -279,7 +287,6 @@ function* generateOrders(
     while (true) {
         yield createTestCase(
             world.catalog,
-            // removalGenerator.randomGenericEntityRemoval(random)
             [orderGenerator.randomOrder(random)]
         );
     }
@@ -296,9 +303,9 @@ function* remove(
     // Remove Prologues
     //
     const removePrologues = [
-        "(can,could,would) you [please] remove [the]",
-        "[please] remove [the]",
-        "I (don't,do not) (want,need) [the]",
+        "(can,could,would) you [please] remove the",
+        "[please] remove the",
+        "I (don't,do not) (want,need) the",
         "(lose,remove) the"
     ];
     const removePrologueGenerator = new AliasGenerator(removePrologues);
