@@ -2,7 +2,7 @@ export * from './actions';
 export * from './attributes';
 export * from './cart';
 export * from './catalog';
-export * from './fuzzer3';
+export * from './fuzzer';
 export * from './order';
 export * from './parser';
 // Deliberately omit ./parser2 because of conflicting exports during refactor.

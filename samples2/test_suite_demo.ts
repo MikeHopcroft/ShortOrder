@@ -3,7 +3,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import { State, TestSuite } from 'prix-fixe';
 
-import { createWorld, createShortOrderProcessor } from '../src/fuzzer3';
+import { createWorld, createShortOrderProcessor } from '../src';
 
 // This processor does nothing. Replace it with code that processes the text
 // utterance to produce a new State.

@@ -9,8 +9,6 @@ import {
     World,
 } from 'prix-fixe';
 
-// TODO: Currently importing directly from fuzzer3 because of export conflicts
-// during refactoring. Change this import to '../src' once refactoring is complete.
 import {
     AliasGenerator,
     AttributeGenerator,
@@ -30,7 +28,7 @@ import {
     RemovalGenerator,
     RIGHT,
     TestCaseGeneratorFactory,
-} from '../src/fuzzer3';
+} from '../src';
 
 
 async function go()
