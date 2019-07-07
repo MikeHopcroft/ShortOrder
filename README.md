@@ -4,13 +4,17 @@
 
 **NOTICE:** we're in the process of a major refactoring.
 
-Commit [aa324a0f](commit/aa324a0ff72e01f23df7ea7f47edb3836fc7c308) is the last version that maintains the functionality described in the original
-[README.md](archive/README.md). This commit is tagged [deprecate-original]().
+Commit [e00b2205](https://github.com/MikeHopcroft/ShortOrder/commit/e00b220546a5dc06189fbc0a6e394b19b7373744) is the last version that maintains the functionality described in the original
+[README.md](archive/README.md). This commit is tagged
+[deprecate-original](https://github.com/MikeHopcroft/ShortOrder/releases/tag/deprecate-original).
 
 The last NPM package version with the original algorithm is [short-order@v0.0.48](https://www.npmjs.com/package/short-order/v/0.0.48).
 
 Much of the original code will be stored in the [archive](archive) folder until the refactor is complete and the original functionality is restored.
 </div>
+
+---
+
 
 **short-order** is an exerimental natural language conversational agent intended for domains with a fixed vocabulary of entities and a small number of intents. Uses might include ordering food from a restaurant or organizing your song collection.
 
