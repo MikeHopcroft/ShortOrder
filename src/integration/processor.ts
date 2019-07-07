@@ -1,6 +1,6 @@
 import { State, World } from 'prix-fixe';
 
-import { LexicalAnalyzer } from './lexical_analyzer';
+import { LexicalAnalyzer } from '../unified/lexical_analyzer';
 
 // TODO: temporarily importing from parser2 directory because of export
 // conflicts during refactor.

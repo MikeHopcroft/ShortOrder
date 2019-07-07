@@ -4,7 +4,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
 
-import { createProcessor } from '../unified';
+import { createProcessor } from '../integration';
 
 import {
     AggregatedResults,
