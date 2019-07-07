@@ -1,7 +1,13 @@
 import { assert } from 'chai';
 import 'mocha';
 
-import { enumerateSplits, splitOnEntities, SequenceToken, GapToken } from '../../src/parser2';
+import {
+    EntityToken,
+    enumerateSplits,
+    splitOnEntities,
+    SequenceToken,
+    GapToken
+} from '../../src';
 
 import {
     attributeChocolate,
@@ -18,8 +24,6 @@ import {
     quantityFive,
     unitPumps,
 } from '../shared';
-
-import { EntityToken } from '../../src';
 
 describe('Parser Utilities', () => {
 

@@ -3,7 +3,7 @@ import 'mocha';
 
 import { AttributeInfo, CartOps, ItemInstance, Key } from 'prix-fixe';
 
-import { EntityBuilder, Segment } from '../../src/parser2';
+import { EntityBuilder, Segment } from '../../src';
 
 import {
     smallWorldAttributes,

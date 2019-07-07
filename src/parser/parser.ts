@@ -50,7 +50,7 @@ function printSegment(segment: Segment) {
     console.log(`    right: ${right}`);
 }
 
-export class Parser2 {
+export class Parser {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
     private readonly rules: RuleChecker;

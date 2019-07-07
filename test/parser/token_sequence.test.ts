@@ -1,9 +1,7 @@
 import { assert } from 'chai';
 import 'mocha';
 
-import { AttributeToken } from '../../src';
-
-import { TokenSequence } from '../../src/parser2';
+import { AttributeToken, TokenSequence } from '../../src';
 
 import {
     attributeChocolate,

@@ -4,6 +4,7 @@ import {
     ATTRIBUTE,
     AttributeToken,
     CONJUNCTION,
+    ConjunctionToken,
     ENTITY,
     EntityToken,
     OPTION,
@@ -11,8 +12,6 @@ import {
     UNIT,
     UnitToken
 } from '../../src';
-
-import { ConjunctionToken } from '../../src/parser2';
 
 import {
     caffeineDecaf,

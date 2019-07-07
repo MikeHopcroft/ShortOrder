@@ -1,7 +1,7 @@
 import { State, World } from 'prix-fixe';
 
 import { LexicalAnalyzer } from '../lexer';
-import { Parser2, SequenceToken } from '../parser2';
+import { Parser, SequenceToken } from '../parser';
 
 
 export function createProcessor(
@@ -21,7 +21,7 @@ export function createProcessor(
         stopwordsFile,
     );
 
-    const parser = new Parser2(
+    const parser = new Parser(
         world.cartOps,
         world.attributeInfo,
         world.ruleChecker,
