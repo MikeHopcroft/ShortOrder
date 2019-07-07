@@ -209,18 +209,19 @@ function configureProductGenerators(
     // Prologues
     //
     const prologues = [
-        "(I'd,I would) like",
-        "(I'll,I will) (do,get,have,take)",
-        "I (need,want)",
-        "(get,give) me",
-        "(can,could,may) I [just,please] (do,get,have)",
-        "[please] set me up with",
-        "[please] hook me up with",
-        "we need",
-        "we want",
-        "(we'd,we would) like",
-        "(we'll, we will) have",
-        "how about",
+        "[all right,alright,allrighty,ok,ok let's see,let's see,you got it,sure,sure not a problem,not a problem] (that's,that is,I'll add,I've added,I have added,I added,I have,we've got,we have)"
+        // "(I'd,I would) like",
+        // "(I'll,I will) (do,get,have,take)",
+        // "I (need,want)",
+        // "(get,give) me",
+        // "(can,could,may) I [just,please] (do,get,have)",
+        // "[please] set me up with",
+        // "[please] hook me up with",
+        // "we need",
+        // "we want",
+        // "(we'd,we would) like",
+        // "(we'll, we will) have",
+        // "how about",
     ];
     const prologueGenerator = new AliasGenerator(prologues);
 
@@ -228,12 +229,16 @@ function configureProductGenerators(
     // Epilogues
     //
     const epilogues = [
-        "I'm (done,fine,good)",
-        "thank you",
-        "thanks",
-        "that's (all,everything,it)",
-        "(that'll,that will,that should) (be,do) it",
-        "bye",
+        "(anything else for, is that all for, is there anything else for) (you, ya) [this morning, this afternoon, this evening, today]",
+        "what else (are we getting, can I get for you) [this morning, this afternoon, this evening, today]",
+        "is that everything (for you, for ya) [this morning, this afternoon, this evening, today]",
+        "(is that everything, is that all, anything else, is there anything else) [for you, for ya]",
+        // "I'm (done,fine,good)",
+        // "thank you",
+        // "thanks",
+        // "that's (all,everything,it)",
+        // "(that'll,that will,that should) (be,do) it",
+        // "bye",
     ];
     const epilogueGenerator = new AliasGenerator(epilogues);
 

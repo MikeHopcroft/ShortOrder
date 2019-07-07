@@ -5,13 +5,20 @@ import {
     RuleChecker
 } from 'prix-fixe';
 
-import { Token } from 'token-flow';
+import { Token, NUMBERTOKEN } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
+    ATTRIBUTE,
+    CONJUNCTION,
+    ENTITY,
     EntityToken,
     tokenToString,
-    LexicalAnalyzer
+    LexicalAnalyzer,
+    OPTION,
+    QUANTITY,
+    UNIT,
+    REMOVE_ITEM
 } from '../unified';
 
 import { EntityBuilder } from './entity_builder';
@@ -19,8 +26,10 @@ import { EntityBuilder } from './entity_builder';
 import {
     HypotheticalItem,
     Interpretation,
+    ProductToken,
     Segment,
-    SequenceToken
+    SequenceToken,
+    PRODUCT_PARTS
 } from './interfaces';
 
 import {
@@ -28,6 +37,7 @@ import {
     splitOnEntities,
 } from './parser_utilities';
 
+import { TokenSequence } from './token_sequence';
 
 function printSegment(segment: Segment) {
     const left = segment.left.map(tokenToString).join('');
@@ -45,6 +55,11 @@ export class Parser2 {
     private readonly info: AttributeInfo;
     private readonly rules: RuleChecker;
     private readonly debugMode: boolean;
+
+    intentTokens = [
+        ADD_TO_ORDER,
+        REMOVE_ITEM
+    ];
 
     constructor(cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker, debugMode: boolean) {
         this.cartOps = cartOps;
@@ -115,12 +130,60 @@ export class Parser2 {
     }
 
     parseRoot2(tokens: Token[]): Interpretation {
-        // TODO: HACK: BUGBUG:
-        // TODO: Remove this code once the parser handles intents.
-        if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
-            tokens.shift();
+        const grouped = new TokenSequence<Token>(
+            this.groupProductParts(tokens)
+        );
+
+        while (!grouped.atEOS()) {
+            if (grouped.startsWith([ADD_TO_ORDER, PRODUCT_PARTS])) {
+                const add = grouped.peek(0);
+                const parts = (grouped.peek(1) as ProductToken).tokens;
+                grouped.take(2);
+                return this.findBestInterpretation(parts);
+            } else if (grouped.startsWith([REMOVE_ITEM, PRODUCT_PARTS])) {
+                console.log('REMOVE_ITEM not implemented');
+                grouped.take(2);
+            } else {
+                grouped.discard(1);
+            }
         }
-        return this.findBestInterpretation(tokens as SequenceToken[]);
+
+        // We didn't find any interpretations.
+        // Return an empty interpretation.
+        return {score: 0, items: []}; 
+ 
+        // // TODO: HACK: BUGBUG:
+        // // TODO: Remove this code once the parser handles intents.
+        // if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
+        //     tokens.shift();
+        // }
+        // return this.findBestInterpretation(tokens as SequenceToken[]);
+    }
+
+    groupProductParts(tokens: Token[]) {
+        const grouped: Token[] = [];
+        let productParts: SequenceToken[] = [];
+        for (const token of tokens) {
+            if (!this.intentTokens.includes(token.type)) {
+                productParts.push(token as SequenceToken);
+            } else {
+                if (productParts.length > 0) {
+                    grouped.push({
+                        type: PRODUCT_PARTS,
+                        tokens: productParts
+                    } as ProductToken);
+                    productParts = [];
+                }
+                grouped.push(token);
+            }
+        }
+        if (productParts.length > 0) {
+            grouped.push({
+                type: PRODUCT_PARTS,
+                tokens: productParts
+            } as ProductToken);
+        }
+        return grouped;
     }
 
     findBestInterpretation(tokens: SequenceToken[]): Interpretation {

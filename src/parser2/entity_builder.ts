@@ -6,7 +6,6 @@ import {
     ItemInstance,
     PID,
     RuleChecker,
-    Tensor
 } from 'prix-fixe';
 
 import { NumberToken, NUMBERTOKEN } from 'token-flow';

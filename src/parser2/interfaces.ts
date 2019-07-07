@@ -1,16 +1,23 @@
 import { ItemInstance } from 'prix-fixe';
-import { NumberToken } from 'token-flow';
+import { NumberToken, Token } from 'token-flow';
 
 import {
     AttributeToken,
+    CONJUNCTION,
     EntityToken,
     OptionToken,
     UnitToken,
-    CONJUNCTION,
 } from '../unified';
 
-export interface ConjunctionToken {
+export interface ConjunctionToken extends Token {
     type: CONJUNCTION;
+}
+
+export const PRODUCT_PARTS: unique symbol = Symbol('PRODUCT_PARTS');
+export type PRODUCT_PARTS = typeof PRODUCT_PARTS;
+export interface ProductToken extends Token {
+    type: PRODUCT_PARTS;
+    tokens: SequenceToken[];
 }
 
 export type SequenceToken = 
@@ -21,15 +28,12 @@ export type SequenceToken =
     NumberToken |
     UnitToken;
 
-// TODO: conjunction token
 export type GapToken = 
     AttributeToken |
     ConjunctionToken |
-    EntityToken |
     OptionToken |
     NumberToken |
     UnitToken;
-
 
 export interface Segment {
     left: GapToken[];

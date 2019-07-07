@@ -10,7 +10,8 @@ import {
     AttributeToken,
     ENTITY,
     OPTION,
-    QUANTITY, UNIT, WORD, EntityToken } from '../unified';
+    QUANTITY, UNIT, WORD, EntityToken
+} from '../unified';
 
 
 export function tokenToColoredString(t: Token, catalog: Catalog, attributeInfo: AttributeInfo) {
