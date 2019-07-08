@@ -91,7 +91,8 @@ function showUsage(
     console.log('-t [generator]  Use the named test case generator.');
     console.log(`                (default is '-t=${testCaseGeneratorFactory.getDefaultName()}').`);
     console.log('-v [processor]  Run the generated cases with the specified processor.');
-    console.log('                or the domain-specific-entity processor (dse).');
+    // TODO: get default processor name from factory.
+    console.log(`                (default is '-v=so').`);
     console.log('-f|failed       When verifying, show only failing cases.');
     console.log('-h|help|?       Show this message.');
     console.log(' ');

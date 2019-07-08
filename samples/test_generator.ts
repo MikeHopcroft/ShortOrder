@@ -303,10 +303,11 @@ function* remove(
     // Remove Prologues
     //
     const removePrologues = [
-        "(can,could,would) you [please] remove the",
-        "[please] remove the",
-        "I (don't,do not) (want,need) the",
-        "(lose,remove) the"
+        "[no problem,sure thing,yeah,great,allrighty,ok,alright] [so] (i've,i have,i will,we've) (take off,remove) (the,that)"
+        // "(can,could,would) you [please] remove the",
+        // "[please] remove the",
+        // "I (don't,do not) (want,need) the",
+        // "(lose,remove) the"
     ];
     const removePrologueGenerator = new AliasGenerator(removePrologues);
 
@@ -314,12 +315,16 @@ function* remove(
     // Remove Epilogues
     //
     const removeEpilogues = [
-        "I'm (done,fine,good)",
-        "thank you",
-        "thanks",
-        "that's (all,everything,it)",
-        "(that'll,that will,that should) (be,do) it",
-        "bye",
+        "(anything else for, is that all for, is there anything else for) (you, ya) [this morning, this afternoon, this evening, today]",
+        "what else (are we getting, can I get for you) [this morning, this afternoon, this evening, today]",
+        "is that everything (for you, for ya) [this morning, this afternoon, this evening, today]",
+        "(is that everything, is that all, anything else, is there anything else) [for you, for ya]",
+        // "I'm (done,fine,good)",
+        // "thank you",
+        // "thanks",
+        // "that's (all,everything,it)",
+        // "(that'll,that will,that should) (be,do) it",
+        // "bye",
     ];
     const removeEpilogueGenerator = new AliasGenerator(removeEpilogues);
 
