@@ -6,7 +6,7 @@ import * as path from 'path';
 import { Catalog, TestSuite } from 'prix-fixe';
 
 import {
-    createShortOrderProcessor,
+    createShortOrderWorld,
     createWorld,
     speechToTextFilter,
 } from '../src';
@@ -86,7 +86,7 @@ async function go() {
     // Set up short-order processor
     //
     const world = createWorld(dataPath);
-    const processor = createShortOrderProcessor(world, dataPath, false);
+    const processor = createShortOrderWorld(world, dataPath, false).processor;
 
     // Run test suite to get new baseline.
     const priority = 0;

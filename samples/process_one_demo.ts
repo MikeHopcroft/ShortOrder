@@ -3,7 +3,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import { TestCase, TestLineItem, TestOrder } from 'prix-fixe';
 
-import { createShortOrderProcessor, createWorld } from '../src';
+import { createShortOrderWorld, createWorld } from '../src';
 
 function showUsage() {
     const program = path.basename(process.argv[1]);
@@ -47,7 +47,7 @@ async function go(utterance: string) {
     }
 
     const world = createWorld(dataPath);
-    const processor = createShortOrderProcessor(world, dataPath, true);
+    const processor = createShortOrderWorld(world, dataPath, true).processor;
 
     const testCase = new TestCase(
         0,

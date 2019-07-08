@@ -5,7 +5,7 @@ import * as path from 'path';
 import { TestSuite } from 'prix-fixe';
 
 import {
-    createShortOrderProcessor,
+    createShortOrderWorld,
     createWorld,
 } from '../src';
 
@@ -77,7 +77,7 @@ async function go() {
     // Set up short-order processor
     //
     const world = createWorld(dataPath);
-    const processor = createShortOrderProcessor(world, dataPath, false);
+    const processor = createShortOrderWorld(world, dataPath, false).processor;
 
     //
     // Run the tests

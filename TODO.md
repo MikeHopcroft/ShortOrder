@@ -1,5 +1,7 @@
 # TODO List
 
+* REPL: Replace .menu with .products and .options
+* Add processor factory to test_runner and repl_main
 * x createWorld() and createShortOrderProcessor() should not be in fuzzerMain
 * rename fuzzer.ts
 

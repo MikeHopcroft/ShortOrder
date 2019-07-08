@@ -5,11 +5,6 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import * as replServer from 'repl';
 
-// TODO
-// Replace .menu with .products and .options
-// Implement tokenize
-
-
 import {
     Cart,
     GenericTypedEntity, 
@@ -20,7 +15,8 @@ import {
     State
 } from 'prix-fixe';
 
-import { createShortOrderProcessor, createWorld } from '../integration';
+import { createShortOrderWorld, createWorld } from '../integration';
+import { tokenToString } from '../lexer';
 import { speechToTextFilter } from './speech_to_text_filter';
 
 
@@ -88,7 +84,10 @@ export function runRepl(
     // Set up the tokenizer pipeline.
     const world = createWorld(dataPath);
     const catalog = world.catalog;
-    const processor = createShortOrderProcessor(world, dataPath, false);
+
+    const world2 = createShortOrderWorld(world, dataPath, false);
+    const lexer = world2.lexer;
+    const processor = world2.processor;
 
     let state: State = { cart: { items: [] } };
 
@@ -145,17 +144,12 @@ export function runRepl(
                 console.log(`${style.red.close}`);
             }
     
-            // const tokens = unified.processOneQuery(text);
-
-            // console.log(`${style.black.open}`);
-
-            // console.log(tokens.map(tokenToString).join('\n'));
-
-            // console.log(tokens.map(tokenToString).join('\n'));
-
-            // console.log(`${style.black.close}`);
-
-            console.log('Tokenize not implemented.');
+            const tokenizations = lexer.tokenizations(text);
+            let counter = 0;
+            for (const tokens of tokenizations) {
+                console.log(`${counter}: ${tokens.map(tokenToString).join(' ')}`);
+                counter++;
+            }
     
             repl.displayPrompt();
         }

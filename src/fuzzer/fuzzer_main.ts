@@ -4,7 +4,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
 
-import { createWorld, createShortOrderProcessor } from '../integration';
+import { createWorld, createShortOrderWorld } from '../integration';
 
 import {
     AggregatedResults,
@@ -282,7 +282,7 @@ export interface ProcessorDescription {
 }
 
 function shortOrderFactory(world: World, dataPath: string) {
-    return createShortOrderProcessor(world, dataPath, false);
+    return createShortOrderWorld(world, dataPath, false).processor;
 }
 
 export class ProcessorFactory {

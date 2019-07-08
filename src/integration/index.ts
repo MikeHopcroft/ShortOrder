@@ -1,2 +1,1 @@
-export * from './factories';
-export * from './processor';
+export * from './short-order-world';
