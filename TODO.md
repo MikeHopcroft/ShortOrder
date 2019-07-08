@@ -1,5 +1,11 @@
 # TODO List
 
+* Item removal
+    * Interpretations for each sort of action: add, remove, modify
+    * Query data structure
+    * Query execution
+    * Parser check for more than one product in parts
+
 * Item removal fuzzing
     * Item name generalizer based on term frequency and stop words
     * Target item searching
@@ -8,16 +14,17 @@
         * Keys with differnt tensors: [407:*:1,408:1:2:3]
         * Children/options
         * Key builder - group by tensor
+    * those vs that peephole fixup based on quantity
 
 * x Alias collision detection tool
-* . Suppressing 'add', 'hot', 'regular'?
-    * This is just an attribute.yaml issue.
-    * Document all hand-authored changes to attributes.
+* x Suppressing 'add', 'hot', 'regular'?
+    * x This is just an attribute.yaml issue.
+    * x Document all hand-authored changes to attributes.
 * x Enforcing mutual exclusion in fuzzer
 * Units for options, by CID?
 * LEFT, RIGHT, EITHER for options, by CID?
-* short-order uses graph api
-* generate removals
+* x short-order uses graph api
+* x generate removals
 
 * NEW
     * quantified: NEVER, DEFAULT, ALWAYS
@@ -37,11 +44,11 @@
     * Rebasing support for TestSuite
     * Return code for TestSuite
     * TestSuite app
-    * Measure and report min, max, mean, percentile latency
+    * x Measure and report min, max, mean, percentile latency
     * Return code
 * Parser2
     * Figure out how to reintroduce implied quantifiers. Then revert unit test changes. Parser change introduced in 8bbd7455.
-    * Group EntitySequenceTokens
+    * x Group EntitySequenceTokens
     * x Add to order
     * Remove
     * Restate

@@ -39,17 +39,6 @@ import {
 
 import { TokenSequence } from './token_sequence';
 
-function printSegment(segment: Segment) {
-    const left = segment.left.map(tokenToString).join('');
-    const entity = tokenToString(segment.entity);
-    const right = segment.right.map(tokenToString).join('');
-
-    console.log('  Segment');
-    console.log(`    left: ${left}`);
-    console.log(`    entity: ${entity}`);
-    console.log(`    right: ${right}`);
-}
-
 export class Parser {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
@@ -60,6 +49,21 @@ export class Parser {
         ADD_TO_ORDER,
         REMOVE_ITEM
     ];
+
+    validTokens = new Set<Symbol>([
+        // Intents
+        ADD_TO_ORDER,
+        REMOVE_ITEM,
+
+        // Product-related
+        ATTRIBUTE,
+        CONJUNCTION,
+        ENTITY,
+        OPTION,
+        NUMBERTOKEN,
+        QUANTITY,
+        UNIT,
+    ]);
 
     constructor(cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker, debugMode: boolean) {
         this.cartOps = cartOps;
@@ -130,8 +134,9 @@ export class Parser {
     }
 
     parseRoot2(tokens: Token[]): Interpretation {
+        const filtered = this.filterBadTokens(tokens);
         const grouped = new TokenSequence<Token>(
-            this.groupProductParts(tokens)
+            this.groupProductParts(filtered)
         );
 
         while (!grouped.atEOS()) {
@@ -142,6 +147,9 @@ export class Parser {
                 return this.findBestInterpretation(parts);
             } else if (grouped.startsWith([REMOVE_ITEM, PRODUCT_PARTS])) {
                 console.log('REMOVE_ITEM not implemented');
+                const remove = grouped.peek(0);
+                const parts = (grouped.peek(1) as ProductToken).tokens;
+                this.parseRemove(parts);
                 grouped.take(2);
             } else {
                 grouped.discard(1);
@@ -151,13 +159,17 @@ export class Parser {
         // We didn't find any interpretations.
         // Return an empty interpretation.
         return {score: 0, items: []}; 
- 
+
         // // TODO: HACK: BUGBUG:
         // // TODO: Remove this code once the parser handles intents.
         // if (tokens.length > 0 && tokens[0].type === ADD_TO_ORDER) {
         //     tokens.shift();
         // }
         // return this.findBestInterpretation(tokens as SequenceToken[]);
+    }
+
+    filterBadTokens(tokens: Token[]) {
+        return tokens.filter( token => this.validTokens.has(token.type));
     }
 
     groupProductParts(tokens: Token[]) {
@@ -184,6 +196,22 @@ export class Parser {
             } as ProductToken);
         }
         return grouped;
+    }
+
+    parseRemove(tokens: SequenceToken[]): Interpretation {
+        const {entities, gaps} = splitOnEntities(tokens);
+        const segment: Segment = {
+            left: gaps[0],
+            entity: entities[0],
+            right: gaps[1]
+        };
+        const x = this.interpretOneSegment(segment);
+        if (x.item !== undefined) {
+            console.log(`============ Removing ${x.item.key} ==============`);
+            // score += x.score;
+            // items.push(x.item);
+        }
+        return {score: 0, items: []}; 
     }
 
     findBestInterpretation(tokens: SequenceToken[]): Interpretation {
@@ -264,3 +292,15 @@ export class Parser {
         };
     }
 }
+
+function printSegment(segment: Segment) {
+    const left = segment.left.map(tokenToString).join('');
+    const entity = tokenToString(segment.entity);
+    const right = segment.right.map(tokenToString).join('');
+
+    console.log('  Segment');
+    console.log(`    left: ${left}`);
+    console.log(`    entity: ${entity}`);
+    console.log(`    right: ${right}`);
+}
+

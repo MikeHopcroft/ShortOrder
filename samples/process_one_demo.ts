@@ -120,4 +120,6 @@ function rightJustify(text: string, width: number) {
     }
 }
 
-go('soy latte');
+// go('soy latte');
+// go("can I get a whole milk latte");
+go("ok that's one two percent milk latte with two one percent lattes iced with decaf");
