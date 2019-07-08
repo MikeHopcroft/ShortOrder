@@ -1,5 +1,8 @@
 # TODO List
 
+* x createWorld() and createShortOrderProcessor() should not be in fuzzerMain
+* rename fuzzer.ts
+
 * Item removal
     * Interpretations for each sort of action: add, remove, modify
     * Query data structure

@@ -1,7 +1,7 @@
 import { State, World } from 'prix-fixe';
 
 import { LexicalAnalyzer } from '../lexer';
-import { Parser, SequenceToken } from '../parser';
+import { Parser } from '../parser';
 
 
 export function createProcessor(

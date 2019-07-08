@@ -20,7 +20,7 @@ import {
     State
 } from 'prix-fixe';
 
-import { createShortOrderProcessor, createWorld } from '../fuzzer';
+import { createShortOrderProcessor, createWorld } from '../integration';
 import { speechToTextFilter } from './speech_to_text_filter';
 
 
