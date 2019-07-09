@@ -12,6 +12,7 @@ import { Random } from './utilities';
 export class ProductGenerator {
     entityGenerators: EntityGenerator[];
     optionGenerators: OptionGenerator[];
+    optionCountRange: [number, number];
     rules: RuleChecker;
 
     pidToGenerator = new Map<PID, OptionGenerator>();
@@ -19,6 +20,7 @@ export class ProductGenerator {
     constructor(
         entityGenerators: EntityGenerator[],
         optionGenerators: OptionGenerator[],
+        optionCountRange: [number, number],
         rules: RuleChecker
     ) {
         if (entityGenerators.length < 1) {
@@ -28,6 +30,7 @@ export class ProductGenerator {
 
         this.entityGenerators = entityGenerators;
         this.optionGenerators = optionGenerators;
+        this.optionCountRange = optionCountRange;
 
         for (const generator of optionGenerators) {
             this.pidToGenerator.set(generator.pid, generator);
@@ -42,7 +45,8 @@ export class ProductGenerator {
 
         const options: OptionX[] = [];
         // TODO: Don't hard-code number of options here.
-        const generators = this.randomOptions(entity.key, 3, random);
+        const count = random.randomInRange(this.optionCountRange[0], this.optionCountRange[1] + 1);
+        const generators = this.randomOptions(entity.key, count, random);
         for (const generator of generators) {
             // TODO: only quantify ADD options
             if (random.randomBoolean()) {

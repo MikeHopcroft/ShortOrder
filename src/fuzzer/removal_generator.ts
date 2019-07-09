@@ -29,12 +29,12 @@ export class RemovalGenerator {
         removePrologues: AliasGenerator,
         removeEpilogues: AliasGenerator
     ) {
-        // this.catalog = catalog;
-
+        // Use one segment per OrderX to allow product removal to correspond to
+        // OrderX removal.
         this.orderGenerator = new OrderGenerator(
             addPrologueGenerator,
             productGenerator,
-            1,
+            [1, 1],
             addEpilogueGenerator
         );
 

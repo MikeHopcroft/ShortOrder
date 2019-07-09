@@ -82,7 +82,7 @@ interface RemoveGenerators {
 
 function configureProductGenerators(
     world: World,
-    generateOptions: boolean
+    optionCountRange: [number, number]
 ): ProductGenerators {
     //
     // Attributes
@@ -204,7 +204,8 @@ function configureProductGenerators(
     //
     const productGenerator = new ProductGenerator(
         entityGenerators,
-        generateOptions ? optionGenerators : [],
+        optionGenerators,
+        optionCountRange,
         world.ruleChecker
     );
 
@@ -253,24 +254,24 @@ function configureProductGenerators(
 }
 
 function *levelA(world: World) {
-    yield *generateOrders(world, 1, false);
+    yield *generateOrders(world, [1, 1], [0, 0]);
 }
 
 function *levelB(world: World) {
-    yield *generateOrders(world, 1, true);
+    yield *generateOrders(world, [1, 1], [1, 3]);
 }
 
 function *levelC(world: World) {
-    yield *generateOrders(world, 3, true);
+    yield *generateOrders(world, [1, 3], [1, 3]);
 }
 
 function* generateOrders(
     world: World,
-    maxSegmentCount: number,
-    generateOptions: boolean
+    segmentCountRange: [number, number],
+    optionCount: [number, number]
 ): IterableIterator<TestCase> {
     const {prologueGenerator, productGenerator, epilogueGenerator} =
-        configureProductGenerators(world, generateOptions);
+        configureProductGenerators(world, optionCount);
 
     //
     // Orders
@@ -278,7 +279,7 @@ function* generateOrders(
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
         productGenerator,
-        maxSegmentCount,
+        segmentCountRange,
         epilogueGenerator
     );
 
@@ -295,9 +296,9 @@ function* generateOrders(
 function* remove(
     world: World
 ): IterableIterator<TestCase> {
-    const generateOptions = true;
+    const optionCountRange: [number, number] = [1, 3];
     const {prologueGenerator, productGenerator, epilogueGenerator} =
-        configureProductGenerators(world, generateOptions);
+        configureProductGenerators(world, optionCountRange);
 
     //
     // Remove Prologues
