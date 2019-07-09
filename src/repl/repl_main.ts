@@ -1,19 +1,23 @@
 import * as style from 'ansi-styles';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
+import * as yaml from 'js-yaml';
 import * as minimist from 'minimist';
 import * as path from 'path';
 import * as replServer from 'repl';
 
 import {
     Cart,
-    GenericTypedEntity, 
     ICatalog,
     ItemInstance,
     Key,
     MENUITEM,
     PID,
+    Processor,
     State,
+    TestCase,
+    TestSuite,
+    YamlTestCase
 } from 'prix-fixe';
 
 import { createShortOrderWorld, createWorld } from '../integration';
@@ -91,6 +95,10 @@ export function runRepl(
     const lexer = world2.lexer;
     const processor = world2.processor;
 
+    let utterances: string[] = [];
+    let recordMode = false;
+    let yamlTestCases: YamlTestCase[] = [];
+
     let state: State = { cart: { items: [] } };
 
     const repl = replServer.start({
@@ -126,6 +134,46 @@ export function runRepl(
         action(text: string) {
             debugMode = !debugMode;
             console.log(`Debug mode ${debugMode ? "on" : "off"}.`);
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('reset', {
+        help: 'Clear shopping cart.',
+        action(text: string) {
+            utterances = [];
+            yamlTestCases = [];
+            state = { cart: { items: [] } };
+            console.log('Cart has been reset.');
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('record', {
+        help: 'Toggle YAML recording mode.',
+        action(text: string) {
+            recordMode = !recordMode;
+            console.log(`YAML record mode ${recordMode ? "on" : "off"}.`);
+            yamlTestCases = [];
+            utterances = [];
+            console.log('Cart has been reset.');
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('yaml', {
+        help: 'Display YAML test case for cart',
+        action(text: string) {
+            if (!recordMode) {
+                console.log('You must first enable YAML recording with the .record command.');
+            } else if (yamlTestCases.length > 0) {
+                const yamlText = yaml.safeDump(yamlTestCases, { noRefs: true });
+                console.log(' ');
+                console.log('WARNING: test case expects short-order behavior.');
+                console.log('Be sure to manually verify.');
+                console.log(' ');
+                console.log(yamlText);
+            }
             repl.displayPrompt();
         }
     });
@@ -262,6 +310,21 @@ export function runRepl(
                         console.log(`${style.red.close}`);
                     }
 
+                    // Need to build YAML test cases here because of the async await.
+                    // Build them proactively in case they are needed by the .yaml command.
+                    // TODO: This is o(n^2). Come up with a better approach, as this will
+                    // be problematic in the .load case.
+                    if (recordMode) {
+                        utterances.push(text);
+                        yamlTestCases = await cartYaml(
+                            processor,
+                            catalog,
+                            utterances,
+                            1,
+                            ['unverified']
+                        );
+                    }
+
                     state = await processor(text, state);
                     const order: TestOrder = formatCart(state.cart, catalog);
                     const orderText = OrderOps.formatOrder(order);
@@ -296,23 +359,6 @@ export function runRepl(
     function myWriter(text: string) {
         return text;
     }
-}
-
-function printMenuItem(item: GenericTypedEntity, catalog: ICatalog) {
-    console.log(`${item.pid} ${item.name}`);
-    // if (item.composition.defaults.length > 0) {
-    //     const defaults = item.composition.defaults.map( (x) => catalog.get(x.pid).name );
-    //     console.log(`  Ingredients: ${defaults.join(', ')}`);
-    // }
-    // if (item.composition.options.length > 0) {
-    //     const options = item.composition.options.map( (x) => catalog.get(x.pid).name );
-    //     console.log(`  Options: ${options.join(', ')}`);
-    // }
-    // for (const choice of item.composition.choices) {
-    //     const alternatives = choice.alternatives.map( (x) => catalog.get(x).name );
-    //     console.log(`  Choice of ${choice.className}: ${alternatives.join(', ')}`);
-    // }
-    // console.log();
 }
 
 interface TestLineItem {
@@ -407,4 +453,37 @@ function rightJustify(text: string, width: number) {
         const padding = new Array(paddingWidth + 1).join(' ');
         return padding + text;
     }
+}
+
+// Generate a collection of yamlTestCase records from an array of input
+// lines, each of which provides the input to a test case. Uses the
+// observed output as the expected output.
+async function cartYaml(
+    processor: Processor,
+    catalog: ICatalog,
+    lines: string[],
+    priority: number,
+    suites: string[]
+): Promise<YamlTestCase[]> {
+    const emptyOrder: TestOrder = { lines: [] };
+
+    const testLines = lines.map(x => x.trim()).filter(x => x.length > 0);
+    const expected = lines.map(x => emptyOrder);
+    const testCase = new TestCase(
+        0,
+        String(priority),
+        suites,
+        'generated by repl',
+        testLines,
+        expected
+    );
+
+    // Create a TestSuite from the TestCase, and then run it to collect
+    // the observed output.
+    const suite = new TestSuite([testCase]);
+    const results = await suite.run(processor, catalog, undefined);
+
+    // Generate a yamlTestCase from each Result, using the observed output
+    // for the expected output.
+    return results.rebase();
 }
