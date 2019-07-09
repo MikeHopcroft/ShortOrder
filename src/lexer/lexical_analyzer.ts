@@ -2,14 +2,11 @@ import * as fs from 'fs';
 
 import {
     Alias,
-    DefaultTermModel,
     Edge,
-    equivalentPaths,
     Lexicon,
     Tokenizer,
     Token,
     TermModel,
-    UNKNOWNTOKEN,
 } from 'token-flow';
 
 import {

@@ -11,12 +11,14 @@ import {
     ICatalog,
     ItemInstance,
     Key,
+    MENUITEM,
     PID,
-    State
+    State,
 } from 'prix-fixe';
 
 import { createShortOrderWorld, createWorld } from '../integration';
-import { tokenToString } from '../lexer';
+import { ENTITY, EntityToken, tokenToString } from '../lexer';
+
 import { speechToTextFilter } from './speech_to_text_filter';
 
 
@@ -160,7 +162,9 @@ export function runRepl(
         action(line: string) {
             if (line.length === 0) {
                 for (const item of catalog.genericEntities()) {
-                    console.log(`${item.pid} ${item.name}`);
+                    if (item.kind === MENUITEM) {
+                        console.log(`${item.name} (${item.pid})`);
+                    }
                 }
             }
             else if (!isNaN(Number(line))) {
@@ -171,27 +175,48 @@ export function runRepl(
                 }
                 else {
                     const item = catalog.getGeneric(Number(line));
-                    printMenuItem(item, catalog);
+                    console.log(`${item.name} (${item.pid})`);
+
+                    console.log('  Attributes:');
+                    const tensor = world.attributeInfo.getTensor(item.tensor);
+                    for (const dimension of tensor.dimensions) {
+                        console.log(`    ${dimension.name}`);
+                        for (const attribute of dimension.attributes) {
+                            console.log(`      ${attribute.name} (${attribute.aid})`);
+                        }
+                    }
+
+                    const specific = catalog.getSpecific(item.defaultKey);
+
+                    console.log(`  Options for ${specific.name}:`);
+                    for (const childPID of world.ruleChecker.getValidChildren(item.defaultKey)) {
+                        if (catalog.hasPID(childPID)) {
+                            const child = catalog.getGeneric(childPID);
+                            console.log(`    ${child.name} (${child.pid})`);
+                        }
+                    }
                 }
             }
-            // else {
-            //     const tokens = unified.processOneQuery(line);
-            //     if (tokens.length > 0 && tokens[0].type === ENTITY) {
-            //         const token = tokens[0] as EntityToken;
-            //         const pid = token.pid;
-            //         if (catalog.has(pid)) {
-            //             const item = catalog.get(pid);
-            //             printMenuItem(item, catalog);
-            //         }
-            //         else {
-            //             // This should never happen if tokenizer returned PID.
-            //             console.log(`Unrecognized menu item "${line}"`);
-            //         }
-            //     }
-            //     else {
-            //         console.log(`Unrecognized menu item "${line}"`);
-            //     }
-            // }
+            else {
+                const tokens = lexer.tokenizations(line).next().value;
+                console.log(`${tokens.map(tokenToString).join(' ')}`);
+
+                if (tokens && tokens.length > 0 && tokens[0].type === ENTITY) {
+                    const token = tokens[0] as EntityToken;
+                    const pid = token.pid;
+                    if (catalog.hasPID(pid)) {
+                        const item = catalog.getGeneric(pid);
+                        console.log(`${item.name} (${item.pid})`);
+                    }
+                    else {
+                        // This should never happen if tokenizer returned PID.
+                        console.log(`Unrecognized menu item "${line}"`);
+                    }
+                }
+                else {
+                    console.log(`Unrecognized menu item "${line}"`);
+                }
+            }
             repl.displayPrompt();
         }
     });
