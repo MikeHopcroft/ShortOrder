@@ -3,23 +3,28 @@ import * as fs from 'fs';
 import {
     Alias,
     Edge,
+    DynamicGraph,
+    Graph,
     Lexicon,
     Tokenizer,
     Token,
     TermModel,
+    UNKNOWNTOKEN,
 } from 'token-flow';
 
 import {
+    AID,
     aliasesFromPattern,
     MENUITEM,
     OPTION,
+    PID,
     World,
 } from 'prix-fixe';
 
 import { stopwordsFromYamlString } from '../stopwords';
 
-import { CreateAttribute } from './attributes';
-import { CreateEntity } from './entities';
+import { CreateAttribute, AttributeToken, ATTRIBUTE } from './attributes';
+import { CreateEntity, EntityToken, ENTITY } from './entities';
 import { intentTokenFactory } from './intents';
 import { tokenToString } from './lexical_utilities';
 import { CreateOption } from './options';
@@ -35,6 +40,19 @@ import {
     WordToken
 } from './lexical_utilities';
 
+function* generateAliases(
+    entries: IterableIterator<[Token, string]>
+): IterableIterator<Alias> {
+    for (const [token, aliases] of entries) {
+        for (const alias of aliases) {
+            const matcher = matcherFromExpression(alias);
+            const pattern = patternFromExpression(alias);
+            for (const text of aliasesFromPattern(pattern)) {
+                yield { token, text, matcher };
+            }
+        }
+    }
+}
 
 // Prints out information about dimensions associated with a set of DIDs.
 function* generateAttributes(world: World): IterableIterator<Alias> {
@@ -91,6 +109,9 @@ function* generateOptions(world: World): IterableIterator<Alias> {
     }
 }
 
+// TODO: This seems like a hack.
+// Consider alternative to monkey patch.
+// Consider making data-driven.
 function addCustomStemmer(model: TermModel) {
     const stem = model.stem;
     model.stem = (term: string): string => {
@@ -105,6 +126,9 @@ function addCustomStemmer(model: TermModel) {
 export class LexicalAnalyzer {
     lexicon: Lexicon;
     tokenizer: Tokenizer;
+
+    aidToToken = new Map<AID, AttributeToken>();
+    pidToToken = new Map<PID, EntityToken>();
 
     constructor(
         world: World,
@@ -164,6 +188,63 @@ export class LexicalAnalyzer {
         }
 
         this.lexicon.ingest(this.tokenizer);
+    }
+
+    *indexEntityTokens(
+        entries: IterableIterator<[EntityToken, string]>
+    ): IterableIterator<[Token, string]> {
+        for (const entry of entries) {
+            const token = entry[0];
+            const existing = this.pidToToken.get(token.pid);
+            if (existing) {
+                if (token !== existing) {
+                    const message =
+                        `indexEntityTokens: tokens must be unique  (pid=${token.pid}).`;
+                    throw TypeError(message);
+                }
+            } else {
+                this.pidToToken.set(token.pid, token);
+            }
+            yield entry;
+        }
+    }
+
+    *indexAttributeTokens(
+        entries: IterableIterator<[AttributeToken, string]>
+    ): IterableIterator<[Token, string]> {
+        for (const entry of entries) {
+            const token = entry[0];
+            // TODO: rename AttributeToken.id to aid.
+            const existing = this.aidToToken.get(token.id);
+            if (existing) {
+                if (token !== existing) {
+                    const message =
+                        `indexAttributeTokens: tokens must be unique  (aid=${token.id}).`;
+                    throw TypeError(message);
+                }
+            } else {
+                this.aidToToken.set(token.id, token);
+            }
+            yield entry;
+        }
+    }
+
+    getEntityToken(pid: PID): EntityToken {
+        const token = this.pidToToken.get(pid);
+        if (!token) {
+            const message = `getEntityToken(): unknown PID ${pid}.`;
+            throw TypeError(message);
+        }
+        return token;
+    }
+
+    getAttributeToken(aid: AID): AttributeToken {
+        const token = this.aidToToken.get(aid);
+        if (!token) {
+            const message = `getAttributeToken(): unknown AID ${aid}.`;
+            throw TypeError(message);
+        }
+        return token;
     }
 
     // Generator for tokenizations of the input string that are equivanent to
@@ -288,3 +369,31 @@ function *equivalentPathsRecursion2(
     }
 }
 
+function createSubgraph(
+    tokenizer: Tokenizer,
+    edgeLists: Edge[][],
+    subset: Set<Token>
+): Graph {
+    const filtered: Edge[][] = [];
+    for (const edgeList of edgeLists) {
+        filtered.push(edgeList.filter(edge => {
+            const token = tokenizer.tokenFromEdge(edge);
+
+            if (token.type === ENTITY || token.type === ATTRIBUTE) {
+                // Entities (products and options) and Attributes
+                // are copied if they are in the subset.
+                return subset.has(token);
+            } else if (token.type !== UNKNOWNTOKEN) {
+                // All other, non-default edges are copied.
+                // The default edges will be added by the DynamicGraph constructor.
+                // TODO: REVIEW: do UNKNOWNTOKEN only correspond to default edges?
+                // Can they be anything else?
+                return true;
+            } else {
+                return false;
+            }
+        
+        }));
+    }
+    return new DynamicGraph(filtered);
+}

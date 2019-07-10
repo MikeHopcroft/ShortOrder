@@ -144,12 +144,13 @@ export function* aliasesFromItems(items: IterableIterator<Item>, factory: TokenF
         for (const expression of item.aliases) {
             const matcher = matcherFromExpression(expression);
             const pattern = patternFromExpression(expression);
+
+            // DESIGN NOTE: The design relies on tokens being unique.
+            // Therefore, only create each token one time.
+            const token = factory(item);
+            
             for (const text of generateAliases(pattern)) {
-                yield {
-                    token: factory(item),
-                    text,
-                    matcher
-                };
+                yield {token, text, matcher};
             }
         }
     }
