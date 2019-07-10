@@ -143,6 +143,7 @@ export class AttributeInfo {
     }
 
     // Returns the PID of an entity with a specific key.
+    // TODO: REVIEW: why don't we just parse the Key, instead of using a Map?
     getPID(key: string): PID | undefined {
         return this.keyToEntityId.get(key);
     }

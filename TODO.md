@@ -1,5 +1,7 @@
 # TODO List
 
+* Remove attributes, catalog directories.
+
 *Target search architecture
     * LexicalAnalyzer needs to provide the graph, the edge list, and the tokens to allow for reprocessing.
     * Need some way to copy subgraph of edges in the cart.

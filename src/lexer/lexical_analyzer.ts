@@ -127,8 +127,8 @@ export class LexicalAnalyzer {
     lexicon: Lexicon;
     tokenizer: Tokenizer;
 
-    aidToToken = new Map<AID, AttributeToken>();
-    pidToToken = new Map<PID, EntityToken>();
+    private readonly aidToToken = new Map<AID, AttributeToken>();
+    private readonly pidToToken = new Map<PID, EntityToken>();
 
     constructor(
         world: World,
@@ -367,33 +367,4 @@ function *equivalentPathsRecursion2(
             }
         }
     }
-}
-
-function createSubgraph(
-    tokenizer: Tokenizer,
-    edgeLists: Edge[][],
-    subset: Set<Token>
-): Graph {
-    const filtered: Edge[][] = [];
-    for (const edgeList of edgeLists) {
-        filtered.push(edgeList.filter(edge => {
-            const token = tokenizer.tokenFromEdge(edge);
-
-            if (token.type === ENTITY || token.type === ATTRIBUTE) {
-                // Entities (products and options) and Attributes
-                // are copied if they are in the subset.
-                return subset.has(token);
-            } else if (token.type !== UNKNOWNTOKEN) {
-                // All other, non-default edges are copied.
-                // The default edges will be added by the DynamicGraph constructor.
-                // TODO: REVIEW: do UNKNOWNTOKEN only correspond to default edges?
-                // Can they be anything else?
-                return true;
-            } else {
-                return false;
-            }
-        
-        }));
-    }
-    return new DynamicGraph(filtered);
 }
