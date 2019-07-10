@@ -1,6 +1,5 @@
-import { ItemInstance } from "../cart";
-import { ChoiceDescription } from "../catalog";
-import { Done } from "mocha";
+// Choices were removed when Catalog was moved to prix-fixe
+// import { ChoiceDescription } from "../catalog";
 
 // DESIGN INTENT: data driven rendering of responses to facilitate
 // multiple languages (e.g. English, Spanish, etc.)
@@ -31,11 +30,13 @@ export type ACKNOWLEDGE = typeof ACKNOWLEDGE;
 export const CHOICE: unique symbol = Symbol('CHOICE');
 export type CHOICE = typeof CHOICE;
 
-export interface ChoiceAction extends Action {
-    type: CHOICE;
-    item: ItemInstance;
-    choice: ChoiceDescription;
-}
+// Choices were removed when Catalog was moved to prix-fixe
+// TODO: reinstate this functionality or remove concept.
+// export interface ChoiceAction extends Action {
+//     type: CHOICE;
+//     item: ItemInstance;
+//     choice: ChoiceDescription;
+// }
 
 // Presumptive close
 // "Is that with a large coke?"
@@ -117,7 +118,9 @@ export interface WelcomeAction extends Action {
 }
 
 export type AnyAction = 
-    ChoiceAction |
+    // Choices were removed when Catalog was moved to prix-fixe
+    // TODO: reinstate this functionality or remove concept.
+    // ChoiceAction |
     CompleteAction |
     ConfusedAction |
     DoneAction |
@@ -129,12 +132,14 @@ export function actionToString(action: AnyAction): string {
     let result = `UNKNOWN action ${String(action.type)}`;
 
     switch (action.type) {
-        case CHOICE:
-            result = `CHOICE: ${action.choice.className} for ${action.item.pid}`;
-            break;
-            case COMPLETE:
-            result = `COMPLETE`;
-            break;
+        // Choices were removed when Catalog was moved to prix-fixe
+        // TODO: reinstate this functionality or remove concept.
+        // case CHOICE:
+        //     result = `CHOICE: ${action.choice.className} for ${action.item.pid}`;
+        //     break;
+        //     case COMPLETE:
+        //     result = `COMPLETE`;
+        //     break;
         case CONFUSED:
             result = `CONFUSED`;
             break;

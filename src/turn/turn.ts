@@ -1,6 +1,17 @@
-import { AnyAction, CHOICE, COMPLETE, CONFUSED, DONE, OK, WAIT, WELCOME } from '../actions';
+import { Catalog } from 'prix-fixe';
+
+import {
+    AnyAction,
+    CHOICE,
+    COMPLETE,
+    CONFUSED, 
+    DONE,
+    OK,
+    WAIT,
+    WELCOME
+} from '../actions';
+
 import { Order } from '../order';
-import { Catalog } from '../catalog';
 
 // DESIGN INTENT: data driven rendering of responses to facilitate
 // multiple languages (e.g. English, Spanish, etc.)
@@ -22,8 +33,11 @@ function lastSpecialAction(actions: AnyAction[]) {
 
     let last: AnyAction = { type: COMPLETE };
     for (const action of actions) {
-        if (action.type === CHOICE || action.type === DONE || action.type === WAIT || action.type === WELCOME) {
-            last = action;
+        // Choices were removed when Catalog was moved to prix-fixe
+        // TODO: reinstate this functionality or remove concept.
+        // if (action.type === CHOICE || action.type === DONE || action.type === WAIT || action.type === WELCOME) {
+        if (action.type === DONE || action.type === WAIT || action.type === WELCOME) {
+                last = action;
             break;
         }
     }
@@ -84,11 +98,13 @@ export function responses(
         case WELCOME:
             results.push("Welcome to Mike's American Grill. What can I get started for you?");
             break;
-        case CHOICE:
-            const className = action.choice.className;
-            const productName = catalog.get(action.item.pid).name;
-            results.push(`What ${className} would you like with your ${productName}?`);
-            break;
+        // Choices were removed when Catalog was moved to prix-fixe
+        // TODO: reinstate this functionality or remove concept.
+        // case CHOICE:
+        //     const className = action.choice.className;
+        //     const productName = catalog.getGeneric(action.item.pid).name;
+        //     results.push(`What ${className} would you like with your ${productName}?`);
+        //     break;
         case COMPLETE:
             // TODO: if the user answers no, need to end order.
             results.push(getPrompt());
