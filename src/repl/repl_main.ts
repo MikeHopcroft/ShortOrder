@@ -209,19 +209,39 @@ export function runRepl(
         help: "Display menu",
         action(line: string) {
             if (line.length === 0) {
+                // No Key or PID was specified. Print out name of all of the
+                // MENUITEM generics.
                 for (const item of catalog.genericEntities()) {
                     if (item.kind === MENUITEM) {
                         console.log(`${item.name} (${item.pid})`);
                     }
                 }
             }
-            else if (!isNaN(Number(line))) {
+            else if (line.indexOf(':')) {
+                // This is a specific entity. Just print out its options.
+                const key = line.trim();
+
+                if (!catalog.hasKey(key)) {
+                    console.log(`${style.red.open}Unknown Key ${key}${style.red.close}`);
+                } else {
+                    const specific = catalog.getSpecific(key);
+                    console.log(`${specific.name} (${specific.key})`);
+
+                    console.log(`  Options for ${specific.name}:`);
+                    for (const childPID of world.ruleChecker.getValidChildren(key)) {
+                        if (catalog.hasPID(childPID)) {
+                            const child = catalog.getGeneric(childPID);
+                            console.log(`    ${child.name} (${child.pid})`);
+                        }
+                    }
+                }
+            } else if (!isNaN(Number(line))) {
+                // This is a generic entity. Print out its attributes and options.
                 const pid: PID = Number(line);
 
                 if (!catalog.hasPID(pid)) {
                     console.log(`${style.red.open}Unknown PID ${pid}${style.red.close}`);
-                }
-                else {
+                } else {
                     const item = catalog.getGeneric(Number(line));
                     console.log(`${item.name} (${item.pid})`);
 
@@ -246,6 +266,8 @@ export function runRepl(
                 }
             }
             else {
+                // Parameter doesn't seem to be a Key or PID.
+                // Try using the tokenizer to identify it.
                 const tokens = lexer.tokenizations(line).next().value;
                 console.log(`${tokens.map(tokenToString).join(' ')}`);
 

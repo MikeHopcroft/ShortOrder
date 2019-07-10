@@ -1,6 +1,15 @@
 # TODO List
 
-* REPL: Replace .menu with .products and .options
+*Target search architecture
+    * LexicalAnalyzer needs to provide the graph, the edge list, and the tokens to allow for reprocessing.
+    * Need some way to copy subgraph of edges in the cart.
+    * Need some way to get tokens for everything in the cart - products, options, attributes
+    * Need to know which other edges to copy
+    * What about default edges? Are these added by the Graph constructor
+    * Need some way to run path algorithm on subgraph.
+    * Need interpretions for each sort of action: add, remove, modify
+
+* x REPL: Replace .menu with .products and .options
 * Add processor factory to test_runner and repl_main
 * x createWorld() and createShortOrderProcessor() should not be in fuzzerMain
 * rename fuzzer.ts
