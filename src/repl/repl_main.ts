@@ -217,7 +217,7 @@ export function runRepl(
                     }
                 }
             }
-            else if (line.indexOf(':')) {
+            else if (line.indexOf(':') !== -1) {
                 // This is a specific entity. Just print out its options.
                 const key = line.trim();
 
@@ -252,6 +252,12 @@ export function runRepl(
                         for (const attribute of dimension.attributes) {
                             console.log(`      ${attribute.name} (${attribute.aid})`);
                         }
+                    }
+
+                    console.log('  Specifics:');
+                    for (const key of catalog.getSpecificsForGeneric(pid)) {
+                        const name = catalog.getSpecific(key).name;
+                        console.log(`    ${name} (${key})`);
                     }
 
                     const specific = catalog.getSpecific(item.defaultKey);
