@@ -1,4 +1,4 @@
-import { Key, PID, RuleChecker } from 'prix-fixe';
+import { IRuleChecker, Key, PID } from 'prix-fixe';
 
 import {
     OptionX,
@@ -13,7 +13,7 @@ export class ProductGenerator {
     entityGenerators: EntityGenerator[];
     optionGenerators: OptionGenerator[];
     optionCountRange: [number, number];
-    rules: RuleChecker;
+    rules: IRuleChecker;
 
     pidToGenerator = new Map<PID, OptionGenerator>();
 
@@ -21,7 +21,7 @@ export class ProductGenerator {
         entityGenerators: EntityGenerator[],
         optionGenerators: OptionGenerator[],
         optionCountRange: [number, number],
-        rules: RuleChecker
+        rules: IRuleChecker
     ) {
         if (entityGenerators.length < 1) {
             const message = 'ProductGenerator: need at least one EntityGenerator';

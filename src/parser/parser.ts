@@ -2,7 +2,7 @@ import {
     AttributeInfo,
     ICartOps,
     ItemInstance, 
-    RuleChecker
+    IRuleChecker
 } from 'prix-fixe';
 
 import { Token, NUMBERTOKEN } from 'token-flow';
@@ -42,7 +42,7 @@ import { TokenSequence } from './token_sequence';
 export class Parser {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
-    private readonly rules: RuleChecker;
+    private readonly rules: IRuleChecker;
     private readonly debugMode: boolean;
 
     intentTokens = [
@@ -65,7 +65,12 @@ export class Parser {
         UNIT,
     ]);
 
-    constructor(cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker, debugMode: boolean) {
+    constructor(
+        cartOps: ICartOps,
+        info: AttributeInfo,
+        rules: IRuleChecker,
+        debugMode: boolean
+    ) {
         this.cartOps = cartOps;
         this.info = info;
         this.rules = rules;

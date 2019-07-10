@@ -4,8 +4,8 @@ import {
     DID,
     ICartOps,
     ItemInstance,
+    IRuleChecker,
     PID,
-    RuleChecker,
 } from 'prix-fixe';
 
 import { NumberToken, NUMBERTOKEN } from 'token-flow';
@@ -26,7 +26,7 @@ import { TokenSequence } from './token_sequence';
 export class EntityBuilder {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
-    private readonly rules: RuleChecker;
+    private readonly rules: IRuleChecker;
 
     private readonly didToAID = new Map<DID,AID>();
     private readonly tokensUsed = 0;
@@ -39,7 +39,12 @@ export class EntityBuilder {
 
     private readonly item: ItemInstance;
 
-    constructor(segment: Segment, cartOps: ICartOps, info: AttributeInfo, rules: RuleChecker) {
+    constructor(
+        segment: Segment,
+        cartOps: ICartOps,
+        info: AttributeInfo,
+        rules: IRuleChecker
+    ) {
         this.cartOps = cartOps;
         this.info = info;
         this.rules = rules;
