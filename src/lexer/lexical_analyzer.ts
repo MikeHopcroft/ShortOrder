@@ -180,7 +180,7 @@ export class LexicalAnalyzer {
 
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
 
-        yield* equivalentPaths2(this.tokenizer, graph.edgeLists, graph.findPath([], 0));
+        yield* equivalentPaths(this.tokenizer, graph.edgeLists, graph.findPath([], 0));
     }
 
     analyzePaths(query: string) {
@@ -334,15 +334,15 @@ function addCustomStemmer(model: TermModel) {
 // Path enumeration
 //
 ///////////////////////////////////////////////////////////////////////////////
-export function *equivalentPaths2(
+export function *equivalentPaths(
     tokenizer: Tokenizer,
     edgeLists: Edge[][],
     path: Edge[]
 ): IterableIterator<Token[]> {
-    yield* equivalentPathsRecursion2(tokenizer, edgeLists, 0, 0, path, []);
+    yield* equivalentPathsRecursion(tokenizer, edgeLists, 0, 0, path, []);
 }
 
-function *equivalentPathsRecursion2(
+function *equivalentPathsRecursion(
     tokenizer: Tokenizer,
     edgeLists: Edge[][],
     e: number,
@@ -367,7 +367,7 @@ function *equivalentPathsRecursion2(
                 if (!tokens.has(token)) {
                     tokens.add(token);
                     prefix.push(token);
-                    yield* equivalentPathsRecursion2(
+                    yield* equivalentPathsRecursion(
                         tokenizer,
                         edgeLists,
                         e + 1,
