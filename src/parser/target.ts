@@ -15,10 +15,11 @@ import {
     LexicalAnalyzer
 } from '../lexer';
 
-function subgraphFromItems(
+export function subgraphFromItems(
     attributes: AttributeInfo,
     lexer: LexicalAnalyzer,
     cart: Cart,
+    // TODO: do we want to take a Graph, or Tokenization, or TokenX[], or Edge[][]?
     graph: Graph
 ): Graph {
     const tokens = new Set<Token>();

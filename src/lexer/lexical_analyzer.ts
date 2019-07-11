@@ -3,13 +3,11 @@ import * as fs from 'fs';
 import {
     Alias,
     Edge,
-    DynamicGraph,
-    Graph,
     Lexicon,
     Tokenizer,
     Token,
     TermModel,
-    UNKNOWNTOKEN,
+    Graph,
 } from 'token-flow';
 
 import {
@@ -23,8 +21,8 @@ import {
 
 import { stopwordsFromYamlString } from '../stopwords';
 
-import { CreateAttribute, AttributeToken, ATTRIBUTE } from './attributes';
-import { CreateEntity, EntityToken, ENTITY } from './entities';
+import { CreateAttribute, AttributeToken } from './attributes';
+import { CreateEntity, EntityToken } from './entities';
 import { intentTokenFactory } from './intents';
 import { tokenToString } from './lexical_utilities';
 import { CreateOption } from './options';
@@ -36,91 +34,17 @@ import {
     matcherFromExpression,
     patternFromExpression,
     tokensFromStopwords,
-    WORD,
-    WordToken
 } from './lexical_utilities';
 
-function* generateAliases(
-    entries: IterableIterator<[Token, string]>
-): IterableIterator<Alias> {
-    for (const [token, aliases] of entries) {
-        for (const alias of aliases) {
-            const matcher = matcherFromExpression(alias);
-            const pattern = patternFromExpression(alias);
-            for (const text of aliasesFromPattern(pattern)) {
-                yield { token, text, matcher };
-            }
-        }
-    }
+interface TokenX {
+    start: number;
+    length: number;
+    token: Token;
 }
 
-// Prints out information about dimensions associated with a set of DIDs.
-function* generateAttributes(world: World): IterableIterator<Alias> {
-    for (const dimension of world.attributes.dimensions) {
-        // console.log(`  Dimension(${dimension.did}): ${dimension.name}`);
-        for (const attribute of dimension.attributes) {
-            // console.log(`    Attribute(${attribute.aid})`);
-            const token = CreateAttribute(attribute.aid, attribute.name);
-            for (const alias of attribute.aliases) {
-                const matcher = matcherFromExpression(alias);
-                const pattern = patternFromExpression(alias);
-                for (const text of aliasesFromPattern(pattern)) {
-                    // console.log(`      ${text}`);
-                    yield { token, text, matcher };
-                }
-            }
-        }
-    }
-}
-
-function* generateProducts(world: World): IterableIterator<Alias> {
-    // console.log();
-    // console.log('=== Products ===');
-    for (const item of world.catalog.genericEntities()) {
-        if (item.kind === MENUITEM) {
-            const token = CreateEntity(item.pid, item.name);
-            for (const alias of item.aliases) {
-                const matcher = matcherFromExpression(alias);
-                const pattern = patternFromExpression(alias);
-                for (const text of aliasesFromPattern(pattern)) {
-                    // console.log(`  ${text}`);
-                    yield { token, text, matcher };
-                }
-            }
-        }
-    }
-}
-
-function* generateOptions(world: World): IterableIterator<Alias> {
-    // console.log();
-    // console.log('=== Options ===');
-    for (const item of world.catalog.genericEntities()) {
-        if (item.kind === OPTION) {
-            const token = CreateOption(item.pid, item.name);
-            for (const alias of item.aliases) {
-                const matcher = matcherFromExpression(alias);
-                const pattern = patternFromExpression(alias);
-                for (const text of aliasesFromPattern(pattern)) {
-                    // console.log(`  ${text}`);
-                    yield { token, text, matcher };
-                }
-            }
-        }
-    }
-}
-
-// TODO: This seems like a hack.
-// Consider alternative to monkey patch.
-// Consider making data-driven.
-function addCustomStemmer(model: TermModel) {
-    const stem = model.stem;
-    model.stem = (term: string): string => {
-        if (term.toLowerCase() === 'iced') {
-            return 'iced';
-        } else {
-            return stem(term);
-        }
-    };
+interface Tokenization {
+    graph: Graph;
+    tokens: TokenX[];
 }
 
 export class LexicalAnalyzer {
@@ -190,7 +114,7 @@ export class LexicalAnalyzer {
         this.lexicon.ingest(this.tokenizer);
     }
 
-    *indexEntityTokens(
+    private *indexEntityTokens(
         entries: IterableIterator<[EntityToken, string]>
     ): IterableIterator<[Token, string]> {
         for (const entry of entries) {
@@ -209,7 +133,7 @@ export class LexicalAnalyzer {
         }
     }
 
-    *indexAttributeTokens(
+    private *indexAttributeTokens(
         entries: IterableIterator<[AttributeToken, string]>
     ): IterableIterator<[Token, string]> {
         for (const entry of entries) {
@@ -254,15 +178,7 @@ export class LexicalAnalyzer {
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
 
-        // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
-
-        // XXX
-        // this.analyzePathsInGraph(
-        //     this.tokenizer,
-        //     graph.edgeLists,
-        //     graph.findPath([], 0)
-        // );
 
         yield* equivalentPaths2(this.tokenizer, graph.edgeLists, graph.findPath([], 0));
     }
@@ -272,7 +188,6 @@ export class LexicalAnalyzer {
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
 
-        // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
 
         // XXX
@@ -321,6 +236,104 @@ export class LexicalAnalyzer {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Catalog items and aliases
+//
+///////////////////////////////////////////////////////////////////////////////
+function* generateAliases(
+    entries: IterableIterator<[Token, string]>
+): IterableIterator<Alias> {
+    for (const [token, aliases] of entries) {
+        for (const alias of aliases) {
+            const matcher = matcherFromExpression(alias);
+            const pattern = patternFromExpression(alias);
+            for (const text of aliasesFromPattern(pattern)) {
+                yield { token, text, matcher };
+            }
+        }
+    }
+}
+
+// Prints out information about dimensions associated with a set of DIDs.
+function* generateAttributes(world: World): IterableIterator<Alias> {
+    for (const dimension of world.attributes.dimensions) {
+        // console.log(`  Dimension(${dimension.did}): ${dimension.name}`);
+        for (const attribute of dimension.attributes) {
+            // console.log(`    Attribute(${attribute.aid})`);
+            const token = CreateAttribute(attribute.aid, attribute.name);
+            for (const alias of attribute.aliases) {
+                const matcher = matcherFromExpression(alias);
+                const pattern = patternFromExpression(alias);
+                for (const text of aliasesFromPattern(pattern)) {
+                    // console.log(`      ${text}`);
+                    yield { token, text, matcher };
+                }
+            }
+        }
+    }
+}
+
+function* generateProducts(world: World): IterableIterator<Alias> {
+    // console.log();
+    // console.log('=== Products ===');
+    for (const item of world.catalog.genericEntities()) {
+        if (item.kind === MENUITEM) {
+            const token = CreateEntity(item.pid, item.name);
+            for (const alias of item.aliases) {
+                const matcher = matcherFromExpression(alias);
+                const pattern = patternFromExpression(alias);
+                for (const text of aliasesFromPattern(pattern)) {
+                    // console.log(`  ${text}`);
+                    yield { token, text, matcher };
+                }
+            }
+        }
+    }
+}
+
+function* generateOptions(world: World): IterableIterator<Alias> {
+    // console.log();
+    // console.log('=== Options ===');
+    for (const item of world.catalog.genericEntities()) {
+        if (item.kind === OPTION) {
+            const token = CreateOption(item.pid, item.name);
+            for (const alias of item.aliases) {
+                const matcher = matcherFromExpression(alias);
+                const pattern = patternFromExpression(alias);
+                for (const text of aliasesFromPattern(pattern)) {
+                    // console.log(`  ${text}`);
+                    yield { token, text, matcher };
+                }
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Custom stemmer
+//
+///////////////////////////////////////////////////////////////////////////////
+// TODO: This seems like a hack.
+// Consider alternative to monkey patch.
+// Consider making data-driven.
+function addCustomStemmer(model: TermModel) {
+    const stem = model.stem;
+    model.stem = (term: string): string => {
+        if (term.toLowerCase() === 'iced') {
+            return 'iced';
+        } else {
+            return stem(term);
+        }
+    };
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Path enumeration
+//
+///////////////////////////////////////////////////////////////////////////////
 export function *equivalentPaths2(
     tokenizer: Tokenizer,
     edgeLists: Edge[][],
