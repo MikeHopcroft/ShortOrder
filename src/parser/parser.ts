@@ -77,6 +77,11 @@ export class Parser {
         this.debugMode = debugMode;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Existing code based on Token (vs TokenX)
+    //
+    ///////////////////////////////////////////////////////////////////////////
     parseRoot(lexer: LexicalAnalyzer, text: string): Interpretation {
         // XXX
         if (this.debugMode) {

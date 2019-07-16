@@ -36,13 +36,13 @@ import {
     tokensFromStopwords,
 } from './lexical_utilities';
 
-interface TokenX {
+export interface TokenX {
     start: number;
     length: number;
     token: Token;
 }
 
-interface Tokenization {
+export interface Tokenization {
     graph: Graph;
     tokens: TokenX[];
 }
@@ -181,6 +181,18 @@ export class LexicalAnalyzer {
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
 
         yield* equivalentPaths(this.tokenizer, graph.edgeLists, graph.findPath([], 0));
+    }
+
+    // Generator for tokenizations of the input string that are equivanent to
+    // the top-scoring tokenization.
+    *tokenizationsX(query: string): IterableIterator<Tokenization> {
+        const terms = query.split(/\s+/);
+        const stemmed = terms.map(this.lexicon.termModel.stem);
+        const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
+
+        const graph = this.tokenizer.generateGraph(hashed, stemmed);
+
+        yield* equivalentPathsX(this.tokenizer, graph, graph.findPath([], 0));
     }
 
     analyzePaths(query: string) {
@@ -370,6 +382,67 @@ function *equivalentPathsRecursion(
                     yield* equivalentPathsRecursion(
                         tokenizer,
                         edgeLists,
+                        e + 1,
+                        v + currentEdge.length,
+                        path,
+                        prefix
+                    );
+                    prefix.pop();
+                }
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Path enumeration X
+//
+///////////////////////////////////////////////////////////////////////////////
+export function *equivalentPathsX(
+    tokenizer: Tokenizer,
+    graph: Graph,
+    path: Edge[]
+): IterableIterator<Tokenization> {
+    yield* equivalentPathsRecursionX(tokenizer, graph, 0, 0, path, []);
+}
+
+function *equivalentPathsRecursionX(
+    tokenizer: Tokenizer,
+    graph: Graph,
+    e: number,
+    v: number,
+    path: Edge[],
+    prefix: TokenX[]
+): IterableIterator<Tokenization> {
+    if (prefix.length === path.length) {
+        // Recursive base case. Return the list of edges.
+        yield {
+            graph,
+            tokens: [...prefix],
+        };
+    }
+    else {
+        // Recursive case. Enumerate all equivalent edges from this vertex.
+        const tokens = new Set<Token>();
+        const currentEdge = path[e];
+        const vertex =graph.edgeLists[v];
+        for (const edge of vertex) {
+            if (edge.score === currentEdge.score &&
+                edge.length === currentEdge.length)
+            {
+                const token: Token = tokenizer.tokenFromEdge(edge);
+                const tokenX: TokenX = {
+                    start: v,
+                    length: edge.length,
+                    token
+                };
+                if (!tokens.has(token)) {
+                    tokens.add(token);
+                    prefix.push(tokenX);
+                    yield* equivalentPathsRecursionX(
+                        tokenizer,
+                        graph,
                         e + 1,
                         v + currentEdge.length,
                         path,
