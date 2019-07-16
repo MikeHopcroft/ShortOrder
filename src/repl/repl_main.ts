@@ -7,11 +7,13 @@ import * as path from 'path';
 import * as replServer from 'repl';
 
 import {
+    aliasesFromPattern,
     Cart,
     ICatalog,
     ItemInstance,
     Key,
     MENUITEM,
+    patternFromExpression,
     PID,
     Processor,
     State,
@@ -245,6 +247,14 @@ export function runRepl(
                 } else {
                     const item = catalog.getGeneric(Number(line));
                     console.log(`${item.name} (${item.pid})`);
+
+                    console.log('  Aliases:');
+                    for (const alias of item.aliases) {
+                        const pattern = patternFromExpression(alias);
+                        for (const text of aliasesFromPattern(pattern)) {
+                            console.log(`    ${text}`);
+                        }
+                    }
 
                     console.log('  Attributes:');
                     const tensor = world.attributeInfo.getTensor(item.tensor);
