@@ -40,14 +40,9 @@ export function createShortOrderWorld(world: World, dataPath: string, debugMode:
         debugMode);
 
     const processor = async (text: string, state: State): Promise<State> => {
-        const interpretation = parser.parseRoot(lexer, text);
+        const interpretation = parser.parseRoot(lexer, state, text);
 
-        let updated = state.cart;
-        for (const item of interpretation.items) {
-            updated = world.cartOps.addToCart(updated, item);
-        }
-
-        return {...state, cart: updated};
+        return interpretation.action(state);
     };
 
     return {...world, lexer, processor};

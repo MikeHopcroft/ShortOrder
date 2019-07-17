@@ -1,6 +1,7 @@
 # TODO List
 
-* Remove attributes, catalog directories.
+* Remove Iterpretation.items property
+* x Remove attributes, catalog directories.
 
 *Target search architecture
     * LexicalAnalyzer needs to provide the graph, the edge list, and the tokens to allow for reprocessing.

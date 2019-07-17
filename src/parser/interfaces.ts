@@ -1,4 +1,4 @@
-import { ItemInstance } from 'prix-fixe';
+import { ItemInstance, State } from 'prix-fixe';
 import { NumberToken, Token } from 'token-flow';
 
 import {
@@ -6,6 +6,7 @@ import {
     CONJUNCTION,
     EntityToken,
     OptionToken,
+    Span,
     TokenX,
     UnitToken,
 } from '../lexer';
@@ -18,7 +19,7 @@ export const PRODUCT_PARTS: unique symbol = Symbol('PRODUCT_PARTS');
 export type PRODUCT_PARTS = typeof PRODUCT_PARTS;
 export interface ProductToken extends Token {
     type: PRODUCT_PARTS;
-    tokens: SequenceToken[];
+    tokens: Array<SequenceToken & Span>;
 }
 
 export const PRODUCT_PARTS_X: unique symbol = Symbol('PRODUCT_PARTS_X');
@@ -54,7 +55,10 @@ export interface HypotheticalItem {
     item: ItemInstance | undefined;
 }
 
+export type ActionFunction = (state: State) => State;
+
 export interface Interpretation {
     score: number;
     items: ItemInstance[];
+    action: ActionFunction;
 }

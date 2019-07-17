@@ -27,7 +27,7 @@ function showUsage() {
     console.log(' ');
 }
 
-async function go(utterance: string) {
+async function go(utterances: string[]) {
     dotenv.config();
     const args = minimist(process.argv.slice());
 
@@ -54,21 +54,20 @@ async function go(utterance: string) {
         'priority',
         ['suites'],
         'comment',
-        [utterance],
-        [
-            {
-                lines: [],
-            }
-        ]
+        utterances,
+        utterances.map( x => ({ lines: [] }))
     );
 
-    console.log(`UTTERANCE: "${utterance}"`);
+    console.log('UTTERANCES:');
+    for (const [i, utterance] of utterances.entries()) {
+        console.log(`  ${i}: "${utterance}"`);
+    }
     console.log(' ');
     console.log('Cart');
 
     const result = await testCase.run(processor, world.catalog);
 
-    OrderOps.printOrder(result.observed[0]);
+    OrderOps.printOrder(result.observed[utterances.length - 1]);
 }
 
 export class OrderOps {
@@ -122,4 +121,12 @@ function rightJustify(text: string, width: number) {
 
 // go('soy latte');
 // go("can I get a whole milk latte");
-go("ok that's one two percent milk latte with two one percent lattes iced with decaf");
+//go("ok that's one two percent milk latte with two one percent lattes iced with decaf");
+// go([
+//     "ok that's a soy latte",
+//     "ok that's one two percent milk latte with two one percent lattes iced with decaf"
+// ]);
+go([
+    "ok that's a soy latte and a dopio espresso",
+    "ok I removed the latte"
+]);

@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import 'mocha';
 
-import { AttributeInfo, CartOps, ItemInstance, Key } from 'prix-fixe';
+import { AttributeInfo, CartOps, ItemInstance, State } from 'prix-fixe';
 
 import { Interpretation, Parser } from '../../src';
 
@@ -54,6 +54,11 @@ function normalizeUIDs(interpretation: Interpretation) {
         ...interpretation,
         items: normalizeUIDsRecursion(interpretation.items)
     };
+}
+
+// ActionFunction that does nothing.
+function nop(state: State): State {
+    return state;
 }
 
 describe('Parser2', () => {
@@ -124,7 +129,8 @@ describe('Parser2', () => {
                         quantity: 5,
                         children: []
                     }
-                ]
+                ],
+                action: nop
             };
 
             const interpretation = 
@@ -224,7 +230,8 @@ describe('Parser2', () => {
                         quantity: 1,
                         children: []
                     }
-                ]
+                ],
+                action: nop
             };
 
             const interpretation = 
