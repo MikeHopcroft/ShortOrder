@@ -36,12 +36,6 @@ import {
     tokensFromStopwords,
 } from './lexical_utilities';
 
-export interface TokenX {
-    start: number;
-    length: number;
-    token: Token;
-}
-
 export interface Span {
     start: number;
     length: number;
@@ -178,18 +172,6 @@ export class LexicalAnalyzer {
 
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
-    *tokenizations(query: string): IterableIterator<Token[]> {
-        const terms = query.split(/\s+/);
-        const stemmed = terms.map(this.lexicon.termModel.stem);
-        const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-
-        const graph = this.tokenizer.generateGraph(hashed, stemmed);
-
-        yield* equivalentPaths(this.tokenizer, graph.edgeLists, graph.findPath([], 0));
-    }
-
-    // Generator for tokenizations of the input string that are equivanent to
-    // the top-scoring tokenization.
     *tokenizations2(query: string): IterableIterator<Tokenization> {
         const terms = query.split(/\s+/);
         const stemmed = terms.map(this.lexicon.termModel.stem);
@@ -202,7 +184,7 @@ export class LexicalAnalyzer {
 
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
-    *tokenizationsFromGrap2(graph: Graph): IterableIterator<Tokenization> {
+    *tokenizationsFromGraph2(graph: Graph): IterableIterator<Tokenization> {
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
 
@@ -355,59 +337,6 @@ function addCustomStemmer(model: TermModel) {
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Path enumeration
-//
-///////////////////////////////////////////////////////////////////////////////
-export function *equivalentPaths(
-    tokenizer: Tokenizer,
-    edgeLists: Edge[][],
-    path: Edge[]
-): IterableIterator<Token[]> {
-    yield* equivalentPathsRecursion(tokenizer, edgeLists, 0, 0, path, []);
-}
-
-function *equivalentPathsRecursion(
-    tokenizer: Tokenizer,
-    edgeLists: Edge[][],
-    e: number,
-    v: number,
-    path: Edge[],
-    prefix: Token[]
-): IterableIterator<Token[]> {
-    if (prefix.length === path.length) {
-        // Recursive base case. Return the list of edges.
-        yield [...prefix];
-    }
-    else {
-        // Recursive case. Enumerate all equivalent edges from this vertex.
-        const tokens = new Set<Token>();
-        const currentEdge = path[e];
-        const vertex = edgeLists[v];
-        for (const edge of vertex) {
-            if (edge.score === currentEdge.score &&
-                edge.length === currentEdge.length)
-            {
-                const token: Token = tokenizer.tokenFromEdge(edge);
-                if (!tokens.has(token)) {
-                    tokens.add(token);
-                    prefix.push(token);
-                    yield* equivalentPathsRecursion(
-                        tokenizer,
-                        edgeLists,
-                        e + 1,
-                        v + currentEdge.length,
-                        path,
-                        prefix
-                    );
-                    prefix.pop();
-                }
-            }
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Path enumeration X
 //
 ///////////////////////////////////////////////////////////////////////////////
 export function *equivalentPaths2(

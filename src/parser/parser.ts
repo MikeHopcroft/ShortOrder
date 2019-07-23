@@ -6,7 +6,7 @@ import {
     State
 } from 'prix-fixe';
 
-import { Token, NUMBERTOKEN, Graph } from 'token-flow';
+import { Token, NUMBERTOKEN } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
@@ -267,35 +267,6 @@ export class Parser {
         }
 
         return interpretation;
-
-        // const {entities, gaps} = splitOnEntities(tokens);
-        // const segment: Segment = {
-        //     left: gaps[0],
-        //     entity: entities[0],
-        //     right: gaps[1]
-        // };
-        // // Create subgraph
-        // //   Span based on tokens.
-        // //   Edges filtered by cart.
-        // // Run lexer on subgraph to get tokenization
-        // // For each tokenization
-        // //   
-        // const x = this.interpretOneSegment(segment);
-        // if (x.item !== undefined) {
-        //     console.log(`============ Removing ${x.item.key} ==============`);
-        //     const found = this.cartOps.findByKey(state.cart, x.item.key).next();
-        //     if (!found.done) {
-        //         console.log(`  Removing item uid=${found.value.uid}`);
-
-        //         const action = (state: State): State => {
-        //             const cart = this.cartOps.removeFromCart(state.cart, found.value.uid);
-        //             return {...state, cart};
-        //         };
-
-        //         return { score: x.score, items: [x.item], action };
-        //     }
-        // }
-        // return {score: 0, items: [], action: nop}; 
     }
 
     // TODO: ISSUE: does this return an iterator of HypotheticalItems,
@@ -337,7 +308,7 @@ export class Parser {
         const subgraph = subgraphFromItems(this.info, this.lexer, cart, graph, span);
         
         // Try each tokenization of the subgraph
-        const tokenizations = this.lexer.tokenizationsFromGrap2(subgraph);
+        const tokenizations = this.lexer.tokenizationsFromGraph2(subgraph);
         for (const tokenization of tokenizations) {
             const {entities, gaps} = splitOnEntities(tokenization.tokens as SequenceToken[]);
             const segment: Segment = {
@@ -345,9 +316,10 @@ export class Parser {
                 entity: entities[0],
                 right: gaps[1]
             };
+
             const builder = new EntityBuilder(segment, this.cartOps, this.info, this.rules);
             const target = builder.getItem();
-//            const x = this.interpretOneSegment(segment);
+
             if (target !== undefined) {
                 console.log(`============ Hypothetical target ${target.key} ==============`);
                 // Yield matching ItemInstances from the cart.

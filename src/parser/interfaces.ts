@@ -7,7 +7,6 @@ import {
     EntityToken,
     OptionToken,
     Span,
-    TokenX,
     UnitToken,
 } from '../lexer';
 
@@ -20,13 +19,6 @@ export type PRODUCT_PARTS = typeof PRODUCT_PARTS;
 export interface ProductToken extends Token {
     type: PRODUCT_PARTS;
     tokens: Array<SequenceToken & Span>;
-}
-
-export const PRODUCT_PARTS_X: unique symbol = Symbol('PRODUCT_PARTS_X');
-export type PRODUCT_PARTS_X = typeof PRODUCT_PARTS_X;
-export interface ProductTokenX extends Token {
-    type: PRODUCT_PARTS_X;
-    tokens: TokenX[];
 }
 
 export type SequenceToken = 
