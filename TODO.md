@@ -1,5 +1,6 @@
 # TODO List
 
+* In REPL, reinstate `.menu <item>`
 * Consider factoring graph operations from tokenizer in LexicalAnalyzers
   * Examine the need for tokenizer in equivalentPathsRecursion2(). Seems to be for number tokens.
   * Could we just build a graph of tokens? Downside is that we couple Graph to Token 

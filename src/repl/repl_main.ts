@@ -194,9 +194,10 @@ export function runRepl(
                 console.log(`${style.red.close}`);
             }
     
-            const tokenizations = lexer.tokenizations(text);
+            const tokenizations = lexer.tokenizations2(text);
             let counter = 0;
-            for (const tokens of tokenizations) {
+            for (const tokenization of tokenizations) {
+                const tokens = tokenization.tokens;
                 console.log(`${counter}: ${tokens.map(tokenToString).join(' ')}`);
                 counter++;
             }
@@ -272,26 +273,32 @@ export function runRepl(
                 }
             }
             else {
-                // Parameter doesn't seem to be a Key or PID.
-                // Try using the tokenizer to identify it.
-                const tokens = lexer.tokenizations(line).next().value;
-                console.log(`${tokens.map(tokenToString).join(' ')}`);
+                console.log(`Unrecognized menu item "${line}"`);
 
-                if (tokens && tokens.length > 0 && tokens[0].type === ENTITY) {
-                    const token = tokens[0] as EntityToken;
-                    const pid = token.pid;
-                    if (catalog.hasPID(pid)) {
-                        const item = catalog.getGeneric(pid);
-                        console.log(`${item.name} (${item.pid})`);
-                    }
-                    else {
-                        // This should never happen if tokenizer returned PID.
-                        console.log(`Unrecognized menu item "${line}"`);
-                    }
-                }
-                else {
-                    console.log(`Unrecognized menu item "${line}"`);
-                }
+                // TODO: Implement .menu <item>
+                
+                // // Parameter doesn't seem to be a Key or PID.
+                // // Try using the tokenizer to identify it.
+                // const tokenization = lexer.tokenizations2(line).next().value;
+                // const tokens = tokenization.tokens;
+                // const token = tokens[0];
+                // console.log(`${tokens.map(tokenToString).join(' ')}`);
+
+                // if (tokens && tokens.length > 0 && tokens[0].type === ENTITY) {
+                //     const token = tokens[0] as EntityToken;
+                //     const pid = token.pid;
+                //     if (catalog.hasPID(pid)) {
+                //         const item = catalog.getGeneric(pid);
+                //         console.log(`${item.name} (${item.pid})`);
+                //     }
+                //     else {
+                //         // This should never happen if tokenizer returned PID.
+                //         console.log(`Unrecognized menu item "${line}"`);
+                //     }
+                // }
+                // else {
+                //     console.log(`Unrecognized menu item "${line}"`);
+                // }
             }
             repl.displayPrompt();
         }

@@ -1,3 +1,5 @@
+import { State } from 'prix-fixe';
+
 import {
     ENTITY,
     EntityToken,
@@ -61,4 +63,10 @@ function* enumerateSplitsRecursion(position: number, lengths: number[]): Iterabl
             }
         }
     }
+}
+
+
+// ActionFunction that does nothing.
+export function nop(state: State): State {
+    return state;
 }
