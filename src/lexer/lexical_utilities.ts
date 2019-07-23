@@ -1,3 +1,5 @@
+import { OPTION } from 'prix-fixe';
+
 import {
     DiffResults,
     DownstreamTermPredicate,
@@ -19,7 +21,7 @@ import {
 
 import { ATTRIBUTE, AttributeToken } from './attributes';
 import { ENTITY, EntityToken } from './entities';
-import { OPTION, OptionToken } from './options';
+import { OptionToken } from './options';
 import { QUANTITY, QuantityToken } from './quantities';
 import { Stopwords } from '../stopwords';
 import { UNIT, UnitToken } from './units';

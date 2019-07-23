@@ -5,6 +5,7 @@ import {
     ICartOps,
     ItemInstance,
     IRuleChecker,
+    OPTION,
     PID,
 } from 'prix-fixe';
 
@@ -14,7 +15,6 @@ import {
     ATTRIBUTE,
     AttributeToken,
     CONJUNCTION,
-    OPTION,
     OptionToken,
     QUANTITY,
     UNIT,

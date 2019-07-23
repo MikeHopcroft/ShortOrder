@@ -1,3 +1,4 @@
+import { OPTION } from 'prix-fixe';
 import { NumberToken, NUMBERTOKEN } from 'token-flow';
 
 import {
@@ -7,7 +8,6 @@ import {
     ConjunctionToken,
     ENTITY,
     EntityToken,
-    OPTION,
     OptionToken,
     UNIT,
     UnitToken

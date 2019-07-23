@@ -2,6 +2,7 @@ import {
     AttributeInfo,
     ICartOps,
     IRuleChecker,
+    OPTION,
 } from 'prix-fixe';
 
 import { NUMBERTOKEN } from 'token-flow';
@@ -12,7 +13,6 @@ import {
     CONJUNCTION,
     ENTITY,
     LexicalAnalyzer,
-    OPTION,
     QUANTITY,
     UNIT,
     REMOVE_ITEM,

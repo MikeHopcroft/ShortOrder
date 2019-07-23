@@ -3,8 +3,10 @@ import * as fs from 'fs';
 import {
     Alias,
     Edge,
+    IIngestor,
     Lexicon,
     Tokenizer,
+    TokenizerAlias,
     Token,
     TermModel,
     Graph,
@@ -21,11 +23,11 @@ import {
 
 import { stopwordsFromYamlString } from '../stopwords';
 
-import { CreateAttribute, AttributeToken } from './attributes';
-import { CreateEntity, EntityToken } from './entities';
+import { CreateAttribute, AttributeToken, ATTRIBUTE } from './attributes';
+import { CreateEntity, EntityToken, ENTITY } from './entities';
 import { intentTokenFactory } from './intents';
 import { tokenToString } from './lexical_utilities';
-import { CreateOption } from './options';
+import { CreateOption, OptionToken } from './options';
 import { quantityTokenFactory } from './quantities';
 import { unitTokenFactory } from './units';
 
@@ -51,7 +53,7 @@ export class LexicalAnalyzer {
     tokenizer: Tokenizer;
 
     private readonly aidToToken = new Map<AID, AttributeToken>();
-    private readonly pidToToken = new Map<PID, EntityToken>();
+    private readonly pidToToken = new Map<PID, Token>();
 
     constructor(
         world: World,
@@ -110,7 +112,50 @@ export class LexicalAnalyzer {
             this.lexicon.addDomain(stopwordTokens, false);
         }
 
+        // Ingest the lexicon into the tokenizer.
         this.lexicon.ingest(this.tokenizer);
+
+        // Use ingest method to index attribute and entity tokens.
+        const addItem = (alias: TokenizerAlias):void => {
+            const token = alias.token as AttributeToken | EntityToken | OptionToken;
+            if (token.type === ENTITY) {
+                const existing = this.pidToToken.get(token.pid);
+                if (existing) {
+                    if (token !== existing) {
+                        const message =
+                            `indexEntityTokens: tokens must be unique  (pid=${token.pid}).`;
+                        throw TypeError(message);
+                    }
+                } else {
+                    this.pidToToken.set(token.pid, token);
+                }
+            } else if (token.type === OPTION) {
+                const existing = this.pidToToken.get(token.id);
+                if (existing) {
+                    if (token !== existing) {
+                        const message =
+                            `indexEntityTokens: tokens must be unique  (pid=${token.id}).`;
+                        throw TypeError(message);
+                    }
+                } else {
+                    this.pidToToken.set(token.id, token);
+                }
+            } else if (token.type === ATTRIBUTE) {
+                const existing = this.aidToToken.get(token.id);
+                if (existing) {
+                    if (token !== existing) {
+                        const message =
+                            `indexAttributeTokens: tokens must be unique  (aid=${token.id}).`;
+                        throw TypeError(message);
+                    }
+                } else {
+                    console.log(`attribute: ${token.name}`);
+                    this.aidToToken.set(token.id, token);
+                }
+            }
+        };
+
+        this.lexicon.ingest({addItem});
     }
 
     private *indexEntityTokens(
@@ -152,7 +197,7 @@ export class LexicalAnalyzer {
         }
     }
 
-    getEntityToken(pid: PID): EntityToken {
+    getEntityToken(pid: PID): Token {
         const token = this.pidToToken.get(pid);
         if (!token) {
             const message = `getEntityToken(): unknown PID ${pid}.`;

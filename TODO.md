@@ -1,5 +1,10 @@
 # TODO List
 
+* LexicalAnalyzer: index tokens
+* EntityBuilder: generate regexes
+* CartOps: search with regex
+* OptionToken: rename id to pid
+
 * In REPL, reinstate `.menu <item>`
 * Consider factoring graph operations from tokenizer in LexicalAnalyzers
   * Examine the need for tokenizer in equivalentPathsRecursion2(). Seems to be for number tokens.
