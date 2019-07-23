@@ -20,7 +20,8 @@ import {
     QUANTITY,
     UNIT,
     REMOVE_ITEM,
-    Span
+    Span,
+    Tokenization
 } from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
@@ -113,15 +114,15 @@ export class Parser {
         let counter = 0;
         for (const tokenization of tokenizations) {
             // XXX
-            const tokens = tokenization.tokens;
             if (this.debugMode) {
+                const tokens = tokenization.tokens;
                 console.log(' ');
                 console.log(tokens.map(tokenToString).join(''));
                 // console.log(`  interpretation ${counter}`);
             }
             counter++;
 
-            interpretations.push(this.parseRootStage2(state, tokens));
+            interpretations.push(this.parseRootStage2(state, tokenization));
         }
 
         // TODO: figure out how to remove the type assertion to any.
@@ -161,8 +162,11 @@ export class Parser {
 
     parseRootStage2(
         state: State,
-        tokens: Array<Token & Span>
+        tokenization: Tokenization
     ): Interpretation {
+        const tokens = tokenization.tokens;
+        const graph = tokenization.graph;
+
         const filtered = this.filterBadTokens(tokens);
         const grouped = new TokenSequence<Token>(
             this.groupProductParts(filtered)
@@ -175,16 +179,14 @@ export class Parser {
         // removes item modified by second intent)?
         while (!grouped.atEOS()) {
             if (grouped.startsWith([ADD_TO_ORDER, PRODUCT_PARTS])) {
-                const add = grouped.peek(0);
                 const parts = (grouped.peek(1) as ProductToken).tokens;
                 grouped.take(2);
                 return this.findBestInterpretation(parts);
             } else if (grouped.startsWith([REMOVE_ITEM, PRODUCT_PARTS])) {
                 console.log('REMOVE_ITEM not implemented');
-                const remove = grouped.peek(0);
                 const parts = (grouped.peek(1) as ProductToken).tokens;
                 grouped.take(2);
-                return this.parseRemove(state, parts);
+                return this.parseRemove(state, { tokens: parts, graph });
             } else {
                 grouped.discard(1);
             }
@@ -239,38 +241,61 @@ export class Parser {
 
     parseRemove(
         state: State,
-        tokens: Array<SequenceToken & Span>,
+        tokenization: Tokenization,
+        // tokens: Array<SequenceToken & Span>,
         // graph: Graph
     ): Interpretation {
+        // const tokens = tokenization.tokens as Array<SequenceToken & Span>;
+        // const graph = tokenization.graph;
 
-        const {entities, gaps} = splitOnEntities(tokens);
-        const segment: Segment = {
-            left: gaps[0],
-            entity: entities[0],
-            right: gaps[1]
+        const interpretation: Interpretation = {
+            score: 0,
+            items: [],
+            action: nop
         };
-        // Create subgraph
-        //   Span based on tokens.
-        //   Edges filtered by cart.
-        // Run lexer on subgraph to get tokenization
-        // For each tokenization
-        //   
-        const x = this.interpretOneSegment(segment);
-        if (x.item !== undefined) {
-            console.log(`============ Removing ${x.item.key} ==============`);
-            const found = this.cartOps.findByKey(state.cart, x.item.key).next();
-            if (!found.done) {
-                console.log(`  Removing item uid=${found.value.uid}`);
 
-                const action = (state: State): State => {
-                    const cart = this.cartOps.removeFromCart(state.cart, found.value.uid);
+        for (const target of this.targets(state, tokenization)) {
+            if (target.score > interpretation.score) {
+                const item = target.item!;
+                interpretation.score = target.score;
+                interpretation.items = [target.item!];
+                interpretation.action = (state: State): State => {
+                    const cart = this.cartOps.removeFromCart(state.cart, item.uid);
                     return {...state, cart};
                 };
-
-                return { score: x.score, items: [x.item], action };
             }
         }
-        return {score: 0, items: [], action: nop}; 
+
+        return interpretation;
+
+        // const {entities, gaps} = splitOnEntities(tokens);
+        // const segment: Segment = {
+        //     left: gaps[0],
+        //     entity: entities[0],
+        //     right: gaps[1]
+        // };
+        // // Create subgraph
+        // //   Span based on tokens.
+        // //   Edges filtered by cart.
+        // // Run lexer on subgraph to get tokenization
+        // // For each tokenization
+        // //   
+        // const x = this.interpretOneSegment(segment);
+        // if (x.item !== undefined) {
+        //     console.log(`============ Removing ${x.item.key} ==============`);
+        //     const found = this.cartOps.findByKey(state.cart, x.item.key).next();
+        //     if (!found.done) {
+        //         console.log(`  Removing item uid=${found.value.uid}`);
+
+        //         const action = (state: State): State => {
+        //             const cart = this.cartOps.removeFromCart(state.cart, found.value.uid);
+        //             return {...state, cart};
+        //         };
+
+        //         return { score: x.score, items: [x.item], action };
+        //     }
+        // }
+        // return {score: 0, items: [], action: nop}; 
     }
 
     // TODO: ISSUE: does this return an iterator of HypotheticalItems,
@@ -289,11 +314,16 @@ export class Parser {
     // Seems you can change/modify an attribute, but not remove it.
     *targets(
         state: State,
-        tokens: Array<SequenceToken & Span>,
-        graph: Graph
+        tokenization: Tokenization,
+        // tokens: Array<SequenceToken & Span>,
+        // graph: Graph
     ): IterableIterator<HypotheticalItem> {
+        const tokens = tokenization.tokens;
+        const graph = tokenization.graph;
+        const cart = state.cart;
+
         //
-        // Construct lexical subgraph
+        // Construct lexical subgraph corresponding to items in the cart.
         //
 
         // Subgraph span will be that of `tokens`.
@@ -303,30 +333,32 @@ export class Parser {
             length: last.start + last.length
         };
 
-        // Subgraph edges will correspond to tokens for items in `state.cart`.
-        const subgraph = subgraphFromItems(this.info, this.lexer, state.cart, graph, span);
+        // Subgraph edges will correspond to tokens for items in `cart`.
+        const subgraph = subgraphFromItems(this.info, this.lexer, cart, graph, span);
         
         // Try each tokenization of the subgraph
         const tokenizations = this.lexer.tokenizationsFromGrap2(subgraph);
         for (const tokenization of tokenizations) {
-            const {entities, gaps} = splitOnEntities(tokens);
+            const {entities, gaps} = splitOnEntities(tokenization.tokens as SequenceToken[]);
             const segment: Segment = {
                 left: gaps[0],
                 entity: entities[0],
                 right: gaps[1]
             };
-            const x = this.interpretOneSegment(segment);
-            if (x.item !== undefined) {
-                console.log(`============ Hypothetical target ${x.item.key} ==============`);
+            const builder = new EntityBuilder(segment, this.cartOps, this.info, this.rules);
+            const target = builder.getItem();
+//            const x = this.interpretOneSegment(segment);
+            if (target !== undefined) {
+                console.log(`============ Hypothetical target ${target.key} ==============`);
                 // Yield matching ItemInstances from the cart.
                 // TODO: we need a predicate that treats unspecified attributes as wildcards.
                 // Need to know whether an attribute is default because it was omitted or
                 // specified as the default value.
                 // Perhaps EntityBuilder needs a wildcard mode.
-                for (const item of this.cartOps.findByKey(state.cart, x.item.key)) {
+                for (const item of this.cartOps.findByKey(state.cart, target.key)) {
                     yield {
                         item,
-                        score: x.score
+                        score: builder.getScore()
                     };
                 }
             }

@@ -7,7 +7,7 @@
 * Break parser.ts into multiple stages/files.
 * x Remove attributes, catalog directories.
 
-*Target search architecture
+* Target search architecture
     * LexicalAnalyzer needs to provide the graph, the edge list, and the tokens to allow for reprocessing.
     * Need some way to copy subgraph of edges in the cart.
     * Need some way to get tokens for everything in the cart - products, options, attributes
