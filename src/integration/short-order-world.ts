@@ -36,11 +36,12 @@ export function createShortOrderWorld(world: World, dataPath: string, debugMode:
     const parser = new Parser(
         world.cartOps,
         world.attributeInfo,
+        lexer,
         world.ruleChecker,
         debugMode);
 
     const processor = async (text: string, state: State): Promise<State> => {
-        const interpretation = parser.parseRoot(lexer, state, text);
+        const interpretation = parser.parseRoot(state, text);
 
         return interpretation.action(state);
     };

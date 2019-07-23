@@ -127,6 +127,7 @@ function rightJustify(text: string, width: number) {
 //     "ok that's one two percent milk latte with two one percent lattes iced with decaf"
 // ]);
 go([
-    "ok that's a soy latte and a dopio espresso",
+    "ok that's a iced soy latte and a dopio espresso",
+    // "ok that's a soy latte and a dopio espresso",
     "ok I removed the latte"
 ]);

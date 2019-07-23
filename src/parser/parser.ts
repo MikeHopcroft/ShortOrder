@@ -6,7 +6,7 @@ import {
     State
 } from 'prix-fixe';
 
-import { Token, NUMBERTOKEN } from 'token-flow';
+import { Token, NUMBERTOKEN, Graph } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
@@ -39,6 +39,7 @@ import {
     splitOnEntities,
 } from './parser_utilities';
 
+import { subgraphFromItems } from './target';
 import { TokenSequence } from './token_sequence';
 
 // ActionFunction that does nothing.
@@ -49,6 +50,7 @@ function nop(state: State): State {
 export class Parser {
     private readonly cartOps: ICartOps;
     private readonly info: AttributeInfo;
+    private readonly lexer: LexicalAnalyzer;
     private readonly rules: IRuleChecker;
     private readonly debugMode: boolean;
 
@@ -72,14 +74,20 @@ export class Parser {
         UNIT,
     ]);
 
+    // TODO: Parser shouldn't be coupled to LexicalAnalyzer. It should take an
+    // interface to a graph manipulation class or perhaps that code could be
+    // extracted from LexicalAnalyzer and exposed as simple functions.
+    // TODO: Fix LexicalAnalyzer hack (undefined!) in unit tests.
     constructor(
         cartOps: ICartOps,
         info: AttributeInfo,
+        lexer: LexicalAnalyzer,
         rules: IRuleChecker,
         debugMode: boolean
     ) {
         this.cartOps = cartOps;
         this.info = info;
+        this.lexer = lexer;
         this.rules = rules;
         this.debugMode = debugMode;
     }
@@ -89,14 +97,14 @@ export class Parser {
     // Existing code based on Token (vs TokenX)
     //
     ///////////////////////////////////////////////////////////////////////////
-    parseRoot(lexer: LexicalAnalyzer, state: State, text: string): Interpretation {
+    parseRoot(state: State, text: string): Interpretation {
         // XXX
         if (this.debugMode) {
             console.log(' ');
             console.log(`Text: "${text}"`);
         }
 
-        const tokenizations = [...lexer.tokenizations2(text)];
+        const tokenizations = [...this.lexer.tokenizations2(text)];
         const interpretations: Interpretation[] = [];
 
         // TODO: figure out how to remove the type assertion to any.
@@ -132,7 +140,7 @@ export class Parser {
             console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
             console.log(`Time: ${delta/1.0e6}ms`);
             console.log(`  "${text}"`);
-            lexer.analyzePaths(text);
+            this.lexer.analyzePaths(text);
         }
 
         if (interpretations.length > 0) {
@@ -231,14 +239,22 @@ export class Parser {
 
     parseRemove(
         state: State,
-        tokens: Array<SequenceToken & Span>
+        tokens: Array<SequenceToken & Span>,
+        // graph: Graph
     ): Interpretation {
+
         const {entities, gaps} = splitOnEntities(tokens);
         const segment: Segment = {
             left: gaps[0],
             entity: entities[0],
             right: gaps[1]
         };
+        // Create subgraph
+        //   Span based on tokens.
+        //   Edges filtered by cart.
+        // Run lexer on subgraph to get tokenization
+        // For each tokenization
+        //   
         const x = this.interpretOneSegment(segment);
         if (x.item !== undefined) {
             console.log(`============ Removing ${x.item.key} ==============`);
@@ -255,6 +271,66 @@ export class Parser {
             }
         }
         return {score: 0, items: [], action: nop}; 
+    }
+
+    // TODO: ISSUE: does this return an iterator of HypotheticalItems,
+    // correponding to ItemInstances in the cart for one Interpretation,
+    // or for all Interpretations? Issue is that one doesn't want to see
+    // the same item twice. Is the solution to collect the ItemInstances
+    // in a Set? This seems wrong because in the case of, say, a remove
+    // operation with two Interpretations, one want to remove only one
+    // target.
+    //
+    // TODO: a target might also be implicit, if the tokens don't contain
+    // an entity.
+    //
+    // TODO: remove an option from an implicit entity - e.g. 'I removed the decaf'
+    // TODO: remove an attribute from an implicit entity - e.g. 'I removed the large` - doesn't make sense
+    // Seems you can change/modify an attribute, but not remove it.
+    *targets(
+        state: State,
+        tokens: Array<SequenceToken & Span>,
+        graph: Graph
+    ): IterableIterator<HypotheticalItem> {
+        //
+        // Construct lexical subgraph
+        //
+
+        // Subgraph span will be that of `tokens`.
+        const last = tokens[tokens.length - 1];
+        const span: Span = {
+            start: tokens[0].start,
+            length: last.start + last.length
+        };
+
+        // Subgraph edges will correspond to tokens for items in `state.cart`.
+        const subgraph = subgraphFromItems(this.info, this.lexer, state.cart, graph, span);
+        
+        // Try each tokenization of the subgraph
+        const tokenizations = this.lexer.tokenizationsFromGrap2(subgraph);
+        for (const tokenization of tokenizations) {
+            const {entities, gaps} = splitOnEntities(tokens);
+            const segment: Segment = {
+                left: gaps[0],
+                entity: entities[0],
+                right: gaps[1]
+            };
+            const x = this.interpretOneSegment(segment);
+            if (x.item !== undefined) {
+                console.log(`============ Hypothetical target ${x.item.key} ==============`);
+                // Yield matching ItemInstances from the cart.
+                // TODO: we need a predicate that treats unspecified attributes as wildcards.
+                // Need to know whether an attribute is default because it was omitted or
+                // specified as the default value.
+                // Perhaps EntityBuilder needs a wildcard mode.
+                for (const item of this.cartOps.findByKey(state.cart, x.item.key)) {
+                    yield {
+                        item,
+                        score: x.score
+                    };
+                }
+            }
+        }
     }
 
     findBestInterpretation(tokens: SequenceToken[]): Interpretation {

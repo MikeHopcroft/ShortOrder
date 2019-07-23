@@ -200,6 +200,12 @@ export class LexicalAnalyzer {
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
 
+    // Generator for tokenizations of the input string that are equivanent to
+    // the top-scoring tokenization.
+    *tokenizationsFromGrap2(graph: Graph): IterableIterator<Tokenization> {
+        yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
+    }
+
     analyzePaths(query: string) {
         const terms = query.split(/\s+/);
         const stemmed = terms.map(this.lexicon.termModel.stem);

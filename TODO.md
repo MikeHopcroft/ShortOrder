@@ -1,6 +1,10 @@
 # TODO List
 
-* Remove Iterpretation.items property
+* Consider factoring graph operations from tokenizer in LexicalAnalyzers
+  * Examine the need for tokenizer in equivalentPathsRecursion2(). Seems to be for number tokens.
+  * Could we just build a graph of tokens? Downside is that we couple Graph to Token 
+* Remove Iterpretation.items property - update unit tests
+* Break parser.ts into multiple stages/files.
 * x Remove attributes, catalog directories.
 
 *Target search architecture

@@ -3,7 +3,7 @@ import 'mocha';
 
 import { AttributeInfo, CartOps, ItemInstance, State } from 'prix-fixe';
 
-import { Interpretation, Parser } from '../../src';
+import { Interpretation, Parser, LexicalAnalyzer } from '../../src';
 
 import {
     smallWorldAttributes,
@@ -103,7 +103,9 @@ describe('Parser2', () => {
         // });
 
         it('segment on quantifier', () => {
-            const parser = new Parser(ops, attributeInfo, smallWorldRuleChecker, false);
+            // TODO: HACK: BUGBUG: Remove temporary code in following line.
+            const lexer: LexicalAnalyzer = (undefined!);
+            const parser = new Parser(ops, attributeInfo, lexer, smallWorldRuleChecker, false);
             const tokens = [
                 quantityOne,
                 attributeSmall,
@@ -210,7 +212,9 @@ describe('Parser2', () => {
         // });
 
         it('segment ambiguous size based on options', () => {
-            const parser = new Parser(ops, attributeInfo, smallWorldRuleChecker, false);
+            // TODO: HACK: BUGBUG: Remove temporary code in following line.
+            const lexer: LexicalAnalyzer = (undefined!);
+            const parser = new Parser(ops, attributeInfo, lexer, smallWorldRuleChecker, false);
             const tokens = [
                 productCoffee,
                 attributeMedium,
