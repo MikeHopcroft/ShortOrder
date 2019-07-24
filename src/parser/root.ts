@@ -123,7 +123,6 @@ function parseRootStage2(
             grouped.take(2);
             return parseAdd(parser, parts);
         } else if (grouped.startsWith([REMOVE_ITEM, PRODUCT_PARTS])) {
-            console.log('REMOVE_ITEM not implemented');
             const parts = (grouped.peek(1) as ProductToken).tokens;
             grouped.take(2);
             return parseRemove(parser, state, { tokens: parts, graph });

@@ -110,7 +110,9 @@ function interpretOneSegment(
         segment,
         parser.cartOps, 
         parser.attributes,
-        parser.rules
+        parser.rules,
+        false,
+        false
     );
     return {
         score: builder.getScore(),

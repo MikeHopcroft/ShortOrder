@@ -43,7 +43,9 @@ export class EntityBuilder {
         segment: Segment,
         cartOps: ICartOps,
         info: AttributeInfo,
-        rules: IRuleChecker
+        rules: IRuleChecker,
+        generateRegexKey: boolean,
+        implicitQuantifiers: boolean
     ) {
         this.cartOps = cartOps;
         this.info = info;
@@ -53,7 +55,7 @@ export class EntityBuilder {
         this.tokensUsed += 1;
 
         const leftTokens = new TokenSequence<GapToken>(segment.left);
-        this.processLeft(leftTokens);
+        this.processLeft(leftTokens, implicitQuantifiers);
         this.tokensUsed += leftTokens.tokensUsed;
 
         const rightTokens = new TokenSequence<GapToken>(segment.right);
@@ -61,36 +63,49 @@ export class EntityBuilder {
         this.tokensUsed += rightTokens.tokensUsed;
 
         // Initially, create item without options, in order to get key.
-        const item = cartOps.createItem(this.quantity, this.pid, this.aids.values(), [].values());
+        const item = cartOps.createItem(
+            this.quantity,
+            this.pid, 
+            this.aids.values(),
+            [].values(),
+            generateRegexKey
+        );
 
-        // TODO: filter out illegal options here.
-        const legalOptions: ItemInstance[] = [];
-        for (const [index, option] of this.options.entries()) {
-            if (this.rules.isValidChild(item.key, option.key)) {
-                legalOptions.push(option);
-            } else {
-                // This option cannot legally configure the item.
-                // Exclude it and adjust the used token count accordingly.
-                this.tokensUsed -= this.optionTokenCounts[index];
+        if (!generateRegexKey) {
+            // TODO: filter out illegal options here.
+            const legalOptions: ItemInstance[] = [];
+            for (const [index, option] of this.options.entries()) {
+                if (this.rules.isValidChild(item.key, option.key)) {
+                    legalOptions.push(option);
+                } else {
+                    // This option cannot legally configure the item.
+                    // Exclude it and adjust the used token count accordingly.
+                    this.tokensUsed -= this.optionTokenCounts[index];
+                }
             }
-        }
 
-        // Use key to filter out options that violate mutual exclusivity.
-        const f = this.rules.getIncrementalMutualExclusionPredicate(item.key);
-        const filteredOptions: ItemInstance[] = [];
-        for (const [index, option] of legalOptions.entries()) {
-            if (f(option.key)) {
-                filteredOptions.push(option);
-            } else {
-                // This option violated mutual exclusivity with the previous
-                // options. Exclude it and adjust the used token count
-                // accordingly.
-                this.tokensUsed -= this.optionTokenCounts[index];
+            // Use key to filter out options that violate mutual exclusivity.
+            const f = this.rules.getIncrementalMutualExclusionPredicate(item.key);
+            const filteredOptions: ItemInstance[] = [];
+            for (const [index, option] of legalOptions.entries()) {
+                if (f(option.key)) {
+                    filteredOptions.push(option);
+                } else {
+                    // This option violated mutual exclusivity with the previous
+                    // options. Exclude it and adjust the used token count
+                    // accordingly.
+                    this.tokensUsed -= this.optionTokenCounts[index];
+                }
             }
-        }
 
-        // Construct item with filtered options.
-        this.item = {...item, children: filteredOptions};
+            // Construct item with filtered options.
+            this.item = {...item, children: filteredOptions};
+        } else {
+            // When generateRegexKey is true, we don't have a Key (we only have
+            // a regex) so we can't use the rules checker to filter out options.
+            // Construct item with unfiltered options.
+            this.item = {...item, children: this.options};
+        }
     }
 
     getScore(): number {
@@ -108,7 +123,10 @@ export class EntityBuilder {
     // item, as in "5 vanilla lattes". After the first position, quantifiers
     // only apply to options as in "3 5 pump vanilla latte with 2 pumps of
     // chocolate".
-    processLeft(tokens: TokenSequence<GapToken>) {
+    processLeft(
+        tokens: TokenSequence<GapToken>,
+        implicitQuantifiers: boolean
+    ) {
         this.processConjunction(tokens);
 
         // DESIGN NOTE:
@@ -137,8 +155,12 @@ export class EntityBuilder {
         //     // Otherwise, use the NumberToken to quantify the entity.
         //     this.processQuantity(tokens);
         // }
+        // this.processRemaining(tokens);
 
-        if (this.processQuantity(tokens)) {
+        // // New code
+        // DESGIN NOTE: Must check implicitQuantifiers after processQuantity()
+        // to ensure that we always get the quantifier if there is one.
+        if (this.processQuantity(tokens) || implicitQuantifiers) {
             // The process the remaining tokens.
             this.processRemaining(tokens);
         }
@@ -242,7 +264,12 @@ export class EntityBuilder {
             const tensor = this.info.getTensorForEntity(option.id);
             const coordinates = this.info.getAttributeCoordinates(attribute.id);
             if (AttributeInfo.hasDimension(tensor, coordinates.dimension.did)) {
-                const item = this.cartOps.createItem(1, option.id, [attribute.id].values(), [].values());
+                const item = this.cartOps.createItem(
+                    1,
+                    option.id,
+                    [attribute.id].values(),
+                    [].values(),
+                    false);
                 this.options.push(item);
                 this.optionTokenCounts.push(2);
                 tokens.take(2);
@@ -259,7 +286,13 @@ export class EntityBuilder {
         if (tokens.startsWith([NUMBERTOKEN, UNIT, OPTION])) {
             const quantity = tokens.peek(0) as NumberToken;
             const option = tokens.peek(2) as OptionToken;
-            const item = this.cartOps.createItem(quantity.value, option.id, [].values(), [].values());
+            const item = this.cartOps.createItem(
+                quantity.value,
+                option.id,
+                [].values(),
+                [].values(),
+                false
+            );
             this.options.push(item);
             this.optionTokenCounts.push(3);
             tokens.take(3);
@@ -269,7 +302,13 @@ export class EntityBuilder {
         if (tokens.startsWith([NUMBERTOKEN, OPTION])) {
             const quantity = tokens.peek(0) as NumberToken;
             const option = tokens.peek(1) as OptionToken;
-            const item = this.cartOps.createItem(quantity.value, option.id, [].values(), [].values());
+            const item = this.cartOps.createItem(
+                quantity.value,
+                option.id,
+                [].values(),
+                [].values(),
+                false
+            );
             this.options.push(item);
             this.optionTokenCounts.push(2);
             tokens.take(2);
@@ -278,7 +317,12 @@ export class EntityBuilder {
         
         if (tokens.startsWith([OPTION])) {
             const option = tokens.peek(0) as OptionToken;
-            const item = this.cartOps.createItem(1, option.id, [].values(), [].values());
+            const item = this.cartOps.createItem(
+                1,
+                option.id,
+                [].values(),
+                [].values(),
+                false);
             this.options.push(item);
             this.optionTokenCounts.push(1);
             tokens.take(1);

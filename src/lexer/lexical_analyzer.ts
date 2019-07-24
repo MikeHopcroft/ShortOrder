@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import {
     Alias,
     Edge,
-    IIngestor,
     Lexicon,
     Tokenizer,
     TokenizerAlias,
@@ -149,52 +148,12 @@ export class LexicalAnalyzer {
                         throw TypeError(message);
                     }
                 } else {
-                    console.log(`attribute: ${token.name}`);
                     this.aidToToken.set(token.id, token);
                 }
             }
         };
 
         this.lexicon.ingest({addItem});
-    }
-
-    private *indexEntityTokens(
-        entries: IterableIterator<[EntityToken, string]>
-    ): IterableIterator<[Token, string]> {
-        for (const entry of entries) {
-            const token = entry[0];
-            const existing = this.pidToToken.get(token.pid);
-            if (existing) {
-                if (token !== existing) {
-                    const message =
-                        `indexEntityTokens: tokens must be unique  (pid=${token.pid}).`;
-                    throw TypeError(message);
-                }
-            } else {
-                this.pidToToken.set(token.pid, token);
-            }
-            yield entry;
-        }
-    }
-
-    private *indexAttributeTokens(
-        entries: IterableIterator<[AttributeToken, string]>
-    ): IterableIterator<[Token, string]> {
-        for (const entry of entries) {
-            const token = entry[0];
-            // TODO: rename AttributeToken.id to aid.
-            const existing = this.aidToToken.get(token.id);
-            if (existing) {
-                if (token !== existing) {
-                    const message =
-                        `indexAttributeTokens: tokens must be unique  (aid=${token.id}).`;
-                    throw TypeError(message);
-                }
-            } else {
-                this.aidToToken.set(token.id, token);
-            }
-            yield entry;
-        }
     }
 
     getEntityToken(pid: PID): Token {

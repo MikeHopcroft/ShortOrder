@@ -55,7 +55,13 @@ function stripUIDs(item: ItemInstance): SimpleItemInstance {
 }
 
 function process(segment: Segment) {
-    const builder = new EntityBuilder(segment, ops, attributeInfo, smallWorldRuleChecker);
+    const builder = new EntityBuilder(
+        segment,
+        ops,
+        attributeInfo,
+        smallWorldRuleChecker,
+        false,
+        false);
 
     const score = builder.getScore();
     const item = builder.getItem();

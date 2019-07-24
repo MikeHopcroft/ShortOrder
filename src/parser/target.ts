@@ -130,8 +130,6 @@ export function *targets(
     rules: IRuleChecker,
     state: State,
     tokenization: Tokenization,
-    // tokens: Array<SequenceToken & Span>,
-    // graph: Graph
 ): IterableIterator<HypotheticalItem> {
     const tokens = tokenization.tokens;
     const graph = tokenization.graph;
@@ -161,17 +159,24 @@ export function *targets(
             right: gaps[1]
         };
 
-        const builder = new EntityBuilder(segment, cartOps, attributes, rules);
+        const builder = new EntityBuilder(
+            segment,
+            cartOps,
+            attributes,
+            rules,
+            true,
+            true);
         const target = builder.getItem();
 
         if (target !== undefined) {
-            console.log(`============ Hypothetical target ${target.key} ==============`);
+            // console.log(`============ Hypothetical target ${target.key} ==============`);
+
             // Yield matching ItemInstances from the cart.
             // TODO: we need a predicate that treats unspecified attributes as wildcards.
             // Need to know whether an attribute is default because it was omitted or
             // specified as the default value.
             // Perhaps EntityBuilder needs a wildcard mode.
-            for (const item of cartOps.findByKey(state.cart, target.key)) {
+            for (const item of cartOps.findByKeyRegex(state.cart, target.key)) {
                 yield {
                     item,
                     score: builder.getScore()

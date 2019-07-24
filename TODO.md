@@ -1,8 +1,8 @@
 # TODO List
 
-* LexicalAnalyzer: index tokens
-* EntityBuilder: generate regexes
-* CartOps: search with regex
+* x LexicalAnalyzer: index tokens
+* x EntityBuilder: generate regexes
+* x CartOps: search with regex
 * OptionToken: rename id to pid
 
 * In REPL, reinstate `.menu <item>`
