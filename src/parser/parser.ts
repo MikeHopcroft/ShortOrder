@@ -1,6 +1,7 @@
 import {
     AttributeInfo,
     ICartOps,
+    ICatalog,
     IRuleChecker,
     OPTION,
 } from 'prix-fixe';
@@ -21,6 +22,7 @@ import {
 export class Parser {
     readonly attributes: AttributeInfo;
     readonly cartOps: ICartOps;
+    readonly catalog: ICatalog;
     readonly lexer: LexicalAnalyzer;
     readonly rules: IRuleChecker;
     readonly debugMode: boolean;
@@ -51,12 +53,14 @@ export class Parser {
     // TODO: Fix LexicalAnalyzer hack (undefined!) in unit tests.
     constructor(
         cartOps: ICartOps,
+        catalog: ICatalog,
         attributes: AttributeInfo,
         lexer: LexicalAnalyzer,
         rules: IRuleChecker,
         debugMode: boolean
     ) {
         this.cartOps = cartOps;
+        this.catalog = catalog;
         this.attributes = attributes;
         this.lexer = lexer;
         this.rules = rules;

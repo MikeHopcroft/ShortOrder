@@ -123,7 +123,7 @@ export class EntityBuilder {
     // item, as in "5 vanilla lattes". After the first position, quantifiers
     // only apply to options as in "3 5 pump vanilla latte with 2 pumps of
     // chocolate".
-    processLeft(
+    private processLeft(
         tokens: TokenSequence<GapToken>,
         implicitQuantifiers: boolean
     ) {
@@ -169,11 +169,11 @@ export class EntityBuilder {
     // Process tokens that lie to the right of the entity. This sequence is
     // considered to be made up of item attributes, and fully specified
     // options.
-    processRight(tokens: TokenSequence<GapToken>) {
+    private processRight(tokens: TokenSequence<GapToken>) {
         this.processRemaining(tokens);
     }
 
-    processRemaining(tokens: TokenSequence<GapToken>): boolean {
+    private processRemaining(tokens: TokenSequence<GapToken>): boolean {
         while (!tokens.atEOS()) {
             this.processConjunction(tokens);
 
@@ -202,7 +202,7 @@ export class EntityBuilder {
     //  <CONJUNCTION>
     //
     // Returns true if the conjunction was successfully parsed.
-    processConjunction(tokens: TokenSequence<GapToken>): boolean {
+    private processConjunction(tokens: TokenSequence<GapToken>): boolean {
         if (tokens.startsWith([CONJUNCTION])) {
             tokens.take(1);
             return true;
@@ -216,7 +216,7 @@ export class EntityBuilder {
     //  <NUMBER>
     //
     // Returns true if the number was sucessfully parsed.
-    processQuantity(tokens: TokenSequence<GapToken>): boolean {
+    private processQuantity(tokens: TokenSequence<GapToken>): boolean {
         if (tokens.startsWith([NUMBERTOKEN])) {
             const quantity = tokens.peek(0) as NumberToken;
             this.quantity = quantity.value;
@@ -246,7 +246,7 @@ export class EntityBuilder {
     //
     // Returns true if option tokens were consumed, even if they couldn't be
     // used for the item under construction.
-    processOption(tokens: TokenSequence<GapToken>): boolean {
+    private processOption(tokens: TokenSequence<GapToken>): boolean {
         // TODO: check for mutual exclusivity.
         //   Challenge is that we cannot check for exclusivity until we know
         //   the product key, which we won't know until we have processed all
@@ -342,7 +342,7 @@ export class EntityBuilder {
     //
     // Returns true if attribute tokens were consumed, even if they could 
     // not be used for the product.
-    processAttribute(tokens: TokenSequence<GapToken>): boolean {
+    private processAttribute(tokens: TokenSequence<GapToken>): boolean {
         if (tokens.startsWith([ATTRIBUTE])) {
             // Ensure that the attribute can configure the entity.
             const attribute = tokens.peek(0) as AttributeToken;

@@ -35,6 +35,7 @@ export function createShortOrderWorld(world: World, dataPath: string, debugMode:
 
     const parser = new Parser(
         world.cartOps,
+        world.catalog,
         world.attributeInfo,
         lexer,
         world.ruleChecker,

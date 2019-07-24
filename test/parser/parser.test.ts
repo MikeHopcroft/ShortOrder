@@ -105,7 +105,14 @@ describe('Parser2', () => {
         it('segment on quantifier', () => {
             // TODO: HACK: BUGBUG: Remove temporary code in following line.
             const lexer: LexicalAnalyzer = (undefined!);
-            const parser = new Parser(ops, attributeInfo, lexer, smallWorldRuleChecker, false);
+            const parser = new Parser(
+                ops,
+                smallWorldCatalog,
+                attributeInfo,
+                lexer,
+                smallWorldRuleChecker,
+                false
+            );
             const tokens = [
                 quantityOne,
                 attributeSmall,
@@ -214,7 +221,14 @@ describe('Parser2', () => {
         it('segment ambiguous size based on options', () => {
             // TODO: HACK: BUGBUG: Remove temporary code in following line.
             const lexer: LexicalAnalyzer = (undefined!);
-            const parser = new Parser(ops, attributeInfo, lexer, smallWorldRuleChecker, false);
+            const parser = new Parser(
+                ops,
+                smallWorldCatalog,
+                attributeInfo,
+                lexer,
+                smallWorldRuleChecker,
+                false
+            );
             const tokens = [
                 productCoffee,
                 attributeMedium,

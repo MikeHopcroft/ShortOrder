@@ -28,6 +28,12 @@ export function parseAdd(
     // Break into sequence of gaps and the entities that separate them.
     const {entities, gaps} = splitOnEntities(tokens);
 
+    if (entities.length < 1) {
+        // There's no entity here.
+        // Return an empty interpretation.
+        return {score: 0, items: [], action: nop}; 
+    }
+
     // Enumerate all combinations of split points in gaps.
     const lengths: number[] = gaps.map(x => x.length);
 
@@ -108,14 +114,23 @@ function interpretOneSegment(
 ): HypotheticalItem {
     const builder = new EntityBuilder(
         segment,
-        parser.cartOps, 
+        parser.cartOps,
         parser.attributes,
         parser.rules,
         false,
         false
     );
-    return {
-        score: builder.getScore(),
-        item: builder.getItem()
-    };
+
+    const item = builder.getItem();
+    if (parser.catalog.hasKey(item.key)) {
+        return {
+            score: builder.getScore(),
+            item: builder.getItem()
+        };
+    } else {
+        return {
+            score: 0,
+            item: undefined
+        };
+    }
 }
