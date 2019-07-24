@@ -27,6 +27,25 @@ import { ENTITY, EntityToken, tokenToString } from '../lexer';
 
 import { speechToTextFilter } from './speech_to_text_filter';
 
+class Session {
+    utterances: string[] = [];
+    yamlTestCases: YamlTestCase[] = [];
+    state: State = { cart: { items: [] } };
+
+    copy(): Session {
+        const session = new Session();
+        session.utterances = [...this.utterances];
+        session.yamlTestCases = [...this.yamlTestCases];
+        session.state = this.state;
+        return session;
+    }
+
+    reset(): void {
+        this.utterances = [];
+        this.yamlTestCases = [];
+        this.state = { cart: { items: [] } };
+    }
+}
 
 const maxHistorySteps = 1000;
 const historyFile = '.repl_history';
@@ -97,11 +116,8 @@ export function runRepl(
     const lexer = world2.lexer;
     const processor = world2.processor;
 
-    let utterances: string[] = [];
+    const stack: Session[] = [new Session()];
     let recordMode = false;
-    let yamlTestCases: YamlTestCase[] = [];
-
-    let state: State = { cart: { items: [] } };
 
     const repl = replServer.start({
         prompt: '% ',
@@ -143,10 +159,62 @@ export function runRepl(
     repl.defineCommand('reset', {
         help: 'Clear shopping cart.',
         action(text: string) {
-            utterances = [];
-            yamlTestCases = [];
-            state = { cart: { items: [] } };
+            stack[stack.length - 1].reset();
             console.log('Cart has been reset.');
+            repl.displayPrompt();
+        }
+    });
+
+
+    repl.defineCommand('push', {
+        help: 'Push shopping cart on the stack.',
+        action(text: string) {
+            stack.push(stack[stack.length - 1].copy());
+            console.log('Cart has been pushed onto the stack.');
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('pop', {
+        help: 'Pop shopping cart from the stack.',
+        action(text: string) {
+            console.log(`stack.length = ${stack.length}`);
+            if (stack.length > 1) {
+                stack.pop();
+                const session = stack[stack.length -1];
+                const order: TestOrder = formatCart(session.state.cart, catalog);
+                const orderText = OrderOps.formatOrder(order);
+                console.log(`${style.yellow.open}${orderText}${style.yellow.open}`);
+                console.log();
+            } else {
+                console.log('Cannot pop - stack is already empty');
+            }
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('restore', {
+        help: 'Restore cart to top of stack without popping.',
+        action(text: string) {
+            if (stack.length > 1) {
+                stack.pop();
+                stack.push(stack[stack.length - 1].copy());
+                const session = stack[stack.length -1];
+                const order: TestOrder = formatCart(session.state.cart, catalog);
+                const orderText = OrderOps.formatOrder(order);
+                console.log(`${style.yellow.open}${orderText}${style.yellow.open}`);
+                console.log();
+            } else {
+                console.log('Cannot restore - stack is already empty');
+            }
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('random', {
+        help: 'Add a random item to the cart.',
+        action(text: string) {
+            console.log('Random item not implemented.');
             repl.displayPrompt();
         }
     });
@@ -156,8 +224,7 @@ export function runRepl(
         action(text: string) {
             recordMode = !recordMode;
             console.log(`YAML record mode ${recordMode ? "on" : "off"}.`);
-            yamlTestCases = [];
-            utterances = [];
+            stack[stack.length - 1].reset();
             console.log('Cart has been reset.');
             repl.displayPrompt();
         }
@@ -166,6 +233,8 @@ export function runRepl(
     repl.defineCommand('yaml', {
         help: 'Display YAML test case for cart',
         action(text: string) {
+            const yamlTestCases = stack[stack.length - 1].yamlTestCases;
+
             if (!recordMode) {
                 console.log('You must first enable YAML recording with the .record command.');
             } else if (yamlTestCases.length > 0) {
@@ -360,20 +429,21 @@ export function runRepl(
                     // TODO: This is o(n^2). Come up with a better approach, as this will
                     // be problematic in the .load case.
                     if (recordMode) {
-                        utterances.push(text);
-                        yamlTestCases = await cartYaml(
+                        const session = stack[stack.length - 1];
+                        session.utterances.push(text);
+                        session.yamlTestCases = await cartYaml(
                             processor,
                             catalog,
-                            utterances,
+                            session.utterances,
                             1,
                             ['unverified']
                         );
                     }
 
-                    state = await processor(text, state);
-                    const order: TestOrder = formatCart(state.cart, catalog);
+                    const session = stack[stack.length -1];
+                    session.state = await processor(text, session.state);
+                    const order: TestOrder = formatCart(session.state.cart, catalog);
                     const orderText = OrderOps.formatOrder(order);
-                    // state = parser.parseText(text, state);
                     console.log(`${style.yellow.open}${orderText}${style.yellow.open}`);
                     console.log();
 
@@ -397,7 +467,7 @@ export function runRepl(
                 }
             }
 
-            callback(null, '');    
+            callback(null, '');
         }
     }
 
