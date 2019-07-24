@@ -13,6 +13,7 @@ import {
     ICartOps,
     IRuleChecker,
     ItemInstance,
+    OPTION,
     State,
 } from 'prix-fixe';
 
@@ -21,7 +22,8 @@ import {
     ENTITY,
     LexicalAnalyzer,
     Span,
-    Tokenization
+    Tokenization,
+    tokenToString
 } from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
@@ -83,7 +85,7 @@ function createSubgraph(
             filtered.push(edgeList.filter(edge => {
                 const token = tokenizer.tokenFromEdge(edge);
     
-                if (token.type === ENTITY || token.type === ATTRIBUTE) {
+                if (token.type === ENTITY || token.type === OPTION || token.type === ATTRIBUTE) {
                     // Entities (products and options) and Attributes
                     // are copied if they are in the subset.
                     return subset.has(token);
@@ -99,6 +101,16 @@ function createSubgraph(
             }));    
         }
     }
+
+    // console.log('Filtered graph:');
+    // for (const [i, edges] of filtered.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
+
     return new DynamicGraph(filtered);
 }
 

@@ -1,25 +1,28 @@
 # TODO List
 
+* REPL .random or .randomCart feature for testing removal
+* REPL .push/.pop cart for reusing a cart
+* In REPL, reinstate `.menu <item>`
+* Fuzzer target simplification
 * x LexicalAnalyzer: index tokens
 * x EntityBuilder: generate regexes
 * x CartOps: search with regex
 * OptionToken: rename id to pid
 
-* In REPL, reinstate `.menu <item>`
 * Consider factoring graph operations from tokenizer in LexicalAnalyzers
   * Examine the need for tokenizer in equivalentPathsRecursion2(). Seems to be for number tokens.
   * Could we just build a graph of tokens? Downside is that we couple Graph to Token 
 * Remove Iterpretation.items property - update unit tests
-* Break parser.ts into multiple stages/files.
+* x Break parser.ts into multiple stages/files.
 * x Remove attributes, catalog directories.
 
 * Target search architecture
-    * LexicalAnalyzer needs to provide the graph, the edge list, and the tokens to allow for reprocessing.
-    * Need some way to copy subgraph of edges in the cart.
-    * Need some way to get tokens for everything in the cart - products, options, attributes
-    * Need to know which other edges to copy
-    * What about default edges? Are these added by the Graph constructor
-    * Need some way to run path algorithm on subgraph.
+    * x LexicalAnalyzer needs to provide the graph, the edge list, and the tokens to allow for reprocessing.
+    * x Need some way to copy subgraph of edges in the cart.
+    * x Need some way to get tokens for everything in the cart - products, options, attributes
+    * x Need to know which other edges to copy
+    * x What about default edges? Are these added by the Graph constructor
+    * x Need some way to run path algorithm on subgraph.
     * Need interpretions for each sort of action: add, remove, modify
 
 * x REPL: Replace .menu with .products and .options
