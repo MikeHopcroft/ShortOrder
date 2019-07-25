@@ -13,6 +13,7 @@ import {
     ItemInstance,
     Key,
     MENUITEM,
+    OPTION,
     patternFromExpression,
     PID,
     Processor,
@@ -23,7 +24,7 @@ import {
 } from 'prix-fixe';
 
 import { createShortOrderWorld, createWorld } from '../integration';
-import { ENTITY, EntityToken, tokenToString } from '../lexer';
+import { ENTITY, EntityToken, tokenToString, OptionToken } from '../lexer';
 
 import { speechToTextFilter } from './speech_to_text_filter';
 
@@ -352,32 +353,32 @@ export function runRepl(
                 }
             }
             else {
-                console.log(`Unrecognized menu item "${line}"`);
+                // Parameter doesn't seem to be a Key or PID.
+                // Try using the tokenizer to identify it.
+                const tokenization = lexer.tokenizations2(line).next().value;
 
-                // TODO: Implement .menu <item>
-                
-                // // Parameter doesn't seem to be a Key or PID.
-                // // Try using the tokenizer to identify it.
-                // const tokenization = lexer.tokenizations2(line).next().value;
-                // const tokens = tokenization.tokens;
-                // const token = tokens[0];
-                // console.log(`${tokens.map(tokenToString).join(' ')}`);
+                const tokens = new Set<EntityToken | OptionToken>();
+                for (const edge of tokenization.graph.edgeLists[0]) {
+                    const token = lexer.tokenizer.tokenFromEdge(edge) as EntityToken | OptionToken;
+                    if (token.type === ENTITY || token.type === OPTION) {
+                        tokens.add(token);
+                    }
+                }
 
-                // if (tokens && tokens.length > 0 && tokens[0].type === ENTITY) {
-                //     const token = tokens[0] as EntityToken;
-                //     const pid = token.pid;
-                //     if (catalog.hasPID(pid)) {
-                //         const item = catalog.getGeneric(pid);
-                //         console.log(`${item.name} (${item.pid})`);
-                //     }
-                //     else {
-                //         // This should never happen if tokenizer returned PID.
-                //         console.log(`Unrecognized menu item "${line}"`);
-                //     }
-                // }
-                // else {
-                //     console.log(`Unrecognized menu item "${line}"`);
-                // }
+                const sorted = [...tokens.values()].sort((a,b) => a.name.localeCompare(b.name));
+
+                if (sorted.length === 0) {
+                    console.log(`No items matching "${line}".`);
+                } else {
+                    for (const token of sorted) {
+                        if (token.type === ENTITY) {
+                            console.log(`${token.name} (${token.pid})`);
+                        } else if (token.type === OPTION) {
+                            console.log(`${token.name} (${token.id})`);
+                        }
+                    }
+                }
+                console.log(' ');
             }
             repl.displayPrompt();
         }

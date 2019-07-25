@@ -117,6 +117,9 @@ function parseRootStage2(
     // DESIGN ISSUE: What if processing the first intent invalidates
     // the interpretation of subsequent intents (e.g. first intent
     // removes item modified by second intent)?
+    // Another issue is if the second intent removes an item added
+    // by the first intent. Since remove inspects the cart, we must
+    // execute the `add` intent before executing the `remove` intent.
     while (!grouped.atEOS()) {
         if (grouped.startsWith([ADD_TO_ORDER, PRODUCT_PARTS])) {
             const parts = (grouped.peek(1) as ProductToken).tokens;

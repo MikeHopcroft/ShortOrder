@@ -1,5 +1,16 @@
 # TODO List
 
+* rename tokenizations2()
+* tokens for prologue and epilogue
+* restructure outer loop
+    * regexes?
+    * token-flow with @tokens
+    * ability to generate tokenizations for fragments of the path
+        * idea is to create one graph, segment by intent, then generate tokenizations for products
+        * need to either speculatively execute interpretations or actually execute
+        * trade-off is the level at which we generate tokenizations
+    * full speculative execution vs different tokenizations and interpretations
+
 * REPL .random or .randomCart feature for testing removal
 * REPL .push/.pop cart for reusing a cart
 * In REPL, reinstate `.menu <item>`
