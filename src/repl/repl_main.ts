@@ -250,6 +250,52 @@ export function runRepl(
         }
     });
 
+    repl.defineCommand('match', {
+        help: 'List fuzzy matches in order of decreasing score.',
+        action(text: string) {
+            const tokenization = lexer.tokenizations2(text).next().value;
+
+            interface Match {
+                token: EntityToken | OptionToken;
+                score: number;
+            }
+
+            const tokens = new Array<[EntityToken | OptionToken, number]>();
+            for (const edge of tokenization.graph.edgeLists[0]) {
+                const token = lexer.tokenizer.tokenFromEdge(edge) as EntityToken | OptionToken;
+                if (token.type === ENTITY || token.type === OPTION) {
+                    tokens.push([token, edge.score]);
+                }
+            }
+
+            const sorted = [...tokens.values()].sort((a,b) => {
+                const delta = b[1] - a[1];
+                if (isFinite(delta)) {
+                    return delta;
+                } else {
+                    return isFinite(a[1]) ? -1: 1;
+                }
+            });
+
+            if (sorted.length === 0) {
+                console.log(`No items matching "${text}".`);
+            } else {
+                for (const [token, score] of sorted) {
+                    const scoreText = rightJustify(score.toFixed(3), 6);
+                    if (token.type === ENTITY) {
+                        console.log(`${scoreText}: ${token.name} (${token.pid})`);
+                    } else if (token.type === OPTION) {
+                        console.log(`${scoreText}: ${token.name} (${token.id})`);
+                    }
+                }
+            }
+            console.log(' ');
+
+
+            repl.displayPrompt();
+        }
+    });
+
     repl.defineCommand('tokenize', {
         help: "Tokenize, but don't parse, text that follows.",
         action(line: string) {
