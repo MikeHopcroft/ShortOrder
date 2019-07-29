@@ -26,7 +26,7 @@ export function splitOnEntities(tokens: SequenceToken[]) {
     }
 
     // Every entity must be followed by a gap, even if the gap is empty.
-    if (entities.length > 0) {
+    if (entities.length > 0 || currentGap.length > 0) {
         gaps.push(currentGap);
     }
 

@@ -102,14 +102,14 @@ function createSubgraph(
         }
     }
 
-    // console.log('Filtered graph:');
-    // for (const [i, edges] of filtered.entries()) {
-    //     console.log(`  vertex ${i}`);
-    //     for (const edge of edges) {
-    //         const token = tokenToString(tokenizer.tokenFromEdge(edge));
-    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
-    //     }
-    // }
+    console.log('Filtered graph:');
+    for (const [i, edges] of filtered.entries()) {
+        console.log(`  vertex ${i}`);
+        for (const edge of edges) {
+            const token = tokenToString(tokenizer.tokenFromEdge(edge));
+            console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+        }
+    }
 
     return new DynamicGraph(filtered);
 }
@@ -155,44 +155,53 @@ export function *targets(
     const last = tokens[tokens.length - 1];
     const span: Span = {
         start: tokens[0].start,
-        length: last.start + last.length
+        length: last.start + last.length - tokens[0].start
     };
 
     // Subgraph edges will correspond to tokens for items in `cart`.
     const subgraph = subgraphFromItems(attributes, lexer, cart, graph, span);
     
     // Try each tokenization of the subgraph
-    const tokenizations = lexer.tokenizationsFromGraph2(subgraph);
+    // const tokenizations = lexer.tokenizationsFromGraph2(subgraph);
+    const tokenizations = lexer.allTokenizations(subgraph);
     for (const tokenization of tokenizations) {
+        // console.log('Tokenization:');
+        // for (const token of tokenization.tokens) {
+        //     const text = tokenToString(token);
+        //     console.log(`  ${text}, start=${token.start}, length=${token.length}`);
+        // }
+
         const {entities, gaps} = splitOnEntities(tokenization.tokens as SequenceToken[]);
-        const segment: Segment = {
-            left: gaps[0],
-            entity: entities[0],
-            right: gaps[1]
-        };
+        if (entities.length > 0) {
+            const segment: Segment = {
+                left: gaps[0],
+                entity: entities[0],
+                right: gaps[1]
+            };
 
-        const builder = new EntityBuilder(
-            segment,
-            cartOps,
-            attributes,
-            rules,
-            true,
-            true);
-        const target = builder.getItem();
+            const builder = new EntityBuilder(
+                segment,
+                cartOps,
+                attributes,
+                rules,
+                true,
+                true);
+            const target = builder.getItem();
 
-        if (target !== undefined) {
-            // console.log(`============ Hypothetical target ${target.key} ==============`);
+            if (target !== undefined) {
+                console.log(`============ Hypothetical target ${target.key} ==============`);
 
-            // Yield matching ItemInstances from the cart.
-            // TODO: we need a predicate that treats unspecified attributes as wildcards.
-            // Need to know whether an attribute is default because it was omitted or
-            // specified as the default value.
-            // Perhaps EntityBuilder needs a wildcard mode.
-            for (const item of cartOps.findByKeyRegex(state.cart, target.key)) {
-                yield {
-                    item,
-                    score: builder.getScore()
-                };
+                // Yield matching ItemInstances from the cart.
+                // TODO: we need a predicate that treats unspecified attributes as wildcards.
+                // Need to know whether an attribute is default because it was omitted or
+                // specified as the default value.
+                // Perhaps EntityBuilder needs a wildcard mode.
+                for (const item of cartOps.findByKeyRegex(state.cart, target.key)) {
+                    yield {
+                        item,
+                        score: builder.getScore()
+                    };
+                }
             }
         }
     }

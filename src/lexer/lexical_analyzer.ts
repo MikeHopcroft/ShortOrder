@@ -3,12 +3,13 @@ import * as fs from 'fs';
 import {
     Alias,
     Edge,
+    Graph,
+    GraphWalker,
     Lexicon,
     Tokenizer,
     TokenizerAlias,
     Token,
     TermModel,
-    Graph,
 } from 'token-flow';
 
 import {
@@ -192,6 +193,10 @@ export class LexicalAnalyzer {
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
 
+    *allTokenizations(graph: Graph): IterableIterator<Tokenization> {
+        yield* walk(this.tokenizer, graph, new GraphWalker(graph));
+    }
+
     analyzePaths(query: string) {
         const terms = query.split(/\s+/);
         const stemmed = terms.map(this.lexicon.termModel.stem);
@@ -343,7 +348,56 @@ function addCustomStemmer(model: TermModel) {
 // Path enumeration
 //
 ///////////////////////////////////////////////////////////////////////////////
-export function *equivalentPaths2(
+
+// Exercises the GraphWalker API to generates all paths in a graph.
+function* walk(
+    tokenizer: Tokenizer,
+    graph: Graph,
+    walker: GraphWalker
+): IterableIterator<Tokenization> {
+    while (true) {
+        // Advance down next edge in current best path.
+        walker.advance();
+
+        if (walker.complete()) {
+            // If the path is complete, ie it goes from the first vertex to the
+            // last vertex, then yield the path.
+            const path: Edge[] = [...walker.left, ...walker.right];
+            const tokens = new Array<Token & Span>();
+            let start = 0;
+            for (const edge of path) {
+                tokens.push({
+                    ...tokenizer.tokenFromEdge(edge),
+                    start,
+                    length: edge.length
+                });
+                start += edge.length;
+            }
+            yield({
+                graph,
+                tokens
+            });
+        }
+        else {
+            // Otherwise, walk further down the path.
+            yield* walk(tokenizer, graph, walker);
+        }
+
+        // We've now explored all paths down this edge.
+        // Retreat back to the previous vertex.
+        walker.retreat(true);
+    
+        // Then, attempt to discard the edge we just explored. If, after
+        // discarding, there is no path to the end then break out of the loop.
+        // Otherwise go back to the top to explore the new path.
+        if (!walker.discard()) {
+            break;
+        }
+    }
+}
+
+
+function *equivalentPaths2(
     tokenizer: Tokenizer,
     graph: Graph,
     path: Edge[]
