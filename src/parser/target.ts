@@ -98,18 +98,18 @@ function createSubgraph(
                 } else {
                     return false;
                 }
-            }));    
+            }));
         }
     }
 
-    console.log('Filtered graph:');
-    for (const [i, edges] of filtered.entries()) {
-        console.log(`  vertex ${i}`);
-        for (const edge of edges) {
-            const token = tokenToString(tokenizer.tokenFromEdge(edge));
-            console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
-        }
-    }
+    // console.log('Filtered graph:');
+    // for (const [i, edges] of filtered.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
 
     return new DynamicGraph(filtered);
 }
@@ -189,7 +189,7 @@ export function *targets(
             const target = builder.getItem();
 
             if (target !== undefined) {
-                console.log(`============ Hypothetical target ${target.key} ==============`);
+                // console.log(`============ Hypothetical target ${target.key} ==============`);
 
                 // Yield matching ItemInstances from the cart.
                 // TODO: we need a predicate that treats unspecified attributes as wildcards.
