@@ -331,13 +331,6 @@ export class OrderX implements StepX {
         const words: string[] = [];
         for (const part of this.parts) {
             for (const word of part.buildText()) {
-                // // TODO: HACK: BUGBUG: remove this hack!!!
-                // if (word.indexOf('modifier') !== -1 || word.startsWith('quantity')) {
-                //     // continue;
-                //     words.push(word.toUpperCase());
-                //     continue;
-                // }
-
                 if (word.length > 0) {
                     words.push(word);
                 }

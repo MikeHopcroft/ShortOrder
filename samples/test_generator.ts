@@ -69,6 +69,22 @@ async function go()
 // Configure generators
 //
 ///////////////////////////////////////////////////////////////////////////////
+const prologues = [
+    "(ok,okay) [so]",
+    "(all right,alright,alrighty) [so]",
+    "(great,yes,yeah) [so]",
+    "(sure,sure thing)[no problem,not a problem] [so]",
+    "(let's see,you got it,you've got it) [so]",
+    "(no,not a) problem [so]",
+];
+
+const epilogues = [
+    "(anything else for, is that all for, is there anything else for) (you, ya) [this morning, this afternoon, this evening, today]",
+    "what else (are we getting, can I get for you) [this morning, this afternoon, this evening, today]",
+    "is that everything (for you, for ya) [this morning, this afternoon, this evening, today]",
+    "(is that everything, is that all, anything else, is there anything else) [for you, for ya]",
+];
+
 interface ProductGenerators {
     prologueGenerator: AliasGenerator;
     productGenerator: ProductGenerator;
@@ -212,15 +228,6 @@ function configureProductGenerators(
     //
     // Prologues
     //
-    const prologues = [
-        "(ok,okay) [so]",
-        "(all right,alright,alrighty) [so]",
-        "(great,yes,yeah) [so]",
-        "(sure,sure thing)[no problem,not a problem] [so]",
-        "(let's see,you got it,you've got it) [so]",
-        "not a problem [so]",
-    ];
-
     const adds = [
         "(that's,that is)",
         "(we've got,we have,I have)",
@@ -232,12 +239,6 @@ function configureProductGenerators(
     //
     // Epilogues
     //
-    const epilogues = [
-        "(anything else for, is that all for, is there anything else for) (you, ya) [this morning, this afternoon, this evening, today]",
-        "what else (are we getting, can I get for you) [this morning, this afternoon, this evening, today]",
-        "is that everything (for you, for ya) [this morning, this afternoon, this evening, today]",
-        "(is that everything, is that all, anything else, is there anything else) [for you, for ya]",
-    ];
     const epilogueGenerator = new AliasGenerator([epilogues]);
 
     return {
@@ -297,42 +298,15 @@ function* remove(
     //
     // Remove Prologues
     //
-    const removePrologues = [
-        "(ok,okay) [so]",
-        "(all right,alright,alrighty) [so]",
-        "(great,yes,yeah) [so]",
-        "(sure,sure thing)[no problem,not a problem] [so]",
-        "(let's see,you got it,you've got it) [so]",
-        "not a problem [so]",
-    ];
     const removes = [ 
         "[I,i've,i have,i will,we,we've,we have,we will] (lose,cancell,took off,take off,remove) [the,that]"
     ];
-    // const removePrologues = [
-    //     "[no problem,sure thing,yeah,great,allrighty,ok,alright] [so] (i've,i have,i will,we've) (take off,remove) (the,that)"
-    //     // "(can,could,would) you [please] remove the",
-    //     // "[please] remove the",
-    //     // "I (don't,do not) (want,need) the",
-    //     // "(lose,remove) the"
-    // ];
-    const removePrologueGenerator = new AliasGenerator([removePrologues, removes]);
+    const removePrologueGenerator = new AliasGenerator([prologues, removes]);
 
     //
     // Remove Epilogues
     //
-    const removeEpilogues = [
-        "(anything else for, is that all for, is there anything else for) (you, ya) [this morning, this afternoon, this evening, today]",
-        "what else (are we getting, can I get for you) [this morning, this afternoon, this evening, today]",
-        "is that everything (for you, for ya) [this morning, this afternoon, this evening, today]",
-        "(is that everything, is that all, anything else, is there anything else) [for you, for ya]",
-        // "I'm (done,fine,good)",
-        // "thank you",
-        // "thanks",
-        // "that's (all,everything,it)",
-        // "(that'll,that will,that should) (be,do) it",
-        // "bye",
-    ];
-    const removeEpilogueGenerator = new AliasGenerator([removeEpilogues]);
+    const removeEpilogueGenerator = new AliasGenerator([epilogues]);
 
     const removalGenerator = new RemovalGenerator(
         prologueGenerator,

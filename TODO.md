@@ -1,5 +1,14 @@
 # TODO List
 
+* alright that will be ...
+* alright I will see you at the window/register ...
+* Remove extra tokenization methods from lexer
+* Improve performance of graph fragment copy in processAdd()
+* Enumerate all interpretations at top level
+* Interpretations should run and store state?
+    * Is this reasonable? Only across intents.
+    * Could cache new state when necessary.
+
 * rename tokenizations2()
 * tokens for prologue and epilogue
 * restructure outer loop
