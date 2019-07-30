@@ -213,21 +213,21 @@ function configureProductGenerators(
     // Prologues
     //
     const prologues = [
-        "[all right,alright,allrighty,ok,ok let's see,let's see,you got it,sure,sure not a problem,not a problem] (that's,that is,I'll add,I've added,I have added,I added,I have,we've got,we have)"
-        // "(I'd,I would) like",
-        // "(I'll,I will) (do,get,have,take)",
-        // "I (need,want)",
-        // "(get,give) me",
-        // "(can,could,may) I [just,please] (do,get,have)",
-        // "[please] set me up with",
-        // "[please] hook me up with",
-        // "we need",
-        // "we want",
-        // "(we'd,we would) like",
-        // "(we'll, we will) have",
-        // "how about",
+        "(ok,okay) [so]",
+        "(all right,alright,alrighty) [so]",
+        "(great,yes,yeah) [so]",
+        "(sure,sure thing)[no problem,not a problem] [so]",
+        "(let's see,you got it,you've got it) [so]",
+        "not a problem [so]",
     ];
-    const prologueGenerator = new AliasGenerator(prologues);
+
+    const adds = [
+        "(that's,that is)",
+        "(we've got,we have,I have)",
+        "[I'll] add",
+        "[I,I've,I have] added",
+    ];
+    const prologueGenerator = new AliasGenerator([prologues, adds]);
 
     //
     // Epilogues
@@ -237,14 +237,8 @@ function configureProductGenerators(
         "what else (are we getting, can I get for you) [this morning, this afternoon, this evening, today]",
         "is that everything (for you, for ya) [this morning, this afternoon, this evening, today]",
         "(is that everything, is that all, anything else, is there anything else) [for you, for ya]",
-        // "I'm (done,fine,good)",
-        // "thank you",
-        // "thanks",
-        // "that's (all,everything,it)",
-        // "(that'll,that will,that should) (be,do) it",
-        // "bye",
     ];
-    const epilogueGenerator = new AliasGenerator(epilogues);
+    const epilogueGenerator = new AliasGenerator([epilogues]);
 
     return {
         prologueGenerator,
@@ -304,13 +298,24 @@ function* remove(
     // Remove Prologues
     //
     const removePrologues = [
-        "[no problem,sure thing,yeah,great,allrighty,ok,alright] [so] (i've,i have,i will,we've) (take off,remove) (the,that)"
-        // "(can,could,would) you [please] remove the",
-        // "[please] remove the",
-        // "I (don't,do not) (want,need) the",
-        // "(lose,remove) the"
+        "(ok,okay) [so]",
+        "(all right,alright,alrighty) [so]",
+        "(great,yes,yeah) [so]",
+        "(sure,sure thing)[no problem,not a problem] [so]",
+        "(let's see,you got it,you've got it) [so]",
+        "not a problem [so]",
     ];
-    const removePrologueGenerator = new AliasGenerator(removePrologues);
+    const removes = [ 
+        "[I,i've,i have,i will,we,we've,we have,we will] (lose,cancell,took off,take off,remove) [the,that]"
+    ];
+    // const removePrologues = [
+    //     "[no problem,sure thing,yeah,great,allrighty,ok,alright] [so] (i've,i have,i will,we've) (take off,remove) (the,that)"
+    //     // "(can,could,would) you [please] remove the",
+    //     // "[please] remove the",
+    //     // "I (don't,do not) (want,need) the",
+    //     // "(lose,remove) the"
+    // ];
+    const removePrologueGenerator = new AliasGenerator([removePrologues, removes]);
 
     //
     // Remove Epilogues
@@ -327,7 +332,7 @@ function* remove(
         // "(that'll,that will,that should) (be,do) it",
         // "bye",
     ];
-    const removeEpilogueGenerator = new AliasGenerator(removeEpilogues);
+    const removeEpilogueGenerator = new AliasGenerator([removeEpilogues]);
 
     const removalGenerator = new RemovalGenerator(
         prologueGenerator,

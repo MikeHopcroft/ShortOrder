@@ -8,7 +8,7 @@ import {
 } from 'prix-fixe';
 
 import { LexicalAnalyzer } from '../lexer';
-import { Parser, parseRoot } from '../parser';
+import { Parser, parseRoot, processRoot } from '../parser';
 
 export interface ShortOrderWorld extends World {
     lexer: LexicalAnalyzer;
@@ -41,10 +41,16 @@ export function createShortOrderWorld(world: World, dataPath: string, debugMode:
         world.ruleChecker,
         debugMode);
 
-    const processor = async (text: string, state: State): Promise<State> => {
-        const interpretation = parseRoot(parser, state, text);
+    // const processor = async (text: string, state: State): Promise<State> => {
+    //     const interpretation = parseRoot(parser, state, text);
 
-        return interpretation.action(state);
+    //     return interpretation.action(state);
+    // };
+
+    const processor = async (text: string, state: State): Promise<State> => {
+        return processRoot(parser, state, text);
+
+        // return interpretation.action(state);
     };
 
     return {...world, lexer, processor};

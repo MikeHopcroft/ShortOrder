@@ -4,10 +4,12 @@ import { Token } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
-    tokenToString,
+    EPILOGUE,
+    PROLOGUE,
     REMOVE_ITEM,
     Span,
-    Tokenization
+    Tokenization,
+    tokenToString,
 } from '../lexer';
 
 import { parseAdd } from './add';
@@ -98,6 +100,184 @@ export function parseRoot(
         return {score: 0, items: [], action: nop}; 
     }
 }
+
+export function processRoot(
+    parser: Parser,
+    state: State,
+    text: string
+): State {
+    // XXX
+    if (parser.debugMode) {
+        console.log(' ');
+        console.log(`Text: "${text}"`);
+    }
+
+    // TODO: figure out how to remove the type assertion to any.
+    // tslint:disable-next-line:no-any
+    const start = (process.hrtime as any).bigint();
+
+    const tokenization = parser.lexer.tokenize(text);
+
+    // XXX
+    if (parser.debugMode) {
+        const tokens = tokenization.tokens;
+        console.log(' ');
+        console.log(tokens.map(tokenToString).join(''));
+    }
+
+    state = processAllActiveRegions(parser, state, tokenization);
+
+    // TODO: figure out how to remove the type assertion to any.
+    // tslint:disable-next-line:no-any
+    const end = (process.hrtime as any).bigint();
+    const delta = Number(end - start);
+    // XXX
+    if (parser.debugMode) {
+        // console.log(`${counter} interpretations.`);
+        console.log(`Time: ${delta/1.0e6}`);
+    }
+
+    // TODO: eventually place the following code under debug mode.
+    if (delta/1.0e6 > 65) {
+    // if (delta/1.0e6 > 1) {
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+        console.log(`Time: ${delta/1.0e6}ms`);
+        console.log(`  "${text}"`);
+        // parser.lexer.analyzePaths(text);
+    }
+
+    return state;
+}
+
+function processAllActiveRegions(
+    parser: Parser,
+    state: State,
+    tokenization: Tokenization
+): State {
+    const filtered = filterBadTokens(parser, tokenization.tokens);
+    const tokens = new TokenSequence<Token & Span>(filtered);
+
+    let active: Array<Token & Span> = [];
+    while (!tokens.atEOS()) {
+        if (tokens.startsWith([PROLOGUE])) {
+            tokens.take(1);
+
+            while (true) {
+                if (!tokens.atEOS() && !tokens.startsWith([EPILOGUE])) {
+                    // There is a next token and it is not an EPILOGUE.
+                    // Append this token to the currenct active region.
+                    active.push(tokens.peek(0));
+                    tokens.take(1);
+                } else {
+                    if (!tokens.atEOS()) {
+                        // We're not at the end of the stream, so the next
+                        // token must be EPILOGUE.
+                        tokens.take(1);
+                    }
+                    // Either way, we're going to process the active region
+                    // we've been collecting.
+                    if (active.length > 0) {
+                        state = processOneActiveRegion(
+                            parser,
+                            state,
+                            { graph: tokenization.graph, tokens: active }
+                        );
+                    }
+
+                    // Break out of the loop to start collecting the next
+                    // active region.
+                    active = [];
+                    break;
+                }
+            }
+        }
+        else {
+            // Skip over this token.
+            tokens.take(1);
+        }
+    }
+
+    return state;
+}
+
+function processOneActiveRegion(
+    parser: Parser,
+    state: State,
+    tokenization: Tokenization
+): State {
+    const graph = tokenization.graph;
+    const tokens = tokenization.tokens;
+
+    const grouped = new TokenSequence<Token>(
+        groupProductParts(parser, tokens)
+    );
+
+    // TODO: should not return directly from inside this loop.
+    // There might be multiple intents in the utterance.
+    // DESIGN ISSUE: What if processing the first intent invalidates
+    // the interpretation of subsequent intents (e.g. first intent
+    // removes item modified by second intent)?
+    // Another issue is if the second intent removes an item added
+    // by the first intent. Since remove inspects the cart, we must
+    // execute the `add` intent before executing the `remove` intent.
+    while (!grouped.atEOS()) {
+        if (grouped.startsWith([ADD_TO_ORDER, PRODUCT_PARTS])) {
+            const parts = (grouped.peek(1) as ProductToken).tokens;
+            grouped.take(2);
+            state = processAdd(parser, state, { tokens: parts, graph });
+        } else if (grouped.startsWith([REMOVE_ITEM, PRODUCT_PARTS])) {
+            const parts = (grouped.peek(1) as ProductToken).tokens;
+            grouped.take(2);
+            state = processRemove(parser, state, { tokens: parts, graph });
+        } else {
+            grouped.discard(1);
+        }
+    }
+
+    return state;
+}
+
+function processAdd(
+    parser: Parser,
+    state: State,
+    tokenization: Tokenization
+): State {
+    const graph = tokenization.graph;
+
+    const tokens = tokenization.tokens;
+    const start = tokens[0];
+    const end = tokens[tokens.length - 1];
+    const span: Span = {
+        start: start.start,
+        length: end.start - start.start + end.length
+    };
+
+    let best: Interpretation | null = null;
+    for(const version of parser.lexer.tokenizationsFromGraph3(graph, span)) {
+        const interpretation =
+            parseAdd(parser, version.tokens as SequenceToken[]);
+        if (best && best.score < interpretation.score || !best) {
+            best = interpretation;
+        }
+    }
+
+    if (best) {
+        // We found at least one interpretation. Run it.
+        return best.action(state);
+    } else {
+        return state;
+    }
+}
+
+function processRemove(
+    parser: Parser,
+    state: State,
+    tokenization: Tokenization
+): State {
+    const interpretation = parseRemove(parser, state, tokenization);
+    return interpretation.action(state);
+}
+
 
 function parseRootStage2(
     parser: Parser,

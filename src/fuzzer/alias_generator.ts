@@ -11,19 +11,27 @@ import { Random } from './utilities';
 //
 ///////////////////////////////////////////////////////////////////////////////
 export class AliasGenerator {
-    private readonly aliases: WordX[];
+    private readonly segments: WordX[][];
 
-    constructor(aliases: string[]) {
-        this.aliases = [];
-        for (const alias of aliases) {
-            const pattern = patternFromExpression(alias);
-            for (const text of generateAliases(pattern)) {
-                this.aliases.push(new WordX(text));
+    constructor(segments: string[][]) {
+        this.segments = [];
+        for (const segment of segments) {
+            const aliases: WordX[] = [];
+            for (const expression of segment) {
+                const pattern = patternFromExpression(expression);
+                for (const text of generateAliases(pattern)) {
+                    aliases.push(new WordX(text));
+                }
             }
+            this.segments.push(aliases);
         }
     }
 
-    randomAlias(random: Random): WordX {
-        return random.randomChoice(this.aliases);
+    randomAlias(random: Random): WordX[] {
+        const segments: WordX[] = [];
+        for (const segment of this.segments) {
+            segments.push(random.randomChoice(segment));
+        }
+        return segments;
     }
 }

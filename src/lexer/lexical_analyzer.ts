@@ -10,6 +10,7 @@ import {
     TokenizerAlias,
     Token,
     TermModel,
+    DynamicGraph,
 } from 'token-flow';
 
 import {
@@ -175,6 +176,28 @@ export class LexicalAnalyzer {
         return token;
     }
 
+    tokenize(query: string): Tokenization {
+        const terms = query.split(/\s+/);
+        const stemmed = terms.map(this.lexicon.termModel.stem);
+        const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
+
+        const graph = this.tokenizer.generateGraph(hashed, stemmed);
+        const path = graph.findPath([], 0);
+
+        const tokens = new Array<Token & Span>();
+        let start = 0;
+        for (const edge of path) {
+            tokens.push({
+                ...this.tokenizer.tokenFromEdge(edge),
+                start,
+                length: edge.length
+            });
+            start += edge.length;
+        }
+
+        return { graph, tokens };
+    }
+
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
     *tokenizations2(query: string): IterableIterator<Tokenization> {
@@ -191,6 +214,23 @@ export class LexicalAnalyzer {
     // the top-scoring tokenization.
     *tokenizationsFromGraph2(graph: Graph): IterableIterator<Tokenization> {
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
+    }
+
+    *tokenizationsFromGraph3(graph: Graph, span: Span): IterableIterator<Tokenization> {
+        const edgeLists: Edge[][] = [];
+        for (let i = span.start; i < span.start + span.length; ++i) {
+            const edges: Edge[] = [];
+            for (const edge of graph.edgeLists[i]) {
+                if (edge.label !== -1) {
+                    edges.push(edge);
+                }
+            }
+            edgeLists.push(edges);
+        }
+        // TODO: figure out how to handle default edges.
+        // Currently DynamicGraph constructor adds them.
+        const graph2 = new DynamicGraph(edgeLists);
+        yield* equivalentPaths2(this.tokenizer, graph2, graph2.findPath([], 0));
     }
 
     *allTokenizations(graph: Graph): IterableIterator<Tokenization> {
@@ -424,7 +464,7 @@ function *equivalentPathsRecursion2(
         // Recursive case. Enumerate all equivalent edges from this vertex.
         const tokens = new Set<Token>();
         const currentEdge = path[e];
-        const vertex =graph.edgeLists[v];
+        const vertex = graph.edgeLists[v];
         for (const edge of vertex) {
             if (edge.score === currentEdge.score &&
                 edge.length === currentEdge.length)

@@ -13,7 +13,9 @@ import {
     ATTRIBUTE,
     CONJUNCTION,
     ENTITY,
+    EPILOGUE,
     LexicalAnalyzer,
+    PROLOGUE,
     QUANTITY,
     UNIT,
     REMOVE_ITEM,
@@ -35,6 +37,8 @@ export class Parser {
     validTokens = new Set<Symbol>([
         // Intents
         ADD_TO_ORDER,
+        EPILOGUE,
+        PROLOGUE,
         REMOVE_ITEM,
 
         // Product-related

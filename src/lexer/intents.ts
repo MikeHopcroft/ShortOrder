@@ -1,5 +1,11 @@
 import { Item, Token } from 'token-flow';
 
+export const PROLOGUE: unique symbol = Symbol.for('PROLOGUE');
+export type PROLOGUE = typeof PROLOGUE;
+
+export const EPILOGUE: unique symbol = Symbol.for('EPILOGUE');
+export type EPILOGUE = typeof EPILOGUE;
+
 export const ADD_TO_ORDER: unique symbol = Symbol.for('ADD_TO_ORDER');
 export type ADD_TO_ORDER = typeof ADD_TO_ORDER;
 

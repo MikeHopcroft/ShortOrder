@@ -307,11 +307,13 @@ export class OrderX implements StepX {
     parts: Array<SegmentX | WordX> = [];
 
     constructor(
-        prologue: WordX,
+        prologue: WordX[],
         segments: SegmentX[],
-        epilogue: WordX,
+        epilogue: WordX[],
     ) {
-        this.parts.push(prologue);
+        for (const word of prologue) {
+            this.parts.push(word);
+        }
 
         for (const [index, segment] of segments.entries()) {
             if (segments.length > 1 && index === segments.length - 1) {
@@ -320,7 +322,9 @@ export class OrderX implements StepX {
             this.parts.push(segment);
         }
 
-        this.parts.push(epilogue);
+        for (const word of epilogue) {
+            this.parts.push(word);
+        }
     }
 
     buildText = ():string[] => {
@@ -354,16 +358,16 @@ export class OrderX implements StepX {
 }
 
 export class RemoveX implements StepX {
-    prologue: WordX;
+    prologue: WordX[];
     target: WordX;
-    epilogue: WordX;
+    epilogue: WordX[];
 
     after: OrderX[];
 
     constructor(
-        prologue: WordX,
+        prologue: WordX[],
         remove: WordX,
-        epilogue: WordX,
+        epilogue: WordX[],
         after: OrderX[],
     ) {
         this.prologue = prologue;
@@ -374,9 +378,9 @@ export class RemoveX implements StepX {
 
     buildText = (): string[] => {
         const parts = [
-            this.prologue,
+            ...this.prologue,
             this.target,
-            this.epilogue
+            ...this.epilogue
         ];
 
         const words: string[] = [];
