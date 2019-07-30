@@ -1,12 +1,13 @@
 # TODO List
 
+* consider scoring Interpretations with total span, instead of total tokens
 * consider removing action() from Interpretation - replace it with state
-* alright that will be ...
+* alright that will be $x ...
 * alright I will see you at the window/register ...
 * Remove extra tokenization methods from lexer
-* Improve performance of graph fragment copy in processAdd()
-* Enumerate all interpretations at top level
-* Interpretations should run and store state?
+* x Improve performance of graph fragment copy in processAdd()
+* x Enumerate all interpretations at top level
+* x Interpretations should run and store state?
     * Is this reasonable? Only across intents.
     * Could cache new state when necessary.
 

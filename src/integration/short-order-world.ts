@@ -43,8 +43,6 @@ export function createShortOrderWorld(world: World, dataPath: string, debugMode:
 
     const processor = async (text: string, state: State): Promise<State> => {
         return processRoot(parser, state, text);
-
-        // return interpretation.action(state);
     };
 
     return {...world, lexer, processor};
