@@ -188,6 +188,8 @@ export function *targets(
                 true);
             const target = builder.getItem();
 
+            // console.log(`  score: ${builder.getScore()}`);
+
             if (target !== undefined) {
                 // console.log(`============ Hypothetical target ${target.key} ==============`);
 

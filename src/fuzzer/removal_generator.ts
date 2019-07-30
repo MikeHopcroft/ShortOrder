@@ -75,8 +75,14 @@ export class RemovalGenerator {
     }
 
     private textFromGeneric(target: OrderX): WordX {
-        const segment = target.parts[1] as SegmentX;
-        const text = pluralize(segment.entity.text, segment.quantity.value);
-        return new WordX(text);
+        for (const part of target.parts) {
+            if (part instanceof SegmentX) {
+                const text = pluralize(part.entity.text, part.quantity.value);
+                return new WordX(text);
+            }
+        }
+
+        const message = 'textFromGeneric: expect at least one SegmentX';
+        throw TypeError(message);
     }
 }

@@ -53,7 +53,8 @@
             "name": "AAA Test Generator",
             "program": "${workspaceFolder}/build/samples/test_generator.js",
             "outputCapture": "std",
-            "args": ["-n=1000", "-t=c", "-v=so", "-f"]
+            "args": ["-n=1", "-t=d", "-v=so", "-f"]
+            // "args": ["-n=1000", "-t=c", "-v=so", "-f"]
             // "args": ["-v=so", "-n 100"]
             // "args": ["-n=2", "-o=foo.yaml"]
         },

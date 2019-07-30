@@ -116,16 +116,25 @@ export function processRoot(
     // tslint:disable-next-line:no-any
     const start = (process.hrtime as any).bigint();
 
-    const tokenization = parser.lexer.tokenize(text);
+    let best: Interpretation | null = null;
+    for (const tokenization of parser.lexer.tokenizations2(text)) {
+        // XXX
+        if (parser.debugMode) {
+            const tokens = tokenization.tokens;
+            console.log(' ');
+            console.log(tokens.map(tokenToString).join(''));
+        }
 
-    // XXX
-    if (parser.debugMode) {
-        const tokens = tokenization.tokens;
-        console.log(' ');
-        console.log(tokens.map(tokenToString).join(''));
+        const interpretation = 
+            processAllActiveRegions(parser, state, tokenization);
+        if (best && best.score < interpretation.score || !best) {
+            best = interpretation;
+        }
     }
 
-    state = processAllActiveRegions(parser, state, tokenization);
+    if (best) {
+        state = best.action(state);
+    }
 
     // TODO: figure out how to remove the type assertion to any.
     // tslint:disable-next-line:no-any
@@ -153,10 +162,11 @@ function processAllActiveRegions(
     parser: Parser,
     state: State,
     tokenization: Tokenization
-): State {
+): Interpretation {
     const filtered = filterBadTokens(parser, tokenization.tokens);
     const tokens = new TokenSequence<Token & Span>(filtered);
 
+    let score = 0;
     let active: Array<Token & Span> = [];
     while (!tokens.atEOS()) {
         if (tokens.startsWith([PROLOGUE])) {
@@ -177,11 +187,13 @@ function processAllActiveRegions(
                     // Either way, we're going to process the active region
                     // we've been collecting.
                     if (active.length > 0) {
-                        state = processOneActiveRegion(
+                        const interpretation = processOneActiveRegion(
                             parser,
                             state,
                             { graph: tokenization.graph, tokens: active }
                         );
+                        score += interpretation.score;
+                        state = interpretation.action(state);
                     }
 
                     // Break out of the loop to start collecting the next
@@ -197,14 +209,18 @@ function processAllActiveRegions(
         }
     }
 
-    return state;
+    return {
+        score,
+        items: [],
+        action: (s: State):State => state
+    };
 }
 
 function processOneActiveRegion(
     parser: Parser,
     state: State,
     tokenization: Tokenization
-): State {
+): Interpretation {
     const graph = tokenization.graph;
     const tokens = tokenization.tokens;
 
@@ -212,72 +228,32 @@ function processOneActiveRegion(
         groupProductParts(parser, tokens)
     );
 
-    // TODO: should not return directly from inside this loop.
-    // There might be multiple intents in the utterance.
-    // DESIGN ISSUE: What if processing the first intent invalidates
-    // the interpretation of subsequent intents (e.g. first intent
-    // removes item modified by second intent)?
-    // Another issue is if the second intent removes an item added
-    // by the first intent. Since remove inspects the cart, we must
-    // execute the `add` intent before executing the `remove` intent.
+    let score = 0;
     while (!grouped.atEOS()) {
         if (grouped.startsWith([ADD_TO_ORDER, PRODUCT_PARTS])) {
             const parts = (grouped.peek(1) as ProductToken).tokens;
             grouped.take(2);
-            state = processAdd(parser, state, { tokens: parts, graph });
+            const interpretation = parseAdd(parser, parts);
+            score += interpretation.score;
+            state = interpretation.action(state);
         } else if (grouped.startsWith([REMOVE_ITEM, PRODUCT_PARTS])) {
             const parts = (grouped.peek(1) as ProductToken).tokens;
             grouped.take(2);
-            state = processRemove(parser, state, { tokens: parts, graph });
+            const interpretation = 
+                parseRemove(parser, state, { tokens: parts, graph });
+            score += interpretation.score;
+            state = interpretation.action(state);
         } else {
             grouped.discard(1);
         }
     }
 
-    return state;
-}
-
-function processAdd(
-    parser: Parser,
-    state: State,
-    tokenization: Tokenization
-): State {
-    const graph = tokenization.graph;
-
-    const tokens = tokenization.tokens;
-    const start = tokens[0];
-    const end = tokens[tokens.length - 1];
-    const span: Span = {
-        start: start.start,
-        length: end.start - start.start + end.length
+    return {
+        score,
+        items: [],
+        action: (s: State) => state
     };
-
-    let best: Interpretation | null = null;
-    for(const version of parser.lexer.tokenizationsFromGraph3(graph, span)) {
-        const interpretation =
-            parseAdd(parser, version.tokens as SequenceToken[]);
-        if (best && best.score < interpretation.score || !best) {
-            best = interpretation;
-        }
-    }
-
-    if (best) {
-        // We found at least one interpretation. Run it.
-        return best.action(state);
-    } else {
-        return state;
-    }
 }
-
-function processRemove(
-    parser: Parser,
-    state: State,
-    tokenization: Tokenization
-): State {
-    const interpretation = parseRemove(parser, state, tokenization);
-    return interpretation.action(state);
-}
-
 
 function parseRootStage2(
     parser: Parser,

@@ -1,5 +1,6 @@
 # TODO List
 
+* consider removing action() from Interpretation - replace it with state
 * alright that will be ...
 * alright I will see you at the window/register ...
 * Remove extra tokenization methods from lexer
