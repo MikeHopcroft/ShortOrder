@@ -1,6 +1,6 @@
 {
   "name": "short-order",
-  "version": "0.0.58",
+  "version": "0.0.59",
   "description": "A natural language conversational agent for ordering and organizing items from a catalog.",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
