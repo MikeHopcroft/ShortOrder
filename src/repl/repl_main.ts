@@ -510,7 +510,8 @@ export function runRepl(
 
                     // const output = `${style.green.open}${replies.join(' ')}${style.green.close}`;
                     // console.log(output);
-                    console.log();
+                    // console.log();
+                    console.log(`${style.reset.open}`);
                 }
             }
 
