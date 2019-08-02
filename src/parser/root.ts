@@ -49,16 +49,15 @@ export function processRoot(
 
     let best: Interpretation | null = null;
     for (const tokenization of parser.lexer.tokenizations2(text)) {
-        console.log('Graph:');
-        const graph = tokenization.graph;
-        for (const [i, edges] of graph.edgeLists.entries()) {
-            console.log(`  vertex ${i}`);
-            for (const edge of edges) {
-                const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
-                console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
-            }
-        }
-
+        // console.log('Graph:');
+        // const graph = tokenization.graph;
+        // for (const [i, edges] of graph.edgeLists.entries()) {
+        //     console.log(`  vertex ${i}`);
+        //     for (const edge of edges) {
+        //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
+        //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+        //     }
+        // }
 
         // XXX
         if (parser.debugMode) {

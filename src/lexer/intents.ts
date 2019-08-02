@@ -51,6 +51,25 @@ export type SUBSTITUTE = typeof SUBSTITUTE;
 export const WEAK_ADD: unique symbol = Symbol.for('WEAK_ADD');
 export type WEAK_ADD = typeof WEAK_ADD;
 
+export class IntentTokenFactory {
+    tokens = new Map<Symbol, Token>();
+
+    createToken = (item:Item): Token => {
+        let name = "UNKNOWN";
+        if (item) {
+            name = item.name;
+        }
+        const symbol = Symbol.for(name);
+
+        let token = this.tokens.get(symbol);
+        if (!token) {
+            token = { type: symbol };
+            this.tokens.set(symbol, token);
+        }
+        return  token;
+    }
+}
+
 export function intentTokenFactory(item:Item): Token {
     let name = "UNKNOWN";
     if (item) {

@@ -26,7 +26,7 @@ import { stopwordsFromYamlString } from '../stopwords';
 
 import { CreateAttribute, AttributeToken, ATTRIBUTE } from './attributes';
 import { CreateEntity, EntityToken, ENTITY } from './entities';
-import { intentTokenFactory } from './intents';
+import { intentTokenFactory, IntentTokenFactory } from './intents';
 import { tokenToString } from './lexical_utilities';
 import { CreateOption, OptionToken } from './options';
 import { quantityTokenFactory } from './quantities';
@@ -100,9 +100,10 @@ export class LexicalAnalyzer {
 
         // Intents
         if (intentsFile) {
+            const factory = new IntentTokenFactory();
             const intents = aliasesFromYamlString(
                 fs.readFileSync(intentsFile, 'utf8'),
-                intentTokenFactory);
+                factory.createToken);
             this.lexicon.addDomain(intents);
         }
         
@@ -532,30 +533,27 @@ class Map2D<A,B,V> {
     }
 }
 
-function filterGraph(tokenizer: Tokenizer, graph: Graph) {
+export function filterGraph(tokenizer: Tokenizer, graph: Graph) {
     const edgeLists: Edge[][] = [];
     for (const edgeList of graph.edgeLists) {
-        // const edges = new Map<string,Edge>();
         const edges = new Map2D<Token,number,Edge>();
 
         for (const edge of edgeList) {
-            if (edge.score >= 0) {
-                // const key = `${edge.label}:${edge.length}`;
+            // if ((edge.score >= 0) || (edge.label === -1)) {
+            // NOTE: remove needs weaker filtering because it works with worse matches.
+            if ((edge.score >= 0.35) || (edge.label === -1)) {
                 const token = tokenizer.tokenFromEdge(edge);
                 const existing = edges.get(token, edge.length);
                 if (existing) {
-                    // console.log(`key "${key}" exists`);
                     if (existing.score < edge.score) {
-                        // console.log('  replaced');
                         edges.set(token, edge.length, edge);
                     }
                 } else {
-                    // console.log(`key "${key}" added`);
                     edges.set(token, edge.length, edge);
                 }
             }
         }
-        const filtered = [...edges.values()];
+        const filtered = [...edges.values()].sort((a,b) => b.score - a.score);
         edgeLists.push(filtered);
     }
 
