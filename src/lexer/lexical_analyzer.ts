@@ -38,6 +38,7 @@ import {
     patternFromExpression,
     tokensFromStopwords,
 } from './lexical_utilities';
+import { stringify } from 'querystring';
 
 export interface Span {
     start: number;
@@ -205,7 +206,7 @@ export class LexicalAnalyzer {
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
 
-        const graph = this.tokenizer.generateGraph(hashed, stemmed);
+        const graph = filterGraph(this.tokenizer, this.tokenizer.generateGraph(hashed, stemmed));
 
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
@@ -493,4 +494,71 @@ function *equivalentPathsRecursion2(
             }
         }
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Graph filtering - TEMPORARY
+// TODO: Remove this code
+//
+///////////////////////////////////////////////////////////////////////////////
+class Map2D<A,B,V> {
+    entries = new Map<A, Map<B,V>>();
+
+    get(a:A, b:B): V | undefined {
+        const d2 = this.entries.get(a);
+        if (d2) {
+            return d2.get(b);
+        } else {
+            return undefined;
+        }
+    }
+
+    set(a:A, b:B, v:V): void {
+        const d2 = this.entries.get(a);
+        if (d2) {
+            d2.set(b, v);
+        } else {
+            const d = new Map<B, V>();
+            d.set(b, v);
+            this.entries.set(a, d);
+        }
+    }
+
+    *values(): IterableIterator<V> {
+        for (const d2 of this.entries.values()) {
+            yield* d2.values();
+        }
+    }
+}
+
+function filterGraph(tokenizer: Tokenizer, graph: Graph) {
+    const edgeLists: Edge[][] = [];
+    for (const edgeList of graph.edgeLists) {
+        // const edges = new Map<string,Edge>();
+        const edges = new Map2D<Token,number,Edge>();
+
+        for (const edge of edgeList) {
+            if (edge.score >= 0) {
+                // const key = `${edge.label}:${edge.length}`;
+                const token = tokenizer.tokenFromEdge(edge);
+                const existing = edges.get(token, edge.length);
+                if (existing) {
+                    // console.log(`key "${key}" exists`);
+                    if (existing.score < edge.score) {
+                        // console.log('  replaced');
+                        edges.set(token, edge.length, edge);
+                    }
+                } else {
+                    // console.log(`key "${key}" added`);
+                    edges.set(token, edge.length, edge);
+                }
+            }
+        }
+        const filtered = [...edges.values()];
+        edgeLists.push(filtered);
+    }
+
+    graph.edgeLists = edgeLists;
+    return graph;
 }
