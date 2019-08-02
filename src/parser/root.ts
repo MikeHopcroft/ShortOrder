@@ -1,5 +1,4 @@
 import { State } from 'prix-fixe';
-
 import { Token } from 'token-flow';
 
 import {
@@ -10,6 +9,7 @@ import {
     Span,
     Tokenization,
     tokenToString,
+    WEAK_ADD
 } from '../lexer';
 
 import { parseAdd } from './add';
@@ -23,7 +23,6 @@ import {
 } from './interfaces';
 
 import { Parser } from './parser';
-import { nop } from './parser_utilities';
 import { parseRemove } from './remove';
 import { TokenSequence } from './token_sequence';
 
@@ -50,6 +49,17 @@ export function processRoot(
 
     let best: Interpretation | null = null;
     for (const tokenization of parser.lexer.tokenizations2(text)) {
+        console.log('Graph:');
+        const graph = tokenization.graph;
+        for (const [i, edges] of graph.edgeLists.entries()) {
+            console.log(`  vertex ${i}`);
+            for (const edge of edges) {
+                const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
+                console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+            }
+        }
+
+
         // XXX
         if (parser.debugMode) {
             const tokens = tokenization.tokens;
@@ -59,6 +69,7 @@ export function processRoot(
 
         const interpretation = 
             processAllActiveRegions(parser, state, tokenization);
+
         if (best && best.score < interpretation.score || !best) {
             best = interpretation;
         }
@@ -101,8 +112,15 @@ function processAllActiveRegions(
     let score = 0;
     let active: Array<Token & Span> = [];
     while (!tokens.atEOS()) {
-        if (tokens.startsWith([PROLOGUE])) {
-            tokens.take(1);
+        const head = tokens.peek(0);
+        if (
+            [PROLOGUE, ADD_TO_ORDER, REMOVE_ITEM].includes(head.type) ||
+            tokens.startsWith([PROLOGUE, WEAK_ADD])
+        ) {
+        // if (tokens.startsWith([PROLOGUE])) {
+            if (head.type === PROLOGUE) {
+                tokens.take(1);
+            }
 
             while (true) {
                 if (!tokens.atEOS() && !tokens.startsWith([EPILOGUE])) {
@@ -162,7 +180,10 @@ function processOneActiveRegion(
 
     let score = 0;
     while (!grouped.atEOS()) {
-        if (grouped.startsWith([ADD_TO_ORDER, PRODUCT_PARTS])) {
+        if (
+            grouped.startsWith([ADD_TO_ORDER, PRODUCT_PARTS]) ||
+            grouped.startsWith([WEAK_ADD, PRODUCT_PARTS])
+        ) {
             const parts = (grouped.peek(1) as ProductToken).tokens;
             grouped.take(2);
             const interpretation = parseAdd(parser, parts);

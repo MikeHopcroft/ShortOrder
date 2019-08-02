@@ -1,11 +1,5 @@
 import { Item, Token } from 'token-flow';
 
-export const PROLOGUE: unique symbol = Symbol.for('PROLOGUE');
-export type PROLOGUE = typeof PROLOGUE;
-
-export const EPILOGUE: unique symbol = Symbol.for('EPILOGUE');
-export type EPILOGUE = typeof EPILOGUE;
-
 export const ADD_TO_ORDER: unique symbol = Symbol.for('ADD_TO_ORDER');
 export type ADD_TO_ORDER = typeof ADD_TO_ORDER;
 
@@ -27,13 +21,19 @@ export type CONJUNCTION = typeof CONJUNCTION;
 export const END_OF_ORDER: unique symbol = Symbol.for('END_OF_ORDER');
 export type END_OF_ORDER = typeof END_OF_ORDER;
 
+export const EPILOGUE: unique symbol = Symbol.for('EPILOGUE');
+export type EPILOGUE = typeof EPILOGUE;
+
 export const NEED_MORE_TIME: unique symbol = Symbol.for('NEED_MORE_TIME');
 export type NEED_MORE_TIME = typeof NEED_MORE_TIME;
 
 export const PREPOSITION: unique symbol = Symbol.for('PREPOSITION');
 export type PREPOSITION = typeof PREPOSITION;
 
-export const REMOVE_ITEM: unique symbol = Symbol.for('REMOVE_ITEM');
+export const PROLOGUE: unique symbol = Symbol.for('PROLOGUE');
+export type PROLOGUE = typeof PROLOGUE;
+
+    export const REMOVE_ITEM: unique symbol = Symbol.for('REMOVE_ITEM');
 export type REMOVE_ITEM = typeof REMOVE_ITEM;
 
 export const RESTATE: unique symbol = Symbol.for('RESTATE');
@@ -47,6 +47,9 @@ export type SEPERATOR = typeof SEPERATOR;
 
 export const SUBSTITUTE: unique symbol = Symbol.for('SUBSTITUTE');
 export type SUBSTITUTE = typeof SUBSTITUTE;
+
+export const WEAK_ADD: unique symbol = Symbol.for('WEAK_ADD');
+export type WEAK_ADD = typeof WEAK_ADD;
 
 export function intentTokenFactory(item:Item): Token {
     let name = "UNKNOWN";
