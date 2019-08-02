@@ -38,7 +38,6 @@ import {
     patternFromExpression,
     tokensFromStopwords,
 } from './lexical_utilities';
-import { stringify } from 'querystring';
 
 export interface Span {
     start: number;
@@ -178,36 +177,44 @@ export class LexicalAnalyzer {
         return token;
     }
 
-    tokenize(query: string): Tokenization {
+    createGraph(query: string): Graph {
         const terms = query.split(/\s+/);
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-
-        const graph = this.tokenizer.generateGraph(hashed, stemmed);
-        const path = graph.findPath([], 0);
-
-        const tokens = new Array<Token & Span>();
-        let start = 0;
-        for (const edge of path) {
-            tokens.push({
-                ...this.tokenizer.tokenFromEdge(edge),
-                start,
-                length: edge.length
-            });
-            start += edge.length;
-        }
-
-        return { graph, tokens };
+        return this.tokenizer.generateGraph(hashed, stemmed);
     }
+
+    // tokenize(query: string): Tokenization {
+    //     const terms = query.split(/\s+/);
+    //     const stemmed = terms.map(this.lexicon.termModel.stem);
+    //     const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
+
+    //     const graph = this.tokenizer.generateGraph(hashed, stemmed);
+    //     const path = graph.findPath([], 0);
+
+    //     const tokens = new Array<Token & Span>();
+    //     let start = 0;
+    //     for (const edge of path) {
+    //         tokens.push({
+    //             ...this.tokenizer.tokenFromEdge(edge),
+    //             start,
+    //             length: edge.length
+    //         });
+    //         start += edge.length;
+    //     }
+
+    //     return { graph, tokens };
+    // }
 
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
     *tokenizations2(query: string): IterableIterator<Tokenization> {
-        const terms = query.split(/\s+/);
-        const stemmed = terms.map(this.lexicon.termModel.stem);
-        const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
+        // const terms = query.split(/\s+/);
+        // const stemmed = terms.map(this.lexicon.termModel.stem);
+        // const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
 
-        const graph = filterGraph(this.tokenizer, this.tokenizer.generateGraph(hashed, stemmed));
+        // const graph = filterGraph(this.tokenizer, this.tokenizer.generateGraph(hashed, stemmed));
+        const graph = filterGraph(this.tokenizer, this.createGraph(query));
 
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
@@ -218,22 +225,23 @@ export class LexicalAnalyzer {
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
 
-    *tokenizationsFromGraph3(graph: Graph, span: Span): IterableIterator<Tokenization> {
-        const edgeLists: Edge[][] = [];
-        for (let i = span.start; i < span.start + span.length; ++i) {
-            const edges: Edge[] = [];
-            for (const edge of graph.edgeLists[i]) {
-                if (edge.label !== -1) {
-                    edges.push(edge);
-                }
-            }
-            edgeLists.push(edges);
-        }
-        // TODO: figure out how to handle default edges.
-        // Currently DynamicGraph constructor adds them.
-        const graph2 = new DynamicGraph(edgeLists);
-        yield* equivalentPaths2(this.tokenizer, graph2, graph2.findPath([], 0));
-    }
+    // *tokenizationsFromGraphAndSpan(graph: Graph, span: Span): IterableIterator<Tokenization> {
+    //     const edgeLists: Edge[][] = [];
+    //     for (let i = span.start; i < span.start + span.length; ++i) {
+    //         const edges: Edge[] = [];
+    //         for (const edge of graph.edgeLists[i]) {
+    //             // Copy everything but default edges.
+    //             if (edge.label !== -1) {
+    //                 edges.push(edge);
+    //             }
+    //         }
+    //         edgeLists.push(edges);
+    //     }
+    //     // TODO: figure out how to handle default edges.
+    //     // Currently DynamicGraph constructor adds them.
+    //     const graph2 = new DynamicGraph(edgeLists);
+    //     yield* equivalentPaths2(this.tokenizer, graph2, graph2.findPath([], 0));
+    // }
 
     *allTokenizations(graph: Graph): IterableIterator<Tokenization> {
         yield* walk(this.tokenizer, graph, new GraphWalker(graph));

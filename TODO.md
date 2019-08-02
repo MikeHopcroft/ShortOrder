@@ -1,5 +1,24 @@
 # TODO List
 
+* token-flow
+    * method to copy a graph
+    * graph coalesce
+    * graph filter
+    * approach to inserting default edges
+    * default edges as stop words
+    * investigate whether stop words are working correctly
+
+* test_runner command line option for single test
+* test_runner multi-file option
+* fuzzer regression suite in mochajava
+* regression script in mochajava
+
+* utility function to compute span from Token[]
+* targets() should take Span + Graph instead of Tokenization
+* processRoot() generates raw and filtered graphs
+* processActiveRegions() receives both graphs
+* processRemove() receives raw graph
+
 * consider scoring Interpretations with total span, instead of total tokens
 * consider removing action() from Interpretation - replace it with state
 * alright that will be $x ...
