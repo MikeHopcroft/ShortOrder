@@ -19,6 +19,7 @@ import {
     QUANTITY,
     UNIT,
     REMOVE_ITEM,
+    WEAK_ADD
 } from '../lexer';
 
 export class Parser {
@@ -31,7 +32,8 @@ export class Parser {
 
     intentTokens = new Set<Symbol>([
         ADD_TO_ORDER,
-        REMOVE_ITEM
+        REMOVE_ITEM,
+        WEAK_ADD
     ]);
 
     validTokens = new Set<Symbol>([
@@ -40,6 +42,7 @@ export class Parser {
         EPILOGUE,
         PROLOGUE,
         REMOVE_ITEM,
+        WEAK_ADD,
 
         // Product-related
         ATTRIBUTE,

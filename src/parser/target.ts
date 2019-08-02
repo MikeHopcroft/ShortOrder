@@ -84,7 +84,7 @@ function createSubgraph(
             // Only copy edgelists that are within the span
             filtered.push(edgeList.filter(edge => {
                 const token = tokenizer.tokenFromEdge(edge);
-    
+
                 if (token.type === ENTITY || token.type === OPTION || token.type === ATTRIBUTE) {
                     // Entities (products and options) and Attributes
                     // are copied if they are in the subset.
