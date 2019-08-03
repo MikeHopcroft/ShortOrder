@@ -27,17 +27,19 @@ import { stopwordsFromYamlString } from '../stopwords';
 import { CreateAttribute, AttributeToken, ATTRIBUTE } from './attributes';
 import { CreateEntity, EntityToken, ENTITY } from './entities';
 import { intentTokenFactory, IntentTokenFactory } from './intents';
-import { tokenToString } from './lexical_utilities';
-import { CreateOption, OptionToken } from './options';
-import { quantityTokenFactory } from './quantities';
-import { unitTokenFactory } from './units';
 
 import {
     aliasesFromYamlString,
     matcherFromExpression,
     patternFromExpression,
     tokensFromStopwords,
+    tokenToString,
 } from './lexical_utilities';
+
+import { CreateOption, OptionToken } from './options';
+import { quantityTokenFactory } from './quantities';
+import { unitTokenFactory } from './units';
+
 
 export interface Span {
     start: number;
@@ -184,119 +186,14 @@ export class LexicalAnalyzer {
         return this.tokenizer.generateGraph(hashed, stemmed);
     }
 
-    // tokenize(query: string): Tokenization {
-    //     const terms = query.split(/\s+/);
-    //     const stemmed = terms.map(this.lexicon.termModel.stem);
-    //     const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-
-    //     const graph = this.tokenizer.generateGraph(hashed, stemmed);
-    //     const path = graph.findPath([], 0);
-
-    //     const tokens = new Array<Token & Span>();
-    //     let start = 0;
-    //     for (const edge of path) {
-    //         tokens.push({
-    //             ...this.tokenizer.tokenFromEdge(edge),
-    //             start,
-    //             length: edge.length
-    //         });
-    //         start += edge.length;
-    //     }
-
-    //     return { graph, tokens };
-    // }
-
-    // Generator for tokenizations of the input string that are equivanent to
-    // the top-scoring tokenization.
-    // *tokenizations2(query: string): IterableIterator<Tokenization> {
-    //     // const terms = query.split(/\s+/);
-    //     // const stemmed = terms.map(this.lexicon.termModel.stem);
-    //     // const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-
-    //     // const graph = filterGraph(this.tokenizer, this.tokenizer.generateGraph(hashed, stemmed));
-    //     const graph = filterGraph(this.tokenizer, this.createGraph(query));
-
-    //     yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
-    // }
-
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
     *tokenizationsFromGraph2(graph: Graph): IterableIterator<Tokenization> {
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
 
-    // *tokenizationsFromGraphAndSpan(graph: Graph, span: Span): IterableIterator<Tokenization> {
-    //     const edgeLists: Edge[][] = [];
-    //     for (let i = span.start; i < span.start + span.length; ++i) {
-    //         const edges: Edge[] = [];
-    //         for (const edge of graph.edgeLists[i]) {
-    //             // Copy everything but default edges.
-    //             if (edge.label !== -1) {
-    //                 edges.push(edge);
-    //             }
-    //         }
-    //         edgeLists.push(edges);
-    //     }
-    //     // TODO: figure out how to handle default edges.
-    //     // Currently DynamicGraph constructor adds them.
-    //     const graph2 = new DynamicGraph(edgeLists);
-    //     yield* equivalentPaths2(this.tokenizer, graph2, graph2.findPath([], 0));
-    // }
-
     *allTokenizations(graph: Graph): IterableIterator<Tokenization> {
         yield* walk(this.tokenizer, graph, new GraphWalker(graph));
-    }
-
-    analyzePaths(query: string) {
-        const terms = query.split(/\s+/);
-        const stemmed = terms.map(this.lexicon.termModel.stem);
-        const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-
-        const graph = this.tokenizer.generateGraph(hashed, stemmed);
-
-        // XXX
-        this.analyzePathsInGraph(
-            this.tokenizer,
-            graph.edgeLists,
-            graph.findPath([], 0)
-        );
-    }
-
-    private analyzePathsInGraph(
-        tokenizer: Tokenizer,
-        edgeLists: Edge[][],
-        path: Edge[]
-    ): void {
-        const groups: Token[][] = [];
-        let v = 0;
-        for (const currentEdge of path) {
-            const tokens = new Set<Token>();
-            const group: Token[] = [];
-            const vertex = edgeLists[v];
-            for (const edge of vertex) {
-                if (edge.score === currentEdge.score &&
-                    edge.length === currentEdge.length)
-                {
-                    const token: Token = tokenizer.tokenFromEdge(edge);
-                    if (!tokens.has(token)) {
-                        tokens.add(token);
-                        group.push(token);
-                    }
-                }
-            }
-            groups.push(group);
-            v += currentEdge.length;
-        }
-    
-        let product = 1;
-        for (const tokens of groups) {
-            if (tokens.length > 1) {
-                product *= tokens.length;
-                console.log(`${tokens.length}: ${tokens.map(tokenToString).join(', ')}`);
-            }
-        }
-
-        console.log(`Equivalent path count: ${product}`);
     }
 }
 
@@ -508,7 +405,7 @@ function *equivalentPathsRecursion2(
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Graph filtering - TEMPORARY
-// TODO: Remove this code
+// TODO: Remove this code - this should probably move into token-flow.
 //
 ///////////////////////////////////////////////////////////////////////////////
 class Map2D<A,B,V> {
@@ -597,34 +494,6 @@ export function filterGraph(graph: Graph, threshold: number) {
         edgeList.sort((a,b) => b.score - a.score);
     }
     return g2;
-}
-
-export function filterGraphOld(tokenizer: Tokenizer, graph: Graph) {
-    const edgeLists: Edge[][] = [];
-    for (const edgeList of graph.edgeLists) {
-        const edges = new Map2D<Token,number,Edge>();
-
-        for (const edge of edgeList) {
-            // if ((edge.score >= 0) || (edge.label === -1)) {
-            // NOTE: remove needs weaker filtering because it works with worse matches.
-            if ((edge.score >= 0.35) || (edge.label === -1)) {
-                const token = tokenizer.tokenFromEdge(edge);
-                const existing = edges.get(token, edge.length);
-                if (existing) {
-                    if (existing.score < edge.score) {
-                        edges.set(token, edge.length, edge);
-                    }
-                } else {
-                    edges.set(token, edge.length, edge);
-                }
-            }
-        }
-        const filtered = [...edges.values()].sort((a,b) => b.score - a.score);
-        edgeLists.push(filtered);
-    }
-
-    graph.edgeLists = edgeLists;
-    return graph;
 }
 
 export function createSpan(spans: Span[]): Span {

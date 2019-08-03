@@ -29,6 +29,12 @@ import {
 import { takeActiveTokens } from './root';
 import { TokenSequence } from './token_sequence';
 
+// Attempts to pull off and process a squence of tokens corresponding
+// to a product add operation.
+//
+// Assumes that `tokens` starts with one of the following:
+//     [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS [EPILOGUE]
+//     PROLOGUE WEAK_ORDER PRODUCT_PARTS [EPILOGUE]
 export function processAdd(
     parser: Parser,
     tokens: TokenSequence<Token & Span>
@@ -47,6 +53,9 @@ export function processAdd(
     return parseAdd(parser, active);
 }
 
+// Find the best Interpretation for an array of SequenceTokens representing
+// the addition of one or more products.
+// TODO: stop exporting this function - it is exported for unit testing.
 export function parseAdd(
     parser: Parser,
     tokens: SequenceToken[]
@@ -66,9 +75,6 @@ export function parseAdd(
     const lengths: number[] = gaps.map(x => x.length);
 
     for (const splits of enumerateSplits(lengths)) {
-        // TODO: split debug tracing
-        // console.log(`split = [${splits}]`);
-
         // Construct the sequence of Segments associated with a particular
         // choice of split points.
         const segments: Segment[] = entities.map( (entity: EntityToken, index: number) => ({
@@ -77,20 +83,11 @@ export function parseAdd(
             right: gaps[index + 1].slice(0, splits[index + 1]),
         }));
 
-        // TODO: split debug tracing
-        // for (const segment of segments) {
-        //     printSegment(segment);
-        // }
-
         // Parse these segments to produce an interpretation for this
         // choice of split points.
         // TODO: BUGBUG: following line modifies segments[X].left, right
         // TODO: BUGBUG: TokenSequence shouldn't modifiy tokens[].
         const interpretation = interpretSegmentArray(parser, segments);
-
-        // TODO: split debug tracing
-        // console.log(`  score: ${interpretation.score}`);
-        // console.log('');
 
         interpretations.push(interpretation);
     }

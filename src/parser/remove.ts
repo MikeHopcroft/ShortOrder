@@ -11,14 +11,17 @@ import {
 import {
     Interpretation,
 } from './interfaces';
-
-import { targets } from './target';
 import { Parser } from './parser';
 import { nop } from './parser_utilities';
 import { takeActiveTokens } from './root';
+import { targets } from './target';
 import { TokenSequence } from './token_sequence';
 
-
+// Attempts to pull off and process a squence of tokens corresponding
+// to a product remove operation.
+//
+// Assumes that `tokens` starts with:
+//     [PROLOGUE] REMOVE_ITEM PRODUCT_PARTS [EPILOGUE]
 export function processRemove(
     parser: Parser,
     state: State,
@@ -36,7 +39,7 @@ export function processRemove(
     return parseRemove(parser, state, graph, span);
 }
 
-export function parseRemove(
+function parseRemove(
     parser: Parser,
     state: State,
     graph: Graph,
@@ -56,8 +59,6 @@ export function parseRemove(
         state,
         graph,
         span
-        // tokenization.graph,
-        // createSpan(tokenization.tokens)
     )) {
         if (target.score > interpretation.score) {
             const item = target.item!;

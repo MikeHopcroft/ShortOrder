@@ -255,7 +255,6 @@ export function runRepl(
         action(text: string) {
             const graph = lexer.createGraph(text);
             const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
-            // const tokenization = lexer.tokenizations2(text).next().value;
 
             interface Match {
                 token: EntityToken | OptionToken;
@@ -316,7 +315,7 @@ export function runRepl(
     
             const graph = lexer.createGraph(text);
             const tokenizations = lexer.tokenizationsFromGraph2(graph);
-            // const tokenizations = lexer.tokenizations2(text);
+
             let counter = 0;
             for (const tokenization of tokenizations) {
                 const tokens = tokenization.tokens;
@@ -407,8 +406,6 @@ export function runRepl(
                 // Try using the tokenizer to identify it.
                 const graph = lexer.createGraph(line);
                 const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
-    
-                // const tokenization = lexer.tokenizations2(line).next().value;
 
                 const tokens = new Set<EntityToken | OptionToken>();
                 for (const edge of tokenization.graph.edgeLists[0]) {

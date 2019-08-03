@@ -1,13 +1,4 @@
 import {
-    DynamicGraph,
-    Edge,
-    Graph,
-    Token,
-    Tokenizer,
-    UNKNOWNTOKEN
-} from 'token-flow';
-
-import {
     AttributeInfo,
     Cart,
     ICartOps,
@@ -18,12 +9,19 @@ import {
 } from 'prix-fixe';
 
 import {
+    DynamicGraph,
+    Edge,
+    Graph,
+    Token,
+    Tokenizer,
+    UNKNOWNTOKEN
+} from 'token-flow';
+
+import {
     ATTRIBUTE,
     ENTITY,
     LexicalAnalyzer,
     Span,
-    Tokenization,
-    tokenToString
 } from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
@@ -143,31 +141,23 @@ export function *targets(
     state: State,
     graph: Graph,
     span: Span
-    // tokenization: Tokenization,
 ): IterableIterator<HypotheticalItem> {
     if (span.length === 0) {
         return;
     }
-    // const tokens = tokenization.tokens;
-    // const graph = tokenization.graph;
     const cart = state.cart;
 
     //
     // Construct lexical subgraph corresponding to items in the cart.
     //
 
-    // // Subgraph span will be that of `tokens`.
-    // const last = tokens[tokens.length - 1];
-    // const span: Span = {
-    //     start: tokens[0].start,
-    //     length: last.start + last.length - tokens[0].start
-    // };
-
     // Subgraph edges will correspond to tokens for items in `cart`.
     const subgraph = subgraphFromItems(attributes, lexer, cart, graph, span);
     
-    // Try each tokenization of the subgraph
-    // const tokenizations = lexer.tokenizationsFromGraph2(subgraph);
+    // Try each tokenization of the subgraph.
+    // Need to look at all tokenizations, not just the top-scoring ones because
+    // targets are often partially/poorly specified (e.g. "latte" instead of
+    //  "cinnamon dolce latte")
     const tokenizations = lexer.allTokenizations(subgraph);
     for (const tokenization of tokenizations) {
         // console.log('Tokenization:');

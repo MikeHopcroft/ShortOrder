@@ -15,6 +15,12 @@
 * fuzzer regression suite in mochajava
 * regression script in mochajava
 
+* review groupProductParts() - can it be combined with other parsing code?
+* consider making targets() take Parser.
+* consider definining a nopInterpretation.
+* consider making addCustomStemmer data driven.
+* consider eliminating Tokenization class
+* consider making LexicalAnalyzer.[lexicon,token] private
 * x utility function to compute span from Token[]
 * x targets() should take Span + Graph instead of Tokenization
 * x processRoot() generates raw and filtered graphs
