@@ -23,7 +23,8 @@ export async function fuzzerMain(
     dotenv.config();
     const args = minimist(process.argv);
 
-    const outFile = args['o'] ? path.resolve(__dirname, args['o']) : undefined;
+    const outFile = args['o'] ? path.resolve('.', args['o']) : undefined;
+
     const generator = args['t'];
     const verify = args['v'];
     const showOnlyFailingCases =
