@@ -33,7 +33,7 @@ export type PREPOSITION = typeof PREPOSITION;
 export const PROLOGUE: unique symbol = Symbol.for('PROLOGUE');
 export type PROLOGUE = typeof PROLOGUE;
 
-    export const REMOVE_ITEM: unique symbol = Symbol.for('REMOVE_ITEM');
+export const REMOVE_ITEM: unique symbol = Symbol.for('REMOVE_ITEM');
 export type REMOVE_ITEM = typeof REMOVE_ITEM;
 
 export const RESTATE: unique symbol = Symbol.for('RESTATE');

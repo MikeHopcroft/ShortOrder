@@ -1,5 +1,9 @@
 # TODO List
 
+* x Gathering product-related tokens
+* x groupProductTokens - handling UNKNOWN
+* Consider eliminating SequenceToken and GapToken
+
 * token-flow
     * NaN score
     * method to copy a graph
@@ -10,6 +14,14 @@
     * default edges as stop words
     * investigate whether stop words are working correctly
 
+* x test_runner print data and time
+* test_runner main function
+* test_ruinner print git head commit hash?
+* test_runner aggregate running time across suites
+* test_runner return code
+* test_runner option to suppress list of failures
+* test_runner match conjunction of suites
+* fuzzer add suite names
 * test_runner command line option for single test
 * test_runner multi-file option
 * fuzzer regression suite in mochajava

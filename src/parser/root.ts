@@ -3,6 +3,7 @@ import { Graph, Token } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
+    createSpan,
     EPILOGUE,
     PROLOGUE,
     REMOVE_ITEM,
@@ -93,8 +94,15 @@ function processRootInternal(
             console.log(tokenization.map(tokenToString).join(''));
         }
 
+        const grouped = groupProductTokens(parser, tokenization);
+        // XXX
+        if (parser.debugMode) {
+            console.log(' ');
+            console.log(grouped.map(tokenToString).join(''));
+        }
+
         const interpretation = 
-            processAllActiveRegions(parser, state, tokenization, baseGraph);
+            processAllActiveRegions(parser, state, grouped, baseGraph);
 
         if (best && best.score < interpretation.score || !best) {
             best = interpretation;
@@ -149,74 +157,52 @@ function processAllActiveRegions(
     };
 }
 
-export function takeActiveTokens(
-    parser: Parser,
-    tokens: TokenSequence<Token & Span>
-): Array<SequenceToken & Span> {
-    const active: Array<SequenceToken & Span> = [];
-    while (!tokens.atEOS()) {
-        const token = tokens.peek(0);
-        if (parser.intentTokens.has(token.type)) {
-            // If we reach an intent token, we're done with this active region.
-            // Don't take the intent token because it belongs to the next
-            // region.
-            break;
-        } else if (token.type === EPILOGUE) {
-            // If we reach the epilogue we're done with this active region.
-            // Take the epilogue token because it belongs to this region.
-            tokens.take(1);
-            break;
-        } else if (parser.productTokens.has(token.type)){
-            // Collect product tokens in active.
-            active.push(token as SequenceToken & Span);
-            tokens.take(1);
-        } else {
-            // Skip over unknown token.
-            tokens.take(1);
-        }
-    }
-
-    return active;
-}
-
-// TODO: get type system right here
-function groupProductParts(
+function groupProductTokens(
     parser: Parser,
     tokens: Array<Token & Span>
 ): Array<Token & Span> {
-    const grouped = new Array<Token & Span>();
     let productParts = new Array<SequenceToken & Span>();
+    
+    const grouped = new Array<Token & Span>();
+    const input = new TokenSequence(tokens);
 
-    const tryCreateProductParts = () => {
-        if (productParts.length > 0) {
-            const start = productParts[0].start;
-            const length =
-                productParts.reduce((sum, x) => sum + x.length, 0);
-            grouped.push({
-                type: PRODUCT_PARTS,
-                tokens: productParts,
-                start,
-                length
-            } as ProductToken & Span);
-            productParts = [];
-        }
-    };
+    while (true) {
+        // if (input.atEOS() || parser.intentTokens.has(input.peek(0).type)) {
+        if (input.atEOS() || !parser.productTokens.has(input.peek(0).type)) {
+            // When we reach the end of stream or encounter an intent token,
+            // dump and product parts we have been collecting.
+            if (productParts.length > 0) {
+                grouped.push(createProductToken(productParts));
+                productParts = [];
+            }
 
-    for (const token of tokens) {
-        if (!parser.intentTokens.has(token.type)) {
-            // Code assumes that anything not in intentTokens is a
-            // SequenceToken. Gather SeqeuenceTokens in productParts.
-            productParts.push(token as SequenceToken & Span);
+            if (input.atEOS()) {
+                // If we're at the end of the stream, break out of the while loop.
+                break;
+            } else {
+                // Otherwise copy over the intent token and continue scanning.
+                grouped.push(input.peek(0));
+                input.take(1);
+            }
         } else {
-            // We've reached an intent token.
-            tryCreateProductParts();
-            grouped.push(token);
+            // Assuming anything not in parser.intentTokens must be a
+            // SequenceToken. Gather SeqeuenceTokens in productParts.
+            productParts.push(input.peek(0) as SequenceToken & Span);
+            input.take(1);
         }
-    }
-    if (productParts.length > 0) {
-        tryCreateProductParts();
     }
     return grouped;
+}
+
+function createProductToken(
+    productParts: Array<SequenceToken & Span>
+): ProductToken & Span {
+    const span = createSpan(productParts);
+    return {
+        type: PRODUCT_PARTS,
+        tokens: productParts,
+        ...span
+    };
 }
 
 function printSegment(segment: Segment) {

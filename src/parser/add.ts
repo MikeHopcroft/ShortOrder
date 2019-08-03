@@ -16,7 +16,9 @@ import {
     Interpretation,
     nop,
     Segment,
-    SequenceToken
+    SequenceToken,
+    PRODUCT_PARTS,
+    ProductToken
 } from './interfaces';
 
 import { Parser } from './parser';
@@ -26,7 +28,6 @@ import {
     splitOnEntities,
 } from './parser_utilities';
 
-import { takeActiveTokens } from './root';
 import { TokenSequence } from './token_sequence';
 
 // Attempts to pull off and process a squence of tokens corresponding
@@ -49,8 +50,15 @@ export function processAdd(
         tokens.take(1);
     }
 
-    const active = takeActiveTokens(parser, tokens);
-    return parseAdd(parser, active);
+    if (!tokens.atEOS()) {
+        const token = tokens.peek(0) as ProductToken & Span;
+        if (tokens.peek(0).type === PRODUCT_PARTS) {
+            tokens.take(1);
+            return parseAdd(parser, token.tokens);
+        }
+    }
+
+    return nop;
 }
 
 // Find the best Interpretation for an array of SequenceTokens representing

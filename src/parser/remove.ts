@@ -11,9 +11,11 @@ import {
 import {
     Interpretation,
     nop,
+    PRODUCT_PARTS,
+    ProductToken
 } from './interfaces';
+
 import { Parser } from './parser';
-import { takeActiveTokens } from './root';
 import { targets } from './target';
 import { TokenSequence } from './token_sequence';
 
@@ -34,9 +36,17 @@ export function processRemove(
     if (tokens.peek(0).type === REMOVE_ITEM) {
         tokens.take(1);
     }
-    const active = takeActiveTokens(parser, tokens);
-    const span = createSpan(active);
-    return parseRemove(parser, state, graph, span);
+
+    if (!tokens.atEOS()) {
+        const token = tokens.peek(0) as ProductToken & Span;
+        if (tokens.peek(0).type === PRODUCT_PARTS) {
+            tokens.take(1);
+            const span = createSpan(token.tokens);
+            return parseRemove(parser, state, graph, span);
+        }
+    }
+
+    return nop;
 }
 
 function parseRemove(

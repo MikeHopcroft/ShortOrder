@@ -6,7 +6,7 @@ import {
     OPTION,
 } from 'prix-fixe';
 
-import { NUMBERTOKEN } from 'token-flow';
+import { NUMBERTOKEN, UNKNOWNTOKEN } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
@@ -63,6 +63,8 @@ export class Parser {
         NUMBERTOKEN,
         QUANTITY,
         UNIT,
+
+        UNKNOWNTOKEN,
     ]);
 
     // TODO: Parser shouldn't be coupled to LexicalAnalyzer. It should take an
