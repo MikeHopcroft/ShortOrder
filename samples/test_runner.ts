@@ -40,6 +40,10 @@ function showUsage() {
 
 async function go() {
     dotenv.config();
+
+    console.log('ShortOrder test runner');
+    console.log(new Date().toLocaleString());
+
     const args = minimist(process.argv.slice(2));
 
     if (args._.length !== 1) {
@@ -49,6 +53,7 @@ async function go() {
         return;
     }
     const testFile = args._[0];
+    console.log(`test file = ${testFile}`);
 
     let dataPath = process.env.PRIX_FIXE_DATA;
     if (args.d) {
@@ -58,6 +63,7 @@ async function go() {
         console.log('Use -d flag or PRIX_FIXE_DATA environment variable to specify data path');
         return;
     }
+    console.log(`data path = ${dataPath}`);
 
     if (args.h || args.help || args['?']) {
         showUsage();
@@ -89,6 +95,9 @@ async function go() {
         suiteFilter
     );
     aggregator.print(showAll);
+
+    console.log('');
+    console.log('');
 }
 
 go();
