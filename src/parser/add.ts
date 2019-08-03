@@ -1,5 +1,5 @@
 import { ItemInstance, State } from 'prix-fixe';
-import { Token } from 'token-flow';
+import { Graph, Token } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
@@ -49,6 +49,8 @@ import { TokenSequence } from './token_sequence';
 //     PROLOGUE WEAK_ORDER PRODUCT_PARTS_0 PREPOSITION PRODUCT_PARTS_1 [EPILOGUE]
 export function processAdd(
     parser: Parser,
+    state: State,
+    graph: Graph,
     tokens: TokenSequence<Token & Span>
 ): Interpretation {
     if (tokens.peek(0).type === PROLOGUE) {
@@ -66,11 +68,7 @@ export function processAdd(
         const target = tokens.peek(2) as ProductToken1 & Span;
         const modification = tokens.peek(0) as ProductToken0 & Span;
         tokens.take(3);
-        // console.log(`Modifying`);
-        // console.log(`  ${target.tokens.map(tokenToString).join('')}`);
-        // console.log(`with`);
-        // console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
-        parseAddToExplicitItem(parser, modification.tokens, target.tokens);
+        return parseAddToExplicitItem(parser, state, graph, modification.tokens, target.tokens);
     } else if (
         // We're adding new items to the cart.
         tokens.startsWith([PRODUCT_PARTS_1]) ||
@@ -80,11 +78,10 @@ export function processAdd(
         tokens.take(1);
         return parseAdd(parser, token.tokens);
     } else if (tokens.startsWith([PRODUCT_PARTS_0])) {
+        // We're adding options to an implicit item already in the cart.
         const modification = tokens.peek(0) as ProductToken0 & Span;
         tokens.take(1);
-        // console.log(`Modifying implicit with`);
-        // console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
-        parseAddToImplicitItem(parser, modification.tokens);
+        return parseAddToImplicitItem(parser, modification.tokens);
     }
 
     return nop;

@@ -22,6 +22,7 @@ import {
     ENTITY,
     LexicalAnalyzer,
     Span,
+    tokenToString,
 } from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
@@ -163,7 +164,7 @@ export function *targets(
     const tokenizations = lexer.allTokenizations(subgraph);
     for (const tokenization of tokenizations) {
         // console.log('Tokenization:');
-        // for (const token of tokens) {
+        // for (const token of tokenization) {
         //     const text = tokenToString(token);
         //     console.log(`  ${text}, start=${token.start}, length=${token.length}`);
         // }

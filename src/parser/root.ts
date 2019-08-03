@@ -137,7 +137,7 @@ function processAllActiveRegions(
             tokens.startsWith([PROLOGUE, ADD_TO_ORDER]) ||
             tokens.startsWith([ADD_TO_ORDER])
         ) {
-            const interpretation = processAdd(parser, tokens);
+            const interpretation = processAdd(parser, state, baseGraph, tokens);
             score += interpretation.score;
             state = interpretation.action(state);
         } else if (
