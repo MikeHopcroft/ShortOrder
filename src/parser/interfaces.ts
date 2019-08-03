@@ -1,4 +1,4 @@
-import { ItemInstance, State } from 'prix-fixe';
+import { ItemInstance, PID, State } from 'prix-fixe';
 import { NumberToken, Token } from 'token-flow';
 
 import {
@@ -60,7 +60,7 @@ export type GapToken =
 
 export interface Segment {
     left: GapToken[];
-    entity: EntityToken;
+    entity: PID;
     right: GapToken[];
 }
 

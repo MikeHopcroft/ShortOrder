@@ -1,5 +1,7 @@
 # TODO List
 
+* Segment.entity becomes PID
+* Segment.entity becomes Key?
 * Unit test for groupProductTokens?
 * x PRODUCT_[0,1,N]
 * x Gathering product-related tokens

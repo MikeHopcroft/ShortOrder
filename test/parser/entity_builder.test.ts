@@ -77,7 +77,7 @@ describe('Parser2', () => {
         it('entity', () => {
             const segment: Segment = {
                 left: [],
-                entity: productCone,
+                entity: productCone.pid,
                 right: [],
             };
 
@@ -98,7 +98,7 @@ describe('Parser2', () => {
         it('attribute attribute product', () => {
             const segment: Segment = {
                 left: [quantityOne, attributeMedium, attributeChocolate],
-                entity: productCone,
+                entity: productCone.pid,
                 right: [],
             };
 
@@ -117,7 +117,7 @@ describe('Parser2', () => {
         it('quantityOne attribute product attribute', () => {
             const segment: Segment = {
                 left: [quantityOne, attributeSmall],
-                entity: productCone,
+                entity: productCone.pid,
                 right: [attributeChocolate],
             };
 
@@ -136,7 +136,7 @@ describe('Parser2', () => {
         it('bad-attribute product attribute', () => {
             const segment: Segment = {
                 left: [attributeDecaf],
-                entity: productCone,
+                entity: productCone.pid,
                 right: [attributeChocolate],
             };
 
@@ -155,7 +155,7 @@ describe('Parser2', () => {
         it('quantity attribute product attribute', () => {
             const segment: Segment = {
                 left: [quantityTwo, attributeMedium],
-                entity: productCone,
+                entity: productCone.pid,
                 right: [attributeChocolate],
             };
 
@@ -174,7 +174,7 @@ describe('Parser2', () => {
         it('option product', () => {
             const segment: Segment = {
                 left: [quantityOne, optionMilk],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [],
             };
 
@@ -200,7 +200,7 @@ describe('Parser2', () => {
         it('product conjunction option', () => {
             const segment: Segment = {
                 left: [],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [conjunction, optionMilk],
             };
 
@@ -225,7 +225,7 @@ describe('Parser2', () => {
         it('option-attribute option product', () => {
             const segment: Segment = {
                 left: [quantityOne, attributeSoy, optionMilk],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [],
             };
 
@@ -280,7 +280,7 @@ describe('Parser2', () => {
         it('quantity quantity units option product', () => {
             const segment: Segment = {
                 left: [quantityFive, quantityTwo, unitPumps, optionMilk],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [],
             };
 
@@ -305,7 +305,7 @@ describe('Parser2', () => {
         it('attribute product conjunction quantity unit option', () => {
             const segment: Segment = {
                 left: [quantityOne, attributeDecaf],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [conjunction, quantityTwo, unitPumps, optionMilk],
             };
 
@@ -337,7 +337,7 @@ describe('Parser2', () => {
         it('attribute !attribute product', () => {
             const segment: Segment = {
                 left: [quantityOne,attributeDecaf, attributeRegular],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [],
             };
 
@@ -357,7 +357,7 @@ describe('Parser2', () => {
         it('option-attribute option !option product', () => {
             const segment: Segment = {
                 left: [quantityOne, attributeSoy, optionMilk, optionMilk],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [],
             };
 
@@ -383,7 +383,7 @@ describe('Parser2', () => {
         it('!option option-attribute option product', () => {
             const segment: Segment = {
                 left: [quantityOne, optionMilk, attributeSoy, optionMilk],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [],
             };
 
@@ -410,7 +410,7 @@ describe('Parser2', () => {
         it('product quanitfier', () => {
             const segment: Segment = {
                 left: [],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [quantityTwo],
             };
 
@@ -432,7 +432,7 @@ describe('Parser2', () => {
         it('quanitfier quantifier product', () => {
             const segment: Segment = {
                 left: [quantityTwo, quantityFive],
-                entity: productCoffee,
+                entity: productCoffee.pid,
                 right: [],
             };
 

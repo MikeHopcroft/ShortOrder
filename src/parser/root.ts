@@ -239,7 +239,7 @@ function createProductToken(
 
 function printSegment(segment: Segment) {
     const left = segment.left.map(tokenToString).join('');
-    const entity = tokenToString(segment.entity);
+    const entity = `[Entity: pid=${segment.entity}]`;
     const right = segment.right.map(tokenToString).join('');
 
     console.log('  Segment');

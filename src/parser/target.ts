@@ -172,7 +172,7 @@ export function *targets(
         if (entities.length > 0) {
             const segment: Segment = {
                 left: gaps[0],
-                entity: entities[0],
+                entity: entities[0].pid,
                 right: gaps[1]
             };
 

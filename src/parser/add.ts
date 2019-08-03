@@ -116,7 +116,7 @@ export function parseAdd(
         // choice of split points.
         const segments: Segment[] = entities.map( (entity: EntityToken, index: number) => ({
             left: gaps[index].slice(splits[index]),
-            entity,
+            entity: entity.pid,
             right: gaps[index + 1].slice(0, splits[index + 1]),
         }));
 

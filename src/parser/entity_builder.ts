@@ -51,7 +51,7 @@ export class EntityBuilder {
         this.info = info;
         this.rules = rules;
 
-        this.pid = segment.entity.pid;
+        this.pid = segment.entity;
         this.tokensUsed += 1;
 
         const leftTokens = new TokenSequence<GapToken>(segment.left);
