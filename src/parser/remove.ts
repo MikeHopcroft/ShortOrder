@@ -48,10 +48,7 @@ function parseRemove(
     let interpretation: Interpretation = nop;
 
     for (const target of targets(
-        parser.attributes,
-        parser.cartOps,
-        parser.lexer,
-        parser.rules,
+        parser,
         state,
         graph,
         span

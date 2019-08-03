@@ -26,6 +26,7 @@ import {
 
 import { EntityBuilder } from './entity_builder';
 import { HypotheticalItem, SequenceToken, Segment } from './interfaces';
+import { Parser } from './parser';
 import { splitOnEntities } from './parser_utilities';
 
 
@@ -134,24 +135,25 @@ function createSubgraph(
 // TODO: remove an attribute from an implicit entity - e.g. 'I removed the large` - doesn't make sense
 // Seems you can change/modify an attribute, but not remove it.
 export function *targets(
-    attributes: AttributeInfo,
-    cartOps: ICartOps,
-    lexer: LexicalAnalyzer,
-    rules: IRuleChecker,
+    parser: Parser,
     state: State,
     graph: Graph,
     span: Span
 ): IterableIterator<HypotheticalItem> {
+    const attributes: AttributeInfo = parser.attributes;
+    const cartOps: ICartOps = parser.cartOps;
+    const lexer: LexicalAnalyzer = parser.lexer;
+    const rules: IRuleChecker = parser.rules;
+    const cart = state.cart;
+
     if (span.length === 0) {
         return;
     }
-    const cart = state.cart;
 
     //
     // Construct lexical subgraph corresponding to items in the cart.
-    //
-
     // Subgraph edges will correspond to tokens for items in `cart`.
+    //
     const subgraph = subgraphFromItems(attributes, lexer, cart, graph, span);
     
     // Try each tokenization of the subgraph.

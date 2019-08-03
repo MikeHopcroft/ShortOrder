@@ -17,8 +17,8 @@
 
 * consider removing Interpretation.items
 * review groupProductParts() - can it be combined with other parsing code?
-* consider making targets() take Parser.
-* consider definining a nopInterpretation.
+* x consider making targets() take Parser.
+* x consider definining a nopInterpretation.
 * consider making addCustomStemmer data driven.
 * consider eliminating Tokenization class
 * consider making LexicalAnalyzer.[lexicon,token] private
