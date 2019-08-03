@@ -54,3 +54,11 @@ export interface Interpretation {
     items: ItemInstance[];
     action: ActionFunction;
 }
+
+// An interpretation that does not modify state.
+export const nop: Interpretation = {
+    score: 0,
+    items: [],
+    action: (state: State): State => state
+};
+

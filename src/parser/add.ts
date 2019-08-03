@@ -14,6 +14,7 @@ import { EntityBuilder } from './entity_builder';
 import {
     HypotheticalItem,
     Interpretation,
+    nop,
     Segment,
     SequenceToken
 } from './interfaces';
@@ -22,7 +23,6 @@ import { Parser } from './parser';
 
 import {
     enumerateSplits,
-    nop,
     splitOnEntities,
 } from './parser_utilities';
 
@@ -68,7 +68,7 @@ export function parseAdd(
     if (entities.length < 1) {
         // There's no entity here.
         // Return an empty interpretation.
-        return {score: 0, items: [], action: nop}; 
+        return nop; 
     }
 
     // Enumerate all combinations of split points in gaps.
@@ -106,7 +106,7 @@ export function parseAdd(
     } else {
         // We didn't find any interpretations.
         // Return an empty interpretation.
-        return {score: 0, items: [], action: nop}; 
+        return nop; 
     }
 }
 

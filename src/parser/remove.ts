@@ -10,9 +10,9 @@ import {
 
 import {
     Interpretation,
+    nop,
 } from './interfaces';
 import { Parser } from './parser';
-import { nop } from './parser_utilities';
 import { takeActiveTokens } from './root';
 import { targets } from './target';
 import { TokenSequence } from './token_sequence';
@@ -45,11 +45,7 @@ function parseRemove(
     graph: Graph,
     span: Span
 ): Interpretation {
-    const interpretation: Interpretation = {
-        score: 0,
-        items: [],
-        action: nop
-    };
+    let interpretation: Interpretation = nop;
 
     for (const target of targets(
         parser.attributes,
@@ -62,11 +58,16 @@ function parseRemove(
     )) {
         if (target.score > interpretation.score) {
             const item = target.item!;
-            interpretation.score = target.score;
-            interpretation.items = [target.item!];
-            interpretation.action = (state: State): State => {
-                const cart = parser.cartOps.removeFromCart(state.cart, item.uid);
-                return {...state, cart};
+            interpretation = {
+                score: target.score,
+                items: [target.item!],
+                action: (state: State): State => {
+                    const cart = parser.cartOps.removeFromCart(
+                        state.cart,
+                        item.uid
+                    );
+                    return {...state, cart};
+                }
             };
         }
     }

@@ -7,7 +7,8 @@ import {
 
 import {
     GapToken,
-    SequenceToken
+    SequenceToken,
+    Interpretation
 } from './interfaces';
 
 export function splitOnEntities(tokens: SequenceToken[]) {
@@ -63,10 +64,4 @@ function* enumerateSplitsRecursion(position: number, lengths: number[]): Iterabl
             }
         }
     }
-}
-
-
-// ActionFunction that does nothing.
-export function nop(state: State): State {
-    return state;
 }

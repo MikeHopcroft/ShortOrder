@@ -15,6 +15,7 @@
 * fuzzer regression suite in mochajava
 * regression script in mochajava
 
+* consider removing Interpretation.items
 * review groupProductParts() - can it be combined with other parsing code?
 * consider making targets() take Parser.
 * consider definining a nopInterpretation.
