@@ -7,6 +7,7 @@ import {
     createSpan,
     filterGraph,
     ENTITY,
+    MODIFY_ITEM,
     PROLOGUE,
     REMOVE_ITEM,
     Span,
@@ -26,6 +27,7 @@ import {
     SequenceToken,
 } from './interfaces';
 
+import { processModify } from './modify';
 import { Parser } from './parser';
 import { processRemove } from './remove';
 import { TokenSequence } from './token_sequence';
@@ -41,11 +43,11 @@ export function processRoot(
     state: State,
     text: string
 ): State {
-    // XXX
-    if (parser.debugMode) {
-        console.log(' ');
-        console.log(`Text: "${text}"`);
-    }
+    // // XXX
+    // if (parser.debugMode) {
+    //     console.log(' ');
+    //     console.log(`Text: "${text}"`);
+    // }
 
     // TODO: figure out how to remove the type assertion to any.
     // tslint:disable-next-line:no-any
@@ -90,18 +92,17 @@ function processRootInternal(
 
     let best: Interpretation | null = null;
     for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
-        // XXX
-        if (parser.debugMode) {
-            console.log(' ');
-            console.log(tokenization.map(tokenToString).join(''));
-        }
+        // // XXX
+        // if (parser.debugMode) {
+        //     console.log(' ');
+        //     console.log(tokenization.map(tokenToString).join(''));
+        // }
 
         const grouped = groupProductTokens(parser, tokenization);
-        // XXX
-        if (parser.debugMode) {
-            console.log(' ');
-            console.log(grouped.map(tokenToString).join(''));
-        }
+        // // XXX
+        // if (parser.debugMode) {
+        //     console.log(grouped.map(tokenToString).join(''));
+        // }
 
         const interpretation = 
             processAllActiveRegions(parser, state, grouped, baseGraph);
@@ -144,6 +145,13 @@ function processAllActiveRegions(
             tokens.startsWith([REMOVE_ITEM])
         ) {
             const interpretation = processRemove(parser, state, tokens, baseGraph);
+            score += interpretation.score;
+            state = interpretation.action(state);
+        } else if (
+            tokens.startsWith([PROLOGUE, MODIFY_ITEM]) ||
+            tokens.startsWith([MODIFY_ITEM])
+        ) {
+            const interpretation = processModify(parser, state, tokens, baseGraph);
             score += interpretation.score;
             state = interpretation.action(state);
         } else {

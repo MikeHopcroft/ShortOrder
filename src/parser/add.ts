@@ -5,8 +5,9 @@ import {
     ADD_TO_ORDER,
     EntityToken,
     Span,
+    PREPOSITION,
     PROLOGUE,
-    WEAK_ADD
+    WEAK_ADD,
 } from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
@@ -15,13 +16,20 @@ import {
     HypotheticalItem,
     Interpretation,
     nop,
+    PRODUCT_PARTS_0,
     PRODUCT_PARTS_1,
     PRODUCT_PARTS_N,
     ProductToken,
+    ProductToken0,
+    ProductToken1,
     Segment,
     SequenceToken,
 } from './interfaces';
 
+import {
+    parseAddToExplicitItem,
+    parseAddToImplicitItem
+} from './modify';
 import { Parser } from './parser';
 
 import {
@@ -37,6 +45,8 @@ import { TokenSequence } from './token_sequence';
 // Assumes that `tokens` starts with one of the following:
 //     [PROLOGUE] ADD_TO_ORDER (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
 //     PROLOGUE WEAK_ORDER (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
+//     [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS_0 PREPOSITION PRODUCT_PARTS_1 [EPILOGUE]
+//     PROLOGUE WEAK_ORDER PRODUCT_PARTS_0 PREPOSITION PRODUCT_PARTS_1 [EPILOGUE]
 export function processAdd(
     parser: Parser,
     tokens: TokenSequence<Token & Span>
@@ -51,12 +61,30 @@ export function processAdd(
         tokens.take(1);
     }
 
-    if (!tokens.atEOS()) {
+    if (tokens.startsWith([PRODUCT_PARTS_0, PREPOSITION, PRODUCT_PARTS_1])) {
+        // We're adding modifications to an item that is already in the cart.
+        const target = tokens.peek(2) as ProductToken1 & Span;
+        const modification = tokens.peek(0) as ProductToken0 & Span;
+        tokens.take(3);
+        // console.log(`Modifying`);
+        // console.log(`  ${target.tokens.map(tokenToString).join('')}`);
+        // console.log(`with`);
+        // console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
+        parseAddToExplicitItem(parser, modification.tokens, target.tokens);
+    } else if (
+        // We're adding new items to the cart.
+        tokens.startsWith([PRODUCT_PARTS_1]) ||
+        tokens.startsWith([PRODUCT_PARTS_N])
+    ) {
         const token = tokens.peek(0) as ProductToken & Span;
-        if (token.type === PRODUCT_PARTS_1 || token.type === PRODUCT_PARTS_N) {
-            tokens.take(1);
-            return parseAdd(parser, token.tokens);
-        }
+        tokens.take(1);
+        return parseAdd(parser, token.tokens);
+    } else if (tokens.startsWith([PRODUCT_PARTS_0])) {
+        const modification = tokens.peek(0) as ProductToken0 & Span;
+        tokens.take(1);
+        // console.log(`Modifying implicit with`);
+        // console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
+        parseAddToImplicitItem(parser, modification.tokens);
     }
 
     return nop;

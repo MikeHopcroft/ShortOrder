@@ -17,6 +17,7 @@
     * investigate whether stop words are working correctly
 
 * x test_runner print data and time
+* test_runner just print text - don't run
 * test_runner main function
 * test_ruinner print git head commit hash?
 * test_runner aggregate running time across suites

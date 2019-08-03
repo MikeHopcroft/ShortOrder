@@ -24,6 +24,9 @@ export type END_OF_ORDER = typeof END_OF_ORDER;
 export const EPILOGUE: unique symbol = Symbol.for('EPILOGUE');
 export type EPILOGUE = typeof EPILOGUE;
 
+export const MODIFY_ITEM: unique symbol = Symbol.for('MODIFY_ITEM');
+export type MODIFY_ITEM = typeof MODIFY_ITEM;
+
 export const NEED_MORE_TIME: unique symbol = Symbol.for('NEED_MORE_TIME');
 export type NEED_MORE_TIME = typeof NEED_MORE_TIME;
 
