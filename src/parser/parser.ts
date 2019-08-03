@@ -54,6 +54,17 @@ export class Parser {
         UNIT,
     ]);
 
+    productTokens = new Set<Symbol>([
+        // Product-related
+        ATTRIBUTE,
+        CONJUNCTION,
+        ENTITY,
+        OPTION,
+        NUMBERTOKEN,
+        QUANTITY,
+        UNIT,
+    ]);
+
     // TODO: Parser shouldn't be coupled to LexicalAnalyzer. It should take an
     // interface to a graph manipulation class or perhaps that code could be
     // extracted from LexicalAnalyzer and exposed as simple functions.

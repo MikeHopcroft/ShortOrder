@@ -1,10 +1,12 @@
 # TODO List
 
 * token-flow
+    * NaN score
     * method to copy a graph
     * graph coalesce
     * graph filter
     * approach to inserting default edges
+    * keep vertex count from growing on copy
     * default edges as stop words
     * investigate whether stop words are working correctly
 
@@ -13,11 +15,12 @@
 * fuzzer regression suite in mochajava
 * regression script in mochajava
 
-* utility function to compute span from Token[]
-* targets() should take Span + Graph instead of Tokenization
-* processRoot() generates raw and filtered graphs
-* processActiveRegions() receives both graphs
-* processRemove() receives raw graph
+* x utility function to compute span from Token[]
+* x targets() should take Span + Graph instead of Tokenization
+* x processRoot() generates raw and filtered graphs
+* x processActiveRegions() receives both graphs
+* x processRemove() receives raw graph
+* x Graphs grow by one vertex in each filtering stage.
 
 * consider scoring Interpretations with total span, instead of total tokens
 * consider removing action() from Interpretation - replace it with state

@@ -141,22 +141,27 @@ export function *targets(
     lexer: LexicalAnalyzer,
     rules: IRuleChecker,
     state: State,
-    tokenization: Tokenization,
+    graph: Graph,
+    span: Span
+    // tokenization: Tokenization,
 ): IterableIterator<HypotheticalItem> {
-    const tokens = tokenization.tokens;
-    const graph = tokenization.graph;
+    if (span.length === 0) {
+        return;
+    }
+    // const tokens = tokenization.tokens;
+    // const graph = tokenization.graph;
     const cart = state.cart;
 
     //
     // Construct lexical subgraph corresponding to items in the cart.
     //
 
-    // Subgraph span will be that of `tokens`.
-    const last = tokens[tokens.length - 1];
-    const span: Span = {
-        start: tokens[0].start,
-        length: last.start + last.length - tokens[0].start
-    };
+    // // Subgraph span will be that of `tokens`.
+    // const last = tokens[tokens.length - 1];
+    // const span: Span = {
+    //     start: tokens[0].start,
+    //     length: last.start + last.length - tokens[0].start
+    // };
 
     // Subgraph edges will correspond to tokens for items in `cart`.
     const subgraph = subgraphFromItems(attributes, lexer, cart, graph, span);

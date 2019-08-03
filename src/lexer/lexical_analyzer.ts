@@ -208,16 +208,16 @@ export class LexicalAnalyzer {
 
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
-    *tokenizations2(query: string): IterableIterator<Tokenization> {
-        // const terms = query.split(/\s+/);
-        // const stemmed = terms.map(this.lexicon.termModel.stem);
-        // const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
+    // *tokenizations2(query: string): IterableIterator<Tokenization> {
+    //     // const terms = query.split(/\s+/);
+    //     // const stemmed = terms.map(this.lexicon.termModel.stem);
+    //     // const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
 
-        // const graph = filterGraph(this.tokenizer, this.tokenizer.generateGraph(hashed, stemmed));
-        const graph = filterGraph(this.tokenizer, this.createGraph(query));
+    //     // const graph = filterGraph(this.tokenizer, this.tokenizer.generateGraph(hashed, stemmed));
+    //     const graph = filterGraph(this.tokenizer, this.createGraph(query));
 
-        yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
-    }
+    //     yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
+    // }
 
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
@@ -541,7 +541,65 @@ class Map2D<A,B,V> {
     }
 }
 
-export function filterGraph(tokenizer: Tokenizer, graph: Graph) {
+export function coalesceGraph(tokenizer: Tokenizer, graph: Graph) {
+    const edgeLists: Edge[][] = [];
+    // Copy and filter all but the last edgeList, which is added by the
+    // DynamicGraph constructor.
+    for (let i = 0; i < graph.edgeLists.length - 1; ++i) {
+        const edgeList = graph.edgeLists[i];
+    // for (const edgeList of graph.edgeLists) {
+        const edges = new Map2D<Token,number,Edge>();
+
+        for (const edge of edgeList) {
+            // Don't copy default edges.
+            if (edge.label !== -1) {
+                const token = tokenizer.tokenFromEdge(edge);
+                const existing = edges.get(token, edge.length);
+                if (existing) {
+                    // Keep only the highest scoring edge for each
+                    // (token, length) pair.
+                    if (existing.score < edge.score) {
+                        edges.set(token, edge.length, edge);
+                    }
+                } else {
+                    edges.set(token, edge.length, edge);
+                }
+            }
+        }
+        const filtered = [...edges.values()].sort((a,b) => b.score - a.score);
+        edgeLists.push(filtered);
+    }
+
+    return new DynamicGraph(edgeLists);
+}
+
+export function filterGraph(graph: Graph, threshold: number) {
+    const edgeLists: Edge[][] = [];
+
+    // Copy and filter all but the last edgeList, which is added by the
+    // DynamicGraph constructor.
+    for (let i = 0; i < graph.edgeLists.length - 1; ++i) {
+        const edgeList = graph.edgeLists[i];
+    // for (const edgeList of graph.edgeLists) {
+        const edges: Edge[] = [];
+
+        for (const edge of edgeList) {
+            if ((edge.score >= threshold) && (edge.label !== -1)) {
+                edges.push(edge);
+            }
+        }
+
+        edgeLists.push(edges);
+    }
+
+    const g2 = new DynamicGraph(edgeLists);
+    for (const edgeList of g2.edgeLists) {
+        edgeList.sort((a,b) => b.score - a.score);
+    }
+    return g2;
+}
+
+export function filterGraphOld(tokenizer: Tokenizer, graph: Graph) {
     const edgeLists: Edge[][] = [];
     for (const edgeList of graph.edgeLists) {
         const edges = new Map2D<Token,number,Edge>();
@@ -567,4 +625,17 @@ export function filterGraph(tokenizer: Tokenizer, graph: Graph) {
 
     graph.edgeLists = edgeLists;
     return graph;
+}
+
+export function createSpan(spans: Span[]): Span {
+    if (spans.length === 0) {
+        return { start:0, length: 0 };
+    } else {
+        const first = spans[0];
+        const last = spans[spans.length - 1];
+        return {
+            start: first.start,
+            length: last.start + last.length - first.start
+        };
+    }
 }

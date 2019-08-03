@@ -253,7 +253,9 @@ export function runRepl(
     repl.defineCommand('match', {
         help: 'List fuzzy matches in order of decreasing score.',
         action(text: string) {
-            const tokenization = lexer.tokenizations2(text).next().value;
+            const graph = lexer.createGraph(text);
+            const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
+            // const tokenization = lexer.tokenizations2(text).next().value;
 
             interface Match {
                 token: EntityToken | OptionToken;
@@ -312,7 +314,9 @@ export function runRepl(
                 console.log(`${style.red.close}`);
             }
     
-            const tokenizations = lexer.tokenizations2(text);
+            const graph = lexer.createGraph(text);
+            const tokenizations = lexer.tokenizationsFromGraph2(graph);
+            // const tokenizations = lexer.tokenizations2(text);
             let counter = 0;
             for (const tokenization of tokenizations) {
                 const tokens = tokenization.tokens;
@@ -401,7 +405,10 @@ export function runRepl(
             else {
                 // Parameter doesn't seem to be a Key or PID.
                 // Try using the tokenizer to identify it.
-                const tokenization = lexer.tokenizations2(line).next().value;
+                const graph = lexer.createGraph(line);
+                const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
+    
+                // const tokenization = lexer.tokenizations2(line).next().value;
 
                 const tokens = new Set<EntityToken | OptionToken>();
                 for (const edge of tokenization.graph.edgeLists[0]) {

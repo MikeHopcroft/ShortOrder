@@ -1,18 +1,21 @@
 import { State } from 'prix-fixe';
-import { Token } from 'token-flow';
+import { Graph, Token } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
+    createSpan,
     EPILOGUE,
     PROLOGUE,
     REMOVE_ITEM,
     Span,
     Tokenization,
     tokenToString,
-    WEAK_ADD
+    WEAK_ADD,
+    coalesceGraph,
+    filterGraph
 } from '../lexer';
 
-import { parseAdd } from './add';
+import { parseAdd, processAdd } from './add';
 
 import {
     Interpretation,
@@ -23,7 +26,7 @@ import {
 } from './interfaces';
 
 import { Parser } from './parser';
-import { parseRemove } from './remove';
+import { parseRemove, processRemove } from './remove';
 import { TokenSequence } from './token_sequence';
 
 
@@ -47,8 +50,40 @@ export function processRoot(
     // tslint:disable-next-line:no-any
     const start = (process.hrtime as any).bigint();
 
+    const rawGraph: Graph = parser.lexer.createGraph(text);
+    // console.log('Raw Graph:');
+    // for (const [i, edges] of rawGraph.edgeLists.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
+
+    const baseGraph: Graph = coalesceGraph(parser.lexer.tokenizer, rawGraph);
+    // console.log('Base Graph:');
+    // for (const [i, edges] of baseGraph.edgeLists.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
+
+    // TODO: REVIEW: MAGIC NUMBER
+    // 0.35 is the score cutoff for the filtered graph.
+    const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
+    // console.log('Filtered Graph:');
+    // for (const [i, edges] of filteredGraph.edgeLists.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
+
     let best: Interpretation | null = null;
-    for (const tokenization of parser.lexer.tokenizations2(text)) {
+    for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
         // console.log('Graph:');
         // const graph = tokenization.graph;
         // for (const [i, edges] of graph.edgeLists.entries()) {
@@ -67,7 +102,7 @@ export function processRoot(
         }
 
         const interpretation = 
-            processAllActiveRegions(parser, state, tokenization);
+            processAllActiveRegions(parser, state, tokenization, baseGraph);
 
         if (best && best.score < interpretation.score || !best) {
             best = interpretation;
@@ -100,10 +135,54 @@ export function processRoot(
     return state;
 }
 
+// [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS [EPILOGUE]
+// PROLOGUE WEAK_ORDER PRODUCT_PARTS [EPILOGUE]
+// [PROLOGUE] REMOVE_ITEM PRODUCT_PARTS [EPILOGUE]
 function processAllActiveRegions(
     parser: Parser,
     state: State,
-    tokenization: Tokenization
+    tokenization: Tokenization,
+    baseGraph: Graph
+): Interpretation {
+    // const filtered = filterBadTokens(parser, tokenization.tokens);
+    const tokens = new TokenSequence<Token & Span>(tokenization.tokens);
+
+    let score = 0;
+    while (!tokens.atEOS()) {
+        if (
+            tokens.startsWith([PROLOGUE, WEAK_ADD]) ||
+            tokens.startsWith([PROLOGUE, ADD_TO_ORDER]) ||
+            tokens.startsWith([ADD_TO_ORDER])
+        ) {
+            const interpretation = processAdd(parser, tokens);
+            score += interpretation.score;
+            state = interpretation.action(state);
+        } else if (
+            tokens.startsWith([PROLOGUE, REMOVE_ITEM]) ||
+            tokens.startsWith([REMOVE_ITEM])
+        ) {
+            const interpretation = processRemove(parser, state, tokens, baseGraph);
+            score += interpretation.score;
+            state = interpretation.action(state);
+        } else {
+            // We don't understand this token. Skip over it.
+            tokens.take(1);
+        }
+    }
+
+    return {
+        score,
+        items: [],
+        action: (s: State):State => state
+    };
+}
+
+
+function processAllActiveRegionsOld(
+    parser: Parser,
+    state: State,
+    tokenization: Tokenization,
+    baseGraph: Graph
 ): Interpretation {
     const filtered = filterBadTokens(parser, tokenization.tokens);
     const tokens = new TokenSequence<Token & Span>(filtered);
@@ -116,7 +195,6 @@ function processAllActiveRegions(
             [PROLOGUE, ADD_TO_ORDER, REMOVE_ITEM].includes(head.type) ||
             tokens.startsWith([PROLOGUE, WEAK_ADD])
         ) {
-        // if (tokens.startsWith([PROLOGUE])) {
             if (head.type === PROLOGUE) {
                 tokens.take(1);
             }
@@ -139,7 +217,8 @@ function processAllActiveRegions(
                         const interpretation = processOneActiveRegion(
                             parser,
                             state,
-                            { graph: tokenization.graph, tokens: active }
+                            { graph: tokenization.graph, tokens: active },
+                            baseGraph
                         );
                         score += interpretation.score;
                         state = interpretation.action(state);
@@ -168,7 +247,8 @@ function processAllActiveRegions(
 function processOneActiveRegion(
     parser: Parser,
     state: State,
-    tokenization: Tokenization
+    tokenization: Tokenization,
+    baseGraph: Graph
 ): Interpretation {
     const graph = tokenization.graph;
     const tokens = tokenization.tokens;
@@ -192,7 +272,7 @@ function processOneActiveRegion(
             const parts = (grouped.peek(1) as ProductToken).tokens;
             grouped.take(2);
             const interpretation = 
-                parseRemove(parser, state, { tokens: parts, graph });
+                parseRemove(parser, state, baseGraph, createSpan(parts));
             score += interpretation.score;
             state = interpretation.action(state);
         } else {
@@ -205,6 +285,36 @@ function processOneActiveRegion(
         items: [],
         action: (s: State) => state
     };
+}
+
+export function takeActiveTokens(
+    parser: Parser,
+    tokens: TokenSequence<Token & Span>
+): Array<SequenceToken & Span> {
+    const active: Array<SequenceToken & Span> = [];
+    while (!tokens.atEOS()) {
+        const token = tokens.peek(0);
+        if (parser.intentTokens.has(token.type)) {
+            // If we reach an intent token, we're done with this active region.
+            // Don't take the intent token because it belongs to the next
+            // region.
+            break;
+        } else if (token.type === EPILOGUE) {
+            // If we reach the epilogue we're done with this active region.
+            // Take the epilogue token because it belongs to this region.
+            tokens.take(1);
+            break;
+        } else if (parser.productTokens.has(token.type)){
+            // Collect product tokens in active.
+            active.push(token as SequenceToken & Span);
+            tokens.take(1);
+        } else {
+            // Skip over unknown token.
+            tokens.take(1);
+        }
+    }
+
+    return active;
 }
 
 function filterBadTokens(
