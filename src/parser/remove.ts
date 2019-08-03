@@ -11,8 +11,9 @@ import {
 import {
     Interpretation,
     nop,
-    PRODUCT_PARTS,
-    ProductToken
+    PRODUCT_PARTS_1,
+    PRODUCT_PARTS_N,
+    ProductToken,
 } from './interfaces';
 
 import { Parser } from './parser';
@@ -23,7 +24,7 @@ import { TokenSequence } from './token_sequence';
 // to a product remove operation.
 //
 // Assumes that `tokens` starts with:
-//     [PROLOGUE] REMOVE_ITEM PRODUCT_PARTS [EPILOGUE]
+//     [PROLOGUE] REMOVE_ITEM (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
 export function processRemove(
     parser: Parser,
     state: State,
@@ -39,7 +40,7 @@ export function processRemove(
 
     if (!tokens.atEOS()) {
         const token = tokens.peek(0) as ProductToken & Span;
-        if (tokens.peek(0).type === PRODUCT_PARTS) {
+        if (token.type === PRODUCT_PARTS_1 || token.type === PRODUCT_PARTS_N) {
             tokens.take(1);
             const span = createSpan(token.tokens);
             return parseRemove(parser, state, graph, span);

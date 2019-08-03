@@ -1,5 +1,7 @@
 # TODO List
 
+* Unit test for groupProductTokens?
+* x PRODUCT_[0,1,N]
 * x Gathering product-related tokens
 * x groupProductTokens - handling UNKNOWN
 * Consider eliminating SequenceToken and GapToken

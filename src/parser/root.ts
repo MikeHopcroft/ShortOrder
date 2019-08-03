@@ -3,25 +3,27 @@ import { Graph, Token } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
+    coalesceGraph,
     createSpan,
-    EPILOGUE,
+    filterGraph,
+    ENTITY,
     PROLOGUE,
     REMOVE_ITEM,
     Span,
     tokenToString,
     WEAK_ADD,
-    coalesceGraph,
-    filterGraph
 } from '../lexer';
 
 import { processAdd } from './add';
 
 import {
     Interpretation,
+    PRODUCT_PARTS_0,
+    PRODUCT_PARTS_1,
+    PRODUCT_PARTS_N,
     ProductToken,
     Segment,
     SequenceToken,
-    PRODUCT_PARTS
 } from './interfaces';
 
 import { Parser } from './parser';
@@ -197,12 +199,34 @@ function groupProductTokens(
 function createProductToken(
     productParts: Array<SequenceToken & Span>
 ): ProductToken & Span {
+    let entityCount = 0;
+    for (const token of productParts) {
+        if (token.type === ENTITY) {
+            ++entityCount;
+        }
+    }
+
     const span = createSpan(productParts);
-    return {
-        type: PRODUCT_PARTS,
-        tokens: productParts,
-        ...span
-    };
+
+    if (entityCount === 0) {
+        return {
+            type: PRODUCT_PARTS_0,
+            tokens: productParts,
+            ...span
+        };
+    } else if (entityCount === 1) {
+        return {
+            type: PRODUCT_PARTS_1,
+            tokens: productParts,
+            ...span
+        };
+    } else {
+        return {
+            type: PRODUCT_PARTS_N,
+            tokens: productParts,
+            ...span
+        };
+    }
 }
 
 function printSegment(segment: Segment) {

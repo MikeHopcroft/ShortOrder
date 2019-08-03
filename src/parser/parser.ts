@@ -36,24 +36,6 @@ export class Parser {
         WEAK_ADD
     ]);
 
-    validTokens = new Set<Symbol>([
-        // Intents
-        ADD_TO_ORDER,
-        EPILOGUE,
-        PROLOGUE,
-        REMOVE_ITEM,
-        WEAK_ADD,
-
-        // Product-related
-        ATTRIBUTE,
-        CONJUNCTION,
-        ENTITY,
-        OPTION,
-        NUMBERTOKEN,
-        QUANTITY,
-        UNIT,
-    ]);
-
     productTokens = new Set<Symbol>([
         // Product-related
         ATTRIBUTE,

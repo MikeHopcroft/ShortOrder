@@ -15,10 +15,11 @@ import {
     HypotheticalItem,
     Interpretation,
     nop,
+    PRODUCT_PARTS_1,
+    PRODUCT_PARTS_N,
+    ProductToken,
     Segment,
     SequenceToken,
-    PRODUCT_PARTS,
-    ProductToken
 } from './interfaces';
 
 import { Parser } from './parser';
@@ -34,8 +35,8 @@ import { TokenSequence } from './token_sequence';
 // to a product add operation.
 //
 // Assumes that `tokens` starts with one of the following:
-//     [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS [EPILOGUE]
-//     PROLOGUE WEAK_ORDER PRODUCT_PARTS [EPILOGUE]
+//     [PROLOGUE] ADD_TO_ORDER (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
+//     PROLOGUE WEAK_ORDER (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
 export function processAdd(
     parser: Parser,
     tokens: TokenSequence<Token & Span>
@@ -52,7 +53,7 @@ export function processAdd(
 
     if (!tokens.atEOS()) {
         const token = tokens.peek(0) as ProductToken & Span;
-        if (tokens.peek(0).type === PRODUCT_PARTS) {
+        if (token.type === PRODUCT_PARTS_1 || token.type === PRODUCT_PARTS_N) {
             tokens.take(1);
             return parseAdd(parser, token.tokens);
         }
