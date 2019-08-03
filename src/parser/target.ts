@@ -163,12 +163,12 @@ export function *targets(
     const tokenizations = lexer.allTokenizations(subgraph);
     for (const tokenization of tokenizations) {
         // console.log('Tokenization:');
-        // for (const token of tokenization.tokens) {
+        // for (const token of tokens) {
         //     const text = tokenToString(token);
         //     console.log(`  ${text}, start=${token.start}, length=${token.length}`);
         // }
 
-        const {entities, gaps} = splitOnEntities(tokenization.tokens as SequenceToken[]);
+        const {entities, gaps} = splitOnEntities(tokenization as SequenceToken[]);
         if (entities.length > 0) {
             const segment: Segment = {
                 left: gaps[0],

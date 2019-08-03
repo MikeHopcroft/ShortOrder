@@ -3,12 +3,10 @@ import { Graph, Token } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
-    createSpan,
     EPILOGUE,
     PROLOGUE,
     REMOVE_ITEM,
     Span,
-    Tokenization,
     tokenToString,
     WEAK_ADD,
     coalesceGraph,
@@ -91,9 +89,8 @@ function processRootInternal(
     for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
         // XXX
         if (parser.debugMode) {
-            const tokens = tokenization.tokens;
             console.log(' ');
-            console.log(tokens.map(tokenToString).join(''));
+            console.log(tokenization.map(tokenToString).join(''));
         }
 
         const interpretation = 
@@ -117,10 +114,10 @@ function processRootInternal(
 function processAllActiveRegions(
     parser: Parser,
     state: State,
-    tokenization: Tokenization,
+    tokenization: Array<Token & Span>,
     baseGraph: Graph
 ): Interpretation {
-    const tokens = new TokenSequence<Token & Span>(tokenization.tokens);
+    const tokens = new TokenSequence<Token & Span>(tokenization);
 
     let score = 0;
     while (!tokens.atEOS()) {

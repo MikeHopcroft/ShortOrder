@@ -46,11 +46,6 @@ export interface Span {
     length: number;
 }
 
-export interface Tokenization {
-    graph: Graph;
-    tokens: Array<Token & Span>;
-}
-
 export class LexicalAnalyzer {
     lexicon: Lexicon;
     tokenizer: Tokenizer;
@@ -188,11 +183,11 @@ export class LexicalAnalyzer {
 
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
-    *tokenizationsFromGraph2(graph: Graph): IterableIterator<Tokenization> {
+    *tokenizationsFromGraph2(graph: Graph): IterableIterator<Array<Token & Span>> {
         yield* equivalentPaths2(this.tokenizer, graph, graph.findPath([], 0));
     }
 
-    *allTokenizations(graph: Graph): IterableIterator<Tokenization> {
+    *allTokenizations(graph: Graph): IterableIterator<Array<Token & Span>> {
         yield* walk(this.tokenizer, graph, new GraphWalker(graph));
     }
 }
@@ -301,7 +296,7 @@ function* walk(
     tokenizer: Tokenizer,
     graph: Graph,
     walker: GraphWalker
-): IterableIterator<Tokenization> {
+): IterableIterator<Array<Token & Span>> {
     while (true) {
         // Advance down next edge in current best path.
         walker.advance();
@@ -320,10 +315,7 @@ function* walk(
                 });
                 start += edge.length;
             }
-            yield({
-                graph,
-                tokens
-            });
+            yield(tokens);
         }
         else {
             // Otherwise, walk further down the path.
@@ -348,7 +340,7 @@ function *equivalentPaths2(
     tokenizer: Tokenizer,
     graph: Graph,
     path: Edge[]
-): IterableIterator<Tokenization> {
+): IterableIterator<Array<Token & Span>> {
     yield* equivalentPathsRecursion2(tokenizer, graph, 0, 0, path, []);
 }
 
@@ -359,13 +351,10 @@ function *equivalentPathsRecursion2(
     v: number,
     path: Edge[],
     prefix: Array<Token & Span>
-): IterableIterator<Tokenization> {
+): IterableIterator<Array<Token & Span>> {
     if (prefix.length === path.length) {
         // Recursive base case. Return the list of edges.
-        yield {
-            graph,
-            tokens: [...prefix],
-        };
+        yield [...prefix];
     }
     else {
         // Recursive case. Enumerate all equivalent edges from this vertex.

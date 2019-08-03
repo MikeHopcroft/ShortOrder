@@ -20,7 +20,7 @@
 * x consider making targets() take Parser.
 * x consider definining a nopInterpretation.
 * consider making addCustomStemmer data driven.
-* consider eliminating Tokenization class
+* x consider eliminating Tokenization class
 * consider making LexicalAnalyzer.[lexicon,token] private
 * x utility function to compute span from Token[]
 * x targets() should take Span + Graph instead of Tokenization

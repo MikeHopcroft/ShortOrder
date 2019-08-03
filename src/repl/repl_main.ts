@@ -262,7 +262,7 @@ export function runRepl(
             }
 
             const tokens = new Array<[EntityToken | OptionToken, number]>();
-            for (const edge of tokenization.graph.edgeLists[0]) {
+            for (const edge of graph.edgeLists[0]) {
                 const token = lexer.tokenizer.tokenFromEdge(edge) as EntityToken | OptionToken;
                 if (token.type === ENTITY || token.type === OPTION) {
                     tokens.push([token, edge.score]);
@@ -318,8 +318,7 @@ export function runRepl(
 
             let counter = 0;
             for (const tokenization of tokenizations) {
-                const tokens = tokenization.tokens;
-                console.log(`${counter}: ${tokens.map(tokenToString).join(' ')}`);
+                console.log(`${counter}: ${tokenization.map(tokenToString).join(' ')}`);
                 counter++;
             }
     
@@ -408,7 +407,7 @@ export function runRepl(
                 const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
 
                 const tokens = new Set<EntityToken | OptionToken>();
-                for (const edge of tokenization.graph.edgeLists[0]) {
+                for (const edge of graph.edgeLists[0]) {
                     const token = lexer.tokenizer.tokenFromEdge(edge) as EntityToken | OptionToken;
                     if (token.type === ENTITY || token.type === OPTION) {
                         tokens.add(token);
