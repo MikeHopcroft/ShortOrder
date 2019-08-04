@@ -22,6 +22,7 @@ function showUsage() {
     console.log('<input>         Path to a file of YAML test cases.');
     console.log('');
     console.log('-a              Print results for all tests, passing and failing.');
+    console.log('-x              Do not verify intermediate results.'); 
     console.log('-d datapath     Path to prix-fixe data files.');
     console.log('                    attributes.yaml');
     console.log('                    intents.yaml');
@@ -71,6 +72,7 @@ async function go() {
     }
 
     const showAll = args['a'] === true;
+    const skipIntermediate = args['x'] === true;
 
     const suiteFilter = args['s'];
     if (suiteFilter) {
@@ -92,7 +94,9 @@ async function go() {
     const aggregator = await suite.run(
         processor,
         world.catalog,
-        suiteFilter
+        suiteFilter,
+        false,
+        !skipIntermediate
     );
     aggregator.print(showAll);
 
