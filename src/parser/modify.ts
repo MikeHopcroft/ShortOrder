@@ -64,6 +64,13 @@ export function processModify(
             console.log(`  ${target.tokens.map(tokenToString).join('')}`);
             console.log(`with`);
             console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
+            return parseAddToExplicitItem(
+                parser,
+                state,
+                graph,
+                modification.tokens,
+                target.tokens
+            );
         } else if (tokens.startsWith([PRODUCT_PARTS_1])) {
             // * (made,changed) [the,that,your] P1 [a] P0
             const parts = tokens.peek(0) as ProductToken1 & Span;
@@ -173,16 +180,14 @@ export function parseAddToExplicitItem(
                 items: [],
                 action: (state: State): State => {
                     // Copy over each of the new children.
-                    // TODO: what if the item already the new child?
                     for (const option of modified.children) {
-                        item = parser.cartOps.addToItem(item, option);
+                        item = parser.cartOps.addToItemWithReplacement(item, option);
                     }
                     const cart = parser.cartOps.replaceInCart(state.cart, item);
                     return {...state, cart};
                 }
             };
             return interpretation;
-            // console.log('built item');
         }
     }
     return nop;
