@@ -160,7 +160,7 @@ export function *targets(
     // Try each tokenization of the subgraph.
     // Need to look at all tokenizations, not just the top-scoring ones because
     // targets are often partially/poorly specified (e.g. "latte" instead of
-    //  "cinnamon dolce latte")
+    // "cinnamon dolce latte")
     const tokenizations = lexer.allTokenizations(subgraph);
     for (const tokenization of tokenizations) {
         // console.log('Tokenization:');
@@ -169,7 +169,8 @@ export function *targets(
         //     console.log(`  ${text}, start=${token.start}, length=${token.length}`);
         // }
 
-        const {entities, gaps} = splitOnEntities(tokenization as SequenceToken[]);
+        const {entities, gaps} =
+            splitOnEntities(tokenization as Array<SequenceToken & Span>);
         if (entities.length > 0) {
             const segment: Segment = {
                 left: gaps[0],

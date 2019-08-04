@@ -27,13 +27,14 @@ import {
     ProductToken,
     ProductToken0,
     ProductToken1,
-    Segment
+    Segment,
+    SequenceToken,
 } from './interfaces';
 
 import { Parser } from "./parser";
+import { splitOnEntities } from './parser_utilities';
 import { targets } from './target';
 import { TokenSequence } from './token_sequence';
-import { blue } from 'color-name';
 
 // Attempts to pull off and process a squence of tokens corresponding
 // to a product modification operation.
@@ -55,6 +56,7 @@ export function processModify(
 
     if (!tokens.atEOS()) {
         if (tokens.startsWith([PRODUCT_PARTS_1, PREPOSITION, PRODUCT_PARTS_0])) {
+            // * (made,changed) [the,that,your] P1 (into,to,with) [a] P0
             const target = tokens.peek(0) as ProductToken1 & Span;
             const modification = tokens.peek(2) as ProductToken0 & Span;
             tokens.take(3);
@@ -63,10 +65,17 @@ export function processModify(
             console.log(`with`);
             console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
         } else if (tokens.startsWith([PRODUCT_PARTS_1])) {
+            // * (made,changed) [the,that,your] P1 [a] P0
             const parts = tokens.peek(0) as ProductToken1 & Span;
             tokens.take(1);
             console.log('CASE II: target and modifications adjacent');
             console.log(`  ${parts.tokens.map(tokenToString).join('')}`);
+            return processModify1(
+                parser,
+                state,
+                graph,
+                parts.tokens
+            );
         } else {
             console.log('CASE III: error: multiple targets');
             tokens.take(1);
@@ -76,6 +85,40 @@ export function processModify(
     return nop;
 }
 
+function processModify1(
+    parser: Parser,
+    state: State,
+    graph: Graph,
+    productAndModification: Array<SequenceToken & Span>
+): Interpretation {
+    let best: Interpretation | null = null;
+
+    const {entities, gaps} = splitOnEntities(productAndModification);
+    if (gaps.length === 2 && gaps[1].length >= 1) {
+        // We have exactly one entity (two gaps) and the gap to the right of
+        // the entity has at least one token.
+
+        const product = [...gaps[0], entities[0]];
+        const modifiers = [...gaps[1]];
+        while (modifiers.length > 0) {
+            const interpretation = parseAddToExplicitItem(
+                parser,
+                state,
+                graph,
+                modifiers,
+                product
+            );
+
+            if (best && best.score < interpretation.score || !best) {
+                best = interpretation;
+            }
+
+            product.push(modifiers.shift()!);
+        }
+    }
+
+    return best || nop;
+}
 
 export function parseAddToExplicitItem(
     parser: Parser,

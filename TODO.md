@@ -1,5 +1,41 @@
 # TODO List
 
+* "i'll add grande iced coffee said no classic and add soy"
+    * should add 64:5, not 52:5. Needs to check whether attributed option is legal.
+
+* Confusion matrix in repl
+
+* Extract segment enumeration from parseAdd.
+    * splitOnEntities
+    * lengths = gaps.map()
+    * enumerateSplits(lengths)
+    *   segments = entities.map()
+* Match pattern for attributed product
+* Match pattern for attributed option
+* Match pattern for option children
+
+* Add options and attributes
+    * (add,added) P0 to [the,that,your] P1
+    * (made,changed) [the,that,your] P1 (into,to,with) [a] P0
+    * (made,changed) [the,that,your] P1 [a] P0
+* Add options and attributes implicit
+    * (add,added) P0 [to that]
+    * (made,changed) that (into,to,with) [a] P0
+* Replace product
+    * (made,changed,replaced) [the,that,your] P1 (into,to,with) [a] P1
+* Replace product implicit
+    * (made,changed,replaced) that (into,to,with) [a] P1
+* Remove option or attribute from product
+    * (remove,removed,take off,took off) [that,the] P0 from (the,that,your) P1
+
+* modify routines should not attempt modification with sequences like [UNKNOWNTOKEN][UNKNOWNTOKEN][QUANTITY:1][UNKNOWNTOKEN]
+* parseAddToExplicitItem()
+    * Debug roadmap.yaml failures
+    * Scoring Interpretations
+    * Return best Interpretation
+    * Deal with illegal option additions
+    * Deal with duplicate option additions
+
 * x Segment.entity becomes PID
 * Segment.entity becomes Key?
 * Unit test for groupProductTokens?
@@ -19,6 +55,8 @@
     * investigate whether stop words are working correctly
 
 * x test_runner print data and time
+* test_runner - flag to skip over intermediate steps -x?
+* test_runner - walk over directory tree or get list of file names
 * test_runner just print text - don't run
 * test_runner main function
 * test_ruinner print git head commit hash?

@@ -92,7 +92,7 @@ export function processAdd(
 // TODO: stop exporting this function - it is exported for unit testing.
 export function parseAdd(
     parser: Parser,
-    tokens: SequenceToken[]
+    tokens: Array<SequenceToken & Span>
 ): Interpretation {
     const interpretations: Interpretation[] = [];
 

@@ -92,17 +92,17 @@ function processRootInternal(
 
     let best: Interpretation | null = null;
     for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
-        // // XXX
-        // if (parser.debugMode) {
-        //     console.log(' ');
-        //     console.log(tokenization.map(tokenToString).join(''));
-        // }
+        // XXX
+        if (parser.debugMode) {
+            console.log(' ');
+            console.log(tokenization.map(tokenToString).join(''));
+        }
 
         const grouped = groupProductTokens(parser, tokenization);
-        // // XXX
-        // if (parser.debugMode) {
-        //     console.log(grouped.map(tokenToString).join(''));
-        // }
+        // XXX
+        if (parser.debugMode) {
+            console.log(grouped.map(tokenToString).join(''));
+        }
 
         const interpretation = 
             processAllActiveRegions(parser, state, grouped, baseGraph);

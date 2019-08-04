@@ -1,21 +1,28 @@
-import { State } from 'prix-fixe';
+import { Token } from 'token-flow';
 
 import {
     ENTITY,
     EntityToken,
+    Span
 } from '../lexer';
 
 import {
     GapToken,
     SequenceToken,
-    Interpretation
 } from './interfaces';
 
-export function splitOnEntities(tokens: SequenceToken[]) {
-    const entities: EntityToken[] = [];
-    const gaps: GapToken[][] = [];
+export interface Splits {
+    entities: Array<EntityToken & Span>;
+    gaps: Array<Array<GapToken & Span>>;
+}
 
-    let currentGap: GapToken[] = [];
+export function splitOnEntities(
+    tokens: Array<SequenceToken & Span>
+): Splits {
+    const entities: Array<EntityToken & Span> = [];
+    const gaps: Array<Array<GapToken & Span>> = [];
+
+    let currentGap: Array<GapToken & Span> = [];
     for (const token of tokens) {
         if (token.type === ENTITY) {
             gaps.push(currentGap);

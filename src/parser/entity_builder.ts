@@ -82,7 +82,7 @@ export class EntityBuilder {
                     // Exclude it and adjust the used token count accordingly.
                     this.tokensUsed -= this.optionTokenCounts[index];
                 }
-            }   
+            }
 
             // Use key to filter out options that violate mutual exclusivity.
             const f = this.rules.getIncrementalMutualExclusionPredicate(item.key);

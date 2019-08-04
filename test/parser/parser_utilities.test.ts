@@ -4,9 +4,10 @@ import 'mocha';
 import {
     EntityToken,
     enumerateSplits,
+    GapToken,
     splitOnEntities,
     SequenceToken,
-    GapToken
+    Span,
 } from '../../src';
 
 import {
@@ -67,7 +68,9 @@ describe('Parser Utilities', () => {
                 ],
             ];
 
-            const { entities, gaps } = splitOnEntities(tokens);
+            // TODO: Remove type assertion.
+            const { entities, gaps } =
+                splitOnEntities(tokens as Array<SequenceToken & Span>);
 
             assert.deepEqual(expectedEntities, entities);
             assert.deepEqual(expectedGaps, gaps);
@@ -89,7 +92,9 @@ describe('Parser Utilities', () => {
                 ],
             ];
 
-            const { entities, gaps } = splitOnEntities(tokens);
+            // TODO: remove type assertion.
+            const { entities, gaps } =
+                splitOnEntities(tokens as Array<SequenceToken & Span>);
 
             assert.deepEqual(expectedEntities, entities);
             assert.deepEqual(expectedGaps, gaps);
@@ -115,7 +120,9 @@ describe('Parser Utilities', () => {
                 ],
             ];
 
-            const { entities, gaps } = splitOnEntities(tokens);
+            // TODO: remove type assertion
+            const { entities, gaps } =
+                splitOnEntities(tokens as Array<SequenceToken & Span>);
 
             assert.deepEqual(expectedEntities, entities);
             assert.deepEqual(expectedGaps, gaps);
@@ -139,7 +146,9 @@ describe('Parser Utilities', () => {
                 ],
             ];
 
-            const { entities, gaps } = splitOnEntities(tokens);
+            // TODO: remove type assertion
+            const { entities, gaps } =
+                splitOnEntities(tokens as Array<SequenceToken & Span>);
 
             assert.deepEqual(expectedEntities, entities);
             assert.deepEqual(expectedGaps, gaps);
@@ -163,7 +172,9 @@ describe('Parser Utilities', () => {
                 ],
             ];
 
-            const { entities, gaps } = splitOnEntities(tokens);
+            // TODO: remove type assertion
+            const { entities, gaps } =
+                splitOnEntities(tokens as Array<SequenceToken & Span>);
 
             assert.deepEqual(expectedEntities, entities);
             assert.deepEqual(expectedGaps, gaps);
@@ -191,7 +202,9 @@ describe('Parser Utilities', () => {
                 ],
             ];
 
-            const { entities, gaps } = splitOnEntities(tokens);
+            // TODO: remove type assertion
+            const { entities, gaps } =
+                splitOnEntities(tokens as Array<SequenceToken & Span>);
 
             assert.deepEqual(expectedEntities, entities);
             assert.deepEqual(expectedGaps, gaps);
@@ -204,7 +217,9 @@ describe('Parser Utilities', () => {
 
             const expectedGaps: GapToken[][] = [];
 
-            const { entities, gaps } = splitOnEntities(tokens);
+            // TODO: remove type assertion
+            const { entities, gaps } =
+                splitOnEntities(tokens as Array<SequenceToken & Span>);
 
             assert.deepEqual(expectedEntities, entities);
             assert.deepEqual(expectedGaps, gaps);

@@ -3,7 +3,14 @@ import 'mocha';
 
 import { AttributeInfo, CartOps, ItemInstance, State } from 'prix-fixe';
 
-import { Interpretation, parseAdd, Parser, LexicalAnalyzer } from '../../src';
+import {
+    Interpretation,
+    parseAdd,
+    Parser,
+    LexicalAnalyzer,
+    SequenceToken,
+    Span
+} from '../../src';
 
 import {
     smallWorldAttributes,
@@ -142,8 +149,10 @@ describe('Parser2', () => {
                 action: nop
             };
 
-            const interpretation = 
-                normalizeUIDs(parseAdd(parser, tokens));
+            // TODO: Remove type assertion.
+            const interpretation = normalizeUIDs(
+                    parseAdd(parser, tokens as Array<SequenceToken & Span>)
+            );
 
             // TODO: Remove this temporary code.
             // TEMPORARY code to hide Interpretion.action from deepEqual.
@@ -265,8 +274,10 @@ describe('Parser2', () => {
                 action: nop
             };
 
-            const interpretation = 
-                normalizeUIDs(parseAdd(parser, tokens));
+            // TODO: Remove type assertion.
+            const interpretation = normalizeUIDs(
+                    parseAdd(parser, tokens as Array<SequenceToken & Span>)
+            );
 
             // assert.deepEqual(interpretation, expected);
             // TODO: Remove this temporary code.
