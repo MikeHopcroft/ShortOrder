@@ -386,8 +386,9 @@ export function runRepl(
 
                     console.log('  Specifics:');
                     for (const key of catalog.getSpecificsForGeneric(pid)) {
+                        const defaultMark = (item.defaultKey === key) ? ' <== default':'';
                         const name = catalog.getSpecific(key).name;
-                        console.log(`    ${name} (${key})`);
+                        console.log(`    ${name} (${key})${defaultMark}`);
                     }
 
                     const specific = catalog.getSpecific(item.defaultKey);
