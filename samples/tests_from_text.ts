@@ -3,11 +3,10 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { Catalog, TestSuite } from 'prix-fixe';
+import { createWorld, Catalog, TestSuite } from 'prix-fixe';
 
 import {
     createShortOrderWorld,
-    createWorld,
     speechToTextFilter,
 } from '../src';
 

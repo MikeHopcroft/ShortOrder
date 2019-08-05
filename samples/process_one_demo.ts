@@ -1,9 +1,9 @@
 import * as dotenv from 'dotenv';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { TestCase, TestLineItem, TestOrder } from 'prix-fixe';
+import { createWorld, TestCase, TestLineItem, TestOrder } from 'prix-fixe';
 
-import { createShortOrderWorld, createWorld } from '../src';
+import { createShortOrderWorld, ShortOrderWorld } from '../src';
 
 function showUsage() {
     const program = path.basename(process.argv[1]);
@@ -47,7 +47,8 @@ async function go(utterances: string[]) {
     }
 
     const world = createWorld(dataPath);
-    const processor = createShortOrderWorld(world, dataPath, true).processor;
+    const shortOrderWorld = createShortOrderWorld(world, dataPath, true);
+    const processor = shortOrderWorld.processor;
 
     const testCase = new TestCase(
         0,
@@ -119,15 +120,28 @@ function rightJustify(text: string, width: number) {
     }
 }
 
-// go('soy latte');
-// go("can I get a whole milk latte");
-//go("ok that's one two percent milk latte with two one percent lattes iced with decaf");
-// go([
-//     "ok that's a soy latte",
-//     "ok that's one two percent milk latte with two one percent lattes iced with decaf"
-// ]);
+function printFrequencies(world: ShortOrderWorld, text: string) {
+    const terms = text.split(/\s+/);
+    const stemmed = terms.map(world.lexer.lexicon.termModel.stem);
+    const hashed = stemmed.map(world.lexer.lexicon.termModel.hashTerm);
+
+    const tokenizer = world.lexer.tokenizer;
+    const hashToFrequency = tokenizer['hashToFrequency'] as { [hash: number]: number };
+
+    type Id = number;
+    const postings = tokenizer['postings'] as { [hash: number]: Id[] };
+
+    for (let i = 0; i < terms.length; ++i) {
+        const frequency = hashToFrequency[hashed[i]];
+        const ids = postings[hashed[i]];
+        console.log(`"${terms[i]}": ${frequency}, ${ids.length}`);
+    }
+}
+
+go(['i added a soy latte']);
 go([
-    "ok that's a iced soy latte and a dopio espresso",
-    // "ok that's a soy latte and a dopio espresso",
-    "ok I removed the latte"
+    "ok i added a soy latte",
+    "ok i added one two percent milk latte with two one percent lattes iced with decaf"
 ]);
+
+

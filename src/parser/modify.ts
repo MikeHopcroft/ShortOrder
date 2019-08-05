@@ -60,10 +60,10 @@ export function processModify(
             const target = tokens.peek(0) as ProductToken1 & Span;
             const modification = tokens.peek(2) as ProductToken0 & Span;
             tokens.take(3);
-            console.log('CASE I: modifying');
-            console.log(`  ${target.tokens.map(tokenToString).join('')}`);
-            console.log(`with`);
-            console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
+            // console.log('CASE I: modifying');
+            // console.log(`  ${target.tokens.map(tokenToString).join('')}`);
+            // console.log(`with`);
+            // console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
             return parseAddToExplicitItem(
                 parser,
                 state,
@@ -75,8 +75,8 @@ export function processModify(
             // * (made,changed) [the,that,your] P1 [a] P0
             const parts = tokens.peek(0) as ProductToken1 & Span;
             tokens.take(1);
-            console.log('CASE II: target and modifications adjacent');
-            console.log(`  ${parts.tokens.map(tokenToString).join('')}`);
+            // console.log('CASE II: target and modifications adjacent');
+            // console.log(`  ${parts.tokens.map(tokenToString).join('')}`);
             return processModify1(
                 parser,
                 state,
@@ -84,7 +84,7 @@ export function processModify(
                 parts.tokens
             );
         } else {
-            console.log('CASE III: error: multiple targets');
+            // console.log('CASE III: error: multiple targets');
             tokens.take(1);
         }
     }
@@ -134,10 +134,10 @@ export function parseAddToExplicitItem(
     modification: Array<Token & Span>,
     target: Array<Token & Span>
 ): Interpretation {
-    console.log(`Modifying`);
-    console.log(`  ${target.map(tokenToString).join('')}`);
-    console.log(`with`);
-    console.log(`  ${modification.map(tokenToString).join('')}`);
+    // console.log(`Modifying`);
+    // console.log(`  ${target.map(tokenToString).join('')}`);
+    // console.log(`with`);
+    // console.log(`  ${modification.map(tokenToString).join('')}`);
 
     // For each target
     //   Get target's pid from it's key
@@ -156,7 +156,7 @@ export function parseAddToExplicitItem(
         span
     )) {
         if (targetItem.item) {
-            console.log(`  target: ${targetItem.item.key} (uid=${targetItem.item!.uid})`);
+            // console.log(`  target: ${targetItem.item.key} (uid=${targetItem.item!.uid})`);
             const pid: PID = AttributeInfo.pidFromKey(targetItem.item.key);
             const segment: Segment = {
                 left: [],
@@ -197,7 +197,7 @@ export function parseAddToImplicitItem(
     parser: Parser,
     modification: Array<Token & Span>,
 ): Interpretation {
-    console.log(`Modifying implicit item with`);
-    console.log(`  ${modification.map(tokenToString).join('')}`);
+    // console.log(`Modifying implicit item with`);
+    // console.log(`  ${modification.map(tokenToString).join('')}`);
     return nop;
 }

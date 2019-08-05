@@ -1,10 +1,11 @@
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
+import * as yaml from 'js-yaml';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import * as yaml from 'js-yaml';
+import { createWorld} from 'prix-fixe';
 
-import { createWorld, createShortOrderWorld } from '../integration';
+import { createShortOrderWorld } from '../integration';
 
 import {
     AggregatedResults,

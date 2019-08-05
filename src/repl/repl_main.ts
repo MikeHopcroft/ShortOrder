@@ -9,6 +9,7 @@ import * as replServer from 'repl';
 import {
     aliasesFromPattern,
     Cart,
+    createWorld,
     ICatalog,
     ItemInstance,
     Key,
@@ -23,7 +24,7 @@ import {
     YamlTestCase
 } from 'prix-fixe';
 
-import { createShortOrderWorld, createWorld } from '../integration';
+import { createShortOrderWorld } from '../integration';
 import { ENTITY, EntityToken, tokenToString, OptionToken } from '../lexer';
 
 import { speechToTextFilter } from './speech_to_text_filter';

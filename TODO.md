@@ -55,17 +55,18 @@
     * investigate whether stop words are working correctly
 
 * x test_runner print data and time
-* test_runner - flag to skip over intermediate steps -x?
+* x test_runner - processor factory
+* x test_runner - flag to skip over intermediate steps -x?
 * test_runner - walk over directory tree or get list of file names
-* test_runner just print text - don't run
-* test_runner main function
-* test_ruinner print git head commit hash?
+* x test_runner just print text - don't run
+* x test_runner main function
+* test_runner print git head commit hash?
 * test_runner aggregate running time across suites
-* test_runner return code
+* x test_runner return code
 * test_runner option to suppress list of failures
 * test_runner match conjunction of suites
 * fuzzer add suite names
-* test_runner command line option for single test
+* x test_runner command line option for single test
 * test_runner multi-file option
 * fuzzer regression suite in mochajava
 * regression script in mochajava

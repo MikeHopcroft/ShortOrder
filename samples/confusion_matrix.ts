@@ -1,11 +1,13 @@
 import * as dotenv from 'dotenv';
 import * as minimist from 'minimist';
 import * as path from 'path';
+
+import { createWorld } from 'prix-fixe';
+
 import { IIngestor, Token, TokenizerAlias } from 'token-flow';
 
 import {
     createHistogram,
-    createWorld,
     LexicalAnalyzer,
     tokenToString,
 } from '../src';
