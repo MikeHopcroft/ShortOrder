@@ -394,11 +394,16 @@ export function runRepl(
                     const specific = catalog.getSpecific(item.defaultKey);
 
                     console.log(`  Options for ${specific.name}:`);
+                    const lines: string[] = [];
                     for (const childPID of world.ruleChecker.getValidChildren(item.defaultKey)) {
                         if (catalog.hasPID(childPID)) {
                             const child = catalog.getGeneric(childPID);
-                            console.log(`    ${child.name} (${child.pid})`);
+                            lines.push(`${child.name} (${child.pid})`);
                         }
+                    }
+                    lines.sort();
+                    for (const line of lines) {
+                        console.log(`    ${line}`);
                     }
                 }
             }
