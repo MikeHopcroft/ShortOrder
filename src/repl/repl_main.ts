@@ -368,11 +368,16 @@ export function runRepl(
                     console.log(`${item.name} (${item.pid})`);
 
                     console.log('  Aliases:');
+                    const aliases: string[] = [];
                     for (const alias of item.aliases) {
                         const pattern = patternFromExpression(alias);
                         for (const text of aliasesFromPattern(pattern)) {
-                            console.log(`    ${text}`);
+                            aliases.push(text);
                         }
+                    }
+                    aliases.sort();
+                    for (const alias of aliases) {
+                        console.log(`    ${alias}`);
                     }
 
                     console.log('  Attributes:');
@@ -380,7 +385,20 @@ export function runRepl(
                     for (const dimension of tensor.dimensions) {
                         console.log(`    ${dimension.name}`);
                         for (const attribute of dimension.attributes) {
+                            // const aliases = attribute.aliases.map(x => `"${x}"`).join(', ');
+                            // console.log(`      ${attribute.name} (${attribute.aid}) - ${aliases}`);
                             console.log(`      ${attribute.name} (${attribute.aid})`);
+                            const aliases: string[] = [];
+                            for (const alias of attribute.aliases) {
+                                const pattern = patternFromExpression(alias);
+                                for (const text of aliasesFromPattern(pattern)) {
+                                    aliases.push(text);
+                                }
+                            }
+                            aliases.sort();
+                            for (const alias of aliases) {
+                                console.log(`        ${alias}`);
+                            }
                         }
                     }
 
