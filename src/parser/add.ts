@@ -177,10 +177,8 @@ function interpretOneSegment(
     segment: Segment
 ): HypotheticalItem {
     const builder = new EntityBuilder(
-        segment,
         parser,
-        false,
-        false
+        segment
     );
 
     const item = builder.getItem();

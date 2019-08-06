@@ -15,7 +15,7 @@ import {
     tokenToString,
 } from '../lexer';
 
-import { EntityBuilder } from './entity_builder';
+import { EntityBuilder, ModificationBuilder } from './entity_builder';
 
 import {
     GapToken,
@@ -224,13 +224,17 @@ export function parseAddToItem(
             // TODO: remove type assertion to GapToken.
             right: modification as GapToken[]
         };
-        const builder = new EntityBuilder(
-            segment,
+        const builder = new ModificationBuilder(
             parser,
-            false,
-            false
+            targetItem.item,
+            modification as GapToken[]
         );
-        let item = targetItem.item;
+
+        // const builder = new EntityBuilder(
+        //     parser,
+        //     segment
+        // );
+        // let item = targetItem.item;
         const modified = builder.getItem();
 
         // Score for the entire intrepretation is the sum of the scores of the
@@ -242,13 +246,21 @@ export function parseAddToItem(
             score,
             items: [],
             action: (state: State): State => {
-                // Copy over each of the new children.
-                for (const option of modified.children) {
-                    item = parser.cartOps.addToItemWithReplacement(item, option);
-                }
-                const cart = parser.cartOps.replaceInCart(state.cart, item);
+                const cart = parser.cartOps.replaceInCart(state.cart, modified);
                 return {...state, cart};
             }
+
+        // const interpretation: Interpretation = {
+        //     score,
+        //     items: [],
+        //     action: (state: State): State => {
+        //         // Copy over each of the new children.
+        //         for (const option of modified.children) {
+        //             item = parser.cartOps.addToItemWithReplacement(item, option);
+        //         }
+        //         const cart = parser.cartOps.replaceInCart(state.cart, item);
+        //         return {...state, cart};
+        //     }
         };
         return interpretation;
     }

@@ -26,7 +26,7 @@ import {
     tokenToString,
 } from '../lexer';
 
-import { EntityBuilder } from './entity_builder';
+import { EntityBuilder, TargetBuilder } from './entity_builder';
 import { HypotheticalItem, SequenceToken, Segment } from './interfaces';
 import { Parser } from './parser';
 import { splitOnEntities } from './parser_utilities';
@@ -180,17 +180,18 @@ export function *targets(
         const {entities, gaps} =
             splitOnEntities(tokenization as Array<SequenceToken & Span>);
         if (entities.length > 0) {
-            const segment: Segment = {
-                left: gaps[0],
-                entity: entities[0].pid,
-                right: gaps[1]
-            };
+            // const segment: Segment = {
+            //     left: gaps[0],
+            //     entity: entities[0].pid,
+            //     right: gaps[1]
+            // };
 
-            const builder = new EntityBuilder(
-                segment,
+            const builder = new TargetBuilder(
                 parser,
-                true,
-                true);
+                gaps[0],
+                entities[0].pid,
+                gaps[1]
+            );
             const target = builder.getItem();
 
             // console.log(`  score: ${builder.getScore()}`);
