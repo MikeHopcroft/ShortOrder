@@ -1,7 +1,7 @@
 import {
     AttributeInfo,
     PID, 
-    State
+    State,
 } from 'prix-fixe';
 
 import { Graph, Token } from 'token-flow';
@@ -9,16 +9,17 @@ import { Graph, Token } from 'token-flow';
 import {
     createSpan,
     MODIFY_ITEM,
+    PREPOSITION,
     PROLOGUE,
     Span,
     tokenToString,
-    PREPOSITION
 } from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
 
 import {
     GapToken,
+    HypotheticalItem,
     Interpretation,
     nop,
     PRODUCT_PARTS_0,
@@ -64,12 +65,22 @@ export function processModify(
             // console.log(`  ${target.tokens.map(tokenToString).join('')}`);
             // console.log(`with`);
             // console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
-            return parseAddToExplicitItem(
+            return parseAddToTarget(
                 parser,
                 state,
                 graph,
                 modification.tokens,
                 target.tokens
+            );
+        } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
+            // * (made,changed) [that] (into,to,with) [a] P0
+            const modification = tokens.peek(1) as ProductToken0 & Span;
+            tokens.take(2);
+            return parseAddToImplicit(
+                parser,
+                state,
+                graph,
+                modification.tokens
             );
         } else if (tokens.startsWith([PRODUCT_PARTS_1])) {
             // * (made,changed) [the,that,your] P1 [a] P0
@@ -98,7 +109,7 @@ function processModify1(
     graph: Graph,
     productAndModification: Array<SequenceToken & Span>
 ): Interpretation {
-    let best: Interpretation | null = null;
+    let best = nop;
 
     const {entities, gaps} = splitOnEntities(productAndModification);
     if (gaps.length === 2 && gaps[1].length >= 1) {
@@ -108,7 +119,7 @@ function processModify1(
         const product = [...gaps[0], entities[0]];
         const modifiers = [...gaps[1]];
         while (modifiers.length > 0) {
-            const interpretation = parseAddToExplicitItem(
+            const interpretation = parseAddToTarget(
                 parser,
                 state,
                 graph,
@@ -116,18 +127,45 @@ function processModify1(
                 product
             );
 
-            if (best && best.score < interpretation.score || !best) {
+            if (interpretation.score > best.score) {
                 best = interpretation;
             }
-
+    
             product.push(modifiers.shift()!);
         }
     }
 
-    return best || nop;
+    return best;
 }
 
-export function parseAddToExplicitItem(
+export function parseAddToImplicit(
+    parser: Parser,
+    state: State,
+    graph: Graph,
+    modification: Array<Token & Span>,
+): Interpretation {
+    // console.log(`Modifying`);
+    // console.log(`  ${target.map(tokenToString).join('')}`);
+    // console.log(`with`);
+    // console.log(`  ${modification.map(tokenToString).join('')}`);
+
+    let best = nop;
+    for (const item of state.cart.items) {
+        const interpretation = parseAddToItem(
+            parser,
+            state,
+            graph,
+            modification,
+            { item, score: 1 }
+        );
+        if (interpretation.score > best.score) {
+            best = interpretation;
+        }
+    }
+    return best;
+}
+
+export function parseAddToTarget(
     parser: Parser,
     state: State,
     graph: Graph,
@@ -139,63 +177,75 @@ export function parseAddToExplicitItem(
     // console.log(`with`);
     // console.log(`  ${modification.map(tokenToString).join('')}`);
 
-    // For each target
-    //   Get target's pid from it's key
-    //   Create segment
-    //     left: empty
-    //     entity: pid instead of token
-    //     right: modifications
-    //   Build item
-    //   Copy options from builder
-    //   Change attributes from builder
     const span = createSpan(target);
+    let best = nop;
     for (const targetItem of targets(
         parser,
         state,
         graph,
         span
     )) {
-        if (targetItem.item) {
-            // console.log(`  target: ${targetItem.item.key} (uid=${targetItem.item!.uid})`);
-            const pid: PID = AttributeInfo.pidFromKey(targetItem.item.key);
-            const segment: Segment = {
-                left: [],
-                entity: pid,
-                // TODO: remove type assertion to GapToken.
-                right: modification as GapToken[]
-            };
-            const builder = new EntityBuilder(
-                segment,
-                parser,
-                false,
-                false
-            );
-            let item = targetItem.item;
-            const modified = builder.getItem();
-
-            const interpretation: Interpretation = {
-                score: targetItem.score,
-                items: [],
-                action: (state: State): State => {
-                    // Copy over each of the new children.
-                    for (const option of modified.children) {
-                        item = parser.cartOps.addToItemWithReplacement(item, option);
-                    }
-                    const cart = parser.cartOps.replaceInCart(state.cart, item);
-                    return {...state, cart};
-                }
-            };
-            return interpretation;
+        const interpretation = parseAddToItem(
+            parser,
+            state,
+            graph,
+            modification,
+            targetItem
+        );
+        if (interpretation.score > best.score) {
+            best = interpretation;
         }
     }
-    return nop;
+    return best;
 }
 
-export function parseAddToImplicitItem(
+export function parseAddToItem(
     parser: Parser,
+    state: State,
+    graph: Graph,
     modification: Array<Token & Span>,
+    targetItem: HypotheticalItem
 ): Interpretation {
-    // console.log(`Modifying implicit item with`);
-    // console.log(`  ${modification.map(tokenToString).join('')}`);
+    if (targetItem.item) {
+        // Get target's pid from it's key
+        // Create segment
+        //   left: empty
+        //   entity: pid instead of token
+        //   right: modifications
+        // Build item
+        // Copy options from builder
+        // Change attributes from builder
+
+        // console.log(`  target: ${targetItem.item.key} (uid=${targetItem.item!.uid})`);
+        const pid: PID = AttributeInfo.pidFromKey(targetItem.item.key);
+        const segment: Segment = {
+            left: [],
+            entity: pid,
+            // TODO: remove type assertion to GapToken.
+            right: modification as GapToken[]
+        };
+        const builder = new EntityBuilder(
+            segment,
+            parser,
+            false,
+            false
+        );
+        let item = targetItem.item;
+        const modified = builder.getItem();
+
+        const interpretation: Interpretation = {
+            score: targetItem.score,
+            items: [],
+            action: (state: State): State => {
+                // Copy over each of the new children.
+                for (const option of modified.children) {
+                    item = parser.cartOps.addToItemWithReplacement(item, option);
+                }
+                const cart = parser.cartOps.replaceInCart(state.cart, item);
+                return {...state, cart};
+            }
+        };
+        return interpretation;
+    }
     return nop;
 }
