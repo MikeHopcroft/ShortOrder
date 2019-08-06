@@ -278,7 +278,13 @@ function addCustomStemmer(model: TermModel) {
     const stem = model.stem;
     model.stem = (term: string): string => {
         if (term.toLowerCase() === 'iced') {
+            // Fix for confusion between the adjective, "iced", and the
+            // noun, "ice".
             return 'iced';
+        } else if (term.toLowerCase() === "that's") {
+            // Fix for confusion between the pronoun, "that", and the
+            // contraction, "that's".
+            return "that's";
         } else {
             return stem(term);
         }
