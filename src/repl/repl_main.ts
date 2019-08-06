@@ -389,10 +389,10 @@ export function runRepl(
                     const tensor = world.attributeInfo.getTensor(item.tensor);
                     for (const dimension of tensor.dimensions) {
                         console.log(`    ${dimension.name}`);
-                        for (const attribute of dimension.attributes) {
+                        for (const [index, attribute] of dimension.attributes.entries()) {
                             // const aliases = attribute.aliases.map(x => `"${x}"`).join(', ');
                             // console.log(`      ${attribute.name} (${attribute.aid}) - ${aliases}`);
-                            console.log(`      ${attribute.name} (${attribute.aid})`);
+                            console.log(`      ${attribute.name} (${index})`);
                             const aliases: string[] = [];
                             for (const alias of attribute.aliases) {
                                 const pattern = patternFromExpression(alias);
