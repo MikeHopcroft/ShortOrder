@@ -1,5 +1,7 @@
 # TODO List
 
+* implict operations need some kind of scoring, based on success of add. come up with test cases for this.
+
 * "i'll add grande iced coffee said no classic and add soy"
     * should add 64:5, not 52:5. Needs to check whether attributed option is legal.
 

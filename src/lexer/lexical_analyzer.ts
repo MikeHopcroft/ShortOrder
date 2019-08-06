@@ -303,6 +303,21 @@ function* walk(
     graph: Graph,
     walker: GraphWalker
 ): IterableIterator<Array<Token & Span>> {
+    yield* walkRecursion(tokenizer, graph, walker);
+
+    // IMPORTANT: the tokenize() function will talk this graph
+    // multiple times. Ensure that discarded edges are restored
+    // after walking.
+    for (const e of graph.edgeLists[0]) {
+        e.discarded = false;
+    }
+}
+
+function* walkRecursion(
+    tokenizer: Tokenizer,
+    graph: Graph,
+    walker: GraphWalker
+): IterableIterator<Array<Token & Span>> {
     while (true) {
         // Advance down next edge in current best path.
         walker.advance();
@@ -325,13 +340,13 @@ function* walk(
         }
         else {
             // Otherwise, walk further down the path.
-            yield* walk(tokenizer, graph, walker);
+            yield* walkRecursion(tokenizer, graph, walker);
         }
 
         // We've now explored all paths down this edge.
         // Retreat back to the previous vertex.
         walker.retreat(true);
-    
+
         // Then, attempt to discard the edge we just explored. If, after
         // discarding, there is no path to the end then break out of the loop.
         // Otherwise go back to the top to explore the new path.

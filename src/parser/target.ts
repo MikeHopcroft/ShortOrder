@@ -103,6 +103,14 @@ function createSubgraph(
         }
     }
 
+    // console.log('Original graph:');
+    // for (const [i, edges] of edgeLists.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
     // console.log('Filtered graph:');
     // for (const [i, edges] of filtered.entries()) {
     //     console.log(`  vertex ${i}`);
@@ -144,9 +152,7 @@ export function *targets(
 ): IterableIterator<HypotheticalItem> {
     const attributes: AttributeInfo = parser.attributes;
     const cartOps: ICartOps = parser.cartOps;
-    const catalog: ICatalog = parser.catalog;
     const lexer: LexicalAnalyzer = parser.lexer;
-    const rules: IRuleChecker = parser.rules;
     const cart = state.cart;
 
     if (span.length === 0) {

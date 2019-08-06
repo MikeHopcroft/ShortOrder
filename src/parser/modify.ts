@@ -233,8 +233,13 @@ export function parseAddToItem(
         let item = targetItem.item;
         const modified = builder.getItem();
 
+        // Score for the entire intrepretation is the sum of the scores of the
+        // target item and the modifications from the builder. Subtract one
+        // because there is no token for the entity in the modifications.
+        const score = targetItem.score + builder.getScore() - 1;
+
         const interpretation: Interpretation = {
-            score: targetItem.score,
+            score,
             items: [],
             action: (state: State): State => {
                 // Copy over each of the new children.
