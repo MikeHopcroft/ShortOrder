@@ -3,7 +3,7 @@ import 'mocha';
 
 import { AttributeInfo, CartOps, ItemInstance, Key } from 'prix-fixe';
 
-import { EntityBuilder, Segment } from '../../src';
+import { EntityBuilder, Parser, Segment } from '../../src';
 
 import {
     smallWorldAttributes,
@@ -39,6 +39,21 @@ const ops: CartOps = new CartOps(
     smallWorldRuleChecker
 );
 
+const parser: Parser = {
+    attributes: attributeInfo,
+    debugMode: false,
+    cartOps: ops,
+    catalog: smallWorldCatalog,
+    rules: smallWorldRuleChecker,
+
+    // TODO: clean this up.
+    // The following properties are never used by these test.
+    // Just type-assert.
+    intentTokens: undefined!,
+    productTokens: undefined!,
+    lexer: undefined!,
+};
+
 export interface SimpleItemInstance {
     key: Key;
     quantity: number;
@@ -57,9 +72,7 @@ function stripUIDs(item: ItemInstance): SimpleItemInstance {
 function process(segment: Segment) {
     const builder = new EntityBuilder(
         segment,
-        ops,
-        attributeInfo,
-        smallWorldRuleChecker,
+        parser,
         false,
         false);
 

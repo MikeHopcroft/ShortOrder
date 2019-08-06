@@ -173,9 +173,7 @@ function interpretOneSegment(
 ): HypotheticalItem {
     const builder = new EntityBuilder(
         segment,
-        parser.cartOps,
-        parser.attributes,
-        parser.rules,
+        parser,
         false,
         false
     );

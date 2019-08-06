@@ -3,6 +3,7 @@ import {
     AttributeInfo,
     DID,
     ICartOps,
+    ICatalog,
     ItemInstance,
     IRuleChecker,
     OPTION,
@@ -22,9 +23,11 @@ import {
 
 import { GapToken, Segment } from './interfaces';
 import { TokenSequence } from './token_sequence';
+import { Parser } from './parser';
 
 export class EntityBuilder {
     private readonly cartOps: ICartOps;
+    private readonly catalog: ICatalog;
     private readonly info: AttributeInfo;
     private readonly rules: IRuleChecker;
 
@@ -41,15 +44,14 @@ export class EntityBuilder {
 
     constructor(
         segment: Segment,
-        cartOps: ICartOps,
-        info: AttributeInfo,
-        rules: IRuleChecker,
+        parser: Parser,
         generateRegexKey: boolean,
         implicitQuantifiers: boolean
     ) {
-        this.cartOps = cartOps;
-        this.info = info;
-        this.rules = rules;
+        this.cartOps = parser.cartOps;
+        this.catalog = parser.catalog;
+        this.info = parser.attributes;
+        this.rules = parser.rules;
 
         this.pid = segment.entity;
         this.tokensUsed += 1;
@@ -63,7 +65,7 @@ export class EntityBuilder {
         this.tokensUsed += rightTokens.tokensUsed;
 
         // Initially, create item without options, in order to get key.
-        const item = cartOps.createItem(
+        const item = this.cartOps.createItem(
             this.quantity,
             this.pid, 
             this.aids.values(),
@@ -75,7 +77,8 @@ export class EntityBuilder {
             // TODO: filter out illegal options here.
             const legalOptions: ItemInstance[] = [];
             for (const [index, option] of this.options.entries()) {
-                if (this.rules.isValidChild(item.key, option.key)) {
+                if (this.rules.isValidChild(item.key, option.key) &&
+                    this.catalog.hasKey(option.key)) {
                     legalOptions.push(option);
                 } else {
                     // This option cannot legally configure the item.

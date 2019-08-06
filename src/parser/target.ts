@@ -2,6 +2,7 @@ import {
     AttributeInfo,
     Cart,
     ICartOps,
+    ICatalog,
     IRuleChecker,
     ItemInstance,
     OPTION,
@@ -143,6 +144,7 @@ export function *targets(
 ): IterableIterator<HypotheticalItem> {
     const attributes: AttributeInfo = parser.attributes;
     const cartOps: ICartOps = parser.cartOps;
+    const catalog: ICatalog = parser.catalog;
     const lexer: LexicalAnalyzer = parser.lexer;
     const rules: IRuleChecker = parser.rules;
     const cart = state.cart;
@@ -180,9 +182,7 @@ export function *targets(
 
             const builder = new EntityBuilder(
                 segment,
-                cartOps,
-                attributes,
-                rules,
+                parser,
                 true,
                 true);
             const target = builder.getItem();
