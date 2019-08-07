@@ -185,7 +185,7 @@ function interpretOneSegment(
     if (parser.catalog.hasKey(item.key)) {
         return {
             score: builder.getScore(),
-            item: builder.getItem()
+            item
         };
     } else {
         return {

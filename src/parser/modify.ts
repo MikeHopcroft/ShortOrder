@@ -105,6 +105,29 @@ export function processModify(
                 graph,
                 parts.tokens
             );
+        // } else if (tokens.startsWith([PRODUCT_PARTS_1, PREPOSITION, PRODUCT_PARTS_1])) {
+        //         // * (made,changed,replaced) [the,that,your] P1 (into,to,with) [a] P1
+        //         const target = tokens.peek(0) as ProductToken1 & Span;
+        //         const replacement = tokens.peek(2) as ProductToken0 & Span;
+        //         tokens.take(3);
+        //         return parseReplaceTarget(
+        //             parser,
+        //             state,
+        //             graph,
+        //             target.tokens,
+        //             replacement.tokens,
+        //         );
+        //     }
+        // } else if (tokens.startsWith([PRODUCT_PARTS_N])) {
+        //         // * (made,changed,replaced) [the,that,your] (into,to,with) [a] P1
+        //         const parts = tokens.peek(0) as ProductToken1 & Span;
+        //         tokens.take(3);
+        //         return parseReplace1(
+        //             parser,
+        //             state,
+        //             graph,
+        //             parts.tokens
+        //         );
         } else {
             // console.log('CASE III: error: multiple targets');
             tokens.take(1);
@@ -276,4 +299,57 @@ export function parseAddToItem(
         return interpretation;
     }
     return nop;
+}
+
+function parseReplce1(
+    parser: Parser,
+    state: State,
+    graph: Graph,
+    partTokens: Array<Token & Span>,
+): Interpretation {
+    return undefined!;
+}
+
+function parseReplaceTarget(
+    parser: Parser,
+    state: State,
+    graph: Graph,
+    target: Array<Token & Span>,
+    replacementTokens: Array<Token & Span>
+): Interpretation {
+    const span = createSpan(target);
+    let best = nop;
+
+    for (const targetItem of targets(
+        parser,
+        state,
+        graph,
+        span
+    )) {
+        const interpretation = parseReplaceItem(
+            parser,
+            state,
+            graph,
+            targetItem,
+            replacementTokens,
+        );
+        if (interpretation.score > best.score) {
+            best = interpretation;
+        }
+    }
+    return best;
+}
+
+function parseReplaceItem(
+    parser: Parser,
+    state: State,
+    graph: Graph,
+    target: HypotheticalItem,
+    replacementTokens: Array<Token & Span>
+): Interpretation {
+    // const builder = new EntityBuilder(
+    //     parser,
+    //     segment
+    // );
+    return undefined!;
 }

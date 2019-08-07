@@ -90,6 +90,24 @@ function processRootInternal(
     // 0.35 is the score cutoff for the filtered graph.
     const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
 
+    // console.log('Original graph:');
+    // for (const [i, edges] of baseGraph.edgeLists.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
+    // console.log('Filtered graph:');
+    // for (const [i, edges] of filteredGraph.edgeLists.entries()) {
+    //     console.log(`  vertex ${i}`);
+    //     for (const edge of edges) {
+    //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //     }
+    // }
+
+
     let best: Interpretation | null = null;
     for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
         // XXX
