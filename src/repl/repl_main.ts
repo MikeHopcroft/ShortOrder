@@ -1,4 +1,5 @@
 import * as style from 'ansi-styles';
+import * as Debug from 'debug';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
@@ -28,6 +29,7 @@ import { createShortOrderWorld } from '../integration';
 import { ENTITY, EntityToken, tokenToString, OptionToken } from '../lexer';
 
 import { speechToTextFilter } from './speech_to_text_filter';
+import { DownstreamTermPredicate, levenshtein } from 'token-flow';
 
 class Session {
     utterances: string[] = [];
@@ -102,6 +104,7 @@ export function runRepl(
     dataPath: string
 ) {
     let debugMode = false;
+    Debug.enable('tf-interactive,tf:*');
 
     console.log('Welcome to the ShortOrder REPL.');
     console.log('Type your order below.');
@@ -120,6 +123,11 @@ export function runRepl(
 
     const stack: Session[] = [new Session()];
     let recordMode = false;
+
+    // Prefix for token-flow scoring.
+    // Set by .prefix command.
+    // Used by .score command.
+    let prefix = '';
 
     const repl = replServer.start({
         prompt: '% ',
@@ -191,6 +199,56 @@ export function runRepl(
             } else {
                 console.log('Cannot pop - stack is already empty');
             }
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('prefix', {
+        help: 'Sets the prefix for subsequent token-flow .score command',
+        action(text: string) {
+            prefix = text;
+            console.log(`token-flow prefix = ${prefix}`);
+            repl.displayPrompt();
+        }
+    });
+
+    repl.defineCommand('score', {
+        help: 'Uses token-flow to score match against prefix.',
+        action(query: string) {
+            if (prefix.length < 1) {
+                console.log('No prefix set. First set a prefix string with the .prefix command.');
+            } else {
+                console.log(`token-flow query = ${query}`);
+
+                const termsPrefix = prefix.split(/\s+/);
+                const stemmedPrefix = termsPrefix.map(world2.lexer.lexicon.termModel.stem);
+                const hashedPrefix = stemmedPrefix.map(world2.lexer.lexicon.termModel.hashTerm);
+
+                const termsQuery = query.split(/\s+/);
+                const stemmedQuery = termsQuery.map(world2.lexer.lexicon.termModel.stem);
+                const hashedQuery = stemmedQuery.map(world2.lexer.lexicon.termModel.hashTerm);
+                
+                const isDownstreamTerm: DownstreamTermPredicate<number> = (n: number) => false;
+
+                const match = levenshtein(
+                    hashedQuery,
+                    hashedPrefix,
+                    isDownstreamTerm,
+                    lexer.lexicon.termModel.isTokenHash
+                );
+
+                const tokenizer = world2.lexer.tokenizer;
+                const debugMode = tokenizer['debugMode'];
+                tokenizer['debugMode'] = true;
+                const results = world2.lexer.tokenizer.score(
+                    hashedQuery,
+                    hashedPrefix,
+                    isDownstreamTerm,
+                    match
+                );
+                tokenizer['debugMode'] = debugMode;
+            }
+
             repl.displayPrompt();
         }
     });
