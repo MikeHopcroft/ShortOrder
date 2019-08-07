@@ -82,6 +82,17 @@ export function processModify(
                 graph,
                 modification.tokens
             );
+        } else if (tokens.startsWith([PRODUCT_PARTS_0])) {
+            // Here all tokens to the left roll into the MODIFY_ITEM
+            // * (made,changed) [that] P0
+            const modification = tokens.peek(0) as ProductToken0 & Span;
+            tokens.take(1);
+            return parseAddToImplicit(
+                parser,
+                state,
+                graph,
+                modification.tokens
+            );
         } else if (tokens.startsWith([PRODUCT_PARTS_1])) {
             // * (made,changed) [the,that,your] P1 [a] P0
             const parts = tokens.peek(0) as ProductToken1 & Span;
