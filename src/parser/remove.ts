@@ -5,7 +5,8 @@ import {
     createSpan,
     PROLOGUE,
     REMOVE_ITEM,
-    Span
+    Span,
+    PREPOSITION
 } from '../lexer';
 
 import {
@@ -39,12 +40,21 @@ export function processRemove(
     }
 
     if (!tokens.atEOS()) {
-        const token = tokens.peek(0) as ProductToken & Span;
+        const token = tokens.peek(0);
         if (token.type === PRODUCT_PARTS_1 || token.type === PRODUCT_PARTS_N) {
+            const parts = token as ProductToken & Span;
             tokens.take(1);
-            const span = createSpan(token.tokens);
+            const span = createSpan(parts.tokens);
             return parseRemove(parser, state, graph, span);
+        } else if (token.type === PREPOSITION) {
+            // TODO: add a test to exercise this case.
+            // Does it ever happen? It may be that the REMOVE_ITEM
+            // aliases always include a PREPOSITION.
+            tokens.take(1);
+            return parseRemoveImplicit(parser, state);
         }
+    } else {
+        return parseRemoveImplicit(parser, state);
     }
 
     return nop;
@@ -81,4 +91,22 @@ function parseRemove(
     }
 
     return interpretation;
+}
+
+function parseRemoveImplicit(parser: Parser, state: State): Interpretation {
+    return {
+        score: 1,
+        items: [],
+        action: (state: State): State => {
+            let cart = state.cart;
+            const count = cart.items.length;
+            if (count > 0) {
+                const last = cart.items[count - 1];
+                cart = parser.cartOps.removeFromCart(cart, last.uid);
+                return {...state, cart };
+            } else {
+                return state;
+            }
+        }
+    };
 }
