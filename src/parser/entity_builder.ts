@@ -32,7 +32,7 @@ export class EntityBuilderBase {
     protected readonly rules: IRuleChecker;
 
     private readonly didToAID = new Map<DID,AID>();
-    // No longer readonly after moving intialization to derived class.
+
     protected tokensUsed = 0;
 
     protected quantity = 1;
@@ -40,9 +40,6 @@ export class EntityBuilderBase {
     protected readonly aids: AID[] = [];
     protected readonly options: ItemInstance[] = [];
     protected readonly optionTokenCounts: number[] = [];
-
-    // No longer readonly after moving intialization to derived class.
-    // protected item: ItemInstance;
 
     constructor(parser: Parser, pid: PID) {
         this.cartOps = parser.cartOps;
@@ -53,68 +50,11 @@ export class EntityBuilderBase {
         this.pid = pid;
         this.tokensUsed += 1;
 
-        // const leftTokens = new TokenSequence<GapToken>(segment.left);
-        // this.processLeft(leftTokens, implicitQuantifiers);
-        // this.tokensUsed += leftTokens.tokensUsed;
-
-        // const rightTokens = new TokenSequence<GapToken>(segment.right);
-        // this.processRight(rightTokens);
-        // this.tokensUsed += rightTokens.tokensUsed;
-
-        // // Initially, create item without options, in order to get key.
-        // const item = this.cartOps.createItem(
-        //     this.quantity,
-        //     this.pid, 
-        //     this.aids.values(),
-        //     [].values(),
-        //     generateRegexKey
-        // );
-
-        // if (!generateRegexKey) {
-        //     // TODO: filter out illegal options here.
-        //     const legalOptions: ItemInstance[] = [];
-        //     for (const [index, option] of this.options.entries()) {
-        //         if (this.rules.isValidChild(item.key, option.key) &&
-        //             this.catalog.hasKey(option.key)) {
-        //             legalOptions.push(option);
-        //         } else {
-        //             // This option cannot legally configure the item.
-        //             // Exclude it and adjust the used token count accordingly.
-        //             this.tokensUsed -= this.optionTokenCounts[index];
-        //         }
-        //     }
-
-        //     // Use key to filter out options that violate mutual exclusivity.
-        //     const f = this.rules.getIncrementalMutualExclusionPredicate(item.key);
-        //     const filteredOptions: ItemInstance[] = [];
-        //     for (const [index, option] of legalOptions.entries()) {
-        //         if (f(option.key)) {
-        //             filteredOptions.push(option);
-        //         } else {
-        //             // This option violated mutual exclusivity with the previous
-        //             // options. Exclude it and adjust the used token count
-        //             // accordingly.
-        //             this.tokensUsed -= this.optionTokenCounts[index];
-        //         }
-        //     }
-
-        //     // Construct item with filtered options.
-        //     this.item = {...item, children: filteredOptions};
-        // } else {
-        //     // When generateRegexKey is true, we don't have a Key (we only have
-        //     // a regex) so we can't use the rules checker to filter out options.
-        //     // Construct item with unfiltered options.
-        //     this.item = {...item, children: this.options};
-        // }
     }
 
-    // getScore(): number {
-    //     return this.tokensUsed;
-    // }
-
-    // getItem(): ItemInstance {
-    //     return this.item;
-    // }
+    getScore(): number {
+        return this.tokensUsed;
+    }
 
     // Process tokens that lie to the left of the entity.
     // This sequence may start with a quantifier. The quantifier may apply to
@@ -164,6 +104,8 @@ export class EntityBuilderBase {
             // The process the remaining tokens.
             this.processRemaining(tokens);
         }
+
+        this.tokensUsed += tokens.tokensUsed;
     }
 
     // Process tokens that lie to the right of the entity. This sequence is
@@ -171,6 +113,7 @@ export class EntityBuilderBase {
     // options.
     protected processRight(tokens: TokenSequence<GapToken>) {
         this.processRemaining(tokens);
+        this.tokensUsed += tokens.tokensUsed;
     }
 
     private processRemaining(tokens: TokenSequence<GapToken>): boolean {
@@ -193,6 +136,7 @@ export class EntityBuilderBase {
             // Discard it and move forward.
             tokens.discard(1);
         }
+
         return true;
     }
 
@@ -403,19 +347,12 @@ export class EntityBuilder extends EntityBuilderBase {
 
     constructor(
         parser: Parser,
-        segment: Segment,
-        // generateRegexKey: boolean,
-        // implicitQuantifiers: boolean
+        segment: Segment
     ) {
         super(parser, segment.entity);
 
-        const leftTokens = new TokenSequence<GapToken>(segment.left);
-        this.processLeft(leftTokens, false);
-        this.tokensUsed += leftTokens.tokensUsed;
-
-        const rightTokens = new TokenSequence<GapToken>(segment.right);
-        this.processRight(rightTokens);
-        this.tokensUsed += rightTokens.tokensUsed;
+        this.processLeft(new TokenSequence<GapToken>(segment.left), false);
+        this.processRight(new TokenSequence<GapToken>(segment.right));
 
         // Initially, create item without options, in order to get key.
         const item = this.cartOps.createItem(
@@ -423,17 +360,12 @@ export class EntityBuilder extends EntityBuilderBase {
             this.pid, 
             this.aids.values(),
             [].values(),
-            false
-            // generateRegexKey
+            false   // Don't generate regex Key
         );
 
         // Construct item with filtered options.
         const filteredOptions = this.filterIllegalOptions(item);
         this.item = {...item, children: filteredOptions};
-    }
-
-    getScore(): number {
-        return this.tokensUsed;
     }
 
     getItem(): ItemInstance {
@@ -452,13 +384,8 @@ export class TargetBuilder extends EntityBuilderBase {
     ) {
         super(parser, pid);
 
-        const leftTokens = new TokenSequence<GapToken>(left);
-        this.processLeft(leftTokens, true);
-        this.tokensUsed += leftTokens.tokensUsed;
-
-        const rightTokens = new TokenSequence<GapToken>(right);
-        this.processRight(rightTokens);
-        this.tokensUsed += rightTokens.tokensUsed;
+        this.processRight(new TokenSequence<GapToken>(left));
+        this.processRight(new TokenSequence<GapToken>(right));
 
         // Initially, create item without options, in order to get key.
         const item = this.cartOps.createItem(
@@ -466,17 +393,13 @@ export class TargetBuilder extends EntityBuilderBase {
             this.pid, 
             this.aids.values(),
             [].values(),
-            true
+            true    // Generate regex Key
         );
 
         // We don't have a Key (we only have a regex) so we can't use the
         // rules checker to filter out options.
         // Construct item with unfiltered options.
         this.item = {...item, children: this.options};
-    }
-
-    getScore(): number {
-        return this.tokensUsed;
     }
 
     getItem(): ItemInstance {
@@ -490,37 +413,21 @@ export class ModificationBuilder extends EntityBuilderBase {
     constructor(
         parser: Parser,
         original: ItemInstance,
-        // pid: PID,
-        right: GapToken[],
+        modifications: GapToken[],
     ) {
         const pid: PID = AttributeInfo.pidFromKey(original.key);
         super(parser, pid);
 
-        const rightTokens = new TokenSequence<GapToken>(right);
-        this.processRight(rightTokens);
-        this.tokensUsed += rightTokens.tokensUsed;
+        this.processRight(new TokenSequence<GapToken>(modifications));
 
         const item = this.cartOps.changeItemAttributes(
             original,
             this.aids.values()
         );
 
-        // // Initially, create item without options, in order to get key.
-        // const item = this.cartOps.createItem(
-        //     this.quantity,
-        //     this.pid, 
-        //     this.aids.values(),
-        //     [].values(),
-        //     false
-        // );
-
         // Construct item with filtered options.
         const filteredOptions = this.filterIllegalOptions(item);
         this.item = {...item, children: filteredOptions};
-    }
-
-    getScore(): number {
-        return this.tokensUsed;
     }
 
     getItem(): ItemInstance {
