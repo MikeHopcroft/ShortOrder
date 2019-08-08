@@ -138,10 +138,22 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
     }
 }
 
-go(['i added a soy latte']);
+// go(['i added a soy latte']);
+// go([
+//     "ok i added a soy latte",
+//     "ok i added one two percent milk latte with two one percent lattes iced with decaf"
+// ]);
+
+// go([
+//     "ok i added a soy latte iced",
+//     "ok i added an espresso",
+//     "ok i made that latte iced mocha"
+//     // "ok i made that latte a mocha"
+//     // WORKS "ok I changed that latte into a solo espresso"
+//     // WORKS "ok I replaced that latte with an double espresso"
+// ]);
+
 go([
-    "ok i added a soy latte",
-    "ok i added one two percent milk latte with two one percent lattes iced with decaf"
+    "i added a decaf latte",
+    "i made that latte a cappuccino"
 ]);
-
-

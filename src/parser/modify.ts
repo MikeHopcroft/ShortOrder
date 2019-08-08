@@ -8,6 +8,7 @@ import { Graph, Token } from 'token-flow';
 
 import {
     createSpan,
+    EntityToken,
     MODIFY_ITEM,
     PREPOSITION,
     PROLOGUE,
@@ -33,7 +34,7 @@ import {
 } from './interfaces';
 
 import { Parser } from "./parser";
-import { splitOnEntities } from './parser_utilities';
+import { enumerateSplits, splitOnEntities } from './parser_utilities';
 import { targets } from './target';
 import { TokenSequence } from './token_sequence';
 
@@ -93,6 +94,28 @@ export function processModify(
                 graph,
                 modification.tokens
             );
+        } else if (tokens.startsWith([PRODUCT_PARTS_1, PREPOSITION, PRODUCT_PARTS_1])) {
+                // * (made,changed,replaced) [the,that,your] P1 (into,to,with) [a] P1
+                const target = tokens.peek(0) as ProductToken1 & Span;
+                const replacement = tokens.peek(2) as ProductToken0 & Span;
+                tokens.take(3);
+                return parseReplaceTarget(
+                    parser,
+                    state,
+                    graph,
+                    target.tokens,
+                    replacement.tokens,
+                );
+        } else if (tokens.startsWith([PRODUCT_PARTS_N])) {
+                // * (made,changed,replaced) [the,that,your] (into,to,with) [a] P1
+                const parts = tokens.peek(0) as ProductToken1 & Span;
+                tokens.take(1);
+                return parseReplace1(
+                    parser,
+                    state,
+                    graph,
+                    parts.tokens
+                );
         } else if (tokens.startsWith([PRODUCT_PARTS_1])) {
             // * (made,changed) [the,that,your] P1 [a] P0
             const parts = tokens.peek(0) as ProductToken1 & Span;
@@ -105,29 +128,6 @@ export function processModify(
                 graph,
                 parts.tokens
             );
-        // } else if (tokens.startsWith([PRODUCT_PARTS_1, PREPOSITION, PRODUCT_PARTS_1])) {
-        //         // * (made,changed,replaced) [the,that,your] P1 (into,to,with) [a] P1
-        //         const target = tokens.peek(0) as ProductToken1 & Span;
-        //         const replacement = tokens.peek(2) as ProductToken0 & Span;
-        //         tokens.take(3);
-        //         return parseReplaceTarget(
-        //             parser,
-        //             state,
-        //             graph,
-        //             target.tokens,
-        //             replacement.tokens,
-        //         );
-        //     }
-        // } else if (tokens.startsWith([PRODUCT_PARTS_N])) {
-        //         // * (made,changed,replaced) [the,that,your] (into,to,with) [a] P1
-        //         const parts = tokens.peek(0) as ProductToken1 & Span;
-        //         tokens.take(3);
-        //         return parseReplace1(
-        //             parser,
-        //             state,
-        //             graph,
-        //             parts.tokens
-        //         );
         } else {
             // console.log('CASE III: error: multiple targets');
             tokens.take(1);
@@ -301,13 +301,48 @@ export function parseAddToItem(
     return nop;
 }
 
-function parseReplce1(
+function parseReplace1(
     parser: Parser,
     state: State,
     graph: Graph,
     partTokens: Array<Token & Span>,
 ): Interpretation {
-    return undefined!;
+    // Break into sequence of gaps and the entities that separate them.
+    const {entities, gaps} = splitOnEntities(partTokens as Array<SequenceToken & Span>);
+
+    if (entities.length !== 2) {
+        // TODO: are there scenarios like "I made x y a z" or "I made x a y and z"?
+        // We need a target and a replaement.
+        // Return an empty interpretation.
+        return nop; 
+    }
+
+    // Enumerate all combinations of split points in gaps.
+    const lengths: number[] = gaps.map(x => x.length);
+
+    for (const splits of enumerateSplits(lengths)) {
+        // Construct the sequence of Segments associated with a particular
+        // choice of split points.
+        const segments: Segment[] = entities.map( (entity: EntityToken, index: number) => ({
+            left: gaps[index].slice(splits[index]),
+            entity: entity.pid,
+            right: gaps[index + 1].slice(0, splits[index + 1]),
+        }));
+
+        if (segments.length === 2) {
+            const target = [...gaps[0], entities[0], ...gaps[1]];
+            const replacement = parserBuildItemFromSegment(parser, segments[1]);
+            return parseReplaceTargetWithItem(
+                parser,
+                state,
+                graph,
+                target,
+                replacement
+            );
+        }
+    }
+
+    return nop;
 }
 
 function parseReplaceTarget(
@@ -317,24 +352,42 @@ function parseReplaceTarget(
     target: Array<Token & Span>,
     replacementTokens: Array<Token & Span>
 ): Interpretation {
-    const span = createSpan(target);
-    let best = nop;
-
-    for (const targetItem of targets(
+    const replacement = parserBuildItemFromTokens(parser, replacementTokens);
+    return parseReplaceTargetWithItem(
         parser,
         state,
         graph,
-        span
-    )) {
-        const interpretation = parseReplaceItem(
+        target,
+        replacement
+    );
+}
+
+function parseReplaceTargetWithItem(
+    parser: Parser,
+    state: State,
+    graph: Graph,
+    target: Array<Token & Span>,
+    replacement: HypotheticalItem
+): Interpretation {    
+    let best = nop;
+    const span = createSpan(target);
+    if (replacement.score > 0 && replacement.item) {
+        for (const targetItem of targets(
             parser,
             state,
             graph,
-            targetItem,
-            replacementTokens,
-        );
-        if (interpretation.score > best.score) {
-            best = interpretation;
+            span
+        )) {
+            const interpretation = parseReplaceItem(
+                parser,
+                state,
+                graph,
+                targetItem,
+                replacement,
+            );
+            if (interpretation.score > best.score) {
+                best = interpretation;
+            }
         }
     }
     return best;
@@ -345,11 +398,52 @@ function parseReplaceItem(
     state: State,
     graph: Graph,
     target: HypotheticalItem,
-    replacementTokens: Array<Token & Span>
+    replacement: HypotheticalItem
 ): Interpretation {
-    // const builder = new EntityBuilder(
-    //     parser,
-    //     segment
-    // );
-    return undefined!;
+    if (target.item && replacement.item) {
+        const item = {...replacement.item, uid: target.item.uid};
+        const cart = parser.cartOps.replaceInCart(state.cart, item);
+        return {
+            score: target.score + replacement.score,
+            items: [],
+            action: (state: State): State => {
+                return {...state, cart};
+            }
+        };
+    }
+
+    return nop;
+}
+
+function parserBuildItemFromTokens(
+    parser: Parser,
+    tokens: Array<Token & Span>
+): HypotheticalItem {
+    const {entities, gaps} = splitOnEntities(tokens as Array<SequenceToken & Span>);
+    if (gaps.length === 2 && entities.length === 1) {
+        const segment: Segment = {
+            left: gaps[0],
+            entity: entities[0].pid,
+            right: gaps[1]
+        };
+        return parserBuildItemFromSegment(parser, segment);
+        // const builder = new EntityBuilder(parser, segment);
+        // return {
+        //     item: builder.getItem(),
+        //     score: builder.getScore()
+        // };
+    }
+
+    return { item: undefined, score: 0 };
+}
+
+function parserBuildItemFromSegment(
+    parser: Parser,
+    segment: Segment
+): HypotheticalItem {
+    const builder = new EntityBuilder(parser, segment);
+    return {
+        item: builder.getItem(),
+        score: builder.getScore()
+    };
 }
