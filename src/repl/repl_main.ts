@@ -26,10 +26,17 @@ import {
 } from 'prix-fixe';
 
 import { createShortOrderWorld } from '../integration';
-import { ENTITY, EntityToken, tokenToString, OptionToken } from '../lexer';
+import {
+    coalesceGraph,
+    ENTITY,
+    EntityToken,
+    filterGraph,
+    tokenToString,
+    OptionToken
+} from '../lexer';
 
 import { speechToTextFilter } from './speech_to_text_filter';
-import { DownstreamTermPredicate, levenshtein } from 'token-flow';
+import { DownstreamTermPredicate, Graph, levenshtein } from 'token-flow';
 
 class Session {
     utterances: string[] = [];
@@ -212,7 +219,7 @@ export function runRepl(
         }
     });
 
-    repl.defineCommand('score', {
+    repl.defineCommand('query', {
         help: 'Uses token-flow to score match against prefix.',
         action(query: string) {
             if (prefix.length < 1) {
@@ -372,15 +379,32 @@ export function runRepl(
                 console.log(`${style.red.close}`);
             }
     
-            const graph = lexer.createGraph(text);
-            const tokenizations = lexer.tokenizationsFromGraph2(graph);
+            const rawGraph = lexer.createGraph(text);
+            const baseGraph: Graph = coalesceGraph(lexer.tokenizer, rawGraph);
+        
+            // TODO: REVIEW: MAGIC NUMBER
+            // 0.35 is the score cutoff for the filtered graph.
+            const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
+            const tokenizations = lexer.tokenizationsFromGraph2(filteredGraph);
 
             let counter = 0;
+            // for (const tokenization of tokenizations) {
+            //     console.log(`${counter}: ${tokenization.map(tokenToString).join(' ')}`);
+            //     counter++;
+            // }
+
+            const terms = line.split(/\s+/);
+            counter = 0;
             for (const tokenization of tokenizations) {
-                console.log(`${counter}: ${tokenization.map(tokenToString).join(' ')}`);
+                console.log(`Tokenization ${counter}:`);
                 counter++;
+                for (const token of tokenization) {
+                    const tokenText = tokenToString(token);
+                    const spanText = terms.slice(token.start, token.start + token.length).join(' ');
+                    console.log(`  ${tokenText}: "${spanText}"`);
+                }
             }
-    
+            
             repl.displayPrompt();
         }
     });
