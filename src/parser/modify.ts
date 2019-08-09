@@ -128,6 +128,16 @@ export function processModify(
                 graph,
                 parts.tokens
             );
+        } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_1])) {
+            // * (made,changed) [that] (into,to,with) [a] P1
+            const modification = tokens.peek(1) as ProductToken1 & Span;
+            tokens.take(2);
+            return parseReplaceImplicit(
+                parser,
+                state,
+                graph,
+                modification.tokens
+            );
         } else {
             // console.log('CASE III: error: multiple targets');
             tokens.take(1);
@@ -184,6 +194,7 @@ export function parseAddToImplicit(
     // console.log(`  ${modification.map(tokenToString).join('')}`);
 
     let best = nop;
+    // TODO: shouldn't this loop go in reverse order?
     for (const item of state.cart.items) {
         const interpretation = parseAddToItem(
             parser,
@@ -410,6 +421,31 @@ function parseReplaceItem(
                 return {...state, cart};
             }
         };
+    }
+
+    return nop;
+}
+
+function parseReplaceImplicit(
+    parser: Parser,
+    state: State,
+    graph: Graph,
+    replacementTokens: Array<SequenceToken & Span>
+): Interpretation {
+    const items = state.cart.items;
+    if (items.length > 0) {
+        const replacement = parserBuildItemFromTokens(parser, replacementTokens);
+        const target: HypotheticalItem = {
+            item: items[items.length - 1],
+            score: 1
+        };
+        return parseReplaceItem(
+            parser,
+            state,
+            graph,
+            target,
+            replacement
+        );
     }
 
     return nop;
