@@ -441,29 +441,50 @@ export class ReplacementBuilder extends EntityBuilderBase {
     constructor(
         parser: Parser,
         original: ItemInstance,
-        replacementTokens: GapToken[],
+        segment: Segment
     ) {
-        const pid: PID = AttributeInfo.pidFromKey(original.key);
-        super(parser, pid);
-
-        // Copy over the options from the original item before processing
-        // the tokens for the replacement item. This ensures that a
-        // replacement option will supercede an original option.
-        for (const option of original.children) {
-            this.options.push(option);
-        }
+        super(parser, segment.entity);
 
         // Process the tokens to add the new item's configuration.
-        this.processRight(new TokenSequence<GapToken>(replacementTokens));
+        this.processLeft(new TokenSequence<GapToken>(segment.left), false);
+        this.processRight(new TokenSequence<GapToken>(segment.right));
 
-        const replacement = this.cartOps.changeItemAttributes(
-            original,
-            this.aids.values()
+        // Initially, create item without options, in order to get key.
+        let replacement = this.cartOps.createItem(
+            this.quantity,
+            this.pid, 
+            this.aids.values(),
+            [].values(),
+            false   // Don't generate regex Key
         );
 
-        // Construct item with filtered options.
+        // Filter the new options for legality and mutual exclusivity amongst
+        // themselves.
         const filteredOptions = this.filterIllegalOptions(replacement);
-        this.item = {...replacement, children: filteredOptions};
+
+        // Copy over the options from the original item before adding options
+        // from the replacement item. This ensures that a replacement option
+        // will supercede an original option.
+        for (const option of original.children) {
+            if (this.rules.isValidChild(replacement.key, option.key)) {
+                replacement = this.cartOps.addToItem(
+                    replacement,
+                    option
+                );
+            }
+        }
+
+        // Add the replacement items, with replacement enabled for items in the
+        // same mutual exclusion set.
+        for (const option of filteredOptions) {
+            if (this.rules.isValidChild(replacement.key, option.key)) {
+                replacement = this.cartOps.addToItemWithReplacement(
+                    replacement,
+                    option
+                );
+            }
+        }
+        this.item = replacement;
     }
 
     getItem(): ItemInstance {
