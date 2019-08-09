@@ -1,5 +1,39 @@
 # TODO List
 
+P1 PREP P0 => parseAddToTarget
+PREP P0 => parseAddToImplicit
+P0 => parseAddToImplicit
+
+P1 PREP P1 => parseReplaceTarget        // changed the espresso into a latte
+PN => parseReplace1                     // make the espresso a latte
+P1 => processModify1                    // make the latte decaf
+PREP P1 => processReplaceImplicit       // make it a latte
+
+
+parseReplaceTarget targetTokens replacementTokens
+    parseBuildItemFromTokens replacementTokens
+        parseBuildItemFromSegment segment
+            EntityBuilder
+    parseReplaceTargetWithItem targetTokens hypotheticalItem
+        for (const target of target())
+            parseReplaceItem hypotheticalTarget hypotheticalReplacement
+                cartOps.replaceInCart
+
+parseReplace1 partTokens
+    splitOnEntities
+    for (const splits of enumerateSplits())
+        parseBuildItemFromSegment
+        parseReplaceTargetWithItem targetTokens hypotheticalReplacement
+
+processModify1
+    parseAddToTarget modifierTokens targetTokens
+
+parseReplaceImplcit replacementTokens
+    parserBuildItemFromTokens replacementTokens
+    parseReplceItem hypotheticalTarget hypotheticalReplacement   
+
+
+
 * implict operations need some kind of scoring, based on success of add. come up with test cases for this.
 
 * "i'll add grande iced coffee said no classic and add soy"
