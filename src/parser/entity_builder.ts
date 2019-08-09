@@ -434,3 +434,39 @@ export class ModificationBuilder extends EntityBuilderBase {
         return this.item;
     }
 }
+
+export class ReplacementBuilder extends EntityBuilderBase {
+    private readonly item: ItemInstance;
+
+    constructor(
+        parser: Parser,
+        original: ItemInstance,
+        replacementTokens: GapToken[],
+    ) {
+        const pid: PID = AttributeInfo.pidFromKey(original.key);
+        super(parser, pid);
+
+        // Copy over the options from the original item before processing
+        // the tokens for the replacement item. This ensures that a
+        // replacement option will supercede an original option.
+        for (const option of original.children) {
+            this.options.push(option);
+        }
+
+        // Process the tokens to add the new item's configuration.
+        this.processRight(new TokenSequence<GapToken>(replacementTokens));
+
+        const replacement = this.cartOps.changeItemAttributes(
+            original,
+            this.aids.values()
+        );
+
+        // Construct item with filtered options.
+        const filteredOptions = this.filterIllegalOptions(replacement);
+        this.item = {...replacement, children: filteredOptions};
+    }
+
+    getItem(): ItemInstance {
+        return this.item;
+    }
+}
