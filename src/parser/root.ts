@@ -13,6 +13,7 @@ import {
     Span,
     tokenToString,
     WEAK_ADD,
+    ATTRIBUTE,
 } from '../lexer';
 
 import { processAdd } from './add';
@@ -236,18 +237,21 @@ function copyProductTokens(
     grouped: Array<Token & Span>
 ): void {
     let entityCount = 0;
-    let optionCount = 0;
+    let optionAttributeCount = 0;
     for (const token of productParts) {
         if (token.type === ENTITY) {
             ++entityCount;
-        } else if (token.type === OPTION) {
-            ++optionCount;
+        } else if (
+            token.type === OPTION ||
+            token.type === ATTRIBUTE
+        ) {
+            ++optionAttributeCount;
         }
     }
 
     const span = createSpan(productParts);
 
-    if (entityCount === 0 && optionCount > 0) {
+    if (entityCount === 0 && optionAttributeCount > 0) {
         const product: ProductToken & Span = {
             type: PRODUCT_PARTS_0,
             tokens: productParts,
