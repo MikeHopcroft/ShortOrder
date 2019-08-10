@@ -420,14 +420,48 @@ export class ModificationBuilder extends EntityBuilderBase {
 
         this.processRight(new TokenSequence<GapToken>(modifications));
 
-        const item = this.cartOps.changeItemAttributes(
-            original,
+        // Initially, create item without options, in order to get key.
+        let modified = this.cartOps.changeItemAttributes(
+            {...original, children: []},
             this.aids.values()
         );
 
-        // Construct item with filtered options.
-        const filteredOptions = this.filterIllegalOptions(item);
-        this.item = {...item, children: filteredOptions};
+        // Filter the new options for legality and mutual exclusivity amongst
+        // themselves.
+        const filteredOptions = this.filterIllegalOptions(modified);
+
+        // Copy over the options from the original item before adding options
+        // from the replacement item. This ensures that a replacement option
+        // will supercede an original option.
+        for (const option of original.children) {
+            if (this.rules.isValidChild(modified.key, option.key)) {
+                modified = this.cartOps.addToItem(
+                    modified,
+                    option
+                );
+            }
+        }
+
+        // Add the replacement items, with replacement enabled for items in the
+        // same mutual exclusion set.
+        for (const option of filteredOptions) {
+            if (this.rules.isValidChild(modified.key, option.key)) {
+                modified = this.cartOps.addToItemWithReplacement(
+                    modified,
+                    option
+                );
+            }
+        }
+        this.item = modified;
+
+        // const item = this.cartOps.changeItemAttributes(
+        //     original,
+        //     this.aids.values()
+        // );
+
+        // // Construct item with filtered options.
+        // const filteredOptions = this.filterIllegalOptions(item);
+        // this.item = {...item, children: filteredOptions};
     }
 
     getItem(): ItemInstance {

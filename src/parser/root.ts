@@ -1,5 +1,5 @@
-import { State } from 'prix-fixe';
-import { Graph, Token } from 'token-flow';
+import { OPTION, State } from 'prix-fixe';
+import { Graph, Token, UNKNOWNTOKEN } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
@@ -200,7 +200,7 @@ function groupProductTokens(
             // When we reach the end of stream or encounter an intent token,
             // dump and product parts we have been collecting.
             if (productParts.length > 0) {
-                grouped.push(createProductToken(productParts));
+                copyProductTokens(productParts, grouped);
                 productParts = [];
             }
 
@@ -215,43 +215,64 @@ function groupProductTokens(
         } else {
             // Assuming anything not in parser.intentTokens must be a
             // SequenceToken. Gather SeqeuenceTokens in productParts.
-            productParts.push(input.peek(0) as SequenceToken & Span);
+            const token = input.peek(0);
+            if (token.type === UNKNOWNTOKEN &&
+                productParts.length > 0 && 
+                productParts[productParts.length - 1].type === UNKNOWNTOKEN
+            ) {
+                copyProductTokens(productParts, grouped);
+                grouped.push(input.peek(0));
+            } else {
+                productParts.push(input.peek(0) as SequenceToken & Span);
+            }
             input.take(1);
         }
     }
     return grouped;
 }
 
-function createProductToken(
-    productParts: Array<SequenceToken & Span>
-): ProductToken & Span {
+function copyProductTokens(
+    productParts: Array<SequenceToken & Span>,
+    grouped: Array<Token & Span>
+): void {
     let entityCount = 0;
+    let optionCount = 0;
     for (const token of productParts) {
         if (token.type === ENTITY) {
             ++entityCount;
+        } else if (token.type === OPTION) {
+            ++optionCount;
         }
     }
 
     const span = createSpan(productParts);
 
-    if (entityCount === 0) {
-        return {
+    if (entityCount === 0 && optionCount > 0) {
+        const product: ProductToken & Span = {
             type: PRODUCT_PARTS_0,
             tokens: productParts,
             ...span
         };
+        grouped.push(product);
     } else if (entityCount === 1) {
-        return {
+        const product: ProductToken & Span = {
             type: PRODUCT_PARTS_1,
             tokens: productParts,
             ...span
         };
-    } else {
-        return {
+        grouped.push(product);
+    } else if (entityCount > 1) {
+        const product: ProductToken & Span = {
             type: PRODUCT_PARTS_N,
             tokens: productParts,
             ...span
         };
+        grouped.push(product);
+    } else {
+        // This is not a sequence of product tokens.
+        for (const token of productParts) {
+            grouped.push(token);
+        }
     }
 }
 

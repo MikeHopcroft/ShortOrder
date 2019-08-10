@@ -53,8 +53,6 @@ export function processRemove(
             tokens.take(1);
             return parseRemoveImplicit(parser, state);
         }
-    } else {
-        return parseRemoveImplicit(parser, state);
     }
 
     return nop;

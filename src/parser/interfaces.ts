@@ -1,5 +1,5 @@
 import { ItemInstance, PID, State } from 'prix-fixe';
-import { NumberToken, Token } from 'token-flow';
+import { NumberToken, Token, UnknownToken } from 'token-flow';
 
 import {
     AttributeToken,
@@ -49,14 +49,16 @@ export type SequenceToken =
     EntityToken |
     OptionToken |
     NumberToken |
-    UnitToken;
+    UnitToken |
+    UnknownToken;
 
 export type GapToken = 
     AttributeToken |
     ConjunctionToken |
     OptionToken |
     NumberToken |
-    UnitToken;
+    UnitToken |
+    UnknownToken;
 
 export interface Segment {
     left: GapToken[];
