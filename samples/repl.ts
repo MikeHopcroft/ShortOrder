@@ -1,3 +1,13 @@
-import { replMain } from '../src';
+import {
+    replMain,
+    prixFixeReplExtensionFactory,
+} from 'prix-fixe';
 
-replMain();
+import {
+    shortOrderReplExtensionFactory
+} from '../src';
+
+replMain([
+    prixFixeReplExtensionFactory,
+    shortOrderReplExtensionFactory
+]);
