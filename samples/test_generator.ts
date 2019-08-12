@@ -229,10 +229,13 @@ function configureProductGenerators(
     // Prologues
     //
     const adds = [
-        "(that's,that is)",
-        "(we've got,we have,I have)",
-        "[I'll] add",
-        "[I,I've,I have] added",
+        "(i'll,i will,we'll,we will) [go ahead and] (add,have)",
+        "(i,i've,i have,we,we've,we have) added"
+
+        // "(that's,that is)",
+        // "(we've got,we have,I have)",
+        // "[I'll] add",
+        // "[I,I've,I have] added",
     ];
     const prologueGenerator = new AliasGenerator([prologues, adds]);
 
@@ -299,7 +302,7 @@ function* remove(
     // Remove Prologues
     //
     const removes = [ 
-        "[I,i've,i have,i will,we,we've,we have,we will] (lose,cancell,took off,take off,remove) [the,that]"
+        "[i,i've,i have,i'll,i will,we,we've,we have,we'll,we will] (lose,cancell,took off,take off,remove)",
     ];
     const removePrologueGenerator = new AliasGenerator([prologues, removes]);
 
