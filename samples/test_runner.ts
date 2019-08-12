@@ -1,5 +1,5 @@
 import {
-    ProcessorFactory,
+    TestProcessors,
     testRunnerMain,
     World } from 'prix-fixe';
 
@@ -10,7 +10,7 @@ import {
 async function go() {
 
     // Define the processor factory.
-    const processorFactory = new ProcessorFactory([
+    const processors = new TestProcessors([
         {
             name: 'so',
             description: 'short-order',
@@ -21,7 +21,7 @@ async function go() {
         },
     ]);
 
-    testRunnerMain('ShortOrder', processorFactory);
+    testRunnerMain('ShortOrder', processors);
 }
 
 go();

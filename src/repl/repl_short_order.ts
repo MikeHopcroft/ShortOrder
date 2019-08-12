@@ -6,7 +6,7 @@ import {
     IReplExtension,
     IReplExtensionFactory,
     printCatalog,
-    ProcessorDescription2,
+    ReplProcessor,
     rightJustify,
 } from 'prix-fixe';
 
@@ -226,7 +226,7 @@ export class ShortOrderReplExtension implements IReplExtension {
         });
     }
 
-    createProcessor(): ProcessorDescription2 {
+    createProcessor(): ReplProcessor {
         return {
             name: 'so',
             description: 'short-order',
