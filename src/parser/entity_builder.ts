@@ -101,7 +101,7 @@ export class EntityBuilderBase {
         // DESGIN NOTE: Must check implicitQuantifiers after processQuantity()
         // to ensure that we always get the quantifier if there is one.
         if (this.processQuantity(tokens) || implicitQuantifiers) {
-            // The process the remaining tokens.
+            // Then process the remaining tokens.
             this.processRemaining(tokens);
         }
 

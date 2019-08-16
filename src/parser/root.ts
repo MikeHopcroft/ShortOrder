@@ -222,6 +222,7 @@ function groupProductTokens(
                 productParts[productParts.length - 1].type === UNKNOWNTOKEN
             ) {
                 copyProductTokens(productParts, grouped);
+                productParts = [];
                 grouped.push(input.peek(0));
             } else {
                 productParts.push(input.peek(0) as SequenceToken & Span);

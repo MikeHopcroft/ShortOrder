@@ -139,8 +139,9 @@ export function processModify(
                 modification.tokens
             );
         } else {
-            // console.log('CASE III: error: multiple targets');
-            tokens.take(1);
+            // Don't take the token here. The PROLOGUE and MODIFY_ITEM were
+            // already taken at the beginning on the function.
+            // tokens.take(1);
         }
     }
 
