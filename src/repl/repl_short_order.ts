@@ -10,9 +10,8 @@ import {
     rightJustify,
 } from 'prix-fixe';
 
-import * as replServer from 'repl';
-
 import {
+    IRepl,
     OPTION,
     PID,
     speechToTextFilter,
@@ -53,17 +52,17 @@ export class ShortOrderReplExtension implements IReplExtension {
         return 'short-order';
     }
 
-    registerCommands(repl: replServer.REPLServer): void {
-        repl.defineCommand('prefix', {
+    registerCommands(repl: IRepl): void {
+        repl.server().defineCommand('prefix', {
             help: 'Sets the prefix for subsequent token-flow .score command',
             action: (text: string) => {
                 this.prefix = text;
                 console.log(`token-flow prefix = ${this.prefix}`);
-                repl.displayPrompt();
+                repl.server().displayPrompt();
             }
         });
 
-        repl.defineCommand('query', {
+        repl.server().defineCommand('query', {
             help: 'Uses token-flow to score match against prefix.',
             action:(query: string) => {
                 if (this.prefix.length < 1) {
@@ -100,11 +99,11 @@ export class ShortOrderReplExtension implements IReplExtension {
                     tokenizer['debugMode'] = debugMode;
                 }
 
-                repl.displayPrompt();
+                repl.server().displayPrompt();
             }
         });
 
-        repl.defineCommand('match', {
+        repl.server().defineCommand('match', {
             help: 'List fuzzy matches in order of decreasing score.',
             action: (text: string) => {
                 const graph = this.lexer.createGraph(text);
@@ -146,11 +145,11 @@ export class ShortOrderReplExtension implements IReplExtension {
                 }
                 console.log(' ');
 
-                repl.displayPrompt();
+                repl.server().displayPrompt();
             }
         });
 
-        repl.defineCommand('tokenize', {
+        repl.server().defineCommand('tokenize', {
             help: "Tokenize, but don't parse, text that follows.",
             action: (line: string) => {
 
@@ -192,11 +191,11 @@ export class ShortOrderReplExtension implements IReplExtension {
                     }
                 }
                 
-                repl.displayPrompt();
+                repl.server().displayPrompt();
             }
         });
 
-        repl.defineCommand('menu', {
+        repl.server().defineCommand('menu', {
             help: "Display menu",
             action: (line: string) => {
                 const catalog = this.world.catalog;
@@ -221,7 +220,7 @@ export class ShortOrderReplExtension implements IReplExtension {
                     // Try using the tokenizer to identify it.
                     printMatchingGenerics(this.lexer, line);
                 }
-                repl.displayPrompt();
+                repl.server().displayPrompt();
             }
         });
     }
@@ -243,7 +242,7 @@ export const shortOrderReplExtensionFactory: IReplExtensionFactory = {
 
 export function printMatchingGenerics(lexer: LexicalAnalyzer, text: string) {
     const graph = lexer.createGraph(text);
-    const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
+    // const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
 
     const tokens = new Set<EntityToken | OptionToken>();
     for (const edge of graph.edgeLists[0]) {

@@ -1,5 +1,20 @@
 # TODO List
 
+play test mode repl extension
+incremental test runner mode
+test runner stt and transcribed fields
+x test runner suite expressions
+x boolean expressions for suites
+x Lilian's PRs
+tryrepl.md, examples.md, menu-ordering.md
+process recommendations
+stemmer exclusion file
+unit tests for repl
+take new menu
+weak add
+remove items not there converts to 'add no'
+
+
 P1 PREP P0 => parseAddToTarget
 PREP P0 => parseAddToImplicit
 P0 => parseAddToImplicit
