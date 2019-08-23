@@ -1,5 +1,11 @@
 # TODO List
 
+recipes
+remove to add
+weak add
+regression bug 119 - preserve AIDs when changing PID
+
+test suite should print suite statistics in sorted order
 play test mode repl extension
 incremental test runner mode
 test runner stt and transcribed fields

@@ -479,6 +479,22 @@ export class ReplacementBuilder extends EntityBuilderBase {
     ) {
         super(parser, segment.entity);
 
+        // TODO: copy AIDs from original.
+        // Need some way to take the last AID on a dimension.
+        // Perhaps make an AID set accumulator with different
+        // semantics at construction time?
+        // Perhaps ICartOps.createItem() can have a flag
+        // that indicates whether first or last AID on dimension
+        // wins.
+        //
+        // 119 - FAILED
+        //   Comment: cappuccino should be tall like latte
+        //   Suites: modify regression
+        //   Utterance 0: "i added a tall latte"
+        //     "0/1/tall caffe latte/407:0:1" === "0/1/tall caffe latte/407:0:1" - OK
+        //   Utterance 1: "i made the latte a cappuccino"
+        //     "0/1/tall cappuccino/409:0:1" !== "0/1/grande cappuccino/409:0:2" - <=== ERROR
+
         // Process the tokens to add the new item's configuration.
         this.processLeft(new TokenSequence<GapToken>(segment.left), false);
         this.processRight(new TokenSequence<GapToken>(segment.right));

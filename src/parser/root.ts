@@ -108,7 +108,6 @@ function processRootInternal(
     //     }
     // }
 
-
     let best: Interpretation | null = null;
     for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
         // XXX
@@ -150,15 +149,17 @@ function processAllActiveRegions(
     const tokens = new TokenSequence<Token & Span>(tokenization);
 
     let score = 0;
+    let weakAddAllowed = false;
     while (!tokens.atEOS()) {
         if (
-            tokens.startsWith([PROLOGUE, WEAK_ADD]) ||
             tokens.startsWith([PROLOGUE, ADD_TO_ORDER]) ||
-            tokens.startsWith([ADD_TO_ORDER])
+            tokens.startsWith([ADD_TO_ORDER]) ||
+            (weakAddAllowed && tokens.startsWith([WEAK_ADD]))
         ) {
             const interpretation = processAdd(parser, state, baseGraph, tokens);
             score += interpretation.score;
             state = interpretation.action(state);
+            weakAddAllowed = true;
         } else if (
             tokens.startsWith([PROLOGUE, REMOVE_ITEM]) ||
             tokens.startsWith([REMOVE_ITEM])
@@ -166,6 +167,7 @@ function processAllActiveRegions(
             const interpretation = processRemove(parser, state, tokens, baseGraph);
             score += interpretation.score;
             state = interpretation.action(state);
+            weakAddAllowed = true;
         } else if (
             tokens.startsWith([PROLOGUE, MODIFY_ITEM]) ||
             tokens.startsWith([MODIFY_ITEM])
@@ -173,9 +175,11 @@ function processAllActiveRegions(
             const interpretation = processModify(parser, state, tokens, baseGraph);
             score += interpretation.score;
             state = interpretation.action(state);
+            weakAddAllowed = true;
         } else {
             // We don't understand this token. Skip over it.
             tokens.take(1);
+            weakAddAllowed = false;
         }
     }
 
