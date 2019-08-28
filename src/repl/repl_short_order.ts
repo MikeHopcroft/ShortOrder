@@ -1,3 +1,4 @@
+import * as Debug from 'debug';
 import * as style from 'ansi-styles';
 
 import {
@@ -39,22 +40,24 @@ export class ShortOrderReplExtension implements IReplExtension {
 
     // Prefix for token-flow scoring.
     // Set by .prefix command.
-    // Used by .score command.
+    // Used by .query command.
     prefix = '';
 
     constructor(world: World, dataPath: string) {
         this.world = world;
         this.world2 = createShortOrderWorld(world, dataPath, false);
         this.lexer = this.world2.lexer;
+
+        Debug.enable('tf-interactive,tf:*');
     }
 
     name() {
-        return 'short-order';
+        return 'short-order xxx';
     }
 
     registerCommands(repl: IRepl): void {
         repl.server().defineCommand('prefix', {
-            help: 'Sets the prefix for subsequent token-flow .score command',
+            help: 'Sets the prefix for subsequent token-flow .query command',
             action: (text: string) => {
                 this.prefix = text;
                 console.log(`token-flow prefix = ${this.prefix}`);
@@ -96,6 +99,7 @@ export class ShortOrderReplExtension implements IReplExtension {
                         isDownstreamTerm,
                         match
                     );
+                    console.log(`score=${results.score}, length=${results.length}`);
                     tokenizer['debugMode'] = debugMode;
                 }
 
@@ -167,7 +171,24 @@ export class ShortOrderReplExtension implements IReplExtension {
         
                 const rawGraph = this.lexer.createGraph(text);
                 const baseGraph: Graph = coalesceGraph(this.lexer.tokenizer, rawGraph);
-            
+
+                // console.log('Original graph:');
+                // for (const [i, edges] of rawGraph.edgeLists.entries()) {
+                //     console.log(`  vertex ${i}`);
+                //     for (const edge of edges) {
+                //         const token = tokenToString(this.lexer.tokenizer.tokenFromEdge(edge));
+                //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+                //     }
+                // }
+                // console.log('Filtered graph:');
+                // for (const [i, edges] of baseGraph.edgeLists.entries()) {
+                //     console.log(`  vertex ${i}`);
+                //     for (const edge of edges) {
+                //         const token = tokenToString(this.lexer.tokenizer.tokenFromEdge(edge));
+                //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+                //     }
+                // }
+
                 // TODO: REVIEW: MAGIC NUMBER
                 // 0.35 is the score cutoff for the filtered graph.
                 const filteredGraph: Graph = filterGraph(baseGraph, 0.35);

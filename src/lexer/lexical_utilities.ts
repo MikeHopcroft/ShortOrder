@@ -19,6 +19,13 @@ import {
     NUMBERTOKEN
 } from 'token-flow';
 
+import {
+    ProductRecipeToken,
+    PRODUCT_RECIPE,
+    OptiontRecipeToken,
+    OPTION_RECIPE
+} from './cookbook';
+
 import { ATTRIBUTE, AttributeToken } from './attributes';
 import { ENTITY, EntityToken } from './entities';
 import { OptionToken } from './options';
@@ -39,6 +46,8 @@ export type AnyToken =
     AttributeToken |
     EntityToken |
     NumberToken |
+    ProductRecipeToken |
+    OptiontRecipeToken |
     OptionToken |
     QuantityToken |
     UnitToken |
@@ -56,6 +65,10 @@ export function tokenToString(t: Token) {
             const entity = token.name.replace(/\s/g, '_').toUpperCase();
             name = `[ENTITY:${entity},${token.pid}]`;
             break;
+        case PRODUCT_RECIPE:
+            const productRecipe = token.name.replace(/\s/g, '_').toUpperCase();
+            name = `[PRODUCT_RECIPE:${productRecipe},${token.rid}]`;
+            break;
         case NUMBERTOKEN:
             name = `[NUMBER:${token.value}]`;
             break;
@@ -65,6 +78,10 @@ export function tokenToString(t: Token) {
         case OPTION:
             const option = token.name.replace(/\s/g, '_').toUpperCase();
             name = `[OPTION:${option},${token.id}]`;
+            break;
+        case OPTION_RECIPE:
+            const optionRecipe = token.name.replace(/\s/g, '_').toUpperCase();
+            name = `[OPTION_RECIPE:${optionRecipe},${token.rid}]`;
             break;
         case UNIT:
             const unit = token.name.replace(/\s/g, '_').toUpperCase();

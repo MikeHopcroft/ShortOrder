@@ -1,9 +1,29 @@
 # TODO List
 
-recipes
+repl .prefix/.query
+  stopped working
+  either should trigger update if both values are available
+repl .reset logic
+bug with "double double", "one and one"
+    See note at tokenizer.ts, line 217
+
+recipes/cookbooks
+  x recipes roadmap.yaml tests
+  x recipes.yaml file
+  Recipes class to prix-fixe, create IRecipes
+  Creation functions to prix-fixe ICartOps
+  lexical analyzer
+  parser
+  contextual recipes - part of rules file? RID from token run through rules? Want to share aliases, though. Seems like tokens and aliases are associated with RIDs, while there is another ID for recipe templates.
 remove to add
-weak add
+  need better name?
+  auto-remove?
+  add-remove?
+  default-remove?
+. weak add - check whether "adding" and "added" are stemmed to "add" -   consider collision with "add" attribute.
 regression bug 119 - preserve AIDs when changing PID
+
+simplification of rules logic and file format
 
 test suite should print suite statistics in sorted order
 play test mode repl extension

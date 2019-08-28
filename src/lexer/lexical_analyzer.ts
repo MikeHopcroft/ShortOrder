@@ -25,6 +25,7 @@ import {
 import { stopwordsFromYamlString } from '../stopwords';
 
 import { CreateAttribute, AttributeToken, ATTRIBUTE } from './attributes';
+import { generateRecipes } from './cookbook';
 import { CreateEntity, EntityToken, ENTITY } from './entities';
 import { intentTokenFactory, IntentTokenFactory } from './intents';
 
@@ -77,6 +78,9 @@ export class LexicalAnalyzer {
 
         // Options
         this.lexicon.addDomain(generateOptions(world));
+
+        // Cookbook
+        this.lexicon.addDomain(generateRecipes(world));
 
         // Quantifiers
         if (quantifiersFile) {
