@@ -8,6 +8,7 @@ import { EntityBuilder, Parser, Segment } from '../../src';
 import {
     smallWorldAttributes,
     smallWorldCatalog,
+    smallWorldCookbook,
     smallWorldRuleChecker,
 } from '../shared';
 
@@ -44,6 +45,7 @@ const parser: Parser = {
     debugMode: false,
     cartOps: ops,
     catalog: smallWorldCatalog,
+    cookbook: smallWorldCookbook,
     rules: smallWorldRuleChecker,
 
     // TODO: clean this up.

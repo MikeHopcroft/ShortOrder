@@ -8,6 +8,7 @@ bug with "double double", "one and one"
     See note at tokenizer.ts, line 217
 
 recipes/cookbooks
+  uids in recipes in prix-fixe
   x recipes roadmap.yaml tests
   x recipes.yaml file
   Recipes class to prix-fixe, create IRecipes
@@ -21,6 +22,7 @@ remove to add
   add-remove?
   default-remove?
 . weak add - check whether "adding" and "added" are stemmed to "add" -   consider collision with "add" attribute.
+remove options from target
 regression bug 119 - preserve AIDs when changing PID
 
 simplification of rules logic and file format

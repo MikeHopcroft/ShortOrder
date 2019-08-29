@@ -8,6 +8,7 @@ import {
     IRuleChecker,
     OPTION,
     PID,
+    ICookbook,
 } from 'prix-fixe';
 
 import { NumberToken, NUMBERTOKEN } from 'token-flow';
@@ -19,6 +20,8 @@ import {
     OptionToken,
     QUANTITY,
     UNIT,
+    OPTION_RECIPE,
+    OptionRecipeToken,
 } from '../lexer';
 
 import { GapToken, Segment } from './interfaces';
@@ -28,6 +31,7 @@ import { Parser } from './parser';
 export class EntityBuilderBase {
     protected readonly cartOps: ICartOps;
     protected readonly catalog: ICatalog;
+    protected readonly cookbook: ICookbook;
     private readonly info: AttributeInfo;
     protected readonly rules: IRuleChecker;
 
@@ -44,6 +48,7 @@ export class EntityBuilderBase {
     constructor(parser: Parser, pid: PID) {
         this.cartOps = parser.cartOps;
         this.catalog = parser.catalog;
+        this.cookbook = parser.cookbook;
         this.info = parser.attributes;
         this.rules = parser.rules;
 
@@ -200,7 +205,15 @@ export class EntityBuilderBase {
         // TODO: check whether option legally configures item.
         // compile_error();
 
-        if (tokens.startsWith([ATTRIBUTE, OPTION])) {
+        if (tokens.startsWith([OPTION_RECIPE])) {
+            const token = tokens.peek(0) as OptionRecipeToken;
+            // TODO: pass in parent key - currently second argument is ignored.
+            const recipe = this.cookbook.findOptionRecipe(token.rid, 'TODO');
+            const items = this.cartOps.createItemsFromOptionRecipe(recipe);
+            this.options.push(...items);
+            tokens.take(1);
+            return true;
+        } else if (tokens.startsWith([ATTRIBUTE, OPTION])) {
             const attribute = tokens.peek(0) as AttributeToken;
             const option = tokens.peek(1) as OptionToken;
 

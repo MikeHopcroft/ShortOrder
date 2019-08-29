@@ -15,6 +15,7 @@ import {
 import {
     smallWorldAttributes,
     smallWorldCatalog,
+    smallWorldCookbook,
     smallWorldRuleChecker,
 } from '../shared';
 
@@ -115,6 +116,7 @@ describe('Parser2', () => {
             const parser = new Parser(
                 ops,
                 smallWorldCatalog,
+                smallWorldCookbook,
                 attributeInfo,
                 lexer,
                 smallWorldRuleChecker,
@@ -233,6 +235,7 @@ describe('Parser2', () => {
             const parser = new Parser(
                 ops,
                 smallWorldCatalog,
+                smallWorldCookbook,
                 attributeInfo,
                 lexer,
                 smallWorldRuleChecker,

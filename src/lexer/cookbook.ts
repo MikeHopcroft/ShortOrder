@@ -18,7 +18,7 @@ export interface ProductRecipeToken extends Token {
     name: string;
 }
 
-export interface OptiontRecipeToken extends Token {
+export interface OptionRecipeToken extends Token {
     type: OPTION_RECIPE;
     rid: RID;
     name: string;
@@ -32,7 +32,7 @@ function createProductRecipe(rid: RID, name: string): ProductRecipeToken {
     };
 }
 
-function createOptionRecipe(rid: RID, name: string): OptiontRecipeToken {
+function createOptionRecipe(rid: RID, name: string): OptionRecipeToken {
     return {
         type: OPTION_RECIPE,
         rid,
@@ -41,8 +41,8 @@ function createOptionRecipe(rid: RID, name: string): OptiontRecipeToken {
 }
 
 export function* generateRecipes(world: World): IterableIterator<Alias> {
-    console.log();
-    console.log('=== Recipes ===');
+    // console.log();
+    // console.log('=== Recipes ===');
     const cookbook = world.cookbook;
     for (const product of cookbook.productRecipes()) {
         const token = createProductRecipe(product.rid, product.name);
@@ -50,7 +50,7 @@ export function* generateRecipes(world: World): IterableIterator<Alias> {
             const matcher = matcherFromExpression(alias);
             const pattern = patternFromExpression(alias);
             for (const text of aliasesFromPattern(pattern)) {
-                console.log(`  ${text}`);
+                // console.log(`  ${text}`);
                 yield { token, text, matcher };
             }
         }
@@ -65,7 +65,7 @@ export function* generateRecipes(world: World): IterableIterator<Alias> {
             const matcher = matcherFromExpression(alias);
             const pattern = patternFromExpression(alias);
             for (const text of aliasesFromPattern(pattern)) {
-                console.log(`  ${text}`);
+                // console.log(`  ${text}`);
                 yield { token, text, matcher };
             }
         }

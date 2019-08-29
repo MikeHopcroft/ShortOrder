@@ -3,19 +3,21 @@ import {
     AttributeDescription,
     DimensionAndTensorDescription,
     Catalog,
+    Cookbook,
     CID,
     DID,
     Dimension,
+    DimensionDescription,
     GenericTypedEntity,
     Key,
     TensorDescription,
     MENUITEM,
     OPTION,
     PID,
+    RecipeList,
     RuleChecker,
     RuleConfig,
     SpecificTypedEntity,
-    DimensionDescription,
 } from 'prix-fixe';
 
 // A PID that is not indexed in any data structure in this file. For testing
@@ -450,6 +452,18 @@ export const smallWorldCatalog = Catalog.fromEntities(
     genericItems.values(),
     specificItems.values()
 );
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  smallWorldCookbook
+//
+///////////////////////////////////////////////////////////////////////////////
+// TODO: make a better cookbook
+const recipeList: RecipeList = { 
+    products: [],
+    options: []
+};
+export const smallWorldCookbook = new Cookbook(recipeList);
 
 ///////////////////////////////////////////////////////////////////////////////
 //

@@ -6,6 +6,7 @@ import {
     CONJUNCTION,
     EntityToken,
     OptionToken,
+    OptionRecipeToken,
     Span,
     UnitToken,
 } from '../lexer';
@@ -48,6 +49,7 @@ export type SequenceToken =
     ConjunctionToken |
     EntityToken |
     OptionToken |
+    OptionRecipeToken |
     NumberToken |
     UnitToken |
     UnknownToken;
@@ -56,6 +58,7 @@ export type GapToken =
     AttributeToken |
     ConjunctionToken |
     OptionToken |
+    OptionRecipeToken |
     NumberToken |
     UnitToken |
     UnknownToken;

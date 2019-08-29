@@ -2,6 +2,7 @@ import {
     AttributeInfo,
     ICartOps,
     ICatalog,
+    ICookbook,
     IRuleChecker,
     OPTION,
 } from 'prix-fixe';
@@ -15,6 +16,7 @@ import {
     ENTITY,
     EPILOGUE,
     LexicalAnalyzer,
+    OPTION_RECIPE,
     PROLOGUE,
     QUANTITY,
     UNIT,
@@ -26,6 +28,7 @@ export class Parser {
     readonly attributes: AttributeInfo;
     readonly cartOps: ICartOps;
     readonly catalog: ICatalog;
+    readonly cookbook: ICookbook;
     readonly lexer: LexicalAnalyzer;
     readonly rules: IRuleChecker;
     readonly debugMode: boolean;
@@ -42,6 +45,7 @@ export class Parser {
         CONJUNCTION,
         ENTITY,
         OPTION,
+        OPTION_RECIPE,
         NUMBERTOKEN,
         QUANTITY,
         UNIT,
@@ -56,6 +60,7 @@ export class Parser {
     constructor(
         cartOps: ICartOps,
         catalog: ICatalog,
+        cookbook: ICookbook,
         attributes: AttributeInfo,
         lexer: LexicalAnalyzer,
         rules: IRuleChecker,
@@ -63,6 +68,7 @@ export class Parser {
     ) {
         this.cartOps = cartOps;
         this.catalog = catalog;
+        this.cookbook = cookbook;
         this.attributes = attributes;
         this.lexer = lexer;
         this.rules = rules;

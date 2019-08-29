@@ -1,4 +1,5 @@
 export * from './attributes';
+export * from './cookbook';
 export * from './entities';
 export * from './fuzzy_text_matcher';
 export * from './intents';

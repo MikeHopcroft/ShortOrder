@@ -1,5 +1,3 @@
-import { Token } from 'token-flow';
-
 import {
     ENTITY,
     EntityToken,

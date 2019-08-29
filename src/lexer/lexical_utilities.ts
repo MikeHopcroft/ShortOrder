@@ -22,7 +22,7 @@ import {
 import {
     ProductRecipeToken,
     PRODUCT_RECIPE,
-    OptiontRecipeToken,
+    OptionRecipeToken,
     OPTION_RECIPE
 } from './cookbook';
 
@@ -47,7 +47,7 @@ export type AnyToken =
     EntityToken |
     NumberToken |
     ProductRecipeToken |
-    OptiontRecipeToken |
+    OptionRecipeToken |
     OptionToken |
     QuantityToken |
     UnitToken |
