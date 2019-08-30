@@ -247,7 +247,7 @@ function copyProductTokens(
     let optionAttributeCount = 0;
     for (const token of productParts) {
         if (token.type === ENTITY // ||
-            // token.type === PRODUCT_RECIPE
+            //  token.type === PRODUCT_RECIPE
         ) {
             ++entityCount;
         } else if (

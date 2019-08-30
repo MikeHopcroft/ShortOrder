@@ -7,7 +7,11 @@ Algorithm to generate all top-scoring paths.
   Then enumerate all paths.
   There could still be other paths with same score. 
 
-What if target token is a recipe? How do we search the cart for recipes? Suppose we need to do a tree pattern search.
+Remove option from target or implicit
+  target() becomes targetProduct()
+  TargetBuilder becomes TargetProductBuilder
+  targetOption
+  What if target token is a recipe? How do we search the cart for recipes? Suppose we need to do a tree pattern search.
 
 
 repl .prefix/.query

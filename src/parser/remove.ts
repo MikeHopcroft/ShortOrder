@@ -15,6 +15,7 @@ import {
     PRODUCT_PARTS_1,
     PRODUCT_PARTS_N,
     ProductToken,
+    PRODUCT_PARTS_0,
 } from './interfaces';
 
 import { Parser } from './parser';
@@ -46,6 +47,9 @@ export function processRemove(
             tokens.take(1);
             const span = createSpan(parts.tokens);
             return parseRemove(parser, state, graph, span);
+        } else if (token.type === PRODUCT_PARTS_0) {
+            const parts = token as ProductToken & Span;
+            return parseRemoveOptionFromImplicit(parser, state, parts);
         } else if (token.type === PREPOSITION) {
             // TODO: add a test to exercise this case.
             // Does it ever happen? It may be that the REMOVE_ITEM
@@ -107,4 +111,15 @@ function parseRemoveImplicit(parser: Parser, state: State): Interpretation {
             }
         }
     };
+}
+
+function parseRemoveOptionFromImplicit(
+    parser: Parser,
+    state: State,
+    parts: ProductToken & Span
+): Interpretation {
+    console.log('parseRemoveOptionFromImplicit() not implemented.');
+    // Instead of getting filtering graph with cart, want to filter with target item instance.
+    // In this implicit case, target item instance is last item in the cart.
+    return nop;
 }
