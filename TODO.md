@@ -1,5 +1,15 @@
 # TODO List
 
+Algorithm to generate all top-scoring paths.
+  Copy best path
+  Examine every forward edge to see if taking it would give as good a path.
+  Keep only those edges.
+  Then enumerate all paths.
+  There could still be other paths with same score. 
+
+What if target token is a recipe? How do we search the cart for recipes? Suppose we need to do a tree pattern search.
+
+
 repl .prefix/.query
   stopped working
   either should trigger update if both values are available

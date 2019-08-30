@@ -1,6 +1,8 @@
 import {
+    AnyProductToken,
     ENTITY,
     EntityToken,
+    ProductRecipeToken,
     Span
 } from '../lexer';
 
@@ -11,6 +13,7 @@ import {
 
 export interface Splits {
     entities: Array<EntityToken & Span>;
+    // entities: Array<AnyProductToken & Span>;
     gaps: Array<Array<GapToken & Span>>;
 }
 

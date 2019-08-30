@@ -7,6 +7,7 @@ import {
     EntityToken,
     OptionToken,
     OptionRecipeToken,
+    ProductRecipeToken,
     Span,
     UnitToken,
 } from '../lexer';
@@ -48,8 +49,9 @@ export type SequenceToken =
     AttributeToken |
     ConjunctionToken |
     EntityToken |
-    OptionToken |
     OptionRecipeToken |
+    OptionToken |
+    // ProductRecipeToken |
     NumberToken |
     UnitToken |
     UnknownToken;

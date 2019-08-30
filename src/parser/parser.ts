@@ -17,6 +17,7 @@ import {
     EPILOGUE,
     LexicalAnalyzer,
     OPTION_RECIPE,
+    PRODUCT_RECIPE,
     PROLOGUE,
     QUANTITY,
     UNIT,
@@ -47,6 +48,7 @@ export class Parser {
         OPTION,
         OPTION_RECIPE,
         NUMBERTOKEN,
+        // PRODUCT_RECIPE,
         QUANTITY,
         UNIT,
 

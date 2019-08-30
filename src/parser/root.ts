@@ -15,6 +15,7 @@ import {
     WEAK_ADD,
     ATTRIBUTE,
     OPTION_RECIPE,
+    PRODUCT_RECIPE,
 } from '../lexer';
 
 import { processAdd } from './add';
@@ -245,7 +246,9 @@ function copyProductTokens(
     let entityCount = 0;
     let optionAttributeCount = 0;
     for (const token of productParts) {
-        if (token.type === ENTITY) {
+        if (token.type === ENTITY // ||
+            // token.type === PRODUCT_RECIPE
+        ) {
             ++entityCount;
         } else if (
             token.type === OPTION ||
