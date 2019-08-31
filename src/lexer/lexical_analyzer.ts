@@ -56,13 +56,18 @@ export class LexicalAnalyzer {
 
     constructor(
         world: World,
+        lexicon?: Lexicon,
         debugMode = true,
-        intentsFile: string | undefined = undefined,
-        quantifiersFile: string | undefined = undefined,
-        unitsFile: string | undefined = undefined,
-        stopwordsFile: string | undefined = undefined,
+        intentsFile?: string,
+        quantifiersFile?: string,
+        unitsFile?: string,
+        stopwordsFile?: string,
     ) {
-        this.lexicon = new Lexicon();
+        if (lexicon) {
+            this.lexicon = lexicon;
+        } else {
+            this.lexicon = new Lexicon();
+        }
         addCustomStemmer(this.lexicon.termModel);
         this.tokenizer = new Tokenizer(
             this.lexicon.termModel,

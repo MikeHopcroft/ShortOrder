@@ -284,7 +284,7 @@ export interface ProcessorDescription {
 }
 
 function shortOrderFactory(world: World, dataPath: string) {
-    return createShortOrderWorld(world, dataPath, false).processor;
+    return createShortOrderWorld(world, dataPath, undefined, false).processor;
 }
 
 export class ProcessorFactory {

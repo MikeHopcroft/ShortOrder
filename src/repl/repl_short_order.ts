@@ -1,5 +1,7 @@
-import * as Debug from 'debug';
 import * as style from 'ansi-styles';
+import * as Debug from 'debug';
+const doubleMetaphone = require('double-metaphone');
+// import * as doubleMetaphone from 'double-metaphone';
 
 import {
     describeGeneric,
@@ -19,7 +21,13 @@ import {
     World,
 } from 'prix-fixe';
 
-import { DownstreamTermPredicate, Graph, levenshtein } from 'token-flow';
+import {
+    DefaultTermModel,
+    DownstreamTermPredicate,
+    Graph,
+    Lexicon,
+    levenshtein
+} from 'token-flow';
 
 import { createShortOrderWorld, ShortOrderWorld } from '../integration';
 
@@ -45,7 +53,15 @@ export class ShortOrderReplExtension implements IReplExtension {
 
     constructor(world: World, dataPath: string) {
         this.world = world;
-        this.world2 = createShortOrderWorld(world, dataPath, false);
+
+        // const stemmer = (word: string): string => {
+        //     return doubleMetaphone(word)[0];
+        // };
+        // const termModel = new DefaultTermModel(stemmer);
+        // const lexicon = new Lexicon(termModel);
+        // this.world2 = createShortOrderWorld(world, dataPath, lexicon, false);
+
+        this.world2 = createShortOrderWorld(world, dataPath, undefined, false);
         this.lexer = this.world2.lexer;
 
         Debug.enable('tf-interactive,tf:*');

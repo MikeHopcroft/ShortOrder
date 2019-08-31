@@ -2,10 +2,11 @@ import * as path from 'path';
 
 import {
     Processor,
-    setup,
     State,
     World
 } from 'prix-fixe';
+
+import { Lexicon } from 'token-flow';
 
 import { LexicalAnalyzer } from '../lexer';
 import { Parser, processRoot } from '../parser';
@@ -15,7 +16,12 @@ export interface ShortOrderWorld extends World {
     processor: Processor;
 }
 
-export function createShortOrderWorld(world: World, dataPath: string, debugMode: boolean): ShortOrderWorld {
+export function createShortOrderWorld(
+    world: World,
+    dataPath: string,
+    lexicon?: Lexicon,
+    debugMode = false
+): ShortOrderWorld {
     //
     // Set up short-order LexicalAnalyzer, Parser, and Processor.
     //
@@ -26,6 +32,7 @@ export function createShortOrderWorld(world: World, dataPath: string, debugMode:
 
     const lexer = new LexicalAnalyzer(
         world,
+        lexicon,
         debugMode,
         intentsFile,
         quantifiersFile,

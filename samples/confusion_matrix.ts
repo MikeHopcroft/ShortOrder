@@ -73,6 +73,7 @@ async function go() {
 
     const lexer = new LexicalAnalyzer(
         world,
+        undefined,  // Lexicon
         debugMode,
         // DESIGN NOTE: the following four parameters are optional.
         intentsFile,
