@@ -261,6 +261,18 @@ export class ShortOrderReplExtension implements IReplExtension {
                 repl.server().displayPrompt();
             }
         });
+
+        
+        repl.server().defineCommand('stem', {
+            help: "Stem, but don't parse, text that follows",
+            action: (line: string) => {
+                const text = line;
+                const terms = text.split(/\s+/);
+                const stemmed = terms.map(this.lexer.lexicon.termModel.stem);
+                console.log(stemmed.join(' '));
+                repl.server().displayPrompt();
+            }
+        });
     }
 
     createProcessor(): ReplProcessor {
