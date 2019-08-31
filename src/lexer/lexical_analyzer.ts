@@ -5,11 +5,11 @@ import {
     Edge,
     Graph,
     GraphWalker,
+    ITermModel,
     Lexicon,
     Tokenizer,
     TokenizerAlias,
     Token,
-    TermModel,
     DynamicGraph,
 } from 'token-flow';
 
@@ -278,7 +278,7 @@ function* generateOptions(world: World): IterableIterator<Alias> {
 // TODO: This seems like a hack.
 // Consider alternative to monkey patch.
 // Consider making data-driven.
-function addCustomStemmer(model: TermModel) {
+function addCustomStemmer(model: ITermModel) {
     const stem = model.stem;
     model.stem = (term: string): string => {
         if (term.toLowerCase() === 'iced') {
