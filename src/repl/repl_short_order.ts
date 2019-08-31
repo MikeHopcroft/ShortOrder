@@ -1,5 +1,6 @@
 import * as style from 'ansi-styles';
 import * as Debug from 'debug';
+
 const doubleMetaphone = require('double-metaphone');
 // import * as doubleMetaphone from 'double-metaphone';
 
