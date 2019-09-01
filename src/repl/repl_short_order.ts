@@ -262,7 +262,6 @@ export class ShortOrderReplExtension implements IReplExtension {
             }
         });
 
-        
         repl.server().defineCommand('stem', {
             help: "Stem, but don't parse, text that follows",
             action: (line: string) => {
@@ -270,6 +269,29 @@ export class ShortOrderReplExtension implements IReplExtension {
                 const terms = text.split(/\s+/);
                 const stemmed = terms.map(this.lexer.lexicon.termModel.stem);
                 console.log(stemmed.join(' '));
+                repl.server().displayPrompt();
+            }
+        });
+
+        repl.server().defineCommand('graph', {
+            help: "Display graph for text that follows",
+            action: (line: string) => {
+                const text = line;
+
+                const terms = text.split(/\s+/);
+
+                const rawGraph: Graph = this.lexer.createGraph(text);
+                const baseGraph: Graph = coalesceGraph(this.lexer.tokenizer, rawGraph);
+                const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
+
+                for (const [i, edges] of filteredGraph.edgeLists.entries()) {
+                    console.log(`  vertex ${i}: "${terms[i]}"`);
+                    for (const edge of edges) {
+                        const token = tokenToString(this.lexer.tokenizer.tokenFromEdge(edge));
+                        console.log(`    length:${edge.length}, score:${edge.score.toFixed(2)}, token:${token}`);
+                    }
+                }
+
                 repl.server().displayPrompt();
             }
         });
