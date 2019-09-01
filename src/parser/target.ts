@@ -197,7 +197,7 @@ export function *targets(
             // console.log(`  score: ${builder.getScore()}`);
 
             if (target !== undefined) {
-                // console.log(`============ Hypothetical target ${target.key} ==============`);
+                // console.log(`  ============ Hypothetical target ${target.key} ==============`);
 
                 // Yield matching ItemInstances from the cart.
                 // TODO: we need a predicate that treats unspecified attributes as wildcards.
@@ -205,6 +205,7 @@ export function *targets(
                 // specified as the default value.
                 // Perhaps EntityBuilder needs a wildcard mode.
                 for (const item of cartOps.findByKeyRegex(state.cart, target.key)) {
+                    // console.log(`    yield key=${item.key}, score=${builder.getScore()}`);
                     yield {
                         item,
                         score: builder.getScore()

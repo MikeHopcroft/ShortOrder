@@ -16,6 +16,7 @@ import {
 
 import {
     IRepl,
+    Key,
     OPTION,
     PID,
     speechToTextFilter,
@@ -39,8 +40,11 @@ import {
     filterGraph,
     tokenToString,
     OptionToken,
-    LexicalAnalyzer
+    LexicalAnalyzer,
+    Span,
 } from '../lexer';
+
+import { Parser, targets, HypotheticalItem } from '../parser';
 
 export class ShortOrderReplExtension implements IReplExtension {
     world: World;
@@ -73,16 +77,16 @@ export class ShortOrderReplExtension implements IReplExtension {
     }
 
     registerCommands(repl: IRepl): void {
-        repl.server().defineCommand('prefix', {
+        repl.getReplServer().defineCommand('prefix', {
             help: 'Sets the prefix for subsequent token-flow .query command',
             action: (text: string) => {
                 this.prefix = text;
                 console.log(`token-flow prefix = ${this.prefix}`);
-                repl.server().displayPrompt();
+                repl.getReplServer().displayPrompt();
             }
         });
 
-        repl.server().defineCommand('query', {
+        repl.getReplServer().defineCommand('query', {
             help: 'Uses token-flow to score match against prefix.',
             action:(query: string) => {
                 if (this.prefix.length < 1) {
@@ -120,11 +124,11 @@ export class ShortOrderReplExtension implements IReplExtension {
                     tokenizer['debugMode'] = debugMode;
                 }
 
-                repl.server().displayPrompt();
+                repl.getReplServer().displayPrompt();
             }
         });
 
-        repl.server().defineCommand('match', {
+        repl.getReplServer().defineCommand('match', {
             help: 'List fuzzy matches in order of decreasing score.',
             action: (text: string) => {
                 const graph = this.lexer.createGraph(text);
@@ -166,11 +170,11 @@ export class ShortOrderReplExtension implements IReplExtension {
                 }
                 console.log(' ');
 
-                repl.server().displayPrompt();
+                repl.getReplServer().displayPrompt();
             }
         });
 
-        repl.server().defineCommand('tokenize', {
+        repl.getReplServer().defineCommand('tokenize', {
             help: "Tokenize, but don't parse, text that follows.",
             action: (line: string) => {
 
@@ -229,11 +233,11 @@ export class ShortOrderReplExtension implements IReplExtension {
                     }
                 }
                 
-                repl.server().displayPrompt();
+                repl.getReplServer().displayPrompt();
             }
         });
 
-        repl.server().defineCommand('menu', {
+        repl.getReplServer().defineCommand('menu', {
             help: "Display menu",
             action: (line: string) => {
                 const catalog = this.world.catalog;
@@ -258,22 +262,22 @@ export class ShortOrderReplExtension implements IReplExtension {
                     // Try using the tokenizer to identify it.
                     printMatchingGenerics(this.lexer, line);
                 }
-                repl.server().displayPrompt();
+                repl.getReplServer().displayPrompt();
             }
         });
 
-        repl.server().defineCommand('stem', {
+        repl.getReplServer().defineCommand('stem', {
             help: "Stem, but don't parse, text that follows",
             action: (line: string) => {
                 const text = line;
                 const terms = text.split(/\s+/);
                 const stemmed = terms.map(this.lexer.lexicon.termModel.stem);
                 console.log(stemmed.join(' '));
-                repl.server().displayPrompt();
+                repl.getReplServer().displayPrompt();
             }
         });
 
-        repl.server().defineCommand('graph', {
+        repl.getReplServer().defineCommand('graph', {
             help: "Display graph for text that follows",
             action: (line: string) => {
                 const text = line;
@@ -292,7 +296,7 @@ export class ShortOrderReplExtension implements IReplExtension {
                     }
                 }
 
-                repl.server().displayPrompt();
+                repl.getReplServer().displayPrompt();
             }
         });
     }
