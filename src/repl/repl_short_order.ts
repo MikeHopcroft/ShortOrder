@@ -299,6 +299,72 @@ export class ShortOrderReplExtension implements IReplExtension {
                 repl.getReplServer().displayPrompt();
             }
         });
+
+        repl.getReplServer().defineCommand('targets', {
+            help: "Display targets for text that follows",
+            action: (line: string) => {
+                const text = line;
+
+                const terms = text.split(/\s+/);
+
+                const rawGraph: Graph = this.lexer.createGraph(text);
+                const baseGraph: Graph = coalesceGraph(this.lexer.tokenizer, rawGraph);
+                const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
+
+                const state = repl.getState();
+                const parser = new Parser(
+                    this.world.cartOps,
+                    this.world.catalog,
+                    this.world.cookbook,
+                    this.world.attributeInfo,
+                    this.lexer,
+                    this.world.ruleChecker,
+                    false
+                );
+                const span: Span = {
+                    start: 0,
+                    length: terms.length
+                };
+
+                // const hypotheticals: HypotheticalItem[] = [];
+                const results = new Map<Key, HypotheticalItem>();
+                for (const hypothetical of targets(parser, state, filteredGraph, span)) {
+                    if (hypothetical.item) {
+                        const key = hypothetical.item.key;
+                        const existing = results.get(key);
+                        if (existing) {
+                            if (existing.score < hypothetical.score) {
+                                results.set(key, hypothetical);
+                            }
+                        } else {
+                            results.set(key, hypothetical);
+                        }
+                    }
+                }
+
+                const sorted = [...results.values()].sort( (a,b) => {
+                    return b.score - a.score;
+                });
+
+                for (const hypothetical of sorted) {
+                    const item = hypothetical.item!;
+                    const name = this.world.catalog.getSpecific(item.key).name;
+                    const score = hypothetical.score.toFixed(2);
+                    console.log(`${score}: ${name} (${item.key})`);
+                }
+                console.log();
+
+                // for (const [i, edges] of filteredGraph.edgeLists.entries()) {
+                //     console.log(`  vertex ${i}: "${terms[i]}"`);
+                //     for (const edge of edges) {
+                //         const token = tokenToString(this.lexer.tokenizer.tokenFromEdge(edge));
+                //         console.log(`    length:${edge.length}, score:${edge.score.toFixed(2)}, token:${token}`);
+                //     }
+                // }
+
+                repl.getReplServer().displayPrompt();
+            }
+        });
     }
 
     createProcessor(): ReplProcessor {
