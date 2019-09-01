@@ -47,7 +47,7 @@ async function go(utterances: string[]) {
     }
 
     const world = createWorld(dataPath);
-    const shortOrderWorld = createShortOrderWorld(world, dataPath, true);
+    const shortOrderWorld = createShortOrderWorld(world, dataPath, undefined, true);
     const processor = shortOrderWorld.processor;
 
     const testCase = new TestCase(
@@ -153,7 +153,8 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 //     // WORKS "ok I replaced that latte with an double espresso"
 // ]);
 
-go([
-    "i added a decaf latte",
-    "i made that latte a cappuccino"
-]);
+// go([
+//     "i added a decaf latte",
+//     "i made that latte a cappuccino"
+// ]);
+
