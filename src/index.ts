@@ -5,5 +5,6 @@ export * from './lexer';
 export * from './order';
 export * from './parser';
 export * from './repl';
+export * from './stemmers';
 export * from './turn';
 export * from './utilities';

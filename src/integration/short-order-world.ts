@@ -6,10 +6,11 @@ import {
     World
 } from 'prix-fixe';
 
-import { Lexicon } from 'token-flow';
+import { DefaultTermModel, Lexicon } from 'token-flow';
 
 import { LexicalAnalyzer } from '../lexer';
 import { Parser, processRoot } from '../parser';
+import { StemmerFactory } from '../stemmers';
 
 export interface ShortOrderWorld extends World {
     lexer: LexicalAnalyzer;
@@ -19,7 +20,7 @@ export interface ShortOrderWorld extends World {
 export function createShortOrderWorld(
     world: World,
     dataPath: string,
-    lexicon?: Lexicon,
+    stemmerName?: string,
     debugMode = false
 ): ShortOrderWorld {
     //
@@ -29,6 +30,11 @@ export function createShortOrderWorld(
     const quantifiersFile = path.join(dataPath, 'quantifiers.yaml');
     const unitsFile = path.join(dataPath, 'units.yaml');
     const stopwordsFile = path.join(dataPath, 'stopwords.yaml');
+
+    const stemmerFactory = new StemmerFactory(dataPath);
+    const stemmer = stemmerFactory.create(stemmerName);
+    const termModel = new DefaultTermModel(stemmer);
+    const lexicon = new Lexicon(termModel);
 
     const lexer = new LexicalAnalyzer(
         world,

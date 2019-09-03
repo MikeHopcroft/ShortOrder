@@ -34,8 +34,10 @@
     "@types/murmurhash": "0.0.0",
     "@types/node": "^12.0.0",
     "@types/number-to-words": "^1.2.0",
+    "@types/pluralize": "0.0.29",
     "@types/readline-sync": "^1.4.3",
     "@types/seedrandom": "^2.4.28",
+    "@types/snowball-stemmers": "^0.6.0",
     "chai": "^4.2.0",
     "copyfiles": "^2.1.0",
     "gts": "^0.8.0",
@@ -43,13 +45,11 @@
     "typescript": "~2.8.0"
   },
   "dependencies": {
-    "@types/pluralize": "0.0.29",
     "ajv": "^6.5.4",
     "ansi-styles": "^3.2.1",
     "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "dotenv": "^8.0.0",
-    "double-metaphone": "^1.0.4",
     "js-yaml": "^3.13.1",
     "minimist": "^1.2.0",
     "murmurhash": "0.0.2",
@@ -58,6 +58,7 @@
     "prix-fixe": "0.0.48",
     "readline-sync": "^1.4.9",
     "seedrandom": "^3.0.1",
+    "talisman": "^0.21.0",
     "token-flow": "0.0.34"
   }
 }

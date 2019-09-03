@@ -10,9 +10,9 @@ function showUsage() {
 
     console.log('Process one query');
     console.log('');
-    console.log(`Usage: node ${program} [-d datapath] [-h|help|?]`);
+    console.log(`Usage: node ${program} [-d datapath] [-h|help|?] [-t termModel]`);
     console.log('');
-    console.log('-d datapath     Path to prix-fixe data files.');
+    console.log('-d <datapath>   Path to prix-fixe data files.');
     console.log('                    attributes.yaml');
     console.log('                    intents.yaml');
     console.log('                    options.yaml');
@@ -24,6 +24,7 @@ function showUsage() {
     console.log('                The -d flag overrides the value specified');
     console.log('                in the PRIX_FIXE_DATA environment variable.');
     console.log('-h|help|?       Show this message.');
+    console.log('-t <termModel>  One of snowball, metaphone, or hybrid.');
     console.log(' ');
 }
 
@@ -47,7 +48,7 @@ async function go(utterances: string[]) {
     }
 
     const world = createWorld(dataPath);
-    const shortOrderWorld = createShortOrderWorld(world, dataPath, undefined, true);
+    const shortOrderWorld = createShortOrderWorld(world, dataPath, args.t, true);
     const processor = shortOrderWorld.processor;
 
     const testCase = new TestCase(
@@ -158,3 +159,7 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 //     "i made that latte a cappuccino"
 // ]);
 
+go([
+    "i added a tall latte",
+    "i removed that tall latte"
+]);

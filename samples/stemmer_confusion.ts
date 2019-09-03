@@ -1,17 +1,8 @@
 import * as dotenv from 'dotenv';
 import * as minimist from 'minimist';
 import * as path from 'path';
-
-const doubleMetaphone = require('double-metaphone');
-// import * as doubleMetaphone from 'double-metaphone';
-
 import { createWorld } from 'prix-fixe';
-
-import {
-    DefaultTermModel,
-    Lexicon,
-    stemmerConfusionMatrix
-} from 'token-flow';
+import { stemmerConfusionMatrix } from 'token-flow';
 
 import {
     createShortOrderWorld,
@@ -25,7 +16,7 @@ function showUsage() {
     console.log("NOTE: collisions are detected after stemming with token-flow's");
     console.log('default stemmer (currently English snowball).');
     console.log('');
-    console.log(`Usage: node ${program} [-d datapath] [-h|help|?]`);
+    console.log(`Usage: node ${program} [-d datapath] [-h|help|?] [-t termModel]`);
     console.log('');
     console.log('-d datapath     Path to prix-fixe data files.');
     console.log('                    attributes.yaml');
@@ -39,6 +30,7 @@ function showUsage() {
     console.log('                The -d flag overrides the value specified');
     console.log('                in the PRIX_FIXE_DATA environment variable.');
     console.log('-h|help|?       Show this message.');
+    console.log('-t <termModel>  One of snowball, metaphone, or hybrid.');
     console.log(' ');
 }
 
@@ -62,12 +54,8 @@ function go() {
     }
 
     const world = createWorld(dataPath);
-    const stemmer = (word: string): string => {
-        return doubleMetaphone(word)[0];
-    };
-    const termModel = new DefaultTermModel(stemmer);
-    const lexicon = new Lexicon(termModel);
-    createShortOrderWorld(world, dataPath, lexicon, false);
+    const world2 = createShortOrderWorld(world, dataPath, args.t, false);
+    const lexicon = world2.lexer.lexicon;
 
     const matrix = stemmerConfusionMatrix(lexicon);
 
