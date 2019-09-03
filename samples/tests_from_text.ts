@@ -85,6 +85,7 @@ async function go() {
     //
     const inputText = fs.readFileSync(infilePath, 'utf-8');
     const lines = inputText.split(/\r?\n/);
+    const filtered = lines.filter(x => !x.startsWith('#') && !(x.length === 0));
 
     //
     // Set up short-order processor

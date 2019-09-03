@@ -62,7 +62,7 @@ export class ShortOrderReplExtension implements IReplExtension {
     }
 
     name() {
-        return 'short-order xxx';
+        return 'short-order';
     }
 
     registerCommands(repl: IRepl): void {
