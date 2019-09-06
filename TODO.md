@@ -1,5 +1,10 @@
 # TODO List
 
+CMU dictionary
+Wiktionary
+Metaphone
+Double Metaphone
+
 Algorithm to generate all top-scoring paths.
   Copy best path
   Examine every forward edge to see if taking it would give as good a path.

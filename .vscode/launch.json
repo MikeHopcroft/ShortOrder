@@ -88,7 +88,13 @@
             "program": "${workspaceFolder}/build/samples/repl.js",
             "outputCapture": "std",
             "console": "externalTerminal"
-       }
-
+       },
+       {
+        "type": "node",
+        "request": "launch",
+        "name": "CMU Dict",
+        "program": "${workspaceFolder}/build/samples/cmu_dict.js",
+        "outputCapture": "std"
+        },
     ]
 }

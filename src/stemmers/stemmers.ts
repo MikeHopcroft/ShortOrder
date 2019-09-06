@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as pluralize from 'pluralize';
 import { newStemmer, Stemmer as SnowballStemmer } from 'snowball-stemmers';
+const metaphone = require('talisman/phonetics/metaphone') as (word:string)=>string;
 const doubleMetaphone = require('talisman/phonetics/double-metaphone') as (word:string)=>[string, string];
 import { StemmerFunction } from 'token-flow';
 
@@ -84,8 +85,9 @@ function createSnowballStemmer(dataPath: string): StemmerFunction {
 function createMetaphone(dataPath: string): StemmerFunction {
     const metaphoneFile = path.join(dataPath, 'metaphone.csv');
     return replacer(
-        metaphoneFile, 
-        (term: string): string => doubleMetaphone(term)[0]
+        metaphoneFile,
+        (term: string): string => metaphone(term)
+        // (term: string): string => doubleMetaphone(term)[0]
     );
 }
 
@@ -97,7 +99,8 @@ function createHybridMetaphone(dataPath: string): StemmerFunction {
 
     return replacer(
         metaPhoneFile,
-        (term: string): string => doubleMetaphone(singularize(term))[0]
+        (term: string): string => metaphone(singularize(term))
+        // (term: string): string => doubleMetaphone(singularize(term))[0]
     );
 }
 
