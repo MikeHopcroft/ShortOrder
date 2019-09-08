@@ -2,17 +2,28 @@
 
 A common architecture for speech-based conversational agents is a three stage pipeline, where speech is first converted to text, which is then passed to an NLP algorithm that extracts entities, intents, and sentiments, which are then passed to a rules-based system which performs actions.
 
-1. Speech to Text
-1. Entity and Intent Extraction
-1. Rule-based Business Logic
+<img src="common-architecture.png"/>
 
 This pipelined approach has a fundamental weakness that 
 limits the effectiveness of the system as a whole.
-The problem is that each stage must commit to an interpretation of its input in isolation and without context from the other stages. Once a stage commits, all subsequent stages must live with the interpretation, even if there were other plausible interpretations.
+The problem is that each stage must commit to an interpretation of its input in isolation and without context from the other stages. Once a stage commits to an interpretation, all subsequent stages must live with the interpretation, even if there were other plausible interpretations.
 
 This might not seem like a serious limitation, but consider a system with three stages, each of which gets the correct interpretation 90% of the time. If the errors in the stages are uncorrelated, then the second stage will be right 81% of the time and the third stage will succeed 73% of the time.
 
+<img src="error-compounding.png"/>
+
 In domains with low error rates, this sort of compounding might be tolerable, but the domain of human speech is notoriously difficult. Even if you factor out the impact of differences in voice, accent, culture and speaking style, you are still faced with understanding a language that is inherently ambiguous.
+
+## A Better Way
+
+~~~
+two videotape skits about islands
+
+T UW1   V IH1 D IY0 OW0 T EY1 P   S K IH1 T S   AH0 B AW1 T   AY1 L AH0 N D Z
+tu  ˈvɪdɪˌoʊteɪ̯p ˈskɪts əˈbaʊt ˈaɪ̯lənds
+~~~
+
+<img src="graph1.png"/>
 
 ### Sources of Ambiguity in Speech-to-Text Systems
 Let's look at a few of the sources of ambiguity in speech-to-text systems. Probably the most common source of ambiguity is from [homonyms](https://en.wikipedia.org/wiki/Homonym). These are words that sound the same, but have different meanings. For example,
