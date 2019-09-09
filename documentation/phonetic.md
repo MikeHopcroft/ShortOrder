@@ -19,35 +19,35 @@ In domains with low error rates, this sort of compounding might be tolerable, bu
 The challenge with the pipeline approach is that each stage must _commit to a single interpretation of its input_, and it must do this in a _highly ambiguous environment_ without access to _context from subsequent stages_.
 
 One solution is to avoid making decisions until the end of the pipeline.
-Instead of settling on _one interpretration_, a stage can forward the set of _all possible interpretations_.
+Instead of settling on _one interpretration_, each stage can forward _the set of all possible interpretations_.
 
-Consider, for example, the speech-to-text module. Suppose its input sounds like
+Consider, for example, the speech-to-text module. Suppose its input sounds like the phrase,
 ~~~
 "too videotape's kits about aisle ends"
 ~~~
-In the traditional pipeline, the stage could forward this interpretation along, when the following might be more correct:
+In the traditional pipeline, the speech stage could forward this interpretation along, when the following might be more correct:
 ~~~
 "two videotape skits about islands"
 ~~~
 
-A stage can avoid committing to a single interpretation by generating a graph the represents all possible interpretations. The following diagram shows all the words in the lexicon that sound like portions of the input phrase. Paths from left to right represent possible interpretations. In this case, the blue path represents one of the better interpretations.
+A stage can avoid committing to a single interpretation by generating a graph the represents all possible interpretations. The following diagram shows all the words in a hypothetical lexicon that sound like portions of the input phrase. Paths from left to right represent possible interpretations. In this case, the blue path represents one of the better interpretations.
 
 <img src="graph1.png"/>
 
 Other paths through the graph represent less likely interpretations, such as
 ~~~
 to videotape's kits about aisle ends
-two videotape skit's ab out I land's
+two videotape skit's a boot I land's
 too video tapes kit's aobut aisle and's
 ~~~
 
-If the speech-to-text stage forwarded only the blue path, subsequent stages would not have access to these less likely, but possibly valid, interpretations.
+If the speech-to-text stage forwarded only the blue path, subsequent stages would not have access to these less likely, but potentially valid, interpretations.
 
 In generating this graph of words, the speech-to-text module still commits to decisions the sounds of words in the lexicon. It could avoid these decisions, altogether, by forwarding a graph of phonemes, rather than words. Here's a graph of phonemes that sound like `"two videotape skits about islands"`:
 
 <img src="phonemes.png"/>
 
-This graph-based approach requires a completely different type of Natural Language Processor because it must accept a graph as input, instead of a string of characters. The graph might be composed of words from the lexicon, or it might be made up of phonemes or other sound-based encodings.
+This graph-based approach _requires a completely different type of Natural Language Processor_ because it must accept a graph as input, instead of a string of characters. The graph might be composed of words from the lexicon, or it might be made up of phonemes or other sound-based encodings.
 
 In a similar manner, the natural lauguage processor can generate a graph of compount entities. Suppose the input text was `"burger with cheese fries and ketchup and a coke"`. Does this refer to a `cheeseburger` with `fries` or a `plain hamburger` with `cheesy fries`? We can let the business logic sort this out by forwarding a graph of potential compound entities:
 
@@ -58,6 +58,9 @@ In this graph, the term `cheese` might be part of the `hamburger` compound entit
 Given this graph, the business logic may be able to prune some paths. As an example, the ketchup ingredient, `squirt of ketchup` might only be allowed on the `hamburger`, while the `ketchup packet` may be the only form allowed with `french fries`. Likewise, `slice of cheese` may not be allowed on the hamburger, meaning that the term, `cheese` must be part of `cheesy fries`.
 
 Again, the graph-based approach requires a completely different type of Business Logic that can accept a graph as input and reason about the legality and value of each of the paths.
+
+## Retrofitting Legacy Systems
+
 
 ## Sources of Ambiguity in Speech-to-Text Systems
 Let's look at a few of the sources of ambiguity in speech-to-text systems. Probably the most common source of ambiguity is from [homonyms](https://en.wikipedia.org/wiki/Homonym). These are words that sound the same, but have different meanings. For example,
