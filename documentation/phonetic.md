@@ -61,6 +61,12 @@ Again, the graph-based approach requires a completely different type of Business
 
 ## Retrofitting Legacy Systems
 
+Popular commercial speech recognition systems tend to return a single interpretation instead of a graph of possibilities. On idea for retrofitting:
+1. Speech recognition system generates one interpretation
+1. Convert interpretation into graph of phonemes. Graph will have multiple paths because some words have multiple pronounciations (e.g. `"bow"`).
+1. Use fuzzy matcher against phoneme graph to generate graph of words from the lexicon, or just return the phoneme graph.
+
+Commerial NLU systems do a bit better. Are often feature detectors. Features can sometimes be arranged into a graph.
 
 ## Sources of Ambiguity in Speech-to-Text Systems
 Let's look at a few of the sources of ambiguity in speech-to-text systems. Probably the most common source of ambiguity is from [homonyms](https://en.wikipedia.org/wiki/Homonym). These are words that sound the same, but have different meanings. For example,
