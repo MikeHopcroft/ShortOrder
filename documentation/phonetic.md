@@ -6,7 +6,7 @@ A common architecture for speech-based conversational agents is a three stage pi
 
 This pipelined approach has a fundamental weakness that 
 limits the effectiveness of the system as a whole.
-The problem is that each stage must commit to an interpretation of its input in isolation and without context from the other stages. Once a stage commits to an interpretation, all subsequent stages must live with the interpretation, even if there were other plausible interpretations.
+The problem is that _each stage must commit to an interpretation of its input in isolation and without context from the other stages_. Once a stage commits to an interpretation, all subsequent stages must live with the interpretation, even if there were other plausible interpretations.
 
 This might not seem like a serious limitation, but consider a system with three stages, each of which gets the correct interpretation 90% of the time. If the errors in the stages are uncorrelated, then the second stage will be right 81% of the time and the third stage will succeed 73% of the time.
 
@@ -16,16 +16,50 @@ In domains with low error rates, this sort of compounding might be tolerable, bu
 
 ## A Better Way
 
-~~~
-two videotape skits about islands
+The challenge with the pipeline approach is that each stage must _commit to a single interpretation of its input_, and it must do this in a _highly ambiguous environment_ without access to _context from subsequent stages_.
 
-T UW1   V IH1 D IY0 OW0 T EY1 P   S K IH1 T S   AH0 B AW1 T   AY1 L AH0 N D Z
-tu  ˈvɪdɪˌoʊteɪ̯p ˈskɪts əˈbaʊt ˈaɪ̯lənds
+One solution is to avoid making decisions until the end of the pipeline.
+Instead of settling on _one interpretration_, a stage can forward the set of _all possible interpretations_.
+
+Consider, for example, the speech-to-text module. Suppose its input sounds like
 ~~~
+"too videotape's kits about aisle ends"
+~~~
+In the traditional pipeline, the stage could forward this interpretation along, when the following might be more correct:
+~~~
+"two videotape skits about islands"
+~~~
+
+A stage can avoid committing to a single interpretation by generating a graph the represents all possible interpretations. The following diagram shows all the words in the lexicon that sound like portions of the input phrase. Paths from left to right represent possible interpretations. In this case, the blue path represents one of the better interpretations.
 
 <img src="graph1.png"/>
 
-### Sources of Ambiguity in Speech-to-Text Systems
+Other paths through the graph represent less likely interpretations, such as
+~~~
+to videotape's kits about aisle ends
+two videotape skit's ab out I land's
+too video tapes kit's aobut aisle and's
+~~~
+
+If the speech-to-text stage forwarded only the blue path, subsequent stages would not have access to these less likely, but possibly valid, interpretations.
+
+In generating this graph of words, the speech-to-text module still commits to decisions the sounds of words in the lexicon. It could avoid these decisions, altogether, by forwarding a graph of phonemes, rather than words. Here's a graph of phonemes that sound like `"two videotape skits about islands"`:
+
+<img src="phonemes.png"/>
+
+This graph-based approach requires a completely different type of Natural Language Processor because it must accept a graph as input, instead of a string of characters. The graph might be composed of words from the lexicon, or it might be made up of phonemes or other sound-based encodings.
+
+In a similar manner, the natural lauguage processor can generate a graph of compount entities. Suppose the input text was `"burger with cheese fries and ketchup and a coke"`. Does this refer to a `cheeseburger` with `fries` or a `plain hamburger` with `cheesy fries`? We can let the business logic sort this out by forwarding a graph of potential compound entities:
+
+<img src="entities.png"/>
+
+In this graph, the term `cheese` might be part of the `hamburger` compound entity or it might be part of the name of the `cheesy fries` product. The term `ketchup` might refer to a `packet of ketchup`, or a squirt of the `ketchup ingrdient`.
+
+Given this graph, the business logic may be able to prune some paths. As an example, the ketchup ingredient, `squirt of ketchup` might only be allowed on the `hamburger`, while the `ketchup packet` may be the only form allowed with `french fries`. Likewise, `slice of cheese` may not be allowed on the hamburger, meaning that the term, `cheese` must be part of `cheesy fries`.
+
+Again, the graph-based approach requires a completely different type of Business Logic that can accept a graph as input and reason about the legality and value of each of the paths.
+
+## Sources of Ambiguity in Speech-to-Text Systems
 Let's look at a few of the sources of ambiguity in speech-to-text systems. Probably the most common source of ambiguity is from [homonyms](https://en.wikipedia.org/wiki/Homonym). These are words that sound the same, but have different meanings. For example,
 ~~~
 for, four
@@ -68,11 +102,11 @@ The second problem is that the system must be trained for the context in which i
 
 In some scenarios, the training data changes over time, as new products are introduced and the system is rolled out in new environments. These system require continuous training along with the rigor and processes to ensure that successive versions of the system don't regress working functionality.
 
-### Sources of Errors in NLP Systems
+### Sources of Errors and Ambiguity in NLP Systems
 
 The world of natural language understanding has its own set of ambiguities.
 
-Name inside name
+**Name inside name**
 
 ~~~
 "I'd like a coffee with a half and half"
@@ -94,7 +128,7 @@ CONJUNCTION           : and
 UNKNOWN               : half
 ~~~
 
-Segmentation
+**Segmentation**
 
 ~~~
 "I'd like a burger with cheese fries and a coke"
@@ -109,7 +143,7 @@ cheese fries
 coke
 ~~~
 
-Segmentation
+**Segmentation into Compound Entities**
 
 ~~~
 "I'd like a grande latte iced tea and a muffin""
@@ -123,7 +157,7 @@ iced tea
 muffin
 ~~~
 
-Segmentation
+**Segmentation into Compound Entities**
 
 ~~~
 "I'd like an iced tea latte and a muffin"
@@ -198,3 +232,16 @@ i found the mis counts uprising
 ### Pronunciation Dictionaries
 CMU
 Wiktionary
+
+
+### Random Stuff
+without access to context from successive stages. In a highly ambiguous environment, it is easy to pick an interpretation which will ultimately turn out to be incorrect.
+~~~
+two videotape skits about islands
+
+T UW1   V IH1 D IY0 OW0 T EY1 P   S K IH1 T S   AH0 B AW1 T   AY1 L AH0 N D Z
+tu  ˈvɪdɪˌoʊteɪ̯p ˈskɪts əˈbaʊt ˈaɪ̯lənds
+~~~
+
+
+
