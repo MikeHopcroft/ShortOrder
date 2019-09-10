@@ -1,14 +1,14 @@
 # Mitigating Errors in Speech-to-Text Systems
 
-A common architecture for speech-based conversational agents is a three stage pipeline, where speech is first converted to text, which is then passed to an NLP algorithm that extracts entities, intents, and sentiments, which are then passed to a rules-based system which performs actions.
+A common architecture for speech-based conversational agents is a three stage pipeline, where speech is first converted to text, which is then passed to an NLP algorithm that extracts entities, intents, and sentiments, which are then passed to a rules-based system that performs actions.
 
 <img src="common-architecture.png"/>
 
 This pipelined approach has two fundamental weaknesses that 
 limit the effectiveness of the system as a whole.
-The first problem is that _each stage must commit to an interpretation of its input in isolation and without context from the other stages_. The second problem is that once a stage commits to an interpretation, all subsequent stages must live with this interpretation, even if there were other plausible interpretations.
+The first problem is that **_each stage must commit to an interpretation of its input in isolation and without context from the other stages_**. The second problem is that once a stage commits to an interpretation, **_all subsequent stages must live with this interpretation_**, even if there were other plausible interpretations.
 
-This might not seem like a serious limitation, but consider a system with three stages, each of which gets the correct interpretation 90% of the time. If the errors in the stages are uncorrelated, then the second stage will be right 81% of the time and the third stage will succeed 73% of the time.
+These might not seem like serious limitations, but consider a system with three stages, each of which gets the correct interpretation 90% of the time. If the errors in the stages are uncorrelated, then the second stage will be right 81% of the time and the third stage will succeed 73% of the time.
 
 <img src="error-compounding.png"/>
 
@@ -20,7 +20,7 @@ In a highly ambiguous environment, stages that lack access to global system cont
 
 The challenge with the pipeline approach is that each stage must _commit to a single interpretation of its input_, and it must do this in a _highly ambiguous environment_ without access to _context from subsequent stages_.
 
-### Deferring Decisions
+### Deferring Decisions about Speech
 One solution is to avoid making decisions until the end of the pipeline.
 Instead of settling on _one interpretration_, each stage can forward _the set of all possible interpretations_. The approach maintains multiple, alternative views of world through the life of the computation.
 
@@ -41,18 +41,22 @@ Other paths through the graph represent less likely interpretations, such as
 ~~~
 to videotape's kits about aisle ends
 two videotape skit's a boot I land's
-too video tapes kit's aobut aisle and's
+too video tapes kit's about aisle and's
 ~~~
 
 If the speech-to-text stage forwarded only the blue path, subsequent stages would not have access to these less likely, but potentially valid, interpretations.
 
-In generating this graph of words, the speech-to-text module still commits to decisions about the sounds of words in the lexicon. It could avoid these decisions, altogether, by forwarding a graph of phonemes, rather than words. Here's a graph of phonemes that sound like `"two videotape skits about islands"`:
+In generating this graph of words, the speech-to-text module still commits to decisions about the sounds of words in the lexicon. It could avoid these decisions, altogether, by forwarding a graph of phonemes, instead of a graph of words. Here's a graph of phonemes that sound like `"two videotape skits about islands"`:
 
 <img src="phonemes.png"/>
 
+Note that this graph incorporates two pronounciations for `"video"`, `"about"`, and `"islands"`.
+
 This graph-based approach _requires a completely different type of Natural Language Processor_ because it must accept a graph as input, instead of a string of characters. The graph might be composed of words from the lexicon, or it might be made up of phonemes or other sound-based encodings.
 
-In a similar manner, the natural lauguage processor can generate a graph of compound entities. Suppose the input text was `"burger with cheese fries and ketchup and an orange"`. Does this refer to a `cheeseburger` with `fries` or a `plain hamburger` with `cheesy fries`? We can let the business logic sort this out by forwarding a graph of potential compound entities:
+### Deferring Decisions about Entities
+
+In a similar manner, the natural lauguage processor can generate a graph of compound entities. Suppose the input text was `"burger with cheese fries ketchup and an orange"`. Does this refer to a `cheeseburger` with `fries` or a `plain hamburger` with `cheesy fries`? We can let the business logic sort this out by forwarding a graph of potential compound entities. In the following graph, the blue path represents one potential interpretation. Because we have a graph, the business logic will be able to consider all paths.
 
 <img src="entities2.png"/>
 
@@ -64,7 +68,7 @@ Again, the graph-based approach requires a completely different type of Business
 
 ## Retrofitting Legacy Systems
 
-Popular commercial speech recognition systems tend to return a single interpretation instead of a graph of possibilities. On idea for retrofitting:
+One challenge with this approach is that commercial speech recognition systems tend to return a single interpretation instead of a graph of possibilities. One idea for retrofitting:
 1. Speech recognition system generates one interpretation
 1. Convert interpretation into graph of phonemes. Graph will have multiple paths because some words have multiple pronounciations (e.g. `"bow"`).
 1. Use fuzzy matcher against phoneme graph to generate graph of words from the lexicon, or just return the phoneme graph.
