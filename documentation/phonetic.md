@@ -70,13 +70,17 @@ Again, the graph-based approach requires a completely different type of Business
 
 ## Retrofitting Legacy Systems
 
-Ideally, one would like each stage to output a graph of all possible interpretations. One challenge is that common, off-the-shelf speech and NLP systems are not designed to work with and produce graphs of interpretations. These systems typically target the waterfall/pipeline architecture, and consequently take in a single interpretation in one domain and produce a single interpretation in another domain.
+Ideally, one would like each stage to output a graph of all possible interpretations. One challenge is that common, off-the-shelf speech and NLP systems are not designed to work with, and produce, graphs of interpretations. These systems typically target the waterfall/pipeline architecture, and consequently take in a single interpretation in one domain and produce a single interpretation in another domain.
 
 In some cases we can retrofit these systems to work with graphs. 
-As an example, let's consider a speech-to-text system that outputs the phrase `"latte with white phone"`. We can map this phrase from the space of words to a space of phonetic encodings and back to get a broader set of word interpretations.
+Let's consider a speech-to-text system that outputs a single interpretation, consisting of a sequence of words. We can map this phrase from the space of words to a space of phonetic encodings and back to get a broader set of word interpretations.
 
 Mappings between the space of words and their phonetic encodings are many-to-many.
-[Heteronyms](https://en.wikipedia.org/wiki/Heteronym_(linguistics)) are words with the same spelling that have different meanings and sounds. Here are some examples of words heteronyms mapped to their phonetic representations:
+To see why, let's look at
+[heteronyms](https://en.wikipedia.org/wiki/Heteronym_(linguistics))
+and
+[homophones](https://en.wikipedia.org/wiki/Homophone).
+[Heteronyms](https://en.wikipedia.org/wiki/Heteronym_(linguistics)) are words with the same spelling that have different meanings and sounds. Here are some examples of heteronym words, mapped to their phonetic representations:
 ~~~
 bow => B AW1 (front of a ship)
     => B OW1 (used in archery)
@@ -91,6 +95,7 @@ tear => T EH1 R (to rip)
 ~~~
 S IY1 => sea (body of water)
       => see (looking)
+      => c (the letter)
 
 DH E1 R => there (over there)
         => their (possessive)
@@ -98,10 +103,10 @@ DH E1 R => there (over there)
 
 T UW1 => to (preposition)
       => too (also)
-      => two (number)
+      => two (the number)
 ~~~
 
-Let's look at the phonetic expansion of the phrase, `"their bow to the sea"`:
+Now let's look at the phonetic expansion of the phrase, `"their bow to the sea"`:
 
 <img src="expansion1.png"/>
 
@@ -118,7 +123,20 @@ The approach, shown above, retains the word-segmentation originally produced by 
 * `"ice cream for I scream"`
 * `"I scream for I scream"`
 
-We can produce all of the possible segmentations of a phrase by converting to a phonetic representation that doesn't group phonemes into words. We can then match the phonetic representation of every word in the lexicon with every path fragment in the graph. The combinatorics may seem expensive, but in practice we find that transformation can be performed in milliseconds.
+We can produce all of the possible segmentations of a phrase by converting to a phonetic representation that doesn't group phonemes into words. We can then match the phonetic representation of every word in the lexicon with every path fragment in the graph. The combinatorics may seem expensive, but in practice the transformation can be performed in milliseconds on commodity hardware.
+
+Let's walk through the transformation with the phrase, `"I scream for ice scream"`. Here's one possible output from the speech to text:
+
+<img src="ice-cream1.png"/>
+
+Here it is after converting each word to a sequence phonemes. In this case, each word only had one pronounciation, so the graph is still linear:
+<img src="ice-cream2.png"/>
+
+The next step is to ungroup the phonemes so that we can consider other segmentations:
+<img src="ice-cream3.png"/>
+
+Then we add an edge everywhere a word in the lexicon matches the phonemes. The blue path corresponds to the likely interpretation, but all paths are available for inspection by the next stage.
+<img src="ice-cream4.png"/>
 
 ### Choice of Phonetic Encodings and Distance Metrics
 
@@ -390,3 +408,10 @@ One challenge with this approach is that commercial speech recognition systems t
 
 Commerial NLU systems do a bit better. Are often feature detectors. Features can sometimes be arranged into a graph.
 
+i - AY1
+scream - S K R IY1 M
+for - F AO1 R
+ice - AY1 S
+cream - K R IY1 M
+
+AY1 S K R IY1 M F AO1 R AY1 S K R IY1 M
