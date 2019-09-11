@@ -70,10 +70,11 @@ Again, the graph-based approach requires a completely different type of Business
 
 ## Retrofitting Legacy Systems
 
-Ideally, one would like each stage to output a graph of all possible interpretations. One challenge is that common, off-the-shelf speech and NLP systems are not designed to work with, and produce, graphs of interpretations. These systems typically target the waterfall/pipeline architecture, and consequently take in a single interpretation in one domain and produce a single interpretation in another domain.
+Ideally, we'd like each stage to output a graph of all possible interpretations. One challenge is that common, off-the-shelf speech and NLP systems are not designed to work with, and produce, graphs of interpretations. These systems typically target a waterfall/pipeline architecture, and consequently take in a single interpretation in one domain and produce a single interpretation in another domain.
 
+### Word Identification
 In some cases we can retrofit these systems to work with graphs. 
-Let's consider a speech-to-text system that outputs a single interpretation, consisting of a sequence of words. We can map this phrase from the space of words to a space of phonetic encodings and back to get a broader set of word interpretations.
+Let's consider, first, a speech-to-text system that outputs a single interpretation, consisting of a sequence of words. We can map this phrase from the space of words to a space of phonetic encodings and back to get a broader set of word interpretations.
 
 Mappings between the space of words and their phonetic encodings are many-to-many.
 To see why, let's look at
@@ -86,10 +87,10 @@ bow => B AW1 (front of a ship)
     => B OW1 (used in archery)
 
 lead => L EH1 D (element Pb)
-     => L IY1 D (to guide)
+     => L IY1 D (as in leadership)
 
 tear => T EH1 R (to rip)
-     => T IH1 R (tear drop)
+     => T IH1 R (as in tear drop)
 ~~~
 [Homophones](https://en.wikipedia.org/wiki/Homophone) are words with the same sound that have different meanings and spellings. Here are some examples of phonetic encodings mapping to their homophone words:
 ~~~
@@ -106,26 +107,28 @@ T UW1 => to (preposition)
       => two (the number)
 ~~~
 
-Now let's look at the phonetic expansion of the phrase, `"their bow to the sea"`:
+Now let's look at the phonetic expansion of the phrase, `"their bow to the sea"`.
+Here's that initial phrase, provided by the speech-to-text system:
 
 <img src="expansion1.png"/>
 
-When mapping to a phonetic representation, the word, `bow`, has two pronounciations and the word, `the` has three:
+When mapping to a phonetic representation, the word, `bow`, has two pronounciations while the word, `the`, has three:
 
 <img src="expansion2.png"/>
 
-When we map back to words, the phoneme sequence `DH EH1 R` maps to `{their, there, they're}`, and `T UW1` maps to `{to, too, two, tue}` and `S IY1` maps to `{sea, see}`:
+When we map back to words, the phoneme sequence `DH EH1 R` maps to `{their, there, they're}`, while `T UW1` maps to `{to, too, two, tue}` and `S IY1` maps to `{sea, see}`. The result is a graph that represents 24 different interpretations:
 
 <img src="expansion3.png"/>
 
-The approach, shown above, retains the word-segmentation originally produced by the speech-to-text system. But what if the segmentation is wrong? Consider the phrase, `"I scream of ice cream"`. This could also have been segmented as
+### Word Segmentation
+The approach, shown above, retains the word-segmentation originally produced by the speech-to-text system. But what if speech-to-text gets the initial segmentation wrong? Consider the phrase, `"I scream for ice cream"`. This could also have been segmented as
 * `"ice cream for ice scream"`
 * `"ice cream for I scream"`
 * `"I scream for I scream"`
 
 We can produce all of the possible segmentations of a phrase by converting to a phonetic representation that doesn't group phonemes into words. We can then match the phonetic representation of every word in the lexicon with every path fragment in the graph. The combinatorics may seem expensive, but in practice the transformation can be performed in milliseconds on commodity hardware.
 
-Let's walk through the transformation with the phrase, `"I scream for ice scream"`. Here's one possible output from the speech to text:
+Let's walk through the transformation with the phrase, `"I scream for ice scream"`. Here's one possible output from the speech to text module:
 
 <img src="ice-cream1.png"/>
 
@@ -135,11 +138,12 @@ Here it is after converting each word to a sequence phonemes. In this case, each
 The next step is to ungroup the phonemes so that we can consider other segmentations:
 <img src="ice-cream3.png"/>
 
-Then we add an edge everywhere a word in the lexicon matches the phonemes. The blue path corresponds to the likely interpretation, but all paths are available for inspection by the next stage.
+At this point we add an edge everywhere a word from the lexicon matches the phonemes. The blue path corresponds to a likely interpretation, but all paths are available for inspection by the next stage.
 <img src="ice-cream4.png"/>
 
 ### Choice of Phonetic Encodings and Distance Metrics
 
+(THIS IS JUST ROUGH NOTES)
 Goal is to group words into equivalence classes based on how they sound.
 Want groups to balance between being broad enough to capture differences in speakers and narrow enough to distinguish words with different meanings.
 
@@ -150,7 +154,7 @@ Can use an encoding, in conjunction with a distance metric to create broader clu
 Can use a distance metric on its own to cluster a lexicon, without transforming to a phonetic encoding.
 
 Potential Encodings
-* **metaphone** - originally designed for finding European surnames, given a potentially misspelled string. Tends to form clusters that are too large, especially for one-syllable words. Structure prevents concetenation necessary to produce new segmentations.
+* **metaphone** - originally designed for finding European surnames, with uncertain spellings. Tends to form clusters that are too large, especially for one-syllable words. Structure prevents concetenation necessary to produce new segmentations.
 * **double metaphone** - poor performance on short words, discards distinguishing characteristics towards the ends of words.
 * **metaphone 3** - not open source
 * **CMU pronounciation dictionary** - Open source. Forms very tight, precise clusters. Must be used in conjunction with a distance metric that allows phoneme substitution.
@@ -160,7 +164,7 @@ Potential Phonetic Distance Metrics
 * [Microsoft Phonetic Matching](https://github.com/microsoft/PhoneticMatching)
 * **Speech-to-text Confusion Matrix** - given a large set of labeled speech-to-text outputs, one can form equivalence classes based on words the speech-to-text has trouble disambiguating. The distance is the observed probability of confusion.
 
-Normalizing Singular/Plural, Past/Present/Future, Contractions
+Normalizing for Singular/Plural, Past/Present/Future, Contractions
 * It may be desirable to treat the singular and plural forms of nouns as being the same, even though they have different pronounciations. Because this normalization can change the sound, it must be done after the word to phonetic to word transformation.
 * It may be desirable to treat the past, present, and future tenses of verbs as being the same.
 * It may be desirable to expand contractions
