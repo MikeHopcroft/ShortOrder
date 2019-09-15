@@ -38,7 +38,7 @@ export class Random {
     private readonly random: seedrandom.prng;
 
     constructor(seed: string) {
-        this.random = seedrandom('seed1'); 
+        this.random = seedrandom(seed); 
     }
 
     // Returns random integer in range [start, end).
