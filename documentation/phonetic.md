@@ -20,6 +20,8 @@ In a highly ambiguous environment, stages that lack access to global system cont
 
 The challenge with the pipeline approach is that each stage must _commit to a single interpretation of its input_, and it must do this in a _highly ambiguous environment_ without access to _context from subsequent stages_.
 
+In the next section we describe a graph-based approach that allows simultaneous consideration of multiple interpretations. After that, we discuss ways that later stages can provide context for decisions started in earlier sstages.
+
 ### Deferring Decisions about Speech
 One solution is to avoid making decisions until the end of the pipeline.
 Instead of settling on _one interpretration_, each stage can forward _the set of all possible interpretations_. The approach maintains multiple, alternative views of world through the life of the computation.
@@ -67,6 +69,18 @@ In this graph, the term `cheese` might be part of the `hamburger` compound entit
 Given this graph, the business logic may be able to prune some paths. As an example, the ketchup ingredient, `squirt of ketchup` might only be allowed on the `hamburger`, while the `ketchup packet` may be the only form allowed with `french fries`. Likewise, `slice of cheese` may not be allowed on the hamburger, meaning that the term, `cheese` must be part of `cheesy fries`.
 
 Again, the graph-based approach requires a completely different type of Business Logic that can accept a graph as input and reason about the legality and value of each of the paths.
+
+### Sharing Context across Stages
+To some extent, the existence of the graph is sharing context from earlier stages to later stages.
+
+Can add weights/probabilities.
+Can add data for reprocessing.
+
+Can prune graph, based on lexicon, business rules, parse, etc.
+Can create equivalence classes offline from lexicon and STT
+Word frequency list
+
+Example of target identification. Item removal case study.
 
 ## Retrofitting Legacy Systems
 
@@ -162,10 +176,10 @@ Potential Encodings
 
 Potential Phonetic Distance Metrics
 * [Microsoft Phonetic Matching](https://github.com/microsoft/PhoneticMatching)
-* **Speech-to-text Confusion Matrix** - given a large set of labeled speech-to-text outputs, one can form equivalence classes based on words the speech-to-text has trouble disambiguating. The distance is the observed probability of confusion.
+* **Speech-to-text Confusion Matrix** - given a large set of labeled speech-to-text outputs, one can form equivalence classes based on words the speech-to-text system has trouble disambiguating. The distance is the observed probability of confusion.
 
 Normalizing for Singular/Plural, Past/Present/Future, Contractions
-* It may be desirable to treat the singular and plural forms of nouns as being the same, even though they have different pronounciations. Because this normalization can change the sound, it must be done after the word to phonetic to word transformation.
+* It may be desirable to treat the singular and plural forms of nouns as being the same, even though they have different pronounciations. Because this normalization usually impacts the pronounciation, it must be done after the word to phonetic to word transformation.
 * It may be desirable to treat the past, present, and future tenses of verbs as being the same.
 * It may be desirable to expand contractions
 
