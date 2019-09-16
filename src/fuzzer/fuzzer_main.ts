@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { createWorld} from 'prix-fixe';
+import { createWorld, CorrectionLevel} from 'prix-fixe';
 
 import { createShortOrderWorld } from '../integration';
 
@@ -176,10 +176,10 @@ export async function runFuzzer(
 
         let counter = 0;
         for (const result of results.results) {
-            for (let i = 0; i < result.test.inputs.length; ++i) {
-                console.log(`${counter}: "${result.test.inputs[i]}"`);
+            for (let i = 0; i < result.test.steps.length; ++i) {
+                console.log(`${counter}: "${result.test.steps[i].rawSTT}"`);
             }
-            if (result.test.inputs.length > 1) {
+            if (result.test.steps.length > 1) {
                 console.log(' ');
             }
             counter++;
@@ -201,7 +201,10 @@ export async function runTests(
             break;
         }
         count++;
-        const result = await test.run(processor, catalog);
+        const result = await test.run(
+            processor,
+            catalog,
+            CorrectionLevel.STT);
         results.recordResult(result);
     }
 
@@ -221,7 +224,13 @@ export function makeTests(
             break;
         }
         count++;
-        const result = new Result(test, test.expected, true, undefined, 0);
+        const result = new Result(
+            test,
+            test.steps,
+            true,
+            undefined,
+            0
+        );
         results.recordResult(result);
     }
 

@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { createWorld, TestCase, TestLineItem, TestOrder } from 'prix-fixe';
+import { createWorld, TestCase, TestLineItem, TestOrder, CorrectionLevel } from 'prix-fixe';
 
 import { createShortOrderWorld, ShortOrderWorld } from '../src';
 
@@ -53,11 +53,9 @@ async function go(utterances: string[]) {
 
     const testCase = new TestCase(
         0,
-        'priority',
         ['suites'],
         'comment',
-        utterances,
-        utterances.map( x => ({ lines: [] }))
+        utterances.map(x => ({ rawSTT: x, cart: []})),
     );
 
     console.log('UTTERANCES:');
@@ -67,7 +65,11 @@ async function go(utterances: string[]) {
     console.log(' ');
     console.log('Cart');
 
-    const result = await testCase.run(processor, world.catalog);
+    const result = await testCase.run(
+        processor,
+        world.catalog,
+        CorrectionLevel.Raw
+    );
 
     OrderOps.printOrder(result.observed[utterances.length - 1]);
 }
@@ -79,7 +81,7 @@ export class OrderOps {
     }
 
     static formatOrder(order: TestOrder) {
-        return order.lines.map(OrderOps.formatLineItem).join('\n');
+        return order.cart.map(OrderOps.formatLineItem).join('\n');
     }
 
     static formatLineItem(item: TestLineItem) {

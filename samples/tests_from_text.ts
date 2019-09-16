@@ -94,15 +94,15 @@ async function go() {
     const processor = createShortOrderWorld(world, dataPath, undefined, false).processor;
 
     // Run test suite to get new baseline.
-    const priority = 0;
     const suites: string[] = [];
+    const comment = '';
     const results = await TestSuite.fromInputLines(
         processor,
-        world.catalog as Catalog,
+        world.catalog,
         speechToTextFilter,
-        lines,
-        priority,
-        suites);
+        filtered,
+        suites,
+        comment);
 
     const yamlText = yaml.safeDump(results, { noRefs: true });
 

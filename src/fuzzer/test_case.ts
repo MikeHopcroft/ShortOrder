@@ -3,7 +3,8 @@ import {
     ItemInstance,
     TestCase,
     TestLineItem, 
-    TestOrder
+    TestOrder,
+    TestStep
 } from 'prix-fixe';
 
 import {
@@ -17,8 +18,7 @@ export function createTestCase(
     catalog: ICatalog,
     steps: StepX[]
 ): TestCase {
-    const inputs: string[] = [];
-    const results: TestOrder[] = [];
+    const testSteps: TestStep[] = [];
 
     let items: ItemInstance[] = [];
     for (const order of steps) {
@@ -28,17 +28,18 @@ export function createTestCase(
             appendItemLines(0, item, lines, catalog);
         }
 
-        inputs.push(order.buildText().join(' '));
-        results.push({lines});
+        const step: TestStep = {
+            rawSTT: order.buildText().join(' '),
+            cart: lines
+        };
+        testSteps.push(step);
     }
 
     const testCase = new TestCase(
         counter++,
-        '1',
         ['unverified'],
         'synthetic',        // TODO: put info in comment?
-        inputs,
-        results);
+        testSteps);
 
     return testCase;
 }
