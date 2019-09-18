@@ -211,6 +211,7 @@ export class EntityBuilderBase {
             const recipe = this.cookbook.findOptionRecipe(token.rid, 'TODO');
             const items = this.cartOps.createItemsFromOptionRecipe(recipe);
             this.options.push(...items);
+            this.optionTokenCounts.push(1);
             tokens.take(1);
             return true;
         } else if (tokens.startsWith([ATTRIBUTE, OPTION])) {
