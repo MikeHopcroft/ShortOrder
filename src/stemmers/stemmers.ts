@@ -118,11 +118,14 @@ function replacer(replaceFile: string, stemmer: StemmerFunction): StemmerFunctio
     const lines = fs.readFileSync(replaceFile).toString().match(/[^\r\n]+/g);
     const replacements = new Map<string, string>();
     if (lines) {
+        // TODO: lineNumber may be wrong if match() filtered out blank lines?
         let lineNumber = 0;
         for (const line of lines) {
             ++lineNumber;
+            // TODO: why isn't trimmed used?
             const trimmed = line.trim();
             if (line.length > 0 && !line.startsWith('#') && !line.startsWith('//')) {
+                // TODO: use a real CSV reader
                 const fields = line.split(',');
                 if (fields.length === 2) {
                     const left = fields[0].trim();

@@ -68,7 +68,7 @@ export class LexicalAnalyzer {
         } else {
             this.lexicon = new Lexicon();
         }
-        addCustomStemmer(this.lexicon.termModel);
+
         this.tokenizer = new Tokenizer(
             this.lexicon.termModel,
             this.lexicon.numberParser,
@@ -273,31 +273,6 @@ function* generateOptions(world: World): IterableIterator<Alias> {
             }
         }
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Custom stemmer
-//
-///////////////////////////////////////////////////////////////////////////////
-// TODO: This seems like a hack.
-// Consider alternative to monkey patch.
-// Consider making data-driven.
-function addCustomStemmer(model: ITermModel) {
-    const stem = model.stem;
-    model.stem = (term: string): string => {
-        if (term.toLowerCase() === 'iced') {
-            // Fix for confusion between the adjective, "iced", and the
-            // noun, "ice".
-            return 'iced';
-        } else if (term.toLowerCase() === "that's") {
-            // Fix for confusion between the pronoun, "that", and the
-            // contraction, "that's".
-            return "that's";
-        } else {
-            return stem(term);
-        }
-    };
 }
 
 ///////////////////////////////////////////////////////////////////////////////
