@@ -26,7 +26,12 @@ import {
     tokenToString,
 } from '../lexer';
 
-import { EntityBuilder, TargetBuilder } from './entity_builder';
+import {
+    EntityBuilder,
+    OptionTargetBuilder,
+    TargetBuilder
+} from './entity_builder';
+
 import { HypotheticalItem, SequenceToken, Segment } from './interfaces';
 import { Parser } from './parser';
 import { splitOnEntities } from './parser_utilities';
@@ -42,11 +47,12 @@ export function subgraphFromItems(
     lexer: LexicalAnalyzer,
     cart: Cart,
     graph: Graph,
-    span: Span
+    span: Span,
+    includeProducts: boolean
 ): Graph {
     const tokens = new Set<Token>();
     for (const item of cart.items) {
-        addTokens(attributes, lexer, item, tokens);
+        addTokens(attributes, lexer, item, tokens, includeProducts);
     }
 
     return createSubgraph(lexer.tokenizer, graph.edgeLists, tokens, span);
@@ -56,20 +62,25 @@ function addTokens(
     attributes: AttributeInfo,
     lexer: LexicalAnalyzer,
     item: ItemInstance,
-    tokens: Set<Token>
+    tokens: Set<Token>,
+    includeProducts: boolean
 ): void {
-    // Add entity token
-    const pid = AttributeInfo.pidFromKey(item.key);
-    tokens.add(lexer.getEntityToken(pid));
+    if (includeProducts) {
+        // Add entity token
+        const pid = AttributeInfo.pidFromKey(item.key);
+        tokens.add(lexer.getEntityToken(pid));
 
-    // Add attribute tokens
-    for (const aid of attributes.getAttributes(item.key)) {
-        tokens.add(lexer.getAttributeToken(aid));
+        // Add attribute tokens
+        for (const aid of attributes.getAttributes(item.key)) {
+            tokens.add(lexer.getAttributeToken(aid));
+        }
     }
 
     // Add child item tokens.
     for (const child of item.children) {
-        addTokens(attributes, lexer, child, tokens);
+        // NOTE: this code assumes a two-level ItemInstance hierarchy,
+        // so the recursive call always passes includeProducts = true.
+        addTokens(attributes, lexer, child, tokens, true);
     }
 }
 
@@ -144,7 +155,7 @@ function createSubgraph(
 // TODO: remove an option from an implicit entity - e.g. 'I removed the decaf'
 // TODO: remove an attribute from an implicit entity - e.g. 'I removed the large` - doesn't make sense
 // Seems you can change/modify an attribute, but not remove it.
-export function *targets(
+export function *productTargets(
     parser: Parser,
     state: State,
     graph: Graph,
@@ -163,7 +174,14 @@ export function *targets(
     // Construct lexical subgraph corresponding to items in the cart.
     // Subgraph edges will correspond to tokens for items in `cart`.
     //
-    const subgraph = subgraphFromItems(attributes, lexer, cart, graph, span);
+    const subgraph = subgraphFromItems(
+        attributes,
+        lexer,
+        cart,
+        graph,
+        span,
+        true
+    );
     
     // Try each tokenization of the subgraph.
     // Need to look at all tokenizations, not just the top-scoring ones because
@@ -216,3 +234,80 @@ export function *targets(
     }
 }
 
+export function *optionTargets(
+    parser: Parser,
+    item: ItemInstance,
+    graph: Graph,
+    span: Span
+): IterableIterator<HypotheticalItem> {
+    const attributes: AttributeInfo = parser.attributes;
+    const cartOps: ICartOps = parser.cartOps;
+    const lexer: LexicalAnalyzer = parser.lexer;
+
+    if (span.length === 0) {
+        return;
+    }
+
+    const cart: Cart = { items: [item] };
+
+    //
+    // Construct lexical subgraph corresponding to items in the cart.
+    // Subgraph edges will correspond to tokens for items in `cart`.
+    //
+    const subgraph = subgraphFromItems(
+        attributes,
+        lexer,
+        cart,
+        graph,
+        span,
+        false
+    );
+    
+    // Try each tokenization of the subgraph.
+    // Need to look at all tokenizations, not just the top-scoring ones because
+    // targets are often partially/poorly specified (e.g. "latte" instead of
+    // "cinnamon dolce latte")
+    const tokenizations = lexer.allTokenizations(subgraph);
+    for (const tokenization of tokenizations) {
+        // console.log('Tokenization:');
+        // for (const token of tokenization) {
+        //     const text = tokenToString(token);
+        //     console.log(`  ${text}, start=${token.start}, length=${token.length}`);
+        // }
+
+        const {entities, gaps} =
+            splitOnEntities(tokenization as Array<SequenceToken & Span>);
+        if (entities.length === 0 && gaps.length === 1) {
+            // const segment: Segment = {
+            //     left: gaps[0],
+            //     entity: entities[0].pid,
+            //     right: gaps[1]
+            // };
+
+            const builder = new OptionTargetBuilder(
+                parser,
+                gaps[0]
+            );
+            const target = builder.getOption();
+
+            // console.log(`  score: ${builder.getScore()}`);
+
+            if (target !== undefined) {
+                // console.log(`  ============ Hypothetical target ${target.key} ==============`);
+
+                // Yield matching ItemInstances from the cart.
+                // TODO: we need a predicate that treats unspecified attributes as wildcards.
+                // Need to know whether an attribute is default because it was omitted or
+                // specified as the default value.
+                // Perhaps EntityBuilder needs a wildcard mode.
+                for (const item of cartOps.findByKeyRegex(cart, target.key)) {
+                    // console.log(`    yield key=${item.key}, score=${builder.getScore()}`);
+                    yield {
+                        item,
+                        score: builder.getScore()
+                    };
+                }
+            }
+        }
+    }
+}

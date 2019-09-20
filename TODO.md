@@ -16,6 +16,7 @@ Algorithm to generate all top-scoring paths.
   There could still be other paths with same score. 
 
 Remove option from target or implicit
+  remove items field from Interpretation.
   target() becomes targetProduct()
   TargetBuilder becomes TargetProductBuilder
   targetOption

@@ -35,7 +35,7 @@ import {
 
 import { Parser } from "./parser";
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
-import { targets } from './target';
+import { productTargets } from './target';
 import { TokenSequence } from './token_sequence';
 
 // Attempts to pull off and process a squence of tokens corresponding
@@ -223,7 +223,7 @@ export function parseAddToTarget(
 
     const span = createSpan(target);
     let best = nop;
-    for (const targetItem of targets(
+    for (const targetItem of productTargets(
         parser,
         state,
         graph,
@@ -341,7 +341,7 @@ function parseReplaceTarget(
 ): Interpretation {
     let best = nop;
     const span = createSpan(targetTokens);
-    for (const targetItem of targets(
+    for (const targetItem of productTargets(
         parser,
         state,
         graph,

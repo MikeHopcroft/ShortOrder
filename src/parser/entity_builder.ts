@@ -35,6 +35,8 @@ export class EntityBuilderBase {
     private readonly info: AttributeInfo;
     protected readonly rules: IRuleChecker;
 
+    protected readonly generateRegexOptions: boolean;
+
     private readonly didToAID = new Map<DID,AID>();
 
     protected tokensUsed = 0;
@@ -45,12 +47,18 @@ export class EntityBuilderBase {
     protected readonly options: ItemInstance[] = [];
     protected readonly optionTokenCounts: number[] = [];
 
-    constructor(parser: Parser, pid: PID) {
+    constructor(
+        parser: Parser,
+        pid: PID,
+        generateRegexOptions: boolean
+    ) {
         this.cartOps = parser.cartOps;
         this.catalog = parser.catalog;
         this.cookbook = parser.cookbook;
         this.info = parser.attributes;
         this.rules = parser.rules;
+
+        this.generateRegexOptions = generateRegexOptions;
 
         this.pid = pid;
         this.tokensUsed += 1;
@@ -227,7 +235,7 @@ export class EntityBuilderBase {
                     option.id,
                     [attribute.id].values(),
                     [].values(),
-                    false);
+                    this.generateRegexOptions);
                 this.options.push(item);
                 this.optionTokenCounts.push(2);
                 tokens.take(2);
@@ -240,7 +248,7 @@ export class EntityBuilderBase {
 
             // Otherwise fall through to other cases.
         }
-        
+
         if (tokens.startsWith([NUMBERTOKEN, UNIT, OPTION])) {
             const quantity = tokens.peek(0) as NumberToken;
             const option = tokens.peek(2) as OptionToken;
@@ -249,14 +257,14 @@ export class EntityBuilderBase {
                 option.id,
                 [].values(),
                 [].values(),
-                false
+                this.generateRegexOptions
             );
             this.options.push(item);
             this.optionTokenCounts.push(3);
             tokens.take(3);
             return true;
         }
-        
+
         if (tokens.startsWith([NUMBERTOKEN, OPTION])) {
             const quantity = tokens.peek(0) as NumberToken;
             const option = tokens.peek(1) as OptionToken;
@@ -265,14 +273,14 @@ export class EntityBuilderBase {
                 option.id,
                 [].values(),
                 [].values(),
-                false
+                this.generateRegexOptions
             );
             this.options.push(item);
             this.optionTokenCounts.push(2);
             tokens.take(2);
             return true;
         }
-        
+
         if (tokens.startsWith([OPTION])) {
             const option = tokens.peek(0) as OptionToken;
             const item = this.cartOps.createItem(
@@ -280,7 +288,7 @@ export class EntityBuilderBase {
                 option.id,
                 [].values(),
                 [].values(),
-                false);
+                this.generateRegexOptions);
             this.options.push(item);
             this.optionTokenCounts.push(1);
             tokens.take(1);
@@ -363,7 +371,7 @@ export class EntityBuilder extends EntityBuilderBase {
         parser: Parser,
         segment: Segment
     ) {
-        super(parser, segment.entity);
+        super(parser, segment.entity, false);
 
         this.processLeft(new TokenSequence<GapToken>(segment.left), false);
         this.processRight(new TokenSequence<GapToken>(segment.right));
@@ -396,7 +404,7 @@ export class TargetBuilder extends EntityBuilderBase {
         pid: PID,
         right: GapToken[],
     ) {
-        super(parser, pid);
+        super(parser, pid, false);
 
         this.processRight(new TokenSequence<GapToken>(left));
         this.processRight(new TokenSequence<GapToken>(right));
@@ -421,6 +429,26 @@ export class TargetBuilder extends EntityBuilderBase {
     }
 }
 
+export class OptionTargetBuilder extends EntityBuilderBase {
+    constructor(
+        parser: Parser,
+        tokens: GapToken[],
+    ) {
+        const dummyPid: PID = 0;
+        super(parser, dummyPid, true);
+
+        this.processRight(new TokenSequence<GapToken>(tokens));
+    }
+
+    getOption(): ItemInstance | undefined {
+        if (this.options.length > 0) {
+            return this.options[0];
+        } else {
+            return undefined;
+        }
+    }
+}
+
 export class ModificationBuilder extends EntityBuilderBase {
     private readonly item: ItemInstance;
 
@@ -430,7 +458,7 @@ export class ModificationBuilder extends EntityBuilderBase {
         modifications: GapToken[],
     ) {
         const pid: PID = AttributeInfo.pidFromKey(original.key);
-        super(parser, pid);
+        super(parser, pid, false);
 
         this.processRight(new TokenSequence<GapToken>(modifications));
 
@@ -491,7 +519,7 @@ export class ReplacementBuilder extends EntityBuilderBase {
         original: ItemInstance,
         segment: Segment
     ) {
-        super(parser, segment.entity);
+        super(parser, segment.entity, false);
 
         // TODO: copy AIDs from original.
         // Need some way to take the last AID on a dimension.

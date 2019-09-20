@@ -37,7 +37,7 @@ import {
     Span,
 } from '../lexer';
 
-import { Parser, targets, HypotheticalItem } from '../parser';
+import { Parser, productTargets, HypotheticalItem } from '../parser';
 
 export class ShortOrderReplExtension implements IReplExtension {
     world: World;
@@ -317,7 +317,7 @@ export class ShortOrderReplExtension implements IReplExtension {
 
                 // const hypotheticals: HypotheticalItem[] = [];
                 const results = new Map<Key, HypotheticalItem>();
-                for (const hypothetical of targets(parser, state, filteredGraph, span)) {
+                for (const hypothetical of productTargets(parser, state, filteredGraph, span)) {
                     if (hypothetical.item) {
                         const key = hypothetical.item.key;
                         const existing = results.get(key);
