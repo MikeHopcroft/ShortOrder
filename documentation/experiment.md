@@ -1,5 +1,42 @@
 # Experiment
 
+## Experiment A: WER
+* Data consists of STT output text with corresponding vendor transcriptions.
+* Lexicon consists of phonetic representation of phrases from the menu, and top frequency terms from transcripts.
+* Input text should be converted to sequence of phonemes. ISSUE: some words have multiple pronunciations, so the input may, in some cases be a graph. Should we modify token-flow to consume graphs?
+* Enumerate maximally scoring paths in token-flow graph.
+* Convert each path back into its text representation.
+* Compute WER for each path.
+* Return the lowest WER found.
+
+## Experiment B: Entity Detection
+* Data consists of STT output text and corresponding expected entity sequences.
+* May need some sort of data labeling tool.
+* Lexicon and graph generation process the same as for Experiment A.
+* Compute Token Error Rate (TER) for each (path, expected) pair.
+* Return the lowest TER found.
+
+## Experiment C: End-to-end
+* Data consists of STT output text and corresponding input cart and expected output cart.
+* Will need to author expected carts.
+* Lexicon same as for Experiment A.
+* Will need to decide whether to use single-stage phonetic tokenizer, or two-stage tokenizer that generates a phonetic graph, followed by an entity graph.
+
+## Visualizer
+* Create graph-visualizer React component.
+
+## Annotation/Test Authoring Tool
+* Create tool that uses token-flow and menu to suggest annotations.
+
+## Token-flow Challenges
+
+* Token-flow performs matching at the word level. Its ingestor currently breaks text on white space. If we simply replace words with phoneme sequences, token-flow will break on phonemes. This behavior may be reasonable in that it performs fuzzy matching over phonemes.
+* The match scoring is currently based on words. It it likely that matching on phonemes will change the performance of the scoring system, but it is unclear whether the effect will be positive or negative.
+* The matching algorithm makes use of the concept of cross-domain terms. This concept has no phoneme equivalent. If we match entities directly with against phonemes, we will have to disable the cross-domain concept. We could use one instance token-flow to generate a graph of words, and another to generate a graph of entities. In this case, we could retain the cross-domain concept for the second token-flow. It is unclear whether the cross-domain concept is useful in the context of graphs.
+* Token-flow currently takes a linear sequence of terms as input. To get the full benefit of the graph approach, we would need to modify token-flow to match against a graph.
+* Will have to figure out how to handle the `EnglishNumberParser` used by `Lexicon`. One possibility is to just include numbers from 1 to 20 in the quantities.yaml file.
+
+
 ## Annotation tool
 Evaluate [doccano](https://github.com/chakki-works/doccano). 
 
@@ -67,7 +104,7 @@ A call to englishToPhonetic(‘island’) might return
 ]
 ~~~
 
-Notes
+**Notes:**
 * Initial implementation will likely make use of the [CMU pronunciation dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict). Will need code to parse and load the pronunciation dictionary into a map. 
 * May need a fallback pronunciation strategy for words not in the dictionary.
 * May want to consider other pronunciation sources.
@@ -79,7 +116,7 @@ The lexicon will draw words and phrases from two sources.
 The first source is the set of English text aliases for intents, products, options, attributes, quantifiers, and units defined in a menu. The second source is the set of the top-n most common terms in the user transcripts.
 
 **Work items:**
-* Convert aliases in each configuration file from English text to phonetic representation. Files include `products.yaml`, `options.yaml`, `attributes.yaml`, `quantifiers.yaml`, `units.yaml`, and `intents.yaml`.
+* Convert aliases in each configuration file from English text to phonetic representation. Files include `products.yaml`, `options.yaml`, `attributes.yaml`, `quantifiers.yaml`, `units.yaml`, and `intents.yaml`. In certain circumstances, we could do this conversion at ingestion time, perhaps with a custom stemmer. To do this we may need to modify the stemmer API to allow concatenation of phonemes from different words. Might also consider introducing a pluggable term mapping concept into the term treatment.
 * Generate a word-frequency table from the transcripts.
 * Construct a `words.yaml` file that defines a word-token for each of the top-n most common words in transcripts. The aliases for each token will be its phonetic representations.
 * Write a token-flow ingestor for `words.yaml`.
@@ -99,7 +136,7 @@ A test case will be an utterance, paired with an expected tokenization. The case
 
 **Work items:**
 * Suppress stemmer. We don't stem phonemes.
-* Suppress cross-domain terms. We don't need this concept for phonems.
+* Suppress cross-domain terms. We don't need this concept for phonems. Actually, might want something more subtle. 
 * Verify that hash function works on phonemes. If it does not generate unique hashes, consider using a `Map<string, number>` instead.
 
 ## Experiment Workflow
