@@ -55,10 +55,12 @@
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
     "pluralize": "^7.0.0",
-    "prix-fixe": "0.0.51",
     "readline-sync": "^1.4.9",
     "seedrandom": "^3.0.1",
     "talisman": "^0.21.0",
     "token-flow": "0.0.34"
+  },
+  "peerDependencies": {
+    "prix-fixe": "0.0.51"
   }
 }
