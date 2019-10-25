@@ -42,6 +42,8 @@
     "copyfiles": "^2.1.0",
     "gts": "^0.8.0",
     "mocha": "^5.2.0",
+    "prix-fixe": "0.0.51",
+    "token-flow": "0.0.35",
     "typescript": "~2.8.0"
   },
   "dependencies": {
@@ -57,10 +59,10 @@
     "pluralize": "^7.0.0",
     "readline-sync": "^1.4.9",
     "seedrandom": "^3.0.1",
-    "talisman": "^0.21.0",
-    "token-flow": "0.0.34"
+    "talisman": "^0.21.0"
   },
   "peerDependencies": {
-    "prix-fixe": "0.0.51"
+    "prix-fixe": "0.0.51",
+    "token-flow": "0.0.35"
   }
 }

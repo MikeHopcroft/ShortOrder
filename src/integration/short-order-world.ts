@@ -33,7 +33,7 @@ export function createShortOrderWorld(
 
     const stemmerFactory = new StemmerFactory(dataPath);
     const stemmer = stemmerFactory.create(stemmerName);
-    const termModel = new DefaultTermModel(stemmer);
+    const termModel = new DefaultTermModel({stemmer});
     const lexicon = new Lexicon(termModel);
 
     const lexer = new LexicalAnalyzer(
