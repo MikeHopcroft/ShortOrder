@@ -2,10 +2,10 @@ import * as fs from 'fs';
 
 import {
     Alias,
-    allPaths,
+    allTokenizations,
     Graph,
     Lexicon,
-    maximalPaths,
+    maximalTokenizations,
     Tokenizer,
     TokenizerAlias,
     Token,
@@ -190,35 +190,11 @@ export class LexicalAnalyzer {
     // Generator for tokenizations of the input string that are equivanent to
     // the top-scoring tokenization.
     *tokenizationsFromGraph2(graph: Graph): IterableIterator<Array<Token & Span>> {
-        for (const path of maximalPaths(graph.edgeLists)) {
-            let start = 0;
-            const tokens = new Array<Token & Span>();
-            for (const edge of path) {
-                tokens.push({
-                    ...edge.token,
-                    start,
-                    length: edge.length
-                });
-                start += edge.length;
-            }
-            yield tokens;
-        }
+        yield* maximalTokenizations(graph.edgeLists);
     }
 
     *allTokenizations(graph: Graph): IterableIterator<Array<Token & Span>> {
-        for (const path of allPaths(graph.edgeLists)) {
-            let start = 0;
-            const tokens = new Array<Token & Span>();
-            for (const edge of path) {
-                tokens.push({
-                    ...edge.token,
-                    start,
-                    length: edge.length
-                });
-                start += edge.length;
-            }
-            yield tokens;
-        }
+        yield* allTokenizations(graph.edgeLists);
     }
 }
 
