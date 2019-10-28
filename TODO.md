@@ -1,7 +1,9 @@
 # TODO List
 
-* Remove all `text.split(/\s+/)`
-* Consider moving loops from tokenizationsFromGraph2() and allTokenizations() to token-flow.
+* x Replace `text.split(/\s+/)` with termModel.breakWords()
+* x Consider moving loops from tokenizationsFromGraph2() and allTokenizations() to token-flow.
+* .targets command in replShortOrder may be broken. Also, can get span from graph.
+* Make lexer.createGraph return [terms, graph]
 
 Rules explorer
 

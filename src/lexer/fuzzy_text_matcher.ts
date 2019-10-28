@@ -37,11 +37,9 @@ export class FuzzyTextMatcher {
     }
 
     matches(query: string): FuzzyMatch[] {
-        const terms = query.split(/\s+/);
+        const terms = this.lexicon.termModel.breakWords(query);
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-
-        // TODO: terms should be stemmed and hashed by TermModel in Lexicon.
         const graph = this.tokenizer.generateGraph(hashed, stemmed);
 
         const matches = new Map<number, FuzzyMatch>();

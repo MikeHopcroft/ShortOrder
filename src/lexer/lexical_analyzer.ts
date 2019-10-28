@@ -181,7 +181,7 @@ export class LexicalAnalyzer {
     }
 
     createGraph(query: string): Graph {
-        const terms = query.split(/\s+/);
+        const terms = this.lexicon.termModel.breakWords(query);
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
         return this.tokenizer.generateGraph(hashed, stemmed);

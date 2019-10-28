@@ -82,11 +82,11 @@ export class ShortOrderReplExtension implements IReplExtension {
                 } else {
                     console.log(`token-flow query = ${query}`);
 
-                    const termsPrefix = this.prefix.split(/\s+/);
+                    const termsPrefix = this.lexer.lexicon.termModel.breakWords(prefix);
                     const stemmedPrefix = termsPrefix.map(this.world2.lexer.lexicon.termModel.stem);
                     const hashedPrefix = stemmedPrefix.map(this.world2.lexer.lexicon.termModel.hashTerm);
 
-                    const termsQuery = query.split(/\s+/);
+                    const termsQuery = this.lexer.lexicon.termModel.breakWords(query);
                     const stemmedQuery = termsQuery.map(this.world2.lexer.lexicon.termModel.stem);
                     const hashedQuery = stemmedQuery.map(this.world2.lexer.lexicon.termModel.hashTerm);
                     
@@ -200,7 +200,7 @@ export class ShortOrderReplExtension implements IReplExtension {
 
                 const tokenizations = this.lexer.tokenizationsFromGraph2(filteredGraph);
 
-                const terms = line.split(/\s+/);
+                const terms = this.lexer.lexicon.termModel.breakWords(line);
                 let counter = 0;
                 for (const tokenization of tokenizations) {
                     console.log(`Tokenization ${counter}:`);
@@ -249,7 +249,7 @@ export class ShortOrderReplExtension implements IReplExtension {
             help: "Stem, but don't parse, text that follows",
             action: (line: string) => {
                 const text = line;
-                const terms = text.split(/\s+/);
+                const terms = this.lexer.lexicon.termModel.breakWords(text);
                 const stemmed = terms.map(this.lexer.lexicon.termModel.stem);
                 console.log(stemmed.join(' '));
                 repl.getReplServer().displayPrompt();
@@ -261,7 +261,7 @@ export class ShortOrderReplExtension implements IReplExtension {
             action: (line: string) => {
                 const text = line;
 
-                const terms = text.split(/\s+/);
+                const terms = this.lexer.lexicon.termModel.breakWords(text);
 
                 const rawGraph: Graph = this.lexer.createGraph(text);
 
@@ -286,7 +286,7 @@ export class ShortOrderReplExtension implements IReplExtension {
             action: (line: string) => {
                 const text = line;
 
-                const terms = text.split(/\s+/);
+                const terms = this.lexer.lexicon.termModel.breakWords(text);
 
                 const rawGraph: Graph = this.lexer.createGraph(text);
 
