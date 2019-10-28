@@ -2,8 +2,6 @@ import {
     AttributeInfo,
     Cart,
     ICartOps,
-    ICatalog,
-    IRuleChecker,
     ItemInstance,
     OPTION,
     State,
@@ -14,7 +12,6 @@ import {
     Edge,
     Graph,
     Token,
-    Tokenizer,
     UNKNOWNTOKEN
 } from 'token-flow';
 
@@ -23,11 +20,9 @@ import {
     ENTITY,
     LexicalAnalyzer,
     Span,
-    tokenToString,
 } from '../lexer';
 
 import {
-    EntityBuilder,
     OptionTargetBuilder,
     TargetBuilder
 } from './entity_builder';
@@ -55,7 +50,7 @@ export function subgraphFromItems(
         addTokens(attributes, lexer, item, tokens, includeProducts);
     }
 
-    return createSubgraph(lexer.tokenizer, graph.edgeLists, tokens, span);
+    return createSubgraph(graph.edgeLists, tokens, span);
 }
 
 function addTokens(
@@ -85,7 +80,6 @@ function addTokens(
 }
 
 function createSubgraph(
-    tokenizer: Tokenizer,
     edgeLists: Edge[][],
     subset: Set<Token>,
     span: Span
@@ -95,7 +89,7 @@ function createSubgraph(
         if (i >= span.start && i < span.start + span.length) {
             // Only copy edgelists that are within the span
             filtered.push(edgeList.filter(edge => {
-                const token = tokenizer.tokenFromEdge(edge);
+                const token = edge.token;
 
                 if (token.type === ENTITY || token.type === OPTION || token.type === ATTRIBUTE) {
                     // Entities (products and options) and Attributes
@@ -118,16 +112,16 @@ function createSubgraph(
     // for (const [i, edges] of edgeLists.entries()) {
     //     console.log(`  vertex ${i}`);
     //     for (const edge of edges) {
-    //         const token = tokenToString(tokenizer.tokenFromEdge(edge));
-    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //         const token = edge.token;
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${tokenToString(token)}`);
     //     }
     // }
     // console.log('Filtered graph:');
     // for (const [i, edges] of filtered.entries()) {
     //     console.log(`  vertex ${i}`);
     //     for (const edge of edges) {
-    //         const token = tokenToString(tokenizer.tokenFromEdge(edge));
-    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //         const token = edge.token;
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${tokenToString(token)}`);
     //     }
     // }
 

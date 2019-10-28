@@ -47,7 +47,7 @@ export class FuzzyTextMatcher {
         const matches = new Map<number, FuzzyMatch>();
         for (const edges of graph.edgeLists) {
             for (const edge of edges) {
-                const token = this.tokenizer.tokenFromEdge(edge) as FuzzyToken;
+                const token = edge.token as FuzzyToken;
                 if (token.type === FUZZY && edge.score > 0) {
                     const match: FuzzyMatch = { id: token.id, score: edge.score};
                     const existing = matches.get(match.id);

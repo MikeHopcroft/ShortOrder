@@ -1,5 +1,8 @@
 # TODO List
 
+* Remove all `text.split(/\s+/)`
+* Consider moving loops from tokenizationsFromGraph2() and allTokenizations() to token-flow.
+
 Rules explorer
 
 

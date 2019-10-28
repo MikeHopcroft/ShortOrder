@@ -1,11 +1,9 @@
 import { OPTION, State } from 'prix-fixe';
-import { Graph, Token, UNKNOWNTOKEN } from 'token-flow';
+import { filterGraph, Graph, Token, UNKNOWNTOKEN } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
-    coalesceGraph,
     createSpan,
-    filterGraph,
     ENTITY,
     MODIFY_ITEM,
     PROLOGUE,
@@ -87,14 +85,13 @@ function processRootInternal(
     text: string
 ): State {
     const rawGraph: Graph = parser.lexer.createGraph(text);
-    const baseGraph: Graph = coalesceGraph(parser.lexer.tokenizer, rawGraph);
 
     // TODO: REVIEW: MAGIC NUMBER
     // 0.35 is the score cutoff for the filtered graph.
-    const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
+    const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
 
     // console.log('Original graph:');
-    // for (const [i, edges] of baseGraph.edgeLists.entries()) {
+    // for (const [i, edges] of rawGraph.edgeLists.entries()) {
     //     console.log(`  vertex ${i}`);
     //     for (const edge of edges) {
     //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
@@ -105,8 +102,8 @@ function processRootInternal(
     // for (const [i, edges] of filteredGraph.edgeLists.entries()) {
     //     console.log(`  vertex ${i}`);
     //     for (const edge of edges) {
-    //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
-    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
+    //         const token = edge.token;
+    //         console.log(`    length:${edge.length}, score:${edge.score}, token:${tokenToString(token)}`);
     //     }
     // }
 
@@ -124,8 +121,14 @@ function processRootInternal(
             console.log(grouped.map(tokenToString).join(''));
         }
 
+        // Before bringing in the token-flow maximalPaths() graph API
+        // the original code took baseGraph, as follows, instead of
+        // filtered graph. I suspect this was a bug. Probably want to
+        // use the filteredGraph.
+        // const interpretation = 
+        //     processAllActiveRegions(parser, state, grouped, rawGraph);
         const interpretation = 
-            processAllActiveRegions(parser, state, grouped, baseGraph);
+            processAllActiveRegions(parser, state, grouped, filteredGraph);
 
         if (best && best.score < interpretation.score || !best) {
             best = interpretation;

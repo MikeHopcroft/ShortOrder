@@ -20,6 +20,7 @@ import {
 
 import {
     DownstreamTermPredicate,
+    filterGraph,
     Graph,
     levenshtein
 } from 'token-flow';
@@ -27,10 +28,8 @@ import {
 import { createShortOrderWorld, ShortOrderWorld } from '../integration';
 
 import {
-    coalesceGraph,
     ENTITY,
     EntityToken,
-    filterGraph,
     tokenToString,
     OptionToken,
     LexicalAnalyzer,
@@ -121,22 +120,19 @@ export class ShortOrderReplExtension implements IReplExtension {
             help: 'List fuzzy matches in order of decreasing score.',
             action: (text: string) => {
                 const graph = this.lexer.createGraph(text);
-                const tokenization = this.lexer.tokenizationsFromGraph2(graph).next().value;
 
-                interface Match {
-                    token: EntityToken | OptionToken;
-                    score: number;
-                }
-
-                const tokens = new Array<[EntityToken | OptionToken, number]>();
+                const tokens = new Map<EntityToken | OptionToken, number>();
                 for (const edge of graph.edgeLists[0]) {
-                    const token = this.lexer.tokenizer.tokenFromEdge(edge) as EntityToken | OptionToken;
+                    const token = edge.token as EntityToken | OptionToken;
                     if (token.type === ENTITY || token.type === OPTION) {
-                        tokens.push([token, edge.score]);
+                        const score = tokens.get(token);
+                        if (score === undefined || edge.score > score) {
+                            tokens.set(token, edge.score);
+                        }
                     }
                 }
 
-                const sorted = [...tokens.values()].sort((a,b) => {
+                const sorted = [...tokens.entries()].sort((a,b) => {
                     const delta = b[1] - a[1];
                     if (isFinite(delta)) {
                         return delta;
@@ -180,7 +176,10 @@ export class ShortOrderReplExtension implements IReplExtension {
                 }
         
                 const rawGraph = this.lexer.createGraph(text);
-                const baseGraph: Graph = coalesceGraph(this.lexer.tokenizer, rawGraph);
+
+                // TODO: REVIEW: MAGIC NUMBER
+                // 0.35 is the score cutoff for the filtered graph.
+                const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
 
                 // console.log('Original graph:');
                 // for (const [i, edges] of rawGraph.edgeLists.entries()) {
@@ -199,19 +198,10 @@ export class ShortOrderReplExtension implements IReplExtension {
                 //     }
                 // }
 
-                // TODO: REVIEW: MAGIC NUMBER
-                // 0.35 is the score cutoff for the filtered graph.
-                const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
                 const tokenizations = this.lexer.tokenizationsFromGraph2(filteredGraph);
 
-                let counter = 0;
-                // for (const tokenization of tokenizations) {
-                //     console.log(`${counter}: ${tokenization.map(tokenToString).join(' ')}`);
-                //     counter++;
-                // }
-
                 const terms = line.split(/\s+/);
-                counter = 0;
+                let counter = 0;
                 for (const tokenization of tokenizations) {
                     console.log(`Tokenization ${counter}:`);
                     counter++;
@@ -274,13 +264,15 @@ export class ShortOrderReplExtension implements IReplExtension {
                 const terms = text.split(/\s+/);
 
                 const rawGraph: Graph = this.lexer.createGraph(text);
-                const baseGraph: Graph = coalesceGraph(this.lexer.tokenizer, rawGraph);
-                const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
+
+                // TODO: REVIEW: MAGIC NUMBER
+                // 0.35 is the score cutoff for the filtered graph.
+                const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
 
                 for (const [i, edges] of filteredGraph.edgeLists.entries()) {
                     console.log(`  vertex ${i}: "${terms[i]}"`);
                     for (const edge of edges) {
-                        const token = tokenToString(this.lexer.tokenizer.tokenFromEdge(edge));
+                        const token = tokenToString(edge.token);
                         console.log(`    length:${edge.length}, score:${edge.score.toFixed(2)}, token:${token}`);
                     }
                 }
@@ -297,8 +289,10 @@ export class ShortOrderReplExtension implements IReplExtension {
                 const terms = text.split(/\s+/);
 
                 const rawGraph: Graph = this.lexer.createGraph(text);
-                const baseGraph: Graph = coalesceGraph(this.lexer.tokenizer, rawGraph);
-                const filteredGraph: Graph = filterGraph(baseGraph, 0.35);
+
+                // TODO: REVIEW: MAGIC NUMBER
+                // 0.35 is the score cutoff for the filtered graph.
+                const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
 
                 const state = repl.getState();
                 const parser = new Parser(
@@ -315,7 +309,6 @@ export class ShortOrderReplExtension implements IReplExtension {
                     length: terms.length
                 };
 
-                // const hypotheticals: HypotheticalItem[] = [];
                 const results = new Map<Key, HypotheticalItem>();
                 for (const hypothetical of productTargets(parser, state, filteredGraph, span)) {
                     if (hypothetical.item) {
@@ -373,11 +366,10 @@ export const shortOrderReplExtensionFactory: IReplExtensionFactory = {
 
 export function printMatchingGenerics(lexer: LexicalAnalyzer, text: string) {
     const graph = lexer.createGraph(text);
-    // const tokenization = lexer.tokenizationsFromGraph2(graph).next().value;
 
     const tokens = new Set<EntityToken | OptionToken>();
     for (const edge of graph.edgeLists[0]) {
-        const token = lexer.tokenizer.tokenFromEdge(edge) as EntityToken | OptionToken;
+        const token = edge.token as EntityToken | OptionToken;
         if (token.type === ENTITY || token.type === OPTION) {
             tokens.add(token);
         }
