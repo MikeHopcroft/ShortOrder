@@ -151,11 +151,13 @@ export function parseAdd(
 
 function interpretSegmentArray(parser: Parser, segments: Segment[]): Interpretation {
     let score = 0;
+    let tokenCount2 = 0;
     const items: ItemInstance[] = [];
     for (const segment of segments) {
         const x = interpretOneSegment(parser, segment);
         if (x.item !== undefined) {
             score += x.score;
+            tokenCount2 += segmentLength(segment);
             items.push(x.item);
         }
     }
@@ -169,7 +171,7 @@ function interpretSegmentArray(parser: Parser, segments: Segment[]): Interpretat
         return {...state, cart: updated};
     };
 
-    return {score, items, action};
+    return {score, tokenCount2, items, action};
 }
 
 function interpretOneSegment(
@@ -185,12 +187,18 @@ function interpretOneSegment(
     if (parser.catalog.hasKey(item.key)) {
         return {
             score: builder.getScore(),
+            tokenCount: segmentLength(segment),
             item
         };
     } else {
         return {
             score: 0,
+            tokenCount: 0,
             item: undefined
         };
     }
+}
+
+export function segmentLength(segment: Segment): number {
+    return segment.left.length + segment.right.length + 1;
 }

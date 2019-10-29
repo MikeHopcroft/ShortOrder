@@ -73,6 +73,7 @@ export interface Segment {
 
 export interface HypotheticalItem {
     score: number;
+    tokenCount: number;
     item: ItemInstance | undefined;
 }
 
@@ -80,6 +81,8 @@ export type ActionFunction = (state: State) => State;
 
 export interface Interpretation {
     score: number;
+    tokenCount2: number;
+    missed?: number;
     items: ItemInstance[];
     action: ActionFunction;
 }
@@ -87,7 +90,7 @@ export interface Interpretation {
 // An interpretation that does not modify state.
 export const nop: Interpretation = {
     score: 0,
+    tokenCount2: 0,
     items: [],
     action: (state: State): State => state
 };
-

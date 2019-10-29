@@ -82,7 +82,7 @@ export class ShortOrderReplExtension implements IReplExtension {
                 } else {
                     console.log(`token-flow query = ${query}`);
 
-                    const termsPrefix = this.lexer.lexicon.termModel.breakWords(prefix);
+                    const termsPrefix = this.lexer.lexicon.termModel.breakWords(query);
                     const stemmedPrefix = termsPrefix.map(this.world2.lexer.lexicon.termModel.stem);
                     const hashedPrefix = stemmedPrefix.map(this.world2.lexer.lexicon.termModel.hashTerm);
 
@@ -292,7 +292,10 @@ export class ShortOrderReplExtension implements IReplExtension {
 
                 // TODO: REVIEW: MAGIC NUMBER
                 // 0.35 is the score cutoff for the filtered graph.
-                const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
+                // const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
+                // Don't filter graph for targets because they are often
+                // abbreviated entity names that have poor scores.
+                const filteredGraph = rawGraph;
 
                 const state = repl.getState();
                 const parser = new Parser(
@@ -339,7 +342,7 @@ export class ShortOrderReplExtension implements IReplExtension {
                 // for (const [i, edges] of filteredGraph.edgeLists.entries()) {
                 //     console.log(`  vertex ${i}: "${terms[i]}"`);
                 //     for (const edge of edges) {
-                //         const token = tokenToString(this.lexer.tokenizer.tokenFromEdge(edge));
+                //         const token = tokenToString(edge.token);
                 //         console.log(`    length:${edge.length}, score:${edge.score.toFixed(2)}, token:${token}`);
                 //     }
                 // }

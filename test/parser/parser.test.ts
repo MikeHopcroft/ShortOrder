@@ -134,6 +134,7 @@ describe('Parser2', () => {
 
             const expected: Interpretation = {
                 score: 6,
+                tokenCount2: 0, // This field never inspected by test.
                 items: [
                     {
                         uid: 0,
@@ -253,6 +254,7 @@ describe('Parser2', () => {
 
             const expected: Interpretation = {
                 score: 5,
+                tokenCount2: 0, // This field never inspected by test.
                 items: [
                     {
                         uid: 0,

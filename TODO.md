@@ -4,6 +4,8 @@
 * x Consider moving loops from tokenizationsFromGraph2() and allTokenizations() to token-flow.
 * .targets command in replShortOrder may be broken. Also, can get span from graph.
 * Make lexer.createGraph return [terms, graph]
+* Remove items property from Interpretation
+* Propagate token scores through parser - use for Interpretation.score
 
 Rules explorer
 

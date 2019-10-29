@@ -209,6 +209,7 @@ export function *productTargets(
             // console.log(`  score: ${builder.getScore()}`);
 
             if (target !== undefined) {
+                const tokenCount = gaps[0].length + gaps[1].length + 1;
                 // console.log(`  ============ Hypothetical target ${target.key} ==============`);
 
                 // Yield matching ItemInstances from the cart.
@@ -220,7 +221,8 @@ export function *productTargets(
                     // console.log(`    yield key=${item.key}, score=${builder.getScore()}`);
                     yield {
                         item,
-                        score: builder.getScore()
+                        score: builder.getScore(),
+                        tokenCount
                     };
                 }
             }
@@ -298,7 +300,8 @@ export function *optionTargets(
                     // console.log(`    yield key=${item.key}, score=${builder.getScore()}`);
                     yield {
                         item,
-                        score: builder.getScore()
+                        score: builder.getScore(),
+                        tokenCount: span.length
                     };
                 }
             }

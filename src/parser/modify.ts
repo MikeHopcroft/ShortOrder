@@ -1,10 +1,8 @@
-import {
-    AttributeInfo,
-    PID, 
-    State,
-} from 'prix-fixe';
+import { State } from 'prix-fixe';
 
 import { Graph, Token } from 'token-flow';
+
+import { segmentLength } from './add';
 
 import {
     createSpan,
@@ -13,10 +11,13 @@ import {
     PREPOSITION,
     PROLOGUE,
     Span,
-    tokenToString,
 } from '../lexer';
 
-import { EntityBuilder, ModificationBuilder, ReplacementBuilder } from './entity_builder';
+import {
+    EntityBuilder,
+    ModificationBuilder,
+    ReplacementBuilder
+} from './entity_builder';
 
 import {
     GapToken,
@@ -200,7 +201,11 @@ export function parseAddToImplicit(
         const interpretation = parseAddToItem(
             parser,
             modification,
-            { item, score: 1 }
+            {
+                item,
+                score: 1,
+                tokenCount: modification.length
+            }
         );
         if (interpretation.score > best.score) {
             best = interpretation;
@@ -263,6 +268,7 @@ export function parseAddToItem(
 
         const interpretation: Interpretation = {
             score,
+            tokenCount2: modification.length,
             items: [],
             action: (state: State): State => {
                 const cart = parser.cartOps.replaceInCart(state.cart, modified);
@@ -390,7 +396,8 @@ function parseReplaceItemWithTokens(
                 target,
                 {
                     item: builder.getItem(),
-                    score: builder.getScore()
+                    score: builder.getScore(),
+                    tokenCount: target.tokenCount + replacementTokens.length
                 }
             );
         }
@@ -412,6 +419,7 @@ function parseReplaceItem(
         const cart = parser.cartOps.replaceInCart(state.cart, item);
         return {
             score: target.score + replacement.score,
+            tokenCount2: target.tokenCount + replacement.tokenCount,
             items: [],
             action: (state: State): State => {
                 return {...state, cart};
@@ -434,7 +442,8 @@ function parseReplaceImplicit(
             parserBuildItemFromTokens(parser, replacementTokens);
         const target: HypotheticalItem = {
             item: items[items.length - 1],
-            score: 1
+            score: 1,
+            tokenCount: 0
         };
         return parseReplaceItem(
             parser,
@@ -462,7 +471,7 @@ function parserBuildItemFromTokens(
         return parserBuildItemFromSegment(parser, segment);
     }
 
-    return { item: undefined, score: 0 };
+    return { item: undefined, tokenCount: 0, score: 0 };
 }
 
 function parserBuildItemFromSegment(
@@ -472,6 +481,7 @@ function parserBuildItemFromSegment(
     const builder = new EntityBuilder(parser, segment);
     return {
         item: builder.getItem(),
-        score: builder.getScore()
+        score: builder.getScore(),
+        tokenCount: segmentLength(segment)
     };
 }

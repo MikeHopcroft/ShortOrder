@@ -128,11 +128,24 @@ function processRootInternal(
         // const interpretation = 
         //     processAllActiveRegions(parser, state, grouped, rawGraph);
         const interpretation = 
+            // Following causes stack overflow.
+            // processAllActiveRegions(parser, state, grouped, rawGraph);
             processAllActiveRegions(parser, state, grouped, filteredGraph);
+        interpretation.missed = tokenization.length - interpretation.score;
 
-        if (best && best.score < interpretation.score || !best) {
+        console.log(`interpretation: score(${interpretation.score}), tokenCount(${interpretation.tokenCount2}), missed(${tokenization.length - interpretation.score})`);
+        for (const token of tokenization) {
+            console.log(`  ${tokenToString(token)}`);
+        }
+
+        if (!best) {
+            console.log("First interpreation");
+            best = interpretation;
+        } else if (preferFirstInterpretation(interpretation, best)) {
+            console.log("Better interpreation");
             best = interpretation;
         }
+        console.log('');
     }
 
     if (best) {
@@ -154,6 +167,7 @@ function processAllActiveRegions(
     const tokens = new TokenSequence<Token & Span>(tokenization);
 
     let score = 0;
+    let tokenCount2 = 0;
     let weakAddAllowed = false;
     while (!tokens.atEOS()) {
         if (
@@ -163,6 +177,7 @@ function processAllActiveRegions(
         ) {
             const interpretation = processAdd(parser, state, baseGraph, tokens);
             score += interpretation.score;
+            tokenCount2 += interpretation.tokenCount2;
             state = interpretation.action(state);
             weakAddAllowed = true;
         } else if (
@@ -171,6 +186,7 @@ function processAllActiveRegions(
         ) {
             const interpretation = processRemove(parser, state, tokens, baseGraph);
             score += interpretation.score;
+            tokenCount2 += interpretation.tokenCount2;
             state = interpretation.action(state);
             weakAddAllowed = true;
         } else if (
@@ -179,6 +195,7 @@ function processAllActiveRegions(
         ) {
             const interpretation = processModify(parser, state, tokens, baseGraph);
             score += interpretation.score;
+            tokenCount2 += interpretation.tokenCount2;
             state = interpretation.action(state);
             weakAddAllowed = true;
         } else {
@@ -190,6 +207,7 @@ function processAllActiveRegions(
 
     return {
         score,
+        tokenCount2,
         items: [],
         action: (s: State):State => state
     };
@@ -302,4 +320,21 @@ function printSegment(segment: Segment) {
     console.log(`    left: ${left}`);
     console.log(`    entity: ${entity}`);
     console.log(`    right: ${right}`);
+}
+
+function preferFirstInterpretation(a: Interpretation, b: Interpretation): boolean {
+    if (a.missed! === b.missed!) {
+        const ra = a.score / a.tokenCount2;
+        const rb = b.score / b.tokenCount2;
+    
+        if (ra === rb) {
+            // Prefer shorter token sequences
+            return a.tokenCount2 < b.tokenCount2;
+        } else {
+            // Prefer higher match ratios
+            return ra > rb;
+        }
+    } else {
+        return a.missed! < b.missed!;
+    }
 }
