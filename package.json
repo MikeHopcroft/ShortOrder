@@ -43,7 +43,7 @@
     "gts": "^0.8.0",
     "mocha": "^5.2.0",
     "prix-fixe": "0.0.52",
-    "token-flow": "0.0.35",
+    "token-flow": "0.0.36",
     "typescript": "~2.8.0"
   },
   "dependencies": {
@@ -63,6 +63,6 @@
   },
   "peerDependencies": {
     "prix-fixe": "0.0.52",
-    "token-flow": "0.0.35"
+    "token-flow": "0.0.36"
   }
 }
