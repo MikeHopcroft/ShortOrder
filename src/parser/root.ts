@@ -133,19 +133,19 @@ function processRootInternal(
             processAllActiveRegions(parser, state, grouped, filteredGraph);
         interpretation.missed = tokenization.length - interpretation.score;
 
-        console.log(`interpretation: score(${interpretation.score}), tokenCount(${interpretation.tokenCount2}), missed(${tokenization.length - interpretation.score})`);
-        for (const token of tokenization) {
-            console.log(`  ${tokenToString(token)}`);
-        }
+        // console.log(`interpretation: score(${interpretation.score}), tokenCount(${interpretation.tokenCount2}), missed(${tokenization.length - interpretation.score})`);
+        // for (const token of tokenization) {
+        //     console.log(`  ${tokenToString(token)}`);
+        // }
 
         if (!best) {
-            console.log("First interpreation");
+            // console.log("First interpreation");
             best = interpretation;
         } else if (preferFirstInterpretation(interpretation, best)) {
-            console.log("Better interpreation");
+            // console.log("Better interpreation");
             best = interpretation;
         }
-        console.log('');
+        // console.log('');
     }
 
     if (best) {
