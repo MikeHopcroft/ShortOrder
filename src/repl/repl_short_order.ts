@@ -16,6 +16,7 @@ import {
     rightJustify,
     speechToTextFilter,
     World,
+    MENUITEM,
 } from 'prix-fixe';
 
 import {
@@ -235,7 +236,7 @@ export class ShortOrderReplExtension implements IReplExtension {
                 if (line.length === 0) {
                     // No Key or PID was specified. Print out name of all of the
                     // MENUITEM generics.
-                    printCatalog(catalog);
+                    printCatalog(catalog, MENUITEM);
                 }
                 else if (line.indexOf(':') !== -1) {
                     // This is a specific entity. Just print out its options.

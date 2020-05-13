@@ -3,7 +3,8 @@ import {
     ItemInstance,
     TestCase,
     TestLineItem, 
-    TestOrder
+    TestOrder,
+    TestStep
 } from 'prix-fixe';
 
 import {
@@ -29,16 +30,35 @@ export function createTestCase(
         }
 
         inputs.push(order.buildText().join(' '));
-        results.push({lines});
+        // TODO: Review this fix.
+        results.push({cart: lines});
+        // results.push({lines});
+    }
+
+    // TODO: review this fix.
+    const s2: TestStep[] = [];
+    for (const [i, observed] of results.entries()) {
+        s2.push({
+            rawSTT: inputs[i],
+            cart: observed.cart
+        });
     }
 
     const testCase = new TestCase(
         counter++,
-        '1',
+        // '1',
         ['unverified'],
         'synthetic',        // TODO: put info in comment?
-        inputs,
-        results);
+        s2,
+    );
+
+    // const testCase = new TestCase(
+    //     counter++,
+    //     '1',
+    //     ['unverified'],
+    //     'synthetic',        // TODO: put info in comment?
+    //     inputs,
+    //     results);
 
     return testCase;
 }

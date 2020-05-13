@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { createWorld, TestCase, TestLineItem, TestOrder } from 'prix-fixe';
+import { createWorld2, TestCase, TestLineItem, TestOrder, CorrectionLevel } from 'prix-fixe';
 
 import { createShortOrderWorld, ShortOrderWorld } from '../src';
 
@@ -47,17 +47,22 @@ async function go(utterances: string[]) {
         return;
     }
 
-    const world = createWorld(dataPath);
+    const world = createWorld2(dataPath);
     const shortOrderWorld = createShortOrderWorld(world, dataPath, args.t, true);
     const processor = shortOrderWorld.processor;
 
+    const steps = utterances.map( x => ({
+        rawSTT: x,
+        cart: []
+    }));
     const testCase = new TestCase(
         0,
-        'priority',
+        // 'priority',
         ['suites'],
         'comment',
-        utterances,
-        utterances.map( x => ({ lines: [] }))
+        steps
+        // utterances,
+        // utterances.map( x => ({ lines: [] }))
     );
 
     console.log('UTTERANCES:');
@@ -67,7 +72,10 @@ async function go(utterances: string[]) {
     console.log(' ');
     console.log('Cart');
 
-    const result = await testCase.run(processor, world.catalog);
+    const result = await testCase.run(
+        processor,
+        world.catalog,
+        CorrectionLevel.Raw);
 
     OrderOps.printOrder(result.observed[utterances.length - 1]);
 }
@@ -79,7 +87,8 @@ export class OrderOps {
     }
 
     static formatOrder(order: TestOrder) {
-        return order.lines.map(OrderOps.formatLineItem).join('\n');
+        // return order.lines.map(OrderOps.formatLineItem).join('\n');
+        return order.cart.map(OrderOps.formatLineItem).join('\n');
     }
 
     static formatLineItem(item: TestLineItem) {
@@ -160,6 +169,11 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-    "i added a tall latte",
-    "i removed that tall latte"
+    "i want a latte double espresso and a muffin",
+    // "i want a muffin with strawberry halved",
+    // "i'd like an extra wet latte",
+    // "i'd like a soy vanilla latte",
+    // "i'd like a vanilla latte"
+    // "i want a tall latte",
+    // "i removed that tall latte"
 ]);

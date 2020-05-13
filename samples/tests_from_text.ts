@@ -101,8 +101,10 @@ async function go() {
         world.catalog as Catalog,
         speechToTextFilter,
         lines,
-        priority,
-        suites);
+        // priority,
+        suites,
+        'generated comment',    
+    );
 
     const yamlText = yaml.safeDump(results, { noRefs: true });
 
