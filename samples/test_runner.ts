@@ -3,6 +3,7 @@ import * as minimist from 'minimist';
 import {
     TestProcessors,
     testRunnerMain,
+    testRunnerMain2,
     World
 } from 'prix-fixe';
 
@@ -25,7 +26,7 @@ async function go() {
         },
     ]);
 
-    testRunnerMain('ShortOrder', processors);
+    testRunnerMain2('ShortOrder', processors);
 }
 
 go();

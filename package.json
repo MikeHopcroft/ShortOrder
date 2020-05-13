@@ -47,7 +47,7 @@
     "typescript": "~2.8.0"
   },
   "dependencies": {
-    "ajv": "^6.5.4",
+    "ajv": "^6.12.2",
     "ansi-styles": "^3.2.1",
     "chalk": "^2.4.2",
     "debug": "^4.1.1",

@@ -184,6 +184,15 @@ export async function runFuzzer(
             }
             counter++;
         }
+        // for (const result of results.results) {
+        //     for (let i = 0; i < result.test.inputs.length; ++i) {
+        //         console.log(`${counter}: "${result.test.inputs[i]}"`);
+        //     }
+        //     if (result.test.inputs.length > 1) {
+        //         console.log(' ');
+        //     }
+        //     counter++;
+        // }
     }
 }
 
