@@ -586,6 +586,217 @@ tests:
                   name: grande chai latte
                   sku: '502'
                   children: []
+      - id: 39
+        suites: 'regression remove'
+        comment: 'Remove by generic name, partial match'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a tall latte a short latte macchiato and a chai latte
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                - quantity: 1
+                  name: grande chai latte
+                  sku: '502'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the chai
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+      - id: 40
+        suites: 'regression remove'
+        comment: 'Remove by leading attribute'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a tall latte a short latte macchiato and a chai latte
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                - quantity: 1
+                  name: grande chai latte
+                  sku: '502'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the short latte
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: grande chai latte
+                  sku: '502'
+                  children: []
+      - id: 41
+        suites: 'regression remove'
+        comment: 'Remove by leading attribute'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a tall latte a short latte macchiato and an iced chai latte
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                - quantity: 1
+                  name: iced grande chai latte
+                  sku: '504'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the iced latte
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+      - id: 42
+        suites: 'regression remove'
+        comment: 'Remove by trailing attribute'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a tall latte a short latte macchiato and an iced chai latte
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                - quantity: 1
+                  name: iced grande chai latte
+                  sku: '504'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the latte iced
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+      - id: 43
+        suites: 'regression remove'
+        comment: 'Remove by multiple attributes'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: >-
+                  i want an iced tall latte a short latte macchiato and an iced chai
+                  latte
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '203'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                - quantity: 1
+                  name: iced grande chai latte
+                  sku: '504'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the tall latte iced
+            cart:
+              items:
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                - quantity: 1
+                  name: iced grande chai latte
+                  sku: '504'
+                  children: []
+      - id: 44
+        suites: 'regression remove implicit'
+        comment: 'Remove implicit'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: >-
+                  i want an iced tall latte a short latte macchiato and an iced chai
+                  latte
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '203'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                - quantity: 1
+                  name: iced grande chai latte
+                  sku: '504'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove that
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '203'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+  - comment: '## Modifying items'
+    tests:
+
 
   # may i also get a decaf soy vanilla syrup caramel latte with sugar and foam
   # may i also get a decaf vanilla latte
@@ -662,4 +873,36 @@ tests:
                       name: no sugar
                       sku: '6000'
                       children: []
-
+      - id: 1002
+        suites: 'extras add'
+        comment: ''
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a tall latte a short latte macchiato and a venti chai latte
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+                - quantity: 1
+                  name: short latte macchiato
+                  sku: '300'
+                  children: []
+                # - quantity: 1
+                #   name: short latte
+                #   sku: '200'
+                #   children: []
+                # - quantity: 1
+                #   name: doppio macchiato
+                #   sku: '901'
+                #   children: []
+                # - quantity: 1
+                #   name: grande chai latte
+                #   sku: '502'
+                #   children: []
+                # - quantity: 1
+                #   name: grande latte
+                #   sku: '202'
+                #   children: []
