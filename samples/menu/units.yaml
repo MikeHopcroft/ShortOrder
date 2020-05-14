@@ -1,0 +1,12 @@
+items:
+  - pid: 0
+    name: pump
+    aliases:
+      - pump [of]
+      - splash [of]
+      - squirt [of]
+      - drop [of]
+      - dollop [of]
+      - (pack,packet,package) [of]
+      - order [of]
+

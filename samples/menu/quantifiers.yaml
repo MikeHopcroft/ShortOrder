@@ -1,0 +1,42 @@
+items:
+
+  - pid: 0
+    name: "0"
+    aliases:
+      - xxx
+      # - "no"
+      # - without
+      # - with (no,zero)
+      # - (drop,hold,lose,remove,skip) the
+      # - zero
+
+  - pid: 1
+    name: "1"
+    aliases:
+      - an
+      - the
+      - that
+      # - "[with] (a,an,more,some,the)"
+      # - "[with] (a,an,extra,more,some,the)"
+      # - add
+      # NOTE: "just a" collides with "just a sec"
+      # - just a
+      # - with
+
+  - pid: 2
+    name: "2"
+    aliases:
+      - double
+      # ISSUE: The term "of" is a partial match for "couple of".
+      # Potential error in "Make one of them large".
+      - couple
+
+  - pid: 3
+    name: "3"
+    aliases:
+      - triple
+
+  - pid: 4
+    name: "4"
+    aliases:
+      - quadruple

@@ -25,7 +25,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1002'
+                  sku: '1102'
                   children: []
       - id: 2
         suites: regression add
@@ -38,7 +38,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1002'
+                  sku: '1102'
                   children: []
       - id: 3
         suites: regression add
@@ -158,8 +158,8 @@ tests:
                   sku: '302'
                   children:
                     - quantity: 1
-                      name: vanilla
-                      sku: '2002'
+                      name: vanilla syrup
+                      sku: '2102'
                       children: []
       - id: 12
         suites: regression add
@@ -175,8 +175,8 @@ tests:
                   sku: '202'
                   children:
                     - quantity: 1
-                      name: peppermint
-                      sku: '1702'
+                      name: peppermint syrup
+                      sku: '1802'
                       children: []
       - id: 13
         suites: regression add
@@ -195,27 +195,27 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2300'
+                      sku: '2400'
                       children: []
                     - quantity: 1
                       name: soy milk
-                      sku: '2900'
+                      sku: '3000'
                       children: []
                     - quantity: 1
-                      name: vanilla
-                      sku: '2002'
+                      name: vanilla syrup
+                      sku: '2102'
                       children: []
                     - quantity: 1
-                      name: caramel
-                      sku: '1302'
+                      name: caramel syrup
+                      sku: '1402'
                       children: []
                     - quantity: 1
                       name: sugar
-                      sku: '5902'
+                      sku: '6002'
                       children: []
                     - quantity: 1
                       name: foam
-                      sku: '4502'
+                      sku: '4602'
                       children: []
       - id: 14
         suites: 'regression add'
@@ -231,8 +231,8 @@ tests:
                   sku: '202'
                   children:
                     - quantity: 1
-                      name: peppermint
-                      sku: '1702'
+                      name: peppermint syrup
+                      sku: '1802'
                       children: []
       - id: 15
         suites: 'regression add'
@@ -249,7 +249,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2300'
+                      sku: '2400'
                       children: []
       - id: 16
         suites: 'regression add'
@@ -266,7 +266,7 @@ tests:
                   children:
                     - quantity: 1
                       name: nonfat milk
-                      sku: '2700'
+                      sku: '2800'
                       children: []                      
       # Skipped 17
       # Skipped 18
@@ -281,11 +281,11 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '501'
+                  sku: '601'
                   children:
                     - quantity: 1
                       name: light nutmeg
-                      sku: '4701'
+                      sku: '4801'
                       children: []
       - id: 20
         suites: ''
@@ -302,7 +302,7 @@ tests:
                   children:
                     - quantity: 1
                       name: no foam
-                      sku: '4500'
+                      sku: '4600'
                       children: []
       - id: 21
         suites: 'regression add'
@@ -315,11 +315,11 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '501'
+                  sku: '601'
                   children:
                     - quantity: 1
                       name: no nutmeg
-                      sku: '4700'
+                      sku: '4800'
                       children: []
       - id: 22
         suites: 'regression add'
@@ -338,20 +338,20 @@ tests:
                   children:
                     - quantity: 1
                       name: light whipped cream
-                      sku: '4801'
+                      sku: '4901'
                       children: []
                     - quantity: 1
                       name: no foam
-                      sku: '4500'
+                      sku: '4600'
                       children: []
                     - quantity: 1
                       name: extra hazelnut syrup
-                      sku: '1503'
+                      sku: '1603'
                       children: []
                     - quantity: 1
                       # Why is 'cinnamon syrup' more correct than 'dash of cinnamon'?
                       name: cinnamon syrup
-                      sku: '1402'
+                      sku: '1502'
                       children: []
       - id: 23
         suites: 'regression add illegal-option'
@@ -394,7 +394,7 @@ tests:
                   children:
                     - quantity: 5
                       name: caramel syrup
-                      sku: '1302'
+                      sku: '1402'
                       children: []
       - id: 26
         suites: 'regression add'
@@ -411,7 +411,7 @@ tests:
                   children:
                     - quantity: 5
                       name: caramel syrup
-                      sku: '1302'
+                      sku: '1402'
                       children: []
       - id: 27
         suites: 'regression add'
@@ -430,27 +430,27 @@ tests:
                   children:
                     - quantity: 2
                       name: peppermint syrup
-                      sku: '1702'
+                      sku: '1802'
                       children: []
                     - quantity: 3
                       name: raspberry syrup
-                      sku: '1802'
+                      sku: '1902'
                       children: []
                     - quantity: 1
                       name: nonfat milk
-                      sku: '2700'
+                      sku: '2800'
                       children: []
                     - quantity: 1
                       name: vanilla syrup
-                      sku: '2002'
+                      sku: '2102'
                       children: []
                     - quantity: 1
                       name: caramel syrup
-                      sku: '1302'
+                      sku: '1402'
                       children: []
                     - quantity: 2
                       name: sugar
-                      sku: '5902'
+                      sku: '6002'
                       children: []
       - id: 28
         suites: 'regression add multiple'
@@ -471,7 +471,7 @@ tests:
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '501'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: apple bran muffin
@@ -494,7 +494,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2300'
+                      sku: '2400'
                       children: []
                 - quantity: 1
                   name: grande cappuccino
@@ -502,7 +502,7 @@ tests:
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '501'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: lemon poppyseed muffin
@@ -510,15 +510,15 @@ tests:
                   children:
                     - quantity: 1
                       name: warmed
-                      sku: '6400'
-                      children: []
-                    - quantity: 1
-                      name: cut in half
                       sku: '6500'
                       children: []
                     - quantity: 1
                       name: cut in half
-                      sku: '6500'
+                      sku: '6600'
+                      children: []
+                    - quantity: 1
+                      name: cut in half
+                      sku: '6600'
                       children: []
       # Skipped 30. Need to come up with a new list of products and options.
       # Add chai and hot chocolate and tea to menu. Add lemon. Add extra hot - need rules support for attributes.
@@ -539,26 +539,57 @@ tests:
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '2900'
+                      sku: '3000'
                       children: []
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1002'
+                  sku: '1102'
                   children:
                     - quantity: 1
                       name: soy milk creamer
-                      sku: '3800'
+                      sku: '3900'
                       children: []
-
-
-
+      # Skipped 33-37. Recipe.
   - comment: '## Removing items'
     tests:
+      - id: 38
+        suites: 'regression remove'
+        comment: 'remove by complete generic name'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a latte latte macchiato and a chai latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+                - quantity: 1
+                  name: grande latte macchiato
+                  sku: '302'
+                  children: []
+                - quantity: 1
+                  name: grande chai latte
+                  sku: '502'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the latte macchiato
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+                - quantity: 1
+                  name: grande chai latte
+                  sku: '502'
+                  children: []
+
   # may i also get a decaf soy vanilla syrup caramel latte with sugar and foam
   # may i also get a decaf vanilla latte
   # i'd like a soy vanilla latte
-
-
       - id: 501
         suites: regression add
         comment: 'Two leading attributes'
@@ -573,10 +604,9 @@ tests:
                   sku: '2'
                   children:
                     - quantity: 1
-                      name: buttered rum
-                      sku: '1202'
+                      name: buttered rum syrup
+                      sku: '1302'
                       children: []
-
   - comment: '## extras'
     tests:
       - id: 1000
@@ -596,7 +626,40 @@ tests:
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '501'
+                  sku: '601'
                   children: []
+      - id: 1001
+        suites: 'extras bug'
+        comment: 'should remove the sugar'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a coffee with two sugar
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children:
+                    - quantity: 2
+                      name: sugar
+                      sku: '6002'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that no sugar
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children: 
+                    # - quantity: 2
+                    #   name: sugar
+                    #   sku: '6002'
+                    #   children: []
+                    - quantity: 1
+                      name: no sugar
+                      sku: '6000'
+                      children: []
 
-  
