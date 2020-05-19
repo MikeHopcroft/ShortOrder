@@ -197,11 +197,11 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
                     - quantity: 1
                       name: soy milk
-                      sku: '3000'
+                      sku: '3200'
                       children: []
                     - quantity: 1
                       name: vanilla syrup
@@ -213,11 +213,11 @@ tests:
                       children: []
                     - quantity: 1
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
                     - quantity: 1
                       name: foam
-                      sku: '4602'
+                      sku: '4802'
                       children: []
       - id: 14
         suites: 'regression add'
@@ -251,7 +251,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
       - id: 16
         suites: 'regression add'
@@ -268,7 +268,7 @@ tests:
                   children:
                     - quantity: 1
                       name: nonfat milk
-                      sku: '2800'
+                      sku: '3000'
                       children: []                      
       # Skipped 17
       # Skipped 18
@@ -287,7 +287,7 @@ tests:
                   children:
                     - quantity: 1
                       name: light nutmeg
-                      sku: '4801'
+                      sku: '5001'
                       children: []
       - id: 20
         suites: ''
@@ -304,7 +304,7 @@ tests:
                   children:
                     - quantity: 1
                       name: no foam
-                      sku: '4600'
+                      sku: '4800'
                       children: []
       - id: 21
         suites: 'regression add'
@@ -321,7 +321,7 @@ tests:
                   children:
                     - quantity: 1
                       name: no nutmeg
-                      sku: '4800'
+                      sku: '5000'
                       children: []
       - id: 22
         suites: 'regression add'
@@ -340,11 +340,11 @@ tests:
                   children:
                     - quantity: 1
                       name: light whipped cream
-                      sku: '4901'
+                      sku: '5101'
                       children: []
                     - quantity: 1
                       name: no foam
-                      sku: '4600'
+                      sku: '4800'
                       children: []
                     - quantity: 1
                       name: extra hazelnut syrup
@@ -440,7 +440,7 @@ tests:
                       children: []
                     - quantity: 1
                       name: nonfat milk
-                      sku: '2800'
+                      sku: '3000'
                       children: []
                     - quantity: 1
                       name: vanilla syrup
@@ -452,7 +452,7 @@ tests:
                       children: []
                     - quantity: 2
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
       - id: 28
         suites: 'regression add multiple'
@@ -496,7 +496,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
                 - quantity: 1
                   name: grande cappuccino
@@ -512,15 +512,15 @@ tests:
                   children:
                     - quantity: 1
                       name: warmed
-                      sku: '6500'
+                      sku: '6700'
                       children: []
                     - quantity: 1
                       name: cut in half
-                      sku: '6600'
+                      sku: '6800'
                       children: []
                     - quantity: 1
                       name: cut in half
-                      sku: '6600'
+                      sku: '6800'
                       children: []
       # Skipped 30. Need to come up with a new list of products and options.
       # Add chai and hot chocolate and tea to menu. Add lemon. Add extra hot - need rules support for attributes.
@@ -541,7 +541,7 @@ tests:
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3000'
+                      sku: '3200'
                       children: []
                 - quantity: 1
                   name: grande dark roast coffee
@@ -549,7 +549,7 @@ tests:
                   children:
                     - quantity: 1
                       name: soy milk creamer
-                      sku: '3900'
+                      sku: '4100'
                       children: []
       # Skipped 33-37. Recipe.
   - comment: '## Removing items'
@@ -928,7 +928,7 @@ tests:
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '4902'
+                      sku: '5102'
                       children: []
       - id: 47
         suites: 'regression modify'
@@ -958,7 +958,7 @@ tests:
                       children: []
                     - quantity: 1
                       name: honey
-                      sku: '5802'
+                      sku: '6002'
                       children: []
       - id: 48
         suites: 'regression modify'
@@ -984,7 +984,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
       - id: 49
         suites: 'regression modify'
@@ -1001,7 +1001,7 @@ tests:
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2300'
+                      sku: '2400'
                       children: []
           - turns:
               - speaker: speaker
@@ -1014,7 +1014,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
       - id: 49.1
         suites: 'regression modify'
@@ -1031,7 +1031,7 @@ tests:
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2300'
+                      sku: '2400'
                       children: []
           - turns:
               - speaker: speaker
@@ -1044,7 +1044,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
       - id: 50
         suites: 'regression modify'
@@ -1114,7 +1114,7 @@ tests:
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3000'
+                      sku: '3200'
                       children: []
       - id: 51.1
         suites: 'regression modify'
@@ -1140,7 +1140,7 @@ tests:
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3000'
+                      sku: '3200'
                       children: []
       - id: 51.2
         suites: 'regression modify'
@@ -1166,7 +1166,7 @@ tests:
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3000'
+                      sku: '3200'
                       children: []
 
       - id: 52
@@ -1193,7 +1193,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
       - id: 53
         suites: 'regression modify'
@@ -1240,7 +1240,7 @@ tests:
                   children:
                     - quantity: 1
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
           - turns:
               - speaker: speaker
@@ -1253,7 +1253,7 @@ tests:
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
       - id: 54.1
         suites: 'regression modify'
@@ -1270,7 +1270,7 @@ tests:
                   children:
                     - quantity: 1
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
           - turns:
               - speaker: speaker
@@ -1283,7 +1283,7 @@ tests:
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
       - id: 55
         suites: 'regression modify'
@@ -1300,7 +1300,7 @@ tests:
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5702'
+                      sku: '5902'
                       children: []
           - turns:
               - speaker: speaker
@@ -1313,7 +1313,7 @@ tests:
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5702'
+                      sku: '5902'
                       children: []
       - id: 55.1
         suites: 'regression modify'
@@ -1330,7 +1330,7 @@ tests:
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5702'
+                      sku: '5902'
                       children: []
           - turns:
               - speaker: speaker
@@ -1343,7 +1343,7 @@ tests:
                   children:
                     - quantity: 5
                       name: equal
-                      sku: '5702'
+                      sku: '5902'
                       children: []
 
       - id: 56
@@ -1458,7 +1458,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
       - id: 57
         suites: 'regression modify'
@@ -1484,7 +1484,7 @@ tests:
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2400'
+                      sku: '2600'
                       children: []
       - id: 57.1
         suites: 'regression modify implicit'
@@ -1624,7 +1624,7 @@ tests:
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
           - turns:
               - speaker: speaker
@@ -1641,7 +1641,7 @@ tests:
                     #   children: []
                     - quantity: 1
                       name: no sugar
-                      sku: '6000'
+                      sku: '6200'
                       children: []
       - id: 1006
         suites: 'extras bug'
@@ -1658,7 +1658,7 @@ tests:
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6002'
+                      sku: '6202'
                       children: []
           - turns:
               - speaker: speaker
@@ -1675,7 +1675,7 @@ tests:
                     #   children: []
                     - quantity: 1
                       name: no sugar
-                      sku: '6000'
+                      sku: '6200'
                       children: []
       - id: 1007
         suites: 'extras remove bug'
@@ -1692,7 +1692,7 @@ tests:
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5702'
+                      sku: '5902'
                       children: []
           - turns:
               - speaker: speaker
@@ -1751,7 +1751,7 @@ tests:
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '4902'
+                      sku: '5102'
                       children: []
           - turns:
               - speaker: speaker
@@ -1764,11 +1764,11 @@ tests:
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '4902'
+                      sku: '5102'
                       children: []
                     - quantity: 1
                       name: whipped cream
-                      sku: '4902'
+                      sku: '5102'
                       children: []
       - id: 1004
         suites: 'extras bug'
@@ -1785,7 +1785,7 @@ tests:
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '4902'
+                      sku: '5102'
                       children: []
           - turns:
               - speaker: speaker
@@ -1798,7 +1798,7 @@ tests:
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '4902'
+                      sku: '5102'
                       children: []
       - id: 1005
         suites: 'extras'
