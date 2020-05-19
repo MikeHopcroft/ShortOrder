@@ -7,6 +7,7 @@ dimensions:
         hidden: true
         aliases:
           - hot
+          - not iced
       - name: iced
         aliases:
           - iced
@@ -184,10 +185,19 @@ catalog:
             - regular
             - "[fully] caffeinated"
             - full caf
+        - name: two thirds caf
+          aliases:
+            - two thirds caf
+            - one third decaf
         - name: half caf
           aliases:
             - half caf
+            - half decaf
             - split shot
+        - name: one third caf
+          aliases:
+            - one third caf
+            - two thirds decaf
         - name: decaf
           aliases:
             - decaf
