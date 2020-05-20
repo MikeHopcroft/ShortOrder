@@ -11,10 +11,8 @@ tests:
             cart:
               items:
                 - quantity: 1
-                  name: tall latte
-                  sku: '201'
-                  # name: grande latte
-                  # sku: '202'
+                  name: grande latte
+                  sku: '202'
                   children: []
       - id: 1
         suites: regression add
@@ -513,10 +511,6 @@ tests:
                     - quantity: 1
                       name: warmed
                       sku: '6700'
-                      children: []
-                    - quantity: 1
-                      name: cut in half
-                      sku: '6800'
                       children: []
                     - quantity: 1
                       name: cut in half
@@ -1564,9 +1558,379 @@ tests:
                       name: half caf
                       sku: '2400'
                       children: []
+      - id: 58
+        suites: 'regression modify implicit'
+        comment: 'implicit target change an attribute - make that attribute Z'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: can i get a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that a tall
+            cart:
+              items:
+                - quantity: 1
+                  name: tall latte
+                  sku: '201'
+                  children: []
+      - id: 59
+        suites: 'regression modify implicit'
+        comment: 'implicit target add option - add option y to that'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: get me an espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: add cream to that
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children:
+                    - quantity: 1
+                      name: half and half
+                      sku: '4500'
+                      children: []
+      - id: 60
+        suites: 'regression modify implicit'
+        comment: 'implicit target add option - add option y'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: add peppermint syrup
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children:
+                    - quantity: 1
+                      name: peppermint syrup
+                      sku: '1802'
+                      children: []
+      - id: 60.1
+        suites: 'regression modify implicit'
+        comment: 'implicit target add option - can you make that with option y'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: can you make that with foam
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children:
+                    - quantity: 1
+                      name: foam
+                      sku: '4802'
+                      children: []
+      - id: 60.2
+        suites: 'regression modify implicit'
+        comment: 'implicit target add option - i want that with option y'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: i want that with a lid
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children:
+                    - quantity: 1
+                      name: lid
+                      sku: '5400'
+                      children: []
+      - id: 61
+        suites: 'regression modify replace implicit'
+        comment: 'change one product into another, implicit, preserving options and attributes - actually make that a product x'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a decaf latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children:
+                    - quantity: 1
+                      name: decaf
+                      sku: '2600'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: actually make that a cappuccino
+            cart:
+              items:
+                - quantity: 1
+                  name: grande cappuccino
+                  sku: '3'
+                  children:
+                    - quantity: 1
+                      name: decaf
+                      sku: '2600'
+                      children: []
+      - id: 61.1
+        suites: 'regression modify replace'
+        comment: 'change one product into another, preserving options and attributes - make that product x product y'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a decaf latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children:
+                    - quantity: 1
+                      name: decaf
+                      sku: '2600'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that latte a cappuccino
+            cart:
+              items:
+                - quantity: 1
+                  name: grande cappuccino
+                  sku: '3'
+                  children:
+                    - quantity: 1
+                      name: decaf
+                      sku: '2600'
+                      children: []
+      - id: 62
+        suites: 'regression modify replace'
+        comment: 'change one product into another with different attribute - change product x to product y'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a decaf latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children:
+                    - quantity: 1
+                      name: decaf
+                      sku: '2600'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: change that latte to a half caf espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children:
+                    - quantity: 1
+                      name: half caf
+                      sku: '2400'
+                      children: []
+      - id: 63
+        suites: 'regression modify replace'
+        comment: 'replace one product with another - replace product x with product y'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want an espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: replace that espresso with a tall iced latte
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '203'
+                  children: []
+      - id: 63.1
+        suites: 'regression modify replace implicit'
+        comment: 'replace one product with another, implicit - change that to product x'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want an espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: change that to a tall iced latte
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '203'
+                  children: []
+      - id: 63.2
+        suites: 'regression modify replace implicit'
+        comment: 'replace one product with another, implicit - replace that with product x'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want an espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: replace that with a tall iced latte
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '203'
+                  children: []
+      - id: 64
+        suites: 'regression modify replace implicit'
+        comment: 'replace implicit item with another - change product x to a product y'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: get me an espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: change that to a tall iced latte
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '203'
+                  children: []
+      - id: 65
+        suites: 'regression multiple weak not-implemented'
+        comment: 'add then remove in same utterance'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: get me a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the latte and add an espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+      - id: 66
+        suites: 'regression multiple'
+        comment: 'remove then add in same utterance'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: get me a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: get me an espresso and remove the latte
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+      - id: 66.1
+        suites: 'regression multiple'
+        comment: 'remove then add in same utterance'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: get me a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '202'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: add an espresso and remove the latte
+            cart:
+              items:
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+        # Skipped 67-85 - these are examples of random chitchat 77
 
-
-
+                  
 
   # may i also get a decaf soy vanilla syrup caramel latte with sugar and foam
   # may i also get a decaf vanilla latte
@@ -1938,4 +2302,134 @@ tests:
                 - quantity: 1
                   name: grande latte
                   sku: '202'
+                  children: []
+      # 1013 was a dupe of 1012
+      - id: 1014
+        suites: 'extras'
+        comment: 'multi-step order product then modify'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a muffin
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: i'd like that warmed
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children:
+                    - quantity: 1
+                      name: warmed
+                      sku: '6700'
+                      children: []
+      - id: 1015
+        suites: 'extras'
+        comment: 'room for cream should not add cream'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a coffee with room for cream
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children:
+                    - quantity: 1
+                      name: with room
+                      sku: '5500'
+                      children: []
+      - id: 1016
+        suites: 'extras'
+        comment: 'room for cream should not add cream'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a coffee
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: can you make that with room for cream
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children:
+                    - quantity: 1
+                      name: with room
+                      sku: '5500'
+                      children: []
+      - id: 1017
+        suites: 'extras'
+        comment: 'multi-step add option with product name afterwards'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: can i get a coffee
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: can i get room in that coffee
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children:
+                    - quantity: 1
+                      name: with room
+                      sku: '5500'
+                      children: []
+      - id: 1018
+        suites: 'extras multiple bug'
+        comment: 'multi-step should add room to coffee'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a coffee and an espresso
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children: []
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: can i get room in the coffee
+            cart:
+              items:
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1102'
+                  children:
+                    - quantity: 1
+                      name: with room
+                      sku: '5500'
+                      children: []
+                - quantity: 1
+                  name: doppio espresso
+                  sku: '601'
                   children: []
