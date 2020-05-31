@@ -1,5 +1,3 @@
-imports:
-  - bakery.yaml
 dimensions:
   - name: coffee_temperature
     attributes:

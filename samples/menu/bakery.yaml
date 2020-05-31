@@ -34,9 +34,8 @@ catalog:
               - warmed
           - name: cut in half
             aliases:
-              - 'cut [in half]'
+              - '(cut,sliced) [in half,in two,into two pieces]'
               - halved
-              - sliced
 rules:
   - parents: [bakery_products]
     children: [bakery_options]

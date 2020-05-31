@@ -212,6 +212,8 @@ export class ShortOrderReplExtension implements IReplExtension {
                         console.log(`  ${tokenText}: "${spanText}"`);
                     }
                 }
+
+                console.log(' ');
                 
                 repl.getReplServer().displayPrompt();
             }

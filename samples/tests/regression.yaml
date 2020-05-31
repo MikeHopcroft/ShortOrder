@@ -1,9 +1,33 @@
 tests:
-  - comment: '## Adding items'
+  - comment: |
+      # Title
+      This file catalogs examples of menu ordering scenarios working in
+      [short-order](https://github.com/MikeHopcroft/ShortOrder).
+      In order to better illustrate the `add`, `remove`, and `modify`
+      scenarios, the transcripts below use a simplified grammar.
+      As an example, many of the add scenarios start with
+      "i'd like" and end with "that's it". 
+      Please be aware that the system accepts a much broader variety of
+      prologues, epilogues, disfluencies, and forms of speech.
+      Please see the specification for more details on the nature of
+      utterances likely to be accepted.
+
+      Note also that the system is designed to ignore portions of the
+      conversation that don't directly correspond to transactions on the
+      shopping cart, even if these passages contain product names.
+      The examples below do not illustrate the `ignore` scenario because
+      of the large number of cases.
+
+      We encourage you to try these examples in the short-order REPL yourself.
+      You can also run these examples as part of the regression suite.
+
+      ## Adding Items
     tests:
       - id: 0
         suites: regression add
-        comment: 'Adding one single-term product'
+        comment: |
+          ### Generic Items
+          Adding one single-term product
         steps:
           - turns:
               - speaker: speaker
@@ -12,7 +36,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
       - id: 1
         suites: regression add
@@ -25,7 +49,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children: []
       - id: 2
         suites: regression add
@@ -38,7 +62,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children: []
       - id: 3
         suites: regression add
@@ -51,7 +75,7 @@ tests:
               items:
                 - quantity: 2
                   name: grande mocha
-                  sku: '402'
+                  sku: '802'
                   children: []
       - id: 4
         suites: regression add
@@ -64,11 +88,13 @@ tests:
               items:
                 - quantity: 25
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children: []
       - id: 5
         suites: regression add
-        comment: 'One leading attribute'
+        comment: |
+          ### Attributes
+          One leading attribute
         steps:
           - turns:
               - speaker: speaker
@@ -77,7 +103,7 @@ tests:
               items:
                 - quantity: 1
                   name: tall cappuccino
-                  sku: '2'
+                  sku: '401'
                   children: []
       - id: 6
         suites: regression add
@@ -90,7 +116,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced venti latte
-                  sku: '205'
+                  sku: '605'
                   children: []
       - id: 7
         suites: regression add
@@ -103,7 +129,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced venti latte
-                  sku: '205'
+                  sku: '605'
                   children: []
       - id: 8
         suites: regression add
@@ -116,7 +142,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced venti latte
-                  sku: '205'
+                  sku: '605'
                   children: []
       - id: 9
         suites: regression add
@@ -129,7 +155,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced venti latte
-                  sku: '205'
+                  sku: '605'
                   children: []
       - id: 10
         suites: regression add
@@ -142,11 +168,13 @@ tests:
               items:
                 - quantity: 1
                   name: short latte
-                  sku: '200'
+                  sku: '600'
                   children: []
       - id: 11
         suites: regression add
-        comment: 'One simple, trailing option'
+        comment: |
+          ### Options
+          One simple, trailing option
         steps:
           - turns:
               - speaker: speaker
@@ -155,11 +183,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte macchiato
-                  sku: '302'
+                  sku: '702'
                   children:
                     - quantity: 1
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []
       - id: 12
         suites: regression add
@@ -172,11 +200,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: peppermint syrup
-                      sku: '1802'
+                      sku: '2202'
                       children: []
       - id: 13
         suites: regression add
@@ -191,31 +219,31 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
                     - quantity: 1
                       name: soy milk
-                      sku: '3200'
+                      sku: '3600'
                       children: []
                     - quantity: 1
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []
                     - quantity: 1
                       name: caramel syrup
-                      sku: '1402'
+                      sku: '1802'
                       children: []
                     - quantity: 1
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
                     - quantity: 1
                       name: foam
-                      sku: '4802'
+                      sku: '5202'
                       children: []
       - id: 14
         suites: 'regression add'
@@ -228,11 +256,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: peppermint syrup
-                      sku: '1802'
+                      sku: '2202'
                       children: []
       - id: 15
         suites: 'regression add'
@@ -245,11 +273,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 16
         suites: 'regression add'
@@ -262,11 +290,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: nonfat milk
-                      sku: '3000'
+                      sku: '3400'
                       children: []                      
       # Skipped 17
       # Skipped 18
@@ -281,11 +309,11 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children:
                     - quantity: 1
                       name: light nutmeg
-                      sku: '5001'
+                      sku: '5401'
                       children: []
       - id: 20
         suites: ''
@@ -298,11 +326,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: no foam
-                      sku: '4800'
+                      sku: '5200'
                       children: []
       - id: 21
         suites: 'regression add'
@@ -315,11 +343,11 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children:
                     - quantity: 1
                       name: no nutmeg
-                      sku: '5000'
+                      sku: '5400'
                       children: []
       - id: 22
         suites: 'regression add'
@@ -334,24 +362,24 @@ tests:
               items:
                 - quantity: 1
                   name: grande mocha
-                  sku: '402'
+                  sku: '802'
                   children:
                     - quantity: 1
                       name: light whipped cream
-                      sku: '5101'
+                      sku: '5501'
                       children: []
                     - quantity: 1
                       name: no foam
-                      sku: '4800'
+                      sku: '5200'
                       children: []
                     - quantity: 1
                       name: extra hazelnut syrup
-                      sku: '1603'
+                      sku: '2003'
                       children: []
                     - quantity: 1
                       # Why is 'cinnamon syrup' more correct than 'dash of cinnamon'?
                       name: cinnamon syrup
-                      sku: '1502'
+                      sku: '1902'
                       children: []
       - id: 23
         suites: 'regression add illegal-option'
@@ -364,7 +392,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
       - id: 24
         suites: 'regression add illegal-option'
@@ -377,7 +405,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
       - id: 25
         suites: 'regression add'
@@ -390,11 +418,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 5
                       name: caramel syrup
-                      sku: '1402'
+                      sku: '1802'
                       children: []
       - id: 26
         suites: 'regression add'
@@ -407,11 +435,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 5
                       name: caramel syrup
-                      sku: '1402'
+                      sku: '1802'
                       children: []
       - id: 27
         suites: 'regression add'
@@ -426,35 +454,37 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 2
                       name: peppermint syrup
-                      sku: '1802'
+                      sku: '2202'
                       children: []
                     - quantity: 3
                       name: raspberry syrup
-                      sku: '1902'
+                      sku: '2302'
                       children: []
                     - quantity: 1
                       name: nonfat milk
-                      sku: '3000'
+                      sku: '3400'
                       children: []
                     - quantity: 1
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []
                     - quantity: 1
                       name: caramel syrup
-                      sku: '1402'
+                      sku: '1802'
                       children: []
                     - quantity: 2
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
       - id: 28
         suites: 'regression add multiple'
-        comment: 'Add a comma-separated list of products'
+        comment: |
+          ### Multiple Items
+          Add a comma-separated list of products
         steps:
           - turns:
               - speaker: speaker
@@ -463,15 +493,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
                 - quantity: 1
                   name: apple bran muffin
@@ -490,19 +520,19 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
                 - quantity: 1
                   name: lemon poppyseed muffin
@@ -510,11 +540,11 @@ tests:
                   children:
                     - quantity: 1
                       name: warmed
-                      sku: '6700'
+                      sku: '200'
                       children: []
                     - quantity: 1
                       name: cut in half
-                      sku: '6800'
+                      sku: '300'
                       children: []
       # Skipped 30. Need to come up with a new list of products and options.
       # Add chai and hot chocolate and tea to menu. Add lemon. Add extra hot - need rules support for attributes.
@@ -531,26 +561,28 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3200'
+                      sku: '3600'
                       children: []
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 1
                       name: soy milk creamer
-                      sku: '4100'
+                      sku: '4500'
                       children: []
       # Skipped 33-37. Recipe.
-  - comment: '## Removing items'
+  - comment: '## Removing Items and Options'
     tests:
       - id: 38
         suites: 'regression remove'
-        comment: 'remove by complete generic name'
+        comment: |
+          ### Removing Items
+          Remove by complete generic name
         steps:
           - turns:
               - speaker: speaker
@@ -559,15 +591,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: grande latte macchiato
-                  sku: '302'
+                  sku: '702'
                   children: []
                 - quantity: 1
                   name: grande chai latte
-                  sku: '502'
+                  sku: '902'
                   children: []
           - turns:
               - speaker: speaker
@@ -576,11 +608,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: grande chai latte
-                  sku: '502'
+                  sku: '902'
                   children: []
       - id: 39
         suites: 'regression remove'
@@ -593,15 +625,15 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 - quantity: 1
                   name: grande chai latte
-                  sku: '502'
+                  sku: '902'
                   children: []
           - turns:
               - speaker: speaker
@@ -610,11 +642,11 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
       - id: 40
         suites: 'regression remove'
@@ -627,15 +659,15 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 - quantity: 1
                   name: grande chai latte
-                  sku: '502'
+                  sku: '902'
                   children: []
           - turns:
               - speaker: speaker
@@ -644,11 +676,11 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: grande chai latte
-                  sku: '502'
+                  sku: '902'
                   children: []
       - id: 41
         suites: 'regression remove'
@@ -661,15 +693,15 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 - quantity: 1
                   name: iced grande chai latte
-                  sku: '504'
+                  sku: '904'
                   children: []
           - turns:
               - speaker: speaker
@@ -678,11 +710,11 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
       - id: 42
         suites: 'regression remove'
@@ -695,15 +727,15 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 - quantity: 1
                   name: iced grande chai latte
-                  sku: '504'
+                  sku: '904'
                   children: []
           - turns:
               - speaker: speaker
@@ -712,11 +744,11 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
       - id: 43
         suites: 'regression remove'
@@ -731,15 +763,15 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 - quantity: 1
                   name: iced grande chai latte
-                  sku: '504'
+                  sku: '904'
                   children: []
           - turns:
               - speaker: speaker
@@ -748,11 +780,11 @@ tests:
               items:
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 - quantity: 1
                   name: iced grande chai latte
-                  sku: '504'
+                  sku: '904'
                   children: []
       - id: 44
         suites: 'regression remove implicit'
@@ -767,15 +799,15 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 - quantity: 1
                   name: iced grande chai latte
-                  sku: '504'
+                  sku: '904'
                   children: []
           - turns:
               - speaker: speaker
@@ -784,11 +816,27 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
+                  children: []
+      - id: 44.1
+        suites: 'placeholder'
+        comment: |
+          ### Removing Options
+          placeholder
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: >-
+                  This is a placeholder test.
+            cart:
+              items:
+                - quantity: 1
+                  name: iced tall latte
+                  sku: '603'
                   children: []
   - comment: '## Modifying items'
     tests:
@@ -803,11 +851,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -816,15 +864,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: extra vanilla syrup
-                      sku: '2103'
+                      sku: '2503'
                       children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
       - id: 45.1
         suites: 'regression modify'
@@ -837,11 +885,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -850,15 +898,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: extra vanilla syrup
-                      sku: '2103'
+                      sku: '2503'
                       children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
       - id: 45.2
         suites: 'regression modify'
@@ -871,11 +919,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -884,11 +932,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: triple espresso
-                  sku: '602'
+                  sku: '1002'
                   children: []                  
       - id: 46
         suites: 'regression modify'
@@ -901,11 +949,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -914,15 +962,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '5102'
+                      sku: '5502'
                       children: []
       - id: 47
         suites: 'regression modify'
@@ -935,7 +983,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -944,15 +992,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []
                     - quantity: 1
                       name: honey
-                      sku: '6002'
+                      sku: '6402'
                       children: []
       - id: 48
         suites: 'regression modify'
@@ -965,7 +1013,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -974,11 +1022,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 49
         suites: 'regression modify'
@@ -991,11 +1039,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2400'
+                      sku: '2800'
                       children: []
           - turns:
               - speaker: speaker
@@ -1004,11 +1052,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 49.1
         suites: 'regression modify'
@@ -1021,11 +1069,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2400'
+                      sku: '2800'
                       children: []
           - turns:
               - speaker: speaker
@@ -1034,11 +1082,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 50
         suites: 'regression modify'
@@ -1051,7 +1099,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1060,7 +1108,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced grande latte
-                  sku: '204'
+                  sku: '604'
                   children: []
       - id: 50.1
         suites: 'regression modify'
@@ -1073,7 +1121,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1082,7 +1130,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced grande latte
-                  sku: '204'
+                  sku: '604'
                   children: []
       - id: 51
         suites: 'regression modify'
@@ -1095,7 +1143,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1104,11 +1152,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3200'
+                      sku: '3600'
                       children: []
       - id: 51.1
         suites: 'regression modify'
@@ -1121,7 +1169,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1130,11 +1178,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3200'
+                      sku: '3600'
                       children: []
       - id: 51.2
         suites: 'regression modify'
@@ -1147,7 +1195,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1156,11 +1204,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: soy milk
-                      sku: '3200'
+                      sku: '3600'
                       children: []
 
       - id: 52
@@ -1174,7 +1222,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children: []
           - turns:
               - speaker: speaker
@@ -1183,11 +1231,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 53
         suites: 'regression modify'
@@ -1200,11 +1248,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 2
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []
           - turns:
               - speaker: speaker
@@ -1213,11 +1261,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 3
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []
       - id: 54
         suites: 'regression modify'
@@ -1230,11 +1278,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
           - turns:
               - speaker: speaker
@@ -1243,11 +1291,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
       - id: 54.1
         suites: 'regression modify'
@@ -1260,11 +1308,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
           - turns:
               - speaker: speaker
@@ -1273,11 +1321,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
       - id: 55
         suites: 'regression modify'
@@ -1290,11 +1338,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5902'
+                      sku: '6302'
                       children: []
           - turns:
               - speaker: speaker
@@ -1303,11 +1351,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5902'
+                      sku: '6302'
                       children: []
       - id: 55.1
         suites: 'regression modify'
@@ -1320,11 +1368,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5902'
+                      sku: '6302'
                       children: []
           - turns:
               - speaker: speaker
@@ -1333,11 +1381,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 5
                       name: equal
-                      sku: '5902'
+                      sku: '6302'
                       children: []
 
       - id: 56
@@ -1351,7 +1399,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1360,7 +1408,7 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
       - id: 56.1
         suites: 'regression modify'
@@ -1373,7 +1421,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1382,7 +1430,7 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
       - id: 56.2
         suites: 'regression modify'
@@ -1395,7 +1443,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1404,7 +1452,7 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
       - id: 56.3
         suites: 'regression modify'
@@ -1417,7 +1465,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1426,7 +1474,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
       - id: 56.4
         suites: 'regression modify'
@@ -1439,7 +1487,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1448,11 +1496,11 @@ tests:
               items:
                 - quantity: 1
                   name: iced grande latte
-                  sku: '204'
+                  sku: '604'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 57
         suites: 'regression modify'
@@ -1465,7 +1513,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children: []
           - turns:
               - speaker: speaker
@@ -1474,11 +1522,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 57.1
         suites: 'regression modify implicit'
@@ -1491,7 +1539,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children: []
           - turns:
               - speaker: speaker
@@ -1500,11 +1548,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2400'
+                      sku: '2800'
                       children: []
       - id: 57.2
         suites: 'regression modify implicit'
@@ -1517,7 +1565,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children: []
           - turns:
               - speaker: speaker
@@ -1526,11 +1574,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2400'
+                      sku: '2800'
                       children: []
       - id: 57.3
         suites: 'regression modify implicit'
@@ -1543,7 +1591,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children: []
           - turns:
               - speaker: speaker
@@ -1552,11 +1600,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2400'
+                      sku: '2800'
                       children: []
       - id: 58
         suites: 'regression modify implicit'
@@ -1569,7 +1617,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1578,7 +1626,7 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
       - id: 59
         suites: 'regression modify implicit'
@@ -1591,7 +1639,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -1600,11 +1648,11 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children:
                     - quantity: 1
                       name: half and half
-                      sku: '4500'
+                      sku: '4900'
                       children: []
       - id: 60
         suites: 'regression modify implicit'
@@ -1617,7 +1665,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1626,11 +1674,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: peppermint syrup
-                      sku: '1802'
+                      sku: '2202'
                       children: []
       - id: 60.1
         suites: 'regression modify implicit'
@@ -1643,7 +1691,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1652,11 +1700,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: foam
-                      sku: '4802'
+                      sku: '5202'
                       children: []
       - id: 60.2
         suites: 'regression modify implicit'
@@ -1669,7 +1717,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1678,11 +1726,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: lid
-                      sku: '5400'
+                      sku: '5800'
                       children: []
       - id: 61
         suites: 'regression modify replace implicit'
@@ -1695,11 +1743,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
           - turns:
               - speaker: speaker
@@ -1708,11 +1756,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 61.1
         suites: 'regression modify replace'
@@ -1725,11 +1773,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
           - turns:
               - speaker: speaker
@@ -1738,11 +1786,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande cappuccino
-                  sku: '3'
+                  sku: '402'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
       - id: 62
         suites: 'regression modify replace'
@@ -1755,11 +1803,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
           - turns:
               - speaker: speaker
@@ -1768,11 +1816,11 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children:
                     - quantity: 1
                       name: half caf
-                      sku: '2400'
+                      sku: '2800'
                       children: []
       - id: 63
         suites: 'regression modify replace'
@@ -1785,7 +1833,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -1794,7 +1842,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
       - id: 63.1
         suites: 'regression modify replace implicit'
@@ -1807,7 +1855,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -1816,7 +1864,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
       - id: 63.2
         suites: 'regression modify replace implicit'
@@ -1829,7 +1877,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -1838,7 +1886,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
       - id: 64
         suites: 'regression modify replace implicit'
@@ -1851,7 +1899,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -1860,7 +1908,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced tall latte
-                  sku: '203'
+                  sku: '603'
                   children: []
       - id: 65
         suites: 'regression multiple weak not-implemented'
@@ -1873,7 +1921,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1882,7 +1930,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
       - id: 66
         suites: 'regression multiple'
@@ -1895,7 +1943,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1904,7 +1952,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
       - id: 66.1
         suites: 'regression multiple'
@@ -1917,7 +1965,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
           - turns:
               - speaker: speaker
@@ -1926,7 +1974,7 @@ tests:
               items:
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
         # Skipped 67-85 - these are examples of random chitchat 77
 
@@ -1946,11 +1994,11 @@ tests:
               items:
                 - quantity: 1
                   name: tall cappuccino
-                  sku: '2'
+                  sku: '401'
                   children:
                     - quantity: 1
                       name: buttered rum syrup
-                      sku: '1302'
+                      sku: '1702'
                       children: []
   - comment: '## extras'
     tests:
@@ -1967,11 +2015,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
       - id: 1001
         suites: 'extras bug'
@@ -1984,11 +2032,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
           - turns:
               - speaker: speaker
@@ -1997,7 +2045,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children: 
                     # - quantity: 2
                     #   name: sugar
@@ -2005,7 +2053,7 @@ tests:
                     #   children: []
                     - quantity: 1
                       name: no sugar
-                      sku: '6200'
+                      sku: '6600'
                       children: []
       - id: 1006
         suites: 'extras bug'
@@ -2018,11 +2066,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 2
                       name: sugar
-                      sku: '6202'
+                      sku: '6602'
                       children: []
           - turns:
               - speaker: speaker
@@ -2031,7 +2079,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     # - quantity: 2
                     #   name: sugar
@@ -2039,7 +2087,7 @@ tests:
                     #   children: []
                     - quantity: 1
                       name: no sugar
-                      sku: '6200'
+                      sku: '6600'
                       children: []
       - id: 1007
         suites: 'extras remove bug'
@@ -2052,11 +2100,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 2
                       name: equal
-                      sku: '5902'
+                      sku: '6302'
                       children: []
           - turns:
               - speaker: speaker
@@ -2065,7 +2113,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children: []
       - id: 1002
         suites: 'extras add'
@@ -2078,11 +2126,11 @@ tests:
               items:
                 - quantity: 1
                   name: tall latte
-                  sku: '201'
+                  sku: '601'
                   children: []
                 - quantity: 1
                   name: short latte macchiato
-                  sku: '300'
+                  sku: '700'
                   children: []
                 # - quantity: 1
                 #   name: short latte
@@ -2111,11 +2159,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '5102'
+                      sku: '5502'
                       children: []
           - turns:
               - speaker: speaker
@@ -2124,15 +2172,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '5102'
+                      sku: '5502'
                       children: []
                     - quantity: 1
                       name: whipped cream
-                      sku: '5102'
+                      sku: '5502'
                       children: []
       - id: 1004
         suites: 'extras bug'
@@ -2145,11 +2193,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '5102'
+                      sku: '5502'
                       children: []
           - turns:
               - speaker: speaker
@@ -2158,11 +2206,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: whipped cream
-                      sku: '5102'
+                      sku: '5502'
                       children: []
       - id: 1005
         suites: 'extras'
@@ -2175,11 +2223,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []
           - turns:
               - speaker: speaker
@@ -2188,11 +2236,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: vanilla syrup
-                      sku: '2102'
+                      sku: '2502'
                       children: []                
       - id: 1008
         suites: 'regression add bug'
@@ -2205,7 +2253,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
 
       - id: 1009
@@ -2219,7 +2267,7 @@ tests:
               items:
                 - quantity: 1
                   name: iced grande latte
-                  sku: '204'
+                  sku: '604'
                   children: []
           - turns:
               - speaker: speaker
@@ -2228,7 +2276,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
       - id: 1010
         suites: 'extras'
@@ -2241,11 +2289,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children: []
           - turns:
               - speaker: speaker
@@ -2254,15 +2302,15 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: decaf
-                      sku: '2600'
+                      sku: '3000'
                       children: []
                 - quantity: 1
                   name: grande flat white
-                  sku: '102'
+                  sku: '502'
                   children: []
       - id: 1011
         suites: 'extras remove'
@@ -2275,11 +2323,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children:
                     - quantity: 1
                       name: peppermint syrup
-                      sku: '1802'
+                      sku: '2202'
                       children: []
           - turns:
               - speaker: speaker
@@ -2288,7 +2336,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
       - id: 1012
         suites: 'extras add bug'
@@ -2301,7 +2349,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande latte
-                  sku: '202'
+                  sku: '602'
                   children: []
       # 1013 was a dupe of 1012
       - id: 1014
@@ -2328,7 +2376,7 @@ tests:
                   children:
                     - quantity: 1
                       name: warmed
-                      sku: '6700'
+                      sku: '200'
                       children: []
       - id: 1015
         suites: 'extras'
@@ -2341,11 +2389,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 1
                       name: with room
-                      sku: '5500'
+                      sku: '5900'
                       children: []
       - id: 1016
         suites: 'extras'
@@ -2358,7 +2406,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children: []
           - turns:
               - speaker: speaker
@@ -2367,11 +2415,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 1
                       name: with room
-                      sku: '5500'
+                      sku: '5900'
                       children: []
       - id: 1017
         suites: 'extras'
@@ -2384,7 +2432,7 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children: []
           - turns:
               - speaker: speaker
@@ -2393,11 +2441,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 1
                       name: with room
-                      sku: '5500'
+                      sku: '5900'
                       children: []
       - id: 1018
         suites: 'extras multiple bug'
@@ -2410,11 +2458,11 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
           - turns:
               - speaker: speaker
@@ -2423,13 +2471,13 @@ tests:
               items:
                 - quantity: 1
                   name: grande dark roast coffee
-                  sku: '1102'
+                  sku: '1502'
                   children:
                     - quantity: 1
                       name: with room
-                      sku: '5500'
+                      sku: '5900'
                       children: []
                 - quantity: 1
                   name: doppio espresso
-                  sku: '601'
+                  sku: '1001'
                   children: []
