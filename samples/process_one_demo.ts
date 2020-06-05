@@ -169,7 +169,17 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-    "i want a coffee one and one",
+    "i want an espresso",
+    "replace that espresso with a tall iced latte"
+
+    // "i'd like a decaf latte",
+    // "actually make that a cappuccino"
+
+    // "add a latte with two sugar",
+    // "add a sugar"
+    // "add five more sugar"
+
+    // "i want a coffee one and one",
     // "i want a latte double espresso and a muffin",
     // "i want a muffin with strawberry halved",
     // "i'd like an extra wet latte",
@@ -178,3 +188,8 @@ go([
     // "i want a tall latte",
     // "i removed that tall latte"
 ]);
+
+// NOP: Hi um i'd like a ah a latte with vanilla syrup
+// OK: Actually make that an iced decaf and add a muffin
+// ADDS A MUFFIN: And can you warm the muffin
+// NOP: Warm that

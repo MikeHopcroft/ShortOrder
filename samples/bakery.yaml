@@ -1,0 +1,41 @@
+catalog:
+  - tags: [bakery_products]
+    pid: 2000
+    sku: 10000
+    items:
+      - name: apple bran muffin
+        aliases:
+          - 'apple [bran] muffin'
+          - bran muffin
+      - name: blueberry muffin
+        aliases:
+          - blueberry muffin
+      - name: lemon poppyseed muffin
+        aliases:
+          - lemon [poppyseed] muffin
+          - poppyseed muffin
+  - tags: [bakery_options]
+    type: option
+    items:
+      - tensor: options
+        default: [regular]
+        items:
+          - name: butter
+            aliases:
+              - butter
+          - name: strawberry jam
+            aliases:
+              - 'strawberry [jam]'
+      - tags: [bakery_preparations]
+        tensor: none
+        items:
+          - name: warmed
+            aliases:
+              - warmed
+          - name: cut in half
+            aliases:
+              - '(cut,sliced) [in half,in two,into two pieces]'
+              - halved
+rules:
+  - parents: [bakery_products]
+    children: [bakery_options]

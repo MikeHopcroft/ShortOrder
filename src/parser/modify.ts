@@ -72,7 +72,8 @@ export function processModify(
                 state,
                 graph,
                 modification.tokens,
-                target.tokens
+                target.tokens,
+                false
             );
         } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
             // * (made,changed) [that] (into,to,with) [a] P0
@@ -82,7 +83,8 @@ export function processModify(
                 parser,
                 state,
                 graph,
-                modification.tokens
+                modification.tokens,
+                false
             );
         } else if (tokens.startsWith([PRODUCT_PARTS_0])) {
             // Here all tokens to the left roll into the MODIFY_ITEM
@@ -93,7 +95,8 @@ export function processModify(
                 parser,
                 state,
                 graph,
-                modification.tokens
+                modification.tokens,
+                false
             );
         } else if (tokens.startsWith([PRODUCT_PARTS_1, PREPOSITION, PRODUCT_PARTS_1])) {
                 // * (made,changed,replaced) [the,that,your] P1 (into,to,with) [a] P1
@@ -170,7 +173,8 @@ function processModify1(
                 state,
                 graph,
                 modifiers,
-                product
+                product,
+                false
             );
 
             if (interpretation.score > best.score) {
@@ -189,6 +193,7 @@ export function parseAddToImplicit(
     state: State,
     graph: Graph,
     modification: Array<Token & Span>,
+    combineQuantities: boolean
 ): Interpretation {
     // console.log(`Modifying`);
     // console.log(`  ${target.map(tokenToString).join('')}`);
@@ -205,7 +210,8 @@ export function parseAddToImplicit(
                 item,
                 score: 1,
                 tokenCount: modification.length
-            }
+            },
+            combineQuantities
         );
         if (interpretation.score > best.score) {
             best = interpretation;
@@ -219,7 +225,8 @@ export function parseAddToTarget(
     state: State,
     graph: Graph,
     modification: Array<Token & Span>,
-    target: Array<Token & Span>
+    target: Array<Token & Span>,
+    combineQuantities: boolean
 ): Interpretation {
     // console.log(`Modifying`);
     // console.log(`  ${target.map(tokenToString).join('')}`);
@@ -237,7 +244,8 @@ export function parseAddToTarget(
         const interpretation = parseAddToItem(
             parser,
             modification,
-            targetItem
+            targetItem,
+            combineQuantities
         );
         if (interpretation.score > best.score) {
             best = interpretation;
@@ -249,14 +257,16 @@ export function parseAddToTarget(
 export function parseAddToItem(
     parser: Parser,
     modification: Array<Token & Span>,
-    targetItem: HypotheticalItem
+    targetItem: HypotheticalItem,
+    combineQuantities: boolean
 ): Interpretation {
     if (targetItem.item) {
         // console.log(`  target: ${targetItem.item.key} (uid=${targetItem.item!.uid})`);
         const builder = new ModificationBuilder(
             parser,
             targetItem.item,
-            modification as GapToken[]
+            modification as GapToken[],
+            combineQuantities
         );
 
         const modified = builder.getItem();
@@ -415,7 +425,17 @@ function parseReplaceItem(
     replacement: HypotheticalItem
 ): Interpretation {
     if (target.item && replacement.item) {
-        const item = {...replacement.item, uid: target.item.uid};
+        // If the replacement specifies children use them.
+        // Otherwise keep the children from the target.
+        const children =
+            replacement.item.children.length > 0 ?
+            replacement.item.children :
+            target.item.children;
+        const item = {
+            ...replacement.item,
+            children,
+            uid: target.item.uid,
+        };
         const cart = parser.cartOps.replaceInCart(state.cart, item);
         return {
             score: target.score + replacement.score,

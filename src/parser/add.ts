@@ -69,11 +69,11 @@ export function processAdd(
         const target = tokens.peek(2) as ProductToken1 & Span;
         const modification = tokens.peek(0) as ProductToken0 & Span;
         tokens.take(3);
-        return parseAddToTarget(parser, state, graph, modification.tokens, target.tokens);
+        return parseAddToTarget(parser, state, graph, modification.tokens, target.tokens, true);
     } else if (tokens.startsWith([PRODUCT_PARTS_0, PREPOSITION])) {
         const modification = tokens.peek(0) as ProductToken0 & Span;
         tokens.take(2);
-        return parseAddToImplicit(parser, state, graph, modification.tokens);
+        return parseAddToImplicit(parser, state, graph, modification.tokens, true);
     } else if (
         // We're adding new items to the cart.
         tokens.startsWith([PRODUCT_PARTS_1]) ||
@@ -86,7 +86,7 @@ export function processAdd(
         // We're adding options to an implicit item already in the cart.
         const modification = tokens.peek(0) as ProductToken0 & Span;
         tokens.take(1);
-        return parseAddToImplicit(parser, state, graph, modification.tokens);
+        return parseAddToImplicit(parser, state, graph, modification.tokens, true);
     }
 
     return nop;

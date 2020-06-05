@@ -27,6 +27,7 @@ import {
 import { GapToken, Segment } from './interfaces';
 import { TokenSequence } from './token_sequence';
 import { Parser } from './parser';
+import { OrderOps } from '../order';
 
 export class EntityBuilderBase {
     protected readonly cartOps: ICartOps;
@@ -456,6 +457,7 @@ export class ModificationBuilder extends EntityBuilderBase {
         parser: Parser,
         original: ItemInstance,
         modifications: GapToken[],
+        combineQuantities: boolean
     ) {
         const pid: PID = AttributeInfo.pidFromKey(original.key);
         super(parser, pid, false);
@@ -476,7 +478,9 @@ export class ModificationBuilder extends EntityBuilderBase {
         // from the replacement item. This ensures that a replacement option
         // will supercede an original option.
         for (const option of original.children) {
-            if (this.rules.isValidChild(modified.key, option.key)) {
+            if (
+                this.rules.isValidChild(modified.key, option.key) // &&
+            ) {
                 modified = this.cartOps.addToItem(
                     modified,
                     option
@@ -490,7 +494,8 @@ export class ModificationBuilder extends EntityBuilderBase {
             if (this.rules.isValidChild(modified.key, option.key)) {
                 modified = this.cartOps.addToItemWithReplacement(
                     modified,
-                    option
+                    option,
+                    combineQuantities,
                 );
             }
         }
@@ -572,7 +577,8 @@ export class ReplacementBuilder extends EntityBuilderBase {
             if (this.rules.isValidChild(replacement.key, option.key)) {
                 replacement = this.cartOps.addToItemWithReplacement(
                     replacement,
-                    option
+                    option,
+                    false
                 );
             }
         }

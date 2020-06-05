@@ -26,7 +26,10 @@ items:
   - pid: 2
     name: "2"
     aliases:
-      - double
+      # ISSUE: double as quantifer vs double as product name, e.g. "double espresso"
+      # PLAN: use cookbook for double shot
+      # - double
+
       # ISSUE: The term "of" is a partial match for "couple of".
       # Potential error in "Make one of them large".
       - couple
