@@ -42,9 +42,7 @@
     "copyfiles": "^2.1.0",
     "gts": "^0.8.0",
     "mocha": "^5.2.0",
-    "prix-fixe": "0.0.52",
-    "token-flow": "0.0.36",
-    "typescript": "~2.8.0"
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "ajv": "^6.12.2",
@@ -57,9 +55,11 @@
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
     "pluralize": "^7.0.0",
+    "prix-fixe": "0.0.52",
     "readline-sync": "^1.4.9",
     "seedrandom": "^3.0.1",
-    "talisman": "^0.21.0"
+    "talisman": "^0.21.0",
+    "token-flow": "0.0.36"
   },
   "peerDependencies": {
     "prix-fixe": "0.0.52",

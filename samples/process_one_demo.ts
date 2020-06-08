@@ -148,29 +148,51 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
     }
 }
 
-// go(['i added a soy latte']);
+// go(['add a soy latte']);
 // go([
-//     "ok i added a soy latte",
-//     "ok i added one two percent milk latte with two one percent lattes iced with decaf"
+//     "i want a soy latte",
+//     "ok i'd like one two percent milk latte with two one percent lattes iced with decaf"
 // ]);
 
 // go([
-//     "ok i added a soy latte iced",
-//     "ok i added an espresso",
-//     "ok i made that latte iced mocha"
-//     // "ok i made that latte a mocha"
-//     // WORKS "ok I changed that latte into a solo espresso"
-//     // WORKS "ok I replaced that latte with an double espresso"
+//     "i want a soy latte iced",
+//     "i want an espresso",
+//     "i make that latte iced mocha"
+//     // "make that latte a mocha"
+//     // WORKS "change that latte into a solo espresso"
+//     // WORKS "replace that latte with an double espresso"
 // ]);
 
 // go([
-//     "i added a decaf latte",
-//     "i made that latte a cappuccino"
+//     "add a decaf latte",
+//     "make that latte a cappuccino"
 // ]);
 
 go([
-    "i want an espresso",
-    "replace that espresso with a tall iced latte"
+    // 61
+    "i'd like a decaf latte",
+    "actually make that a cappuccino"
+
+    // // 1014
+    // "add a muffin",
+    // "i'd like that warmed"
+
+    // // 52
+    // "add a cappuccino",
+    // "change that cappuccino to decaf"
+
+    // // 38
+    // "i want a latte latte macchiato and a chai latte",
+    // "remove the latte macchiato"
+
+    // STILL DOESN'T WORK
+    // // 60.2
+    // "i want a latte",
+    // "i want that with a lid"
+
+    // STILL DOESN'T WORK
+    // "i want an espresso",
+    // "replace that espresso with a tall iced latte"
 
     // "i'd like a decaf latte",
     // "actually make that a cappuccino"
@@ -186,7 +208,7 @@ go([
     // "i'd like a soy vanilla latte",
     // "i'd like a vanilla latte"
     // "i want a tall latte",
-    // "i removed that tall latte"
+    // "remove that tall latte"
 ]);
 
 // NOP: Hi um i'd like a ah a latte with vanilla syrup

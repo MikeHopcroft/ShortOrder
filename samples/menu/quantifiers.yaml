@@ -2,8 +2,7 @@ items:
 
   - pid: 0
     name: "0"
-    aliases:
-      - xxx
+    aliases: []
       # - "no"
       # - without
       # - with (no,zero)
@@ -13,9 +12,10 @@ items:
   - pid: 1
     name: "1"
     aliases:
+      # NOTE: following line may rely on stemmer to handle "a"
       - an
-      - the
-      - that
+      # - the
+      # - that
       # - "[with] (a,an,more,some,the)"
       # - "[with] (a,an,extra,more,some,the)"
       # - add
@@ -26,7 +26,8 @@ items:
   - pid: 2
     name: "2"
     aliases:
-      # ISSUE: double as quantifer vs double as product name, e.g. "double espresso"
+      # ISSUE: double as quantifer vs double as product name,
+      # e.g. "double shot" vs "double espresso"
       # PLAN: use cookbook for double shot
       # - double
 

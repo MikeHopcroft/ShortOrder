@@ -74,6 +74,12 @@ export function processAdd(
         const modification = tokens.peek(0) as ProductToken0 & Span;
         tokens.take(2);
         return parseAddToImplicit(parser, state, graph, modification.tokens, true);
+    } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
+        // 60.2: OK => FAILED(1)    "i want that with a lid"
+        // 1014: OK => FAILED(1)    "i'd like that warmed"
+        const modification = tokens.peek(1) as ProductToken0 & Span;
+        tokens.take(2);
+        return parseAddToImplicit(parser, state, graph, modification.tokens, true);
     } else if (
         // We're adding new items to the cart.
         tokens.startsWith([PRODUCT_PARTS_1]) ||

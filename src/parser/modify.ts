@@ -57,6 +57,19 @@ export function processModify(
         tokens.take(1);
     }
 
+    // Without check for preposition, following tests fail:
+    //   52: OK => FAILED(1)    "change that cappuccino to decaf"
+    //   56: OK => FAILED(1)    "change that latte to a tall"
+    //   57: OK => FAILED(1)    "change that cappuccino to a decaf"
+    //   61.1: OK => FAILED(3)  "make that latte a cappuccino"
+    //   62: OK => FAILED(3)    "change that latte to a half caf espresso"
+    //   1010: OK => FAILED(2)  "make that latte decaf"
+    // With check for prepositions, following test fails:
+    //   61: OK => FAILED(3)    "actually make that a cappuccino"
+    if (tokens.peek(0).type === PREPOSITION) {
+        tokens.take(1);
+    }
+
     if (!tokens.atEOS()) {
         if (tokens.startsWith([PRODUCT_PARTS_1, PREPOSITION, PRODUCT_PARTS_0])) {
             // * (made,changed) [the,that,your] P1 (into,to,with) [a] P0

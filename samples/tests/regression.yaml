@@ -1,6 +1,6 @@
 tests:
   - comment: |
-      # Title
+      # Example Orders
       This file catalogs examples of menu ordering scenarios working in
       [short-order](https://github.com/MikeHopcroft/ShortOrder).
       In order to better illustrate the `add`, `remove`, and `modify`
@@ -20,6 +20,9 @@ tests:
 
       We encourage you to try these examples in the short-order REPL yourself.
       You can also run these examples as part of the regression suite.
+
+      The cases in this file are available in the
+      [regression.yaml](regression.yaml) suite.
 
       ## Adding Items
     tests:
@@ -356,7 +359,7 @@ tests:
           - turns:
               - speaker: speaker
                 transcription: >-
-                  we want an light whipped no foam mocha with extra hazelnut and
+                  we want a light whipped no foam mocha with extra hazelnut and
                   cinnamon
             cart:
               items:
@@ -826,12 +829,13 @@ tests:
         suites: 'placeholder'
         comment: |
           ### Removing Options
-          placeholder
+          This is a placeholder test used as a reminder to add in the full
+          set of cases for removing options.
         steps:
           - turns:
               - speaker: speaker
                 transcription: >-
-                  This is a placeholder test.
+                  This is a placeholder test that is designed to fail.
             cart:
               items:
                 - quantity: 1
@@ -1353,7 +1357,7 @@ tests:
                   name: grande flat white
                   sku: '502'
                   children:
-                    - quantity: 2
+                    - quantity: 5
                       name: equal
                       sku: '6302'
                       children: []
@@ -2000,7 +2004,10 @@ tests:
                       name: buttered rum syrup
                       sku: '1702'
                       children: []
-  - comment: '## extras'
+  - comment: |
+      ## Extras
+      These are extra regression cases associated with bugs discovered
+      while testing.
     tests:
       - id: 1000
         suites: 'extras disfluencies'
@@ -2481,3 +2488,383 @@ tests:
                   name: doppio espresso
                   sku: '1001'
                   children: []
+      - id: 1019
+        suites: 'extras bug'
+        comment: 'adds togo to the wrong item'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: add an americano
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+                - quantity: 1
+                  name: grande americano
+                  sku: '1402'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that to go
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+                - quantity: 1
+                  name: grande americano
+                  sku: '1402'
+                  children:
+                    - quantity: 1
+                      name: to go
+                      sku: '6000'
+                      children: []
+      - id: 1020
+        suites: 'extras'
+        comment: 'this one seems to work'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a latte
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: add an americano
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+                - quantity: 1
+                  name: grande americano
+                  sku: '1402'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that americano to go
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+                - quantity: 1
+                  name: grande americano
+                  sku: '1402'
+                  children:
+                    - quantity: 1
+                      name: to go
+                      sku: '6000'
+                      children: []
+      - id: 1021
+        suites: 'extras bug exclusive'
+        comment: 'Should replace peppermint with extra peppermint'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a latte with peppermint
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: peppermint syrup
+                      sku: '2202'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that with extra peppermint
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: extra peppermint syrup
+                      sku: '2203'
+                      children: []
+      - id: 1022
+        suites: 'extras bug'
+        comment: 'should add whole milk creamer to coffee. Question: what about the half and half?'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a nonfat latte and a coffee with half and half
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+                - quantity: 1
+                  name: grande dark roast coffee
+                  sku: '1502'
+                  children:
+                    - quantity: 1
+                      name: half and half
+                      sku: '4900'
+                      children: []
+                    - quantity: 1
+                      name: whole milk creamer
+                      sku: '4000'
+                      children: []
+      - id: 1023
+        suites: 'extras bug'
+        comment: 'should only add one lid'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a latte with a lid
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: lid
+                      sku: '5800'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that with a lid
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: lid
+                      sku: '5800'
+                      children: []
+      - id: 1024
+        suites: extras remove bug
+        comment: should remove the splenda
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a latte with splenda
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: splenda
+                      sku: '6502'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: remove the splenda
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children: []
+
+      - id: 1025
+        suites: extras bug
+        comment: shoud put no foam on second drink
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a mocha and an iced grande latte with extra foam
+            cart:
+              items:
+                - quantity: 1
+                  name: grande mocha
+                  sku: '802'
+                  children: []
+                - quantity: 1
+                  name: iced grande latte
+                  sku: '604'
+                  children:
+                    - quantity: 1
+                      name: extra foam
+                      sku: '5203'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that with no foam
+            cart:
+              items:
+                - quantity: 1
+                  name: grande mocha
+                  sku: '802'
+                  children: []
+                - quantity: 1
+                  name: iced grande latte
+                  sku: '604'
+                  children:
+                    - quantity: 1
+                      name: no foam
+                      sku: '5200'
+                      children: []
+      - id: 1026
+        suites: extras bug
+        comment: should only have on no foam
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a latte with no foam
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: no foam
+                      sku: '5200'
+                      children: []
+          - turns:
+              - speaker: speaker
+                transcription: make that with no foam
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: no foam
+                      sku: '5200'
+                      children: []
+      - id: 1027
+        suites: extras
+        comment: demonstrated an option with the same name as an attribute
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i want a short iced latte
+            cart:
+              items:
+                - quantity: 1
+                  name: short latte
+                  sku: '600'
+                  children:
+                    - quantity: 1
+                      name: ice
+                      sku: '5302'
+                      children: []
+
+      - id: 1028
+        suites: 'extras bug disfluency'
+        comment: 'Disfluency prevents order'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: Hi um i'd like a ah a latte with vanilla syrup
+            cart:
+              items:
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: vanilla syrup
+                      sku: '2502'
+                      children: []
+      - id: 1029
+        suites: 'extras bug'
+        comment: 'Should not add a second muffin'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a muffin
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: and can you warm the muffin
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children:
+                    - quantity: 1
+                      name: warmed
+                      sku: '200'
+                      children: []
+
+      - id: 1030
+        suites: 'extras bug'
+        comment: 'option-as-verb should warm the muffin'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: i'd like a muffin
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: warm that
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children:
+                    - quantity: 1
+                      name: warmed
+                      sku: '200'
+                      children: []
+      - id: 1031
+        suites: 'extras bug'
+        comment: 'option-as-verb should slice the muffin'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: add a muffin
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children: []
+          - turns:
+              - speaker: speaker
+                transcription: slice the muffin
+            cart:
+              items:
+                - quantity: 1
+                  name: apple bran muffin
+                  sku: '10000'
+                  children:
+                    - quantity: 1
+                      name: cut in half
+                      sku: '300'
+                      children: []
