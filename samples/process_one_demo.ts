@@ -169,9 +169,16 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-    // 61
-    "i'd like a decaf latte",
-    "actually make that a cappuccino"
+    "i'd like a latte and a flat white",
+    "make that latte decaf"
+    
+    // "i'd like a latte",
+    // "make that a decaf"
+
+    // // CURRENT TASK
+    // // 61
+    // "i'd like a decaf latte",
+    // "actually make that a cappuccino"
 
     // // 1014
     // "add a muffin",
