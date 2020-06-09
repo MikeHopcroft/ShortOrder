@@ -177,7 +177,7 @@ function interpretSegmentArray(parser: Parser, segments: Segment[]): Interpretat
         return {...state, cart: updated};
     };
 
-    return {score, tokenCount2, items, action};
+    return {score, tokenCount2, action};
 }
 
 function interpretOneSegment(

@@ -208,7 +208,6 @@ function processAllActiveRegions(
     return {
         score,
         tokenCount2,
-        items: [],
         action: (s: State):State => state
     };
 }

@@ -49,21 +49,6 @@ const ops: CartOps = new CartOps(
     smallWorldRuleChecker
 );
 
-function normalizeUIDsRecursion(items: ItemInstance[]): ItemInstance[] {
-    return items.map(item => ({
-        ...item,
-        uid: 0,
-        children: normalizeUIDsRecursion(item.children)
-    }));
-}
-
-function normalizeUIDs(interpretation: Interpretation) {
-    return {
-        ...interpretation,
-        items: normalizeUIDsRecursion(interpretation.items)
-    };
-}
-
 // ActionFunction that does nothing.
 function nop(state: State): State {
     return state;
@@ -135,38 +120,23 @@ describe('Parser2', () => {
             const expected: Interpretation = {
                 score: 6,
                 tokenCount2: 0, // This field never inspected by test.
-                items: [
-                    {
-                        uid: 0,
-                        key: '9000:0:0:0',
-                        quantity: 1,
-                        children: []
-                    },
-                    {
-                        uid: 0,
-                        key: '9000:0:0:1',
-                        quantity: 5,
-                        children: []
-                    }
-                ],
                 action: nop
             };
 
             // TODO: Remove type assertion.
-            const interpretation = normalizeUIDs(
-                    parseAdd(parser, tokens as Array<SequenceToken & Span>)
-            );
+            const interpretation = parseAdd(parser, tokens as Array<SequenceToken & Span>);
+
 
             // TODO: Remove this temporary code.
             // TEMPORARY code to hide Interpretion.action from deepEqual.
             const expected2 = {
                 score: expected.score,
-                items: expected.items
+                // items: expected.items
             };
 
             const observed2 = {
                 score: interpretation.score,
-                items: interpretation.items
+                // items: interpretation.items
             };
 
             assert.deepEqual(observed2, expected2);
@@ -255,46 +225,21 @@ describe('Parser2', () => {
             const expected: Interpretation = {
                 score: 5,
                 tokenCount2: 0, // This field never inspected by test.
-                items: [
-                    {
-                        uid: 0,
-                        key: '9000:1:0:0',
-                        quantity: 1,
-                        children: [
-                            {
-                                uid: 0,
-                                key: '5000:3',
-                                quantity: 1,
-                                children: []
-                            }        
-                        ]
-                    },
-                    {
-                        uid: 0,
-                        key: '8000:0:0',
-                        quantity: 1,
-                        children: []
-                    }
-                ],
                 action: nop
             };
 
             // TODO: Remove type assertion.
-            const interpretation = normalizeUIDs(
-                    parseAdd(parser, tokens as Array<SequenceToken & Span>)
-            );
+            const interpretation = parseAdd(parser, tokens as Array<SequenceToken & Span>);
 
             // assert.deepEqual(interpretation, expected);
             // TODO: Remove this temporary code.
             // TEMPORARY code to hide Interpretion.action from deepEqual.
             const expected2 = {
                 score: expected.score,
-                items: expected.items
             };
 
             const observed2 = {
                 score: interpretation.score,
-                items: interpretation.items
             };
 
             assert.deepEqual(observed2, expected2);

@@ -103,7 +103,6 @@ function parseRemove(
             interpretation = {
                 score: target.score,
                 tokenCount2: span.length,
-                items: [target.item!],
                 action: (state: State): State => {
                     const cart = parser.cartOps.removeFromCart(
                         state.cart,
@@ -122,7 +121,6 @@ function parseRemoveImplicit(parser: Parser, state: State): Interpretation {
     return {
         score: 1,
         tokenCount2: 0,
-        items: [],
         action: (state: State): State => {
             let cart = state.cart;
             const count = cart.items.length;
@@ -192,8 +190,6 @@ function parseRemoveOptionFromTarget(
                     interpretation = {
                         score,
                         tokenCount2,
-                        // TODO: remove items from Interpretation.
-                        items: [],
                         action: (state: State): State => {
                             const cart = parser.cartOps.removeFromCart(
                                 state.cart,

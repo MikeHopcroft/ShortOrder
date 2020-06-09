@@ -81,9 +81,10 @@ export type ActionFunction = (state: State) => State;
 
 export interface Interpretation {
     score: number;
+    // TODO: consider adding edit distance
+    // edit: number;
     tokenCount2: number;
     missed?: number;
-    items: ItemInstance[];
     action: ActionFunction;
 }
 
@@ -91,6 +92,5 @@ export interface Interpretation {
 export const nop: Interpretation = {
     score: 0,
     tokenCount2: 0,
-    items: [],
     action: (state: State): State => state
 };

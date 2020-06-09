@@ -1,5 +1,71 @@
 # TODO List
 
+Parser Map
+* processRootInternal()
+  * for all tokenizations
+    * groupProductTokens()
+    * processAllActiveRegions()
+      * switch statement on tokens.startsWith
+        * processAdd()
+        * processRemove()
+        * processModify()
+          * parseAddToTarget()
+            * for targetItem of productTargets()
+              * parseAddToItem()
+                * ModificationBuilder
+          * parseAddToImplicit()
+            * for item of state.cart.items
+              * parseAddToItem()
+          * parseReplaceTarget()
+            * createSpan()
+            * for targetItem of productTargets()
+              * parseReplaceItemWithTokens()
+                * splitOnEntities()
+                * ReplacementBuilder
+                * parseReplaceItem()
+          * parseReplace1()
+            * splitOnEntities()
+            * for splits of enumerateSplits()
+              * parseReplaceTarget()
+                * for targetItem of productTargets()
+                  * parseReplaceItemWithTokens()
+                    * (see above)
+          * processModify1()
+            * splitOnEntities()
+            * parseAddToTarget()
+              * (see above)
+          * parseReplaceImplicit()
+            * parserBuildItemFromTokens()
+              * parserBuildItemFromSegment()
+                * EntityBuilder
+            * parseReplaceTarget()
+              * (see above)
+    * compute interpretation.missed
+    * pick best interpretation
+      * preferFirstInterpretation()
+    * update state
+
+Parser
+* Remove concept of weakAdd
+* Map a map of the parser call tree
+  * Clarify roles of each function
+  * Clarify concepts (e.g. targets, spans)
+* Consider [nearley.js](https://nearley.js.org/docs/index) parser.
+* Investigate preferFirstInterpretation
+* Is Interpretation.items necessary?
+  * Seems like it's never read.
+  * Seems it is used inconsistently.
+* Why Interpretation.action function vs, say, Interpretation.state or Interpretation.cart?
+* What is the difference between Interpretation.score and Interpretation.tokenCount2?
+  * Score seems to be the total number of tokens used by the various Builders
+  * tokenCount2 seems to be the sum of the segment lengths
+* What is Interpretation.missed?
+* Function for computing edit distance
+* Function for picking best interpretation
+* Should interpretations be flattened in processAllActiveRegions() or should they be chained?
+  * Flattening might be able to catch errors earlier, but there shouldn't be errors.
+  * Probably the reason for flattening as we go is that future iterations need the state to interpret targets.
+
 * x Replace `text.split(/\s+/)` with termModel.breakWords()
 * x Consider moving loops from tokenizationsFromGraph2() and allTokenizations() to token-flow.
 * .targets command in replShortOrder may be broken. Also, can get span from graph.
