@@ -169,9 +169,26 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-    "i'd like a latte and a flat white",
-    "make that latte decaf"
-    
+    // 1024
+    "add a latte with splenda",
+    "remove the splenda"
+
+    // // 1019
+    // "add a latte and an americano",
+    // "make that to go"
+    // This was fixed by adding "replace" to the MODIFY aliases.
+    // May want separate case for replace/substitute
+    //   "replace a with b"
+    //   "substitute b for a"
+    // "add an espresso",
+    // "replace that espresso with a tall iced latte"
+
+    // "i'd like a coffee one and one"
+
+    // "i'd like a double double"
+    // "i'd like a latte and a flat white",
+    // "make that latte decaf"
+
     // "i'd like a latte",
     // "make that a decaf"
 

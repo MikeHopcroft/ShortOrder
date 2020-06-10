@@ -1,0 +1,4067 @@
+tests:
+  - id: 0
+    suites: regression add
+    comment: |
+      ### Generic Items
+      Adding one single-term product
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a latte that's it
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1
+    suites: regression add
+    comment: 'Adding one multi-term product, exact match'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'll have a dark roast coffee thank you
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 2
+    suites: regression add
+    comment: 'Adding one multi-term product, partial match'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: get me a coffee please
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 3
+    suites: regression add
+    comment: Adding two instances
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: could i please get two mochas that's all
+        cart:
+          items:
+            - quantity: 2
+              name: grande mocha
+              sku: '802'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 4
+    suites: regression add
+    comment: Adding 25 instances
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we need twenty five flat whites and that'll do it
+        cart:
+          items:
+            - quantity: 25
+              name: grande flat white
+              sku: '502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 5
+    suites: regression add
+    comment: |
+      ### Attributes
+      One leading attribute
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: how about a tall cappuccino
+        cart:
+          items:
+            - quantity: 1
+              name: tall cappuccino
+              sku: '401'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 6
+    suites: regression add
+    comment: Two leading attributes
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a venti iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 7
+    suites: regression add
+    comment: 'Two leading attributes, different order'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a iced venti latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 8
+    suites: regression add
+    comment: 'Two attributes, one leading and one trailing'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a venti latte iced
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 9
+    suites: regression add
+    comment: Two trailing attributes
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a latte iced venti
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 10
+    suites: regression add
+    comment: Adding a product with conflicting attributes
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we'll also have a short tall latte
+        cart:
+          items:
+            - quantity: 1
+              name: short latte
+              sku: '600'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 11
+    suites: regression add
+    comment: |
+      ### Options
+      One simple, trailing option
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i wanna latte macchiato with vanilla
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte macchiato
+              sku: '702'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 12
+    suites: regression add
+    comment: 'One simple, leading attribute'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: how about a peppermint latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 13
+    suites: regression add
+    comment: Multiple simple leading and trailing options
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: >-
+              may i also get a decaf soy vanilla syrup caramel latte with sugar
+              and foam
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 1
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+                - quantity: 1
+                  name: sugar
+                  sku: '6602'
+                  children: []
+                - quantity: 1
+                  name: foam
+                  sku: '5202'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 14
+    suites: regression add
+    comment: adding drink with option repeated
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte with peppermint syrup with peppermint syrup
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 15
+    suites: regression add
+    comment: Adding a drink with two options in same exclusion set
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a decaf half caf latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 16
+    suites: regression add
+    comment: Adding a drink with two options in same exclusion set
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: can I get a skim soy latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 19
+    suites: regression add
+    comment: leading attributed option
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a light nutmeg espresso that's it
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children:
+                - quantity: 1
+                  name: light nutmeg
+                  sku: '5401'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 20
+    suites: ''
+    comment: ''
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: can i have an cappuccino no foam
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: no foam
+                  sku: '5200'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 21
+    suites: regression add
+    comment: trailing attributed option after conjunction
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: can i have an espresso with no nutmeg
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children:
+                - quantity: 1
+                  name: no nutmeg
+                  sku: '5400'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 22
+    suites: regression add
+    comment: Multiple leading and trailing attributed options
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: >-
+              we want a light whipped no foam mocha with extra hazelnut and
+              cinnamon
+        cart:
+          items:
+            - quantity: 1
+              name: grande mocha
+              sku: '802'
+              children:
+                - quantity: 1
+                  name: light whipped cream
+                  sku: '5501'
+                  children: []
+                - quantity: 1
+                  name: no foam
+                  sku: '5200'
+                  children: []
+                - quantity: 1
+                  name: extra hazelnut syrup
+                  sku: '2003'
+                  children: []
+                - quantity: 1
+                  name: cinnamon syrup
+                  sku: '1902'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 23
+    suites: regression add illegal-option
+    comment: Attempt to add drink with illegal option
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a latte cut in half
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 24
+    suites: regression add illegal-option
+    comment: Attempt to add drink with illegal option
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a strawberry latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 25
+    suites: regression add
+    comment: 'One leading, quantified option with units'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a five pump caramel flat white
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 5
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 26
+    suites: regression add
+    comment: 'One trailing, quantified option with units'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a flat white with five pumps of caramel syrup
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 5
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 27
+    suites: regression add
+    comment: 'Multiple leading and trailing quantified options, some with units'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: >-
+              i want a two pump peppermint three squirt raspberry skinny vanilla
+              latte with a pump of caramel and two sugars
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 2
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+                - quantity: 3
+                  name: raspberry syrup
+                  sku: '2302'
+                  children: []
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 1
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+                - quantity: 2
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 28
+    suites: regression add multiple
+    comment: |
+      ### Multiple Items
+      Add a comma-separated list of products
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte cappuccino espresso and an apple muffin
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 29
+    suites: regression add multiple complex ambiguous
+    comment: Add a comma-separated list of products with attributes and options
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: >-
+              i'd like a tall decaf latte iced a grande cappuccino double
+              espresso and a warmed poppyseed muffin sliced in half
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 2
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+            - quantity: 1
+              name: lemon poppyseed muffin
+              sku: '10200'
+              children:
+                - quantity: 1
+                  name: warmed
+                  sku: '200'
+                  children: []
+                - quantity: 1
+                  name: cut in half
+                  sku: '300'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(118): delete item(espresso shot)'
+  - id: 33
+    suites: regression add overloaded
+    comment: 'Adding correct overloaded option, depending on context'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we'd like a latte with soy and a coffee with soy
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: soy milk creamer
+                  sku: '4500'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 38
+    suites: regression remove
+    comment: |
+      ### Removing Items
+      Remove by complete generic name
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte latte macchiato and a chai latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande latte macchiato
+              sku: '702'
+              children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the latte macchiato
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 39
+    suites: regression remove
+    comment: 'Remove by generic name, partial match'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a tall latte a short latte macchiato and a chai latte
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the chai
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 40
+    suites: regression remove
+    comment: Remove by leading attribute
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a tall latte a short latte macchiato and a chai latte
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the short latte
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 41
+    suites: regression remove
+    comment: Remove by leading attribute
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a tall latte a short latte macchiato and an iced chai latte
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 42
+    suites: regression remove
+    comment: Remove by trailing attribute
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a tall latte a short latte macchiato and an iced chai latte
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the latte iced
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 43
+    suites: regression remove
+    comment: Remove by multiple attributes
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: >-
+              i want an iced tall latte a short latte macchiato and an iced chai
+              latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the tall latte iced
+        cart:
+          items:
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 44
+    suites: regression remove implicit
+    comment: Remove implicit
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: >-
+              i want an iced tall latte a short latte macchiato and an iced chai
+              latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove that
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 44.1
+    suites: placeholder
+    comment: |
+      ### Removing Options
+      This is a placeholder test used as a reminder to add in the full
+      set of cases for removing options.
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: This is a placeholder test that is designed to fail.
+        cart:
+          items: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 3
+            steps:
+              - 'id(206): insert default item(grande latte)'
+              - 'id(206): change item(grande latte) attribute "hot" to "iced"'
+              - 'id(206): change item(grande latte) attribute "grande" to "tall"'
+  - id: 45
+    suites: regression modify bug
+    comment: Add option x to product y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte and an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add extra vanilla syrup to the latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: extra vanilla syrup
+                  sku: '2503'
+                  children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 45.1
+    suites: regression modify
+    comment: Make that with option X
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte and an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with extra vanilla syrup
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children:
+                - quantity: 1
+                  name: extra vanilla syrup
+                  sku: '2503'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 45.2
+    suites: regression modify
+    comment: make that a triple
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte and an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that a triple
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: triple espresso
+              sku: '1002'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 46
+    suites: regression modify
+    comment: add option x to product y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte and an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add whipped cream to the espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children:
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 47
+    suites: regression modify
+    comment: add option x and option y to product z
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add vanilla syrup and honey to that
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 1
+                  name: honey
+                  sku: '6402'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 48
+    suites: regression modify
+    comment: add a mutually exclusive option - make that option x
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 49
+    suites: regression modify
+    comment: change a mutually exclusive option - make that product x option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a half caf latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 49.1
+    suites: regression modify
+    comment: 'change a mutually exclusive option, implicit - make that option y'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a half caf latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 50
+    suites: regression modify
+    comment: change an attribute - make that product x attribute y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte iced
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 50.1
+    suites: regression modify
+    comment: 'change an attribute, implicit - make that attribute y'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that iced
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 51
+    suites: regression modify
+    comment: add a mutually exclusive option - make product x with y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte with soy
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 51.1
+    suites: regression modify
+    comment: 'add a mutually exclusive option, implicit - make that with option y'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with soy
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 51.2
+    suites: regression modify
+    comment: 'add a mutually exclusive option, implicit - change that to option y'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that to soy
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 52
+    suites: regression modify
+    comment: change a mutually exclusive option - change that product x to option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we'd like a cappuccino
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that cappuccino to decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 53
+    suites: regression modify
+    comment: change quantity of an option - make that prduct x with n of option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we'd like a cappuccino with two pumps of vanilla
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 2
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that cappuccino with three pumps of vanilla
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 3
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 54
+    suites: regression modify
+    comment: >-
+      change the quantity of an option that is not mutually exclusive - make
+      that product x with n option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we'd like a cappuccino with a pack of sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that cappuccino with two packs of sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 2
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 54.1
+    suites: regression modify
+    comment: >-
+      change the quantity of an option that is not mutually exclusive, implicit
+      - make that product x with n option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we'd like a cappuccino with a pack of sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with two packs of sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 2
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 55
+    suites: regression modify
+    comment: >-
+      add an additional quantity of existing option - add n option y to product
+      x
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a flat white with two equal
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 2
+                  name: equal
+                  sku: '6302'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add three equal to the flat white
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 5
+                  name: equal
+                  sku: '6302'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 55.1
+    suites: regression modify
+    comment: >-
+      add an additional quantity of existing option, implicit - add n option y
+      to that
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a flat white with two equal
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 2
+                  name: equal
+                  sku: '6302'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add three equal to that
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 5
+                  name: equal
+                  sku: '6302'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 56
+    suites: regression modify
+    comment: change an attribute - change that product x to attribute y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we would like a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that latte to a tall
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 56.1
+    suites: regression modify
+    comment: 'change an attribute, implict - make that attribute y'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we would like a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte tall
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 56.2
+    suites: regression modify
+    comment: 'change an attribute, implicit - change that to attribute y'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we would like a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that to a tall
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 56.3
+    suites: regression modify
+    comment: >-
+      change two attributes, implicit - change that to attribute y and attribute
+      z
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we would like a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that to a tall and iced
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 56.4
+    suites: regression modify
+    comment: change an attribute and add an option
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte iced and decaf
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 57
+    suites: regression modify
+    comment: explicit target change mutually exclusive option
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a cappuccino
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that cappuccino to a decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 57.1
+    suites: regression modify implicit
+    comment: explicit target change mutually exclusive option
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a cappuccino
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that cappuccino half decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 57.2
+    suites: regression modify implicit
+    comment: implicit target change a mutually exclusive option - make that option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a flat white
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that half caf
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 57.3
+    suites: regression modify implicit
+    comment: >-
+      implicit target change a mutually exclusive option - change that to option
+      y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a flat white
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that to a half caf
+        cart:
+          items:
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children:
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 58
+    suites: regression modify implicit
+    comment: implicit target change an attribute - make that attribute Z
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: can i get a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that a tall
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 59
+    suites: regression modify implicit
+    comment: implicit target add option - add option y to that
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: get me an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add cream to that
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children:
+                - quantity: 1
+                  name: half and half
+                  sku: '4900'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 60
+    suites: regression modify implicit
+    comment: implicit target add option - add option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add peppermint syrup
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 60.1
+    suites: regression modify implicit
+    comment: implicit target add option - can you make that with option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: can you make that with foam
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: foam
+                  sku: '5202'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 60.2
+    suites: regression modify implicit
+    comment: implicit target add option - i want that with option y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: i want that with a lid
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 61
+    suites: regression modify replace implicit
+    comment: >-
+      change one product into another, implicit, preserving options and
+      attributes - actually make that a product x
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a decaf latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: actually make that a cappuccino
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 61.1
+    suites: regression modify replace
+    comment: >-
+      change one product into another, preserving options and attributes - make
+      that product x product y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a decaf latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte a cappuccino
+        cart:
+          items:
+            - quantity: 1
+              name: grande cappuccino
+              sku: '402'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 62
+    suites: regression modify replace
+    comment: >-
+      change one product into another with different attribute - change product
+      x to product y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a decaf latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that latte to a half caf espresso
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children:
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 63
+    suites: regression modify replace
+    comment: replace one product with another - replace product x with product y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: replace that espresso with a tall iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 63.1
+    suites: regression modify replace implicit
+    comment: 'replace one product with another, implicit - change that to product x'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that to a tall iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 63.2
+    suites: regression modify replace implicit
+    comment: 'replace one product with another, implicit - replace that with product x'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: replace that with a tall iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 64
+    suites: regression modify replace implicit
+    comment: replace implicit item with another - change product x to a product y
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: get me an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: change that to a tall iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 65
+    suites: regression multiple weak not-implemented
+    comment: add then remove in same utterance
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: get me a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the latte and add an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 66
+    suites: regression multiple
+    comment: remove then add in same utterance
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: get me a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: get me an espresso and remove the latte
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 66.1
+    suites: regression multiple
+    comment: remove then add in same utterance
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: get me a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add an espresso and remove the latte
+        cart:
+          items:
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 501
+    suites: regression add
+    comment: Two leading attributes
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: we'll also have a tall buttered rum cappuccino
+        cart:
+          items:
+            - quantity: 1
+              name: tall cappuccino
+              sku: '401'
+              children:
+                - quantity: 1
+                  name: buttered rum syrup
+                  sku: '1702'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1000
+    suites: extras disfluencies
+    comment: lots of stop words and disfluencies
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: >-
+              i'd ah i'd like a latte and um i need a second and and also an
+              espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1001
+    suites: extras bug
+    comment: should remove the sugar
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a coffee with two sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 2
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that no sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: no sugar
+                  sku: '6600'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1006
+    suites: extras bug
+    comment: should remove the sugar
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a coffee with two sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 2
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that without sugar
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: no sugar
+                  sku: '6600'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1007
+    suites: extras remove not-implemented
+    comment: remove by product class
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a coffee with two equal
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 2
+                  name: equal
+                  sku: '6302'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that without sweetener
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 2
+                  name: equal
+                  sku: '6302'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(502): delete item(equal)'
+  - id: 1002
+    suites: extras add ambiguous
+    comment: chai latte can be a chai latte and a latte or just a latte
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a tall latte a short latte macchiato and a venti chai latte
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children: []
+            - quantity: 1
+              name: short latte
+              sku: '600'
+              children: []
+            - quantity: 1
+              name: doppio macchiato
+              sku: '1301'
+              children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children: []
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 6
+            steps:
+              - 'id(504): delete item(doppio macchiato)'
+              - 'id(505): delete item(short latte)'
+              - 'id(510): insert default item(grande latte macchiato)'
+              - >-
+                id(510): change item(grande latte macchiato) attribute "grande"
+                to "short"
+              - 'id(507): delete item(grande latte)'
+              - 'id(508): delete item(grande chai latte)'
+  - id: 1003
+    suites: extras bug spec-issue
+    comment: should not add a second whipped cream - or should it
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte with whip
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: i want whip on that
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 2
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 2
+            steps:
+              - '  id(516): change item(whipped cream) quantity to 1'
+              - '  id(519): insert default item(whipped cream)'
+  - id: 1004
+    suites: extras bug
+    comment: should remove the whipped cream
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a latte with whip
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the whip
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1005
+    suites: extras remove not-implemented
+    comment: |
+      Should remove the vanilla - says not implemented.
+      parseRemoveOptionFromImplicit() not implemented.
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a vanilla latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the vanilla
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1008
+    suites: regression add bug
+    comment: can we have a product x
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: can we have a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1009
+    suites: extras
+    comment: make that not iced
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: give me an iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that not iced
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1010
+    suites: extras ambiguous
+    comment: |
+      Change option on one of two items.
+      This is ambiguous. Shortest edit distance heuristic
+      might be appropriate here.
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a latte and a flat white
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande flat white
+              sku: '502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that latte decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 2
+            steps:
+              - 'id(546): delete item(grande latte)'
+              - 'id(549): insert default item(grande flat white)'
+  - id: 1011
+    suites: extras remove implicit not-implemented
+    comment: |
+      Remove options.
+      parseRemoveOptionFromImplicit() not implemented.
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a peppermint latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the peppermint
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(557): delete item(peppermint syrup)'
+  - id: 1012
+    suites: extras add bug regression
+    comment: Should add a latte
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1014
+    suites: extras regression
+    comment: multi-step order product then modify
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a muffin
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: i'd like that warmed
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children:
+                - quantity: 1
+                  name: warmed
+                  sku: '200'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1015
+    suites: extras regression
+    comment: room for cream should not add cream
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a coffee with room for cream
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1016
+    suites: extras regression
+    comment: room for cream should not add cream
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a coffee
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: can you make that with room for cream
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1017
+    suites: extras regression
+    comment: multi-step add option with product name afterwards
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: can i get a coffee
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: can i get room in that coffee
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1018
+    suites: extras add multiple bug
+    comment: multi-step should add room to coffee
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a coffee and an espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: can i get room in the coffee
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 2
+            steps:
+              - '  id(588): delete item(with room)'
+              - '  id(592): insert default item(with room)'
+  - id: 1019
+    suites: extras regression
+    comment: adds togo to the wrong item
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add an americano
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande americano
+              sku: '1402'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that to go
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande americano
+              sku: '1402'
+              children:
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1020
+    suites: extras
+    comment: this one seems to work
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add an americano
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande americano
+              sku: '1402'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that americano to go
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children: []
+            - quantity: 1
+              name: grande americano
+              sku: '1402'
+              children:
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1021
+    suites: extras bug exclusive
+    comment: Should replace peppermint with extra peppermint
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte with peppermint
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with extra peppermint
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: extra peppermint syrup
+                  sku: '2203'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1022
+    suites: extras bug
+    comment: |
+      Should add whole milk creamer to coffee.
+      Question: what about the half and half?'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a nonfat latte and a coffee with half and half
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: half and half
+                  sku: '4900'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1023
+    suites: extras regression
+    comment: |
+      Should only add one lid.
+      This may pass for the wrong reason.
+      See 1003, which is the same case, but fails.
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte with a lid
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with a lid
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1024
+    suites: extras remove implicit not-implemented
+    comment: |
+      Should remove the splenda.
+      parseRemoveOptionFromImplicit() not implemented.
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte with splenda
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: remove the splenda
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(646): delete item(splenda)'
+  - id: 1025
+    suites: extras regression
+    comment: shoud put no foam on second drink
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a mocha and an iced grande latte with extra foam
+        cart:
+          items:
+            - quantity: 1
+              name: grande mocha
+              sku: '802'
+              children: []
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: extra foam
+                  sku: '5203'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with no foam
+        cart:
+          items:
+            - quantity: 1
+              name: grande mocha
+              sku: '802'
+              children: []
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: no foam
+                  sku: '5200'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1026
+    suites: extras bug
+    comment: should only have on no foam
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte with no foam
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: no foam
+                  sku: '5200'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with no foam
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: no foam
+                  sku: '5200'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1027
+    suites: extras
+    comment: demonstrated an option with the same name as an attribute
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a short iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1028
+    suites: extras bug disfluencies
+    comment: Disfluency prevents order
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: Hi um i'd like a ah a latte with vanilla syrup
+        cart:
+          items: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 2
+            steps:
+              - 'id(672): insert default item(grande latte)'
+              - '  id(673): insert default item(vanilla syrup)'
+  - id: 1029
+    suites: extras bug option-as-verb
+    comment: Should not add a second muffin
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a muffin
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: and can you warm the muffin
+        cart:
+          items: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 2
+            steps:
+              - 'id(676): insert default item(apple bran muffin)'
+              - '  id(677): insert default item(warmed)'
+  - id: 1030
+    suites: extras implicit bug option-as-verb
+    comment: option-as-verb should warm the muffin
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'd like a muffin
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: warm that
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(682): insert default item(warmed)'
+  - id: 1031
+    suites: extras bug option-as-verb
+    comment: option-as-verb should slice the muffin
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a muffin
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: slice the muffin
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(687): insert default item(cut in half)'
+  - id: 1032
+    suites: extras recipes regression
+    comment: double shot
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a double shot latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 2
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1033
+    suites: extras recipes regression
+    comment: double latte vs double espress
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a double latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 2
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: add a double espresso
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 2
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 1034
+    suites: extras recipes regression
+    comment: coffee one and one
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i'll have a coffee one and one
+        cart:
+          items:
+            - quantity: 1
+              name: grande dark roast coffee
+              sku: '1502'
+              children:
+                - quantity: 1
+                  name: half and half
+                  sku: '4900'
+                  children: []
+                - quantity: 1
+                  name: sugar
+                  sku: '6602'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+measures:
+  notes: menu-based
+  totalTests: 115
+  totalSteps: 191
+  perfectSteps: 178
+  completeSteps: 178
+  totalRepairs: 25

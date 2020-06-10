@@ -342,6 +342,9 @@ catalog:
           aliases:
             - sweet n low
             - pink packet
+        - name: espresso shot
+          aliases:
+            - shot
 rules:
   - parents: [latte_drinks]
     children: 
@@ -364,7 +367,33 @@ rules:
       - toppings
   - parents: [coffee_drinks, espresso_drinks, latte_drinks]
     exclusive: [milks, caffeines, here-or-to-go, wet-or-dry]
-
+# recipes: []
+recipes:
+  - name: double double
+    aliases: [double double]
+    items:
+      - name: grande dark roast coffee
+        quantity: 2
+        children:
+          - name: half and half
+            quantity: 2
+            children: []
+  - name: one and one
+    aliases: [one and one]
+    items:
+      - name: half and half
+        quantity: 1
+        children: []
+      - name: sugar
+        quantity: 1
+        children: []
+  - name: double shot
+    aliases:
+      - "double [shot]"
+    items:
+      - name: espresso shot
+        quantity: 2
+        children: []
 # shaken, stirred
 # gin and tonic
 # rum and coke

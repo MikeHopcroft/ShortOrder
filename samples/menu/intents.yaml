@@ -81,7 +81,7 @@ items:
     name: MODIFY_ITEM
     aliases:
       # TODO: match future tenses
-      - "[can we,can you,would you,i want to,i'd like to,please] (make,modify,change) [the]"
+      - "[can we,can you,would you,i want to,i'd like to,please] (make,modify,change,replace) [the]"
 
   - pid: 100002
     name: CONJUNCTION

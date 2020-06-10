@@ -52,9 +52,9 @@ Parser
   * Clarify concepts (e.g. targets, spans)
 * Consider [nearley.js](https://nearley.js.org/docs/index) parser.
 * Investigate preferFirstInterpretation
-* Is Interpretation.items necessary?
-  * Seems like it's never read.
-  * Seems it is used inconsistently.
+* x Is Interpretation.items necessary?
+  * x Seems like it's never read.
+  * x Seems it is used inconsistently.
 * Why Interpretation.action function vs, say, Interpretation.state or Interpretation.cart?
 * What is the difference between Interpretation.score and Interpretation.tokenCount2?
   * Score seems to be the total number of tokens used by the various Builders
@@ -62,10 +62,12 @@ Parser
 * What is Interpretation.missed?
 * Function for computing edit distance
 * Function for picking best interpretation
+  * Perhaps preferFirstInterpretation() should be changed to incorporate the if-statement and return the best intepretation.
 * Should interpretations be flattened in processAllActiveRegions() or should they be chained?
   * Flattening might be able to catch errors earlier, but there shouldn't be errors.
   * Probably the reason for flattening as we go is that future iterations need the state to interpret targets.
 
+* Removed cookbook - use functionality from prix-fixe instead
 * x Replace `text.split(/\s+/)` with termModel.breakWords()
 * x Consider moving loops from tokenizationsFromGraph2() and allTokenizations() to token-flow.
 * .targets command in replShortOrder may be broken. Also, can get span from graph.

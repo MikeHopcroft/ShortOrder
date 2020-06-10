@@ -283,8 +283,10 @@ export function parseAddToImplicit(
     // console.log(`  ${modification.map(tokenToString).join('')}`);
 
     let best = nop;
-    // TODO: shouldn't this loop go in reverse order?
-    for (const item of state.cart.items) {
+
+    // Search in reverse order to favor more recently added items.
+    for (let i = state.cart.items.length - 1; i >= 0; --i) {
+        const item = state.cart.items[i];
         const interpretation = parseAddToItem(
             parser,
             modification,
