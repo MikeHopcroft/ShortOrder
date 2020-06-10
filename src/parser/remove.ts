@@ -63,7 +63,7 @@ export function processRemove(
             console.log('remove OPTION from IMPLICIT (1)');
             const parts = token as ProductToken & Span;
             tokens.take(1);
-            return parseRemoveOptionFromImplicit(parser, state, parts);
+            return parseRemoveOptionFromImplicit(parser, state, graph, parts);
         } else if (token.type === PREPOSITION) {
             // TODO: add a test to exercise this case.
             // Does it ever happen? It may be that the REMOVE_ITEM
@@ -77,7 +77,7 @@ export function processRemove(
             console.log('remove OPTION from IMPLICIT (2)');
             const parts = tokens.peek(1) as ProductToken & Span;
             tokens.take(2);
-            return parseRemoveOptionFromImplicit(parser, state, parts);
+            return parseRemoveOptionFromImplicit(parser, state, graph, parts);
         }
     }
 
@@ -138,12 +138,41 @@ function parseRemoveImplicit(parser: Parser, state: State): Interpretation {
 function parseRemoveOptionFromImplicit(
     parser: Parser,
     state: State,
+    graph: Graph,
     parts: ProductToken & Span
 ): Interpretation {
-    console.log('parseRemoveOptionFromImplicit() not implemented.');
-    // Instead of getting filtering graph with cart, want to filter with target item instance.
-    // In this implicit case, target item instance is last item in the cart.
-    return nop;
+    const optionSpan = createSpan(parts.tokens);
+    
+    // Walk through items in reverse order to favor more recent items.
+    let interpretation: Interpretation = nop;
+    const items = state.cart.items;
+    for (let i = items.length - 1; i >= 0; --i) {
+        const item = items[i];
+        for (const optionInterpretation of optionTargets(
+            parser,
+            item,
+            graph,
+            optionSpan
+        )) {
+            const score = optionInterpretation.score;
+            const tokenCount2 = optionInterpretation.tokenCount;
+            if (score > interpretation.score && optionInterpretation.item) {
+                interpretation = {
+                    score,
+                    tokenCount2,
+                    action: (state: State): State => {
+                        const cart = parser.cartOps.removeFromCart(
+                            state.cart,
+                            optionInterpretation.item!.uid
+                        );
+                        return {...state, cart};
+                    }
+                };
+            }
+        }
+    }
+
+    return interpretation;
 }
 
 

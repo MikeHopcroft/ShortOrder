@@ -349,21 +349,21 @@ export const smallCoffee: SpecificTypedEntity = {
 
 export const smallDecafCoffee: SpecificTypedEntity = {
     sku: 9002,
-    name: 'small coffee',
+    name: 'small decaf coffee',
     key: '9000:0:0:1',
     kind: MENUITEM,
 };
 
 export const smallIcedCoffee: SpecificTypedEntity = {
     sku: 9003,
-    name: 'small coffee',
+    name: 'small iced coffee',
     key: '9000:0:1:0',
     kind: MENUITEM,
 };
 
 export const smallIcedDecafCoffee: SpecificTypedEntity = {
     sku: 9004,
-    name: 'small coffee',
+    name: 'small iced decaf coffee',
     key: '9000:0:1:1',
     kind: MENUITEM,
 };

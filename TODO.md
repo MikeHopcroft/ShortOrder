@@ -67,6 +67,10 @@ Parser
   * Flattening might be able to catch errors earlier, but there shouldn't be errors.
   * Probably the reason for flattening as we go is that future iterations need the state to interpret targets.
 
+* Does HypotheticalItem.item need to allow undefined?
+  * Does optionTargets() every return a HypotheticalItem with item undefined? No.
+  * What about productTargets()? Nope.
+  * parserBuildItemFromTokens() can return an undefined item. Could this function be changed to a generator?
 * Removed cookbook - use functionality from prix-fixe instead
 * x Replace `text.split(/\s+/)` with termModel.breakWords()
 * x Consider moving loops from tokenizationsFromGraph2() and allTokenizations() to token-flow.

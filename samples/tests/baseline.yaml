@@ -3003,7 +3003,7 @@ tests:
               - '  id(516): change item(whipped cream) quantity to 1'
               - '  id(519): insert default item(whipped cream)'
   - id: 1004
-    suites: extras bug
+    suites: regression remove implicit
     comment: should remove the whipped cream
     steps:
       - turns:
@@ -3033,11 +3033,7 @@ tests:
             - quantity: 1
               name: grande latte
               sku: '602'
-              children:
-                - quantity: 1
-                  name: whipped cream
-                  sku: '5502'
-                  children: []
+              children: []
         measures:
           perfect: true
           complete: true
@@ -3045,7 +3041,7 @@ tests:
             cost: 0
             steps: []
   - id: 1005
-    suites: extras remove not-implemented
+    suites: regression remove implicit
     comment: |
       Should remove the vanilla - says not implemented.
       parseRemoveOptionFromImplicit() not implemented.
@@ -3077,11 +3073,7 @@ tests:
             - quantity: 1
               name: grande latte
               sku: '602'
-              children:
-                - quantity: 1
-                  name: vanilla syrup
-                  sku: '2502'
-                  children: []
+              children: []
         measures:
           perfect: true
           complete: true
@@ -3190,10 +3182,10 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(546): delete item(grande latte)'
-              - 'id(549): insert default item(grande flat white)'
+              - 'id(542): delete item(grande latte)'
+              - 'id(545): insert default item(grande flat white)'
   - id: 1011
-    suites: extras remove implicit not-implemented
+    suites: regression remove implicit
     comment: |
       Remove options.
       parseRemoveOptionFromImplicit() not implemented.
@@ -3225,18 +3217,13 @@ tests:
             - quantity: 1
               name: grande latte
               sku: '602'
-              children:
-                - quantity: 1
-                  name: peppermint syrup
-                  sku: '2202'
-                  children: []
+              children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 1
-            steps:
-              - '  id(557): delete item(peppermint syrup)'
+            cost: 0
+            steps: []
   - id: 1012
     suites: extras add bug regression
     comment: Should add a latte
@@ -3395,7 +3382,9 @@ tests:
             steps: []
   - id: 1018
     suites: extras add multiple bug
-    comment: multi-step should add room to coffee
+    comment: |
+      Multi-step should add room to coffee.
+      Instead adds it to the espresso.
     steps:
       - turns:
           - speaker: speaker
@@ -3439,8 +3428,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - '  id(588): delete item(with room)'
-              - '  id(592): insert default item(with room)'
+              - '  id(583): delete item(with room)'
+              - '  id(587): insert default item(with room)'
   - id: 1019
     suites: extras regression
     comment: adds togo to the wrong item
@@ -3684,7 +3673,7 @@ tests:
             cost: 0
             steps: []
   - id: 1024
-    suites: extras remove implicit not-implemented
+    suites: regression remove implicit
     comment: |
       Should remove the splenda.
       parseRemoveOptionFromImplicit() not implemented.
@@ -3716,18 +3705,13 @@ tests:
             - quantity: 1
               name: grande latte
               sku: '602'
-              children:
-                - quantity: 1
-                  name: splenda
-                  sku: '6502'
-                  children: []
+              children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 1
-            steps:
-              - '  id(646): delete item(splenda)'
+            cost: 0
+            steps: []
   - id: 1025
     suites: extras regression
     comment: shoud put no foam on second drink
@@ -3858,8 +3842,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(672): insert default item(grande latte)'
-              - '  id(673): insert default item(vanilla syrup)'
+              - 'id(666): insert default item(grande latte)'
+              - '  id(667): insert default item(vanilla syrup)'
   - id: 1029
     suites: extras bug option-as-verb
     comment: Should not add a second muffin
@@ -3890,8 +3874,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(676): insert default item(apple bran muffin)'
-              - '  id(677): insert default item(warmed)'
+              - 'id(670): insert default item(apple bran muffin)'
+              - '  id(671): insert default item(warmed)'
   - id: 1030
     suites: extras implicit bug option-as-verb
     comment: option-as-verb should warm the muffin
@@ -3926,7 +3910,7 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(682): insert default item(warmed)'
+              - '  id(676): insert default item(warmed)'
   - id: 1031
     suites: extras bug option-as-verb
     comment: option-as-verb should slice the muffin
@@ -3961,7 +3945,7 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(687): insert default item(cut in half)'
+              - '  id(681): insert default item(cut in half)'
   - id: 1032
     suites: extras recipes regression
     comment: double shot
@@ -4062,6 +4046,6 @@ measures:
   notes: menu-based
   totalTests: 115
   totalSteps: 191
-  perfectSteps: 178
-  completeSteps: 178
-  totalRepairs: 25
+  perfectSteps: 180
+  completeSteps: 180
+  totalRepairs: 23
