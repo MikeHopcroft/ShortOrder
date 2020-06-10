@@ -2639,7 +2639,7 @@ tests:
             cost: 0
             steps: []
   - id: 65
-    suites: regression multiple weak not-implemented
+    suites: regression multiple
     comment: add then remove in same utterance
     steps:
       - turns:
@@ -2959,8 +2959,11 @@ tests:
               - 'id(507): delete item(grande latte)'
               - 'id(508): delete item(grande chai latte)'
   - id: 1003
-    suites: extras bug spec-issue
-    comment: should not add a second whipped cream - or should it
+    suites: extras add modify spec-issue
+    comment: |
+      Should not add a second whipped cream - or should it?
+      This is the difference between "I want", which is like
+      "make that" and "add".
     steps:
       - turns:
           - speaker: speaker
@@ -3134,7 +3137,7 @@ tests:
             cost: 0
             steps: []
   - id: 1010
-    suites: extras ambiguous
+    suites: extras ambiguous not-implemented
     comment: |
       Change option on one of two items.
       This is ambiguous. Shortest edit distance heuristic
@@ -3413,23 +3416,21 @@ tests:
             - quantity: 1
               name: grande dark roast coffee
               sku: '1502'
-              children: []
-            - quantity: 1
-              name: doppio espresso
-              sku: '1001'
               children:
                 - quantity: 1
                   name: with room
                   sku: '5900'
                   children: []
+            - quantity: 1
+              name: doppio espresso
+              sku: '1001'
+              children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 2
-            steps:
-              - '  id(583): delete item(with room)'
-              - '  id(587): insert default item(with room)'
+            cost: 0
+            steps: []
   - id: 1019
     suites: extras regression
     comment: adds togo to the wrong item
@@ -3828,7 +3829,7 @@ tests:
             cost: 0
             steps: []
   - id: 1028
-    suites: extras bug disfluencies
+    suites: extras bug disfluencies not-implemented
     comment: Disfluency prevents order
     steps:
       - turns:
@@ -3845,8 +3846,9 @@ tests:
               - 'id(666): insert default item(grande latte)'
               - '  id(667): insert default item(vanilla syrup)'
   - id: 1029
-    suites: extras bug option-as-verb
-    comment: Should not add a second muffin
+    suites: extras bug option-as-verb not-implemented
+    comment: |
+      Should not remove the muffin
     steps:
       - turns:
           - speaker: speaker
@@ -3877,7 +3879,7 @@ tests:
               - 'id(670): insert default item(apple bran muffin)'
               - '  id(671): insert default item(warmed)'
   - id: 1030
-    suites: extras implicit bug option-as-verb
+    suites: extras implicit option-as-verb not-implemented
     comment: option-as-verb should warm the muffin
     steps:
       - turns:
@@ -3912,7 +3914,7 @@ tests:
             steps:
               - '  id(676): insert default item(warmed)'
   - id: 1031
-    suites: extras bug option-as-verb
+    suites: extras option-as-verb not-implemented
     comment: option-as-verb should slice the muffin
     steps:
       - turns:
@@ -4046,6 +4048,6 @@ measures:
   notes: menu-based
   totalTests: 115
   totalSteps: 191
-  perfectSteps: 180
-  completeSteps: 180
-  totalRepairs: 23
+  perfectSteps: 181
+  completeSteps: 181
+  totalRepairs: 21

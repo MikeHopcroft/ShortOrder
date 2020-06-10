@@ -60,7 +60,7 @@ export function processRemove(
             tokens.take(3);
             return parseRemoveOptionFromTarget(parser, state, graph, option, target);
         } else if (token.type === PRODUCT_PARTS_0) {
-            console.log('remove OPTION from IMPLICIT (1)');
+            // console.log('remove OPTION from IMPLICIT (1)');
             const parts = token as ProductToken & Span;
             tokens.take(1);
             return parseRemoveOptionFromImplicit(parser, state, graph, parts);
@@ -74,7 +74,7 @@ export function processRemove(
             PREPOSITION,
             PRODUCT_PARTS_0
         ])) {
-            console.log('remove OPTION from IMPLICIT (2)');
+            // console.log('remove OPTION from IMPLICIT (2)');
             const parts = tokens.peek(1) as ProductToken & Span;
             tokens.take(2);
             return parseRemoveOptionFromImplicit(parser, state, graph, parts);

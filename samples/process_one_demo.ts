@@ -169,9 +169,13 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-    // 1024
-    "add a latte with splenda",
-    "remove the splenda"
+    // 1018
+    "i want a coffee and an espresso",
+    "can i get room in the coffee"
+
+    // // 1024
+    // "add a latte with splenda",
+    // "remove the splenda"
 
     // // 1019
     // "add a latte and an americano",

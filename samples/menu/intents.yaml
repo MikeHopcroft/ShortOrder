@@ -36,7 +36,7 @@ items:
     name: PREPOSITION 
     aliases:
       - to [have]
-      - "to (the,that,your,be)"
+      - "(for,in,to) (the,that,your,be)"
       - that [to]
       - from [the,that,those]
       # - with
