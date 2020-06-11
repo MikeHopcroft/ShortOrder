@@ -1,7 +1,13 @@
 import * as dotenv from 'dotenv';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { createWorld2, TestCase, TestLineItem, TestOrder, CorrectionLevel } from 'prix-fixe';
+import {
+    createWorld2,
+    TestCase,
+    TestLineItem,
+    TestOrder,
+    CorrectionLevel
+} from 'prix-fixe';
 
 import { createShortOrderWorld, ShortOrderWorld } from '../src';
 
@@ -169,9 +175,15 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-    // 1018
-    "i want a coffee and an espresso",
-    "can i get room in the coffee"
+    // fuzzerB2: 10, simplified
+    "add a grande chai latte with some water",
+
+    // // fuzzerB: 81, simplified
+    // "add a decaf latte with two percent milk and some eggnog",
+
+    // // 1018
+    // "i want a coffee and an espresso",
+    // "can i get room in the coffee"
 
     // // 1024
     // "add a latte with splenda",

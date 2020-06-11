@@ -131,7 +131,8 @@ function processRootInternal(
             // Following causes stack overflow.
             // processAllActiveRegions(parser, state, grouped, rawGraph);
             processAllActiveRegions(parser, state, grouped, filteredGraph);
-        interpretation.missed = tokenization.length - interpretation.score;
+        // TODO: these counts don't include the intent token.
+        interpretation.missed = tokenization.length - interpretation.score; // Missing intent
 
         // console.log(`interpretation: score(${interpretation.score}), tokenCount(${interpretation.tokenCount2}), missed(${tokenization.length - interpretation.score})`);
         // for (const token of tokenization) {
@@ -140,9 +141,15 @@ function processRootInternal(
 
         if (!best) {
             // console.log("First interpreation");
+            if (parser.debugMode) {
+                console.log("Kept first interpretation");
+            }
             best = interpretation;
         } else if (preferFirstInterpretation(interpretation, best)) {
             // console.log("Better interpreation");
+            if (parser.debugMode) {
+                console.log("Found better interpretation");
+            }
             best = interpretation;
         }
         // console.log('');
@@ -321,19 +328,54 @@ function printSegment(segment: Segment) {
     console.log(`    right: ${right}`);
 }
 
-function preferFirstInterpretation(a: Interpretation, b: Interpretation): boolean {
-    if (a.missed! === b.missed!) {
-        const ra = a.score / a.tokenCount2;
-        const rb = b.score / b.tokenCount2;
+function preferFirstInterpretation(
+    a: Interpretation,
+    b: Interpretation
+): boolean {
+    // ISSUE:
+    //   two entities, which concatenated for another entity
+    //   e.g. fuzzerB2: 10, simplified
+    //     "add a grande chai latte with some water",
+    //
+    // [ADD_TO_ORDER][NUMBER:1][ATTRIBUTE:GRANDE,4][ENTITY:CHAI_LATTE,305][CONJUNCTION][UNKNOWNTOKEN][OPTION:WATER,1005]
+    // [ADD_TO_ORDER][PRODUCT_PARTS_1]
+    // Kept first interpretation
     
-        if (ra === rb) {
-            // Prefer shorter token sequences
-            return a.tokenCount2 < b.tokenCount2;
-        } else {
-            // Prefer higher match ratios
-            return ra > rb;
-        }
+    // [ADD_TO_ORDER][NUMBER:1][ATTRIBUTE:GRANDE,4][ENTITY:CHAI_LATTE,305][ENTITY:LATTE,302][CONJUNCTION][UNKNOWNTOKEN][OPTION:WATER,1005]
+    // [ADD_TO_ORDER][PRODUCT_PARTS_N]
+    // Found better interpretation
+
+    // IDEAS:
+    //   tokens used (score)
+    //   tokens not used (missed or tokenCount2 - score)
+    //   percentage of tokens used (score/tokenCount2)
+    //   edit distance to cart
+
+    const aMissed = a.missed!;
+    const bMissed = b.missed!;
+
+    // // This actually fails 8 cases in regression.yaml
+    // // over using a.missed! and b.missed! Only passes
+    // // 844/1000 cases of fuzzerA.yaml
+    // const aMissed = a.tokenCount2 - a.score;
+    // const bMissed = b.tokenCount2 - b.score;
+
+    if (aMissed! === bMissed!) {
+    // if (a.missed! === b.missed!) {
+        return a.tokenCount2 < b.tokenCount2;
+        // const ra = a.score / a.tokenCount2;
+        // const rb = b.score / b.tokenCount2;
+    
+        // if (ra === rb) {
+        //     // Prefer shorter token sequences
+        //     return a.tokenCount2 < b.tokenCount2;    // Original
+        //     // return a.tokenCount2 >= b.tokenCount2;      // Experimental
+        // } else {
+        //     // Prefer higher match ratios
+        //     return ra > rb;
+        // }
     } else {
-        return a.missed! < b.missed!;
+        return aMissed < bMissed;
+        // return a.missed! < b.missed!;
     }
 }

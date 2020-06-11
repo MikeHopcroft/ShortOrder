@@ -51,7 +51,10 @@ Parser
   * Clarify roles of each function
   * Clarify concepts (e.g. targets, spans)
 * Consider [nearley.js](https://nearley.js.org/docs/index) parser.
-* Investigate preferFirstInterpretation
+* Investigate preferFirstInterpretation()
+  * // Prefer shorter token sequences
+  * // return a.tokenCount2 < b.tokenCount2;
+  * return a.tokenCount2 >= b.tokenCount2;
 * x Is Interpretation.items necessary?
   * x Seems like it's never read.
   * x Seems it is used inconsistently.
@@ -67,6 +70,23 @@ Parser
   * Flattening might be able to catch errors earlier, but there shouldn't be errors.
   * Probably the reason for flattening as we go is that future iterations need the state to interpret targets.
 
+* parser/root.ts
+  * // TODO: these counts don't include the intent token.
+* Simplified catalog dump - for groups evaluating algorithms
+* Fuzzer
+  * fuzzerB:81
+    * x Why are all three mutually exclusive milks being added? BUG in rules checker.
+    * x Why are they being generated? Same BUG in rules checker.
+  * fuzzerC2
+    * Investigate long processing times
+  * Don't fuzz ambiguous options - e.g. "almond milk" and "almond syrup"
+  * Singleton options - e.g. "two pump one third caf", "three pump lid lattes"
+  * Correct units
+  * Why are most drinks "small"?
+  * Finish porting remove
+  * Verify while generating?
+  * entity_builder.ts: TODO: BUGBUG: optionTokenCounts is not filtered
+  * product_generator.ts: TODO: Verify that option count is legal (e.g. singleton case)
 * Singleton options, like the milks and the caffination levels
   * Fuzzer support, as well
 * TokenSequence.takeIf takes if peek shows expected token.

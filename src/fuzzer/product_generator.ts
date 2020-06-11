@@ -44,8 +44,11 @@ export class ProductGenerator {
         const entity = entityGenerator.randomEntity(random);
 
         const options: OptionX[] = [];
-        // TODO: Don't hard-code number of options here.
-        const count = random.randomInRange(this.optionCountRange[0], this.optionCountRange[1] + 1);
+        // TODO: Verify that option count is legal (e.g. singleton case)
+        const count = random.randomInRange(
+            this.optionCountRange[0],
+            this.optionCountRange[1] + 1
+        );
         const generators = this.randomOptions(entity.key, count, random);
         for (const generator of generators) {
             // TODO: only quantify ADD options

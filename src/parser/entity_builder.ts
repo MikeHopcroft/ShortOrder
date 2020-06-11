@@ -357,6 +357,8 @@ export class EntityBuilderBase {
                 // This option violated mutual exclusivity with the previous
                 // options. Exclude it and adjust the used token count
                 // accordingly.
+                // TODO: BUGBUG: optionTokenCounts is not filtered, so
+                // we're potentially using the wrong count here.
                 this.tokensUsed -= this.optionTokenCounts[index];
             }
         }

@@ -1,0 +1,3563 @@
+comment: >-
+  C:\Program Files\nodejs\node.exe
+  D:\git\menubot\ShortOrder\build\samples\test_generator.js -t=c -n=100
+  -o=samples\tests\fuzzerC2.yaml
+tests:
+  - id: 0
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              may I also get three three pump eggnog iced venti latte
+              macchiatoes with decaffeinated and raw sugar I'm ready
+        cart:
+          items:
+            - quantity: 3
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 3
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 1
+                  name: sugar in the raw
+                  sku: '6702'
+                  children: []
+  - id: 1
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello can I just have two two thirds decaf iced large two pump
+              honey coconut milk caffe latte macchiatoes and three wet iced chai
+              lattes large that should be all
+        cart:
+          items:
+            - quantity: 2
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 2
+                  name: honey
+                  sku: '6402'
+                  children: []
+                - quantity: 1
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+            - quantity: 3
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 2
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see can I please also do two a little caramel kid's size
+              caffe lattes one child latte with a pump of shot and one just a
+              little nutmeg iced latte macchiato grande that'll be all
+        cart:
+          items:
+            - quantity: 2
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: light caramel syrup
+                  sku: '1801'
+                  children: []
+            - quantity: 1
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+            - quantity: 1
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 1
+                  name: light nutmeg
+                  sku: '5401'
+                  children: []
+  - id: 3
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes may you please get three one pump whip topping iced tall chai
+              lattes with two pumps of orange and three pumps of sugar three
+              small whole milk chai lattes with two pumps of honey and two water
+              latte macchiatoes grande that should do all
+        cart:
+          items:
+            - quantity: 3
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+                - quantity: 2
+                  name: orange syrup
+                  sku: '2102'
+                  children: []
+                - quantity: 3
+                  name: sugar
+                  sku: '6602'
+                  children: []
+            - quantity: 3
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: whole milk
+                  sku: '3100'
+                  children: []
+                - quantity: 2
+                  name: honey
+                  sku: '6402'
+                  children: []
+            - quantity: 2
+              name: grande latte macchiato
+              sku: '702'
+              children:
+                - quantity: 1
+                  name: water
+                  sku: '5602'
+                  children: []
+  - id: 4
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy can you please have two iced tall one pump foam caffe lattes
+              and three small iced equal one third caf sugar in the raw caffe
+              lattes bye
+        cart:
+          items:
+            - quantity: 2
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 1
+                  name: foam
+                  sku: '5202'
+                  children: []
+            - quantity: 3
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 1
+                  name: equal
+                  sku: '6302'
+                  children: []
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 1
+                  name: sugar in the raw
+                  sku: '6702'
+                  children: []
+  - id: 5
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy there may we please also get two small chais with two thirds
+              decaf and slightly less vanilla syrup and two grande iced two pump
+              sugar chai lattes with dry and just a little bit of foam that'll
+              be everything
+        cart:
+          items:
+            - quantity: 2
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 1
+                  name: light vanilla syrup
+                  sku: '2501'
+                  children: []
+            - quantity: 2
+              name: iced grande chai latte
+              sku: '904'
+              children:
+                - quantity: 2
+                  name: sugar
+                  sku: '6602'
+                  children: []
+                - quantity: 1
+                  name: dry
+                  sku: '6100'
+                  children: []
+                - quantity: 1
+                  name: light foam
+                  sku: '5201'
+                  children: []
+  - id: 6
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              could we have two no shot iced small less vanilla chais with one
+              pump of soy milk and two iced two pump lid caffe latte macchiatoes
+              with some ice large that will be everything
+        cart:
+          items:
+            - quantity: 2
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: no espresso shot
+                  sku: '6900'
+                  children: []
+                - quantity: 1
+                  name: light vanilla syrup
+                  sku: '2501'
+                  children: []
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+            - quantity: 2
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 2
+                  name: lid
+                  sku: '5800'
+                  children: []
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+  - id: 7
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay could I please get a three pump toffee iced one pump low fat
+              milk for here latte large and one child latte macchiato with fully
+              caffeinated and three pumps of whipped cream topping that should
+              be it
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 3
+                  name: toffee syrup
+                  sku: '2402'
+                  children: []
+                - quantity: 1
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 1
+                  name: regular
+                  sku: '2600'
+                  children: []
+                - quantity: 3
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+  - id: 8
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so we'd also like a room iced latte with ice medium and shot
+              three lid iced caffe lattes large and a sweet n low iced small low
+              fat caramel syrup latte okay
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+                - quantity: 1
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+            - quantity: 3
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 1
+                  name: sweet n low
+                  sku: '6802'
+                  children: []
+                - quantity: 1
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+                - quantity: 1
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+  - id: 9
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so please hook me up with two small slightly less splenda two
+              pump one percent caffe latte macchiatoes two wet kid's chais with
+              a pump of equal and three kid's size latte macchiatoes with some
+              foam and less toffee I'm good
+        cart:
+          items:
+            - quantity: 2
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: light splenda
+                  sku: '6501'
+                  children: []
+                - quantity: 2
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+            - quantity: 2
+              name: short chai latte
+              sku: '900'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+                - quantity: 1
+                  name: equal
+                  sku: '6302'
+                  children: []
+            - quantity: 3
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 1
+                  name: foam
+                  sku: '5202'
+                  children: []
+                - quantity: 1
+                  name: light toffee syrup
+                  sku: '2401'
+                  children: []
+  - id: 10
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see may we have one tall latte macchiato with some for here
+              cup a caffe latte with just a little bit of honey medium and three
+              more sugar in the raw iced splenda chai lattes with three pumps of
+              honey large okay
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: light honey
+                  sku: '6401'
+                  children: []
+            - quantity: 3
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: extra sugar in the raw
+                  sku: '6703'
+                  children: []
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+                - quantity: 3
+                  name: honey
+                  sku: '6402'
+                  children: []
+  - id: 11
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay so could we just have a grande for here cup chai latte with a
+              pump of coconut milk and a foam tall travelling chai latte with
+              ice bye
+        cart:
+          items:
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+                - quantity: 1
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: foam
+                  sku: '5202'
+                  children: []
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+  - id: 12
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yeah so set me up with three three pump rum syrup chais with full
+              caf grande and one pump of soy milk that will be everything
+        cart:
+          items:
+            - quantity: 3
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 3
+                  name: buttered rum syrup
+                  sku: '1702'
+                  children: []
+                - quantity: 1
+                  name: regular
+                  sku: '2600'
+                  children: []
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+  - id: 13
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              may I just also do one iced medium three pump foam caffe latte
+              macchiato with one pump of two thirds caf and a large iced a
+              little whipped cream honey caffe latte macchiato bye
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 3
+                  name: foam
+                  sku: '5202'
+                  children: []
+                - quantity: 1
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+            - quantity: 1
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: light whipped cream
+                  sku: '5501'
+                  children: []
+                - quantity: 1
+                  name: honey
+                  sku: '6402'
+                  children: []
+  - id: 14
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hi there could you please also get a tall iced full caf peppermint
+              chai latte a two pump one percent small chai and a just a little
+              vanilla tall split shot chai with a pump of room for cream thanks
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: regular
+                  sku: '2600'
+                  children: []
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 2
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: light vanilla syrup
+                  sku: '2501'
+                  children: []
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+  - id: 15
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes so can I also do one extra orange syrup child size caffe latte
+              with two pumps of one percent and three pumps of lid that's
+              everything
+        cart:
+          items:
+            - quantity: 1
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: extra orange syrup
+                  sku: '2103'
+                  children: []
+                - quantity: 2
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+                - quantity: 3
+                  name: lid
+                  sku: '5800'
+                  children: []
+  - id: 16
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello we'll also have three tall iced vanilla nonfat milk latte
+              macchiatoes and two three pump peppermint syrup iced large caffe
+              latte macchiatoes thank you
+        cart:
+          items:
+            - quantity: 3
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+            - quantity: 2
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 3
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+  - id: 17
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              could I also do one tall chai with one pump of honey slightly less
+              whipped cream and some two thirds caf two large iced caffe latte
+              macchiatoes with additional pink packet without ice and
+              decaffeinated and one iced tall wet latte macchiato I'm ready
+        cart:
+          items:
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: honey
+                  sku: '6402'
+                  children: []
+                - quantity: 1
+                  name: light whipped cream
+                  sku: '5501'
+                  children: []
+                - quantity: 1
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+            - quantity: 2
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: extra sweet n low
+                  sku: '6803'
+                  children: []
+                - quantity: 1
+                  name: no ice
+                  sku: '5300'
+                  children: []
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 18
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right could we also get one to go iced chai large and three
+              tall iced extra rum latte macchiatoes with one pump of equal and
+              fat free milk thank you
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+            - quantity: 3
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: extra buttered rum syrup
+                  sku: '1703'
+                  children: []
+                - quantity: 1
+                  name: equal
+                  sku: '6302'
+                  children: []
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+  - id: 19
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yeah can we just also get two kid's caffe lattes with three pumps
+              of decaffeinated that should be all
+        cart:
+          items:
+            - quantity: 2
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 3
+                  name: decaf
+                  sku: '3000'
+                  children: []
+  - id: 20
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see so can I please have one one pump wet iced small latte
+              with two pumps of whip and one pump of orange okay
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+                - quantity: 2
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+                - quantity: 1
+                  name: orange syrup
+                  sku: '2102'
+                  children: []
+  - id: 21
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello can I do one iced large latte macchiato with one pump of dry
+              thanks
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: dry
+                  sku: '6100'
+                  children: []
+  - id: 22
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy can I just also get two iced tall just a little bit of
+              vanilla rum chai lattes with some almond that should be everything
+        cart:
+          items:
+            - quantity: 2
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: light vanilla syrup
+                  sku: '2501'
+                  children: []
+                - quantity: 1
+                  name: buttered rum syrup
+                  sku: '1702'
+                  children: []
+                - quantity: 1
+                  name: almond syrup
+                  sku: '1602'
+                  children: []
+  - id: 23
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hi there could I just also do one three pump almond syrup iced
+              tall vanilla syrup caffe latte with for here one latte grande with
+              three pumps of full caf and a pump of sugar and three kid's caffe
+              latte macchiatoes with some nutmeg split shot and two pumps of
+              room for cream that'll do all
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 3
+                  name: almond syrup
+                  sku: '1602'
+                  children: []
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 3
+                  name: regular
+                  sku: '2600'
+                  children: []
+                - quantity: 1
+                  name: sugar
+                  sku: '6602'
+                  children: []
+            - quantity: 3
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 1
+                  name: nutmeg
+                  sku: '5402'
+                  children: []
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+                - quantity: 2
+                  name: with room
+                  sku: '5900'
+                  children: []
+  - id: 24
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay could I please also do two grande iced caffe lattes with easy
+              orange syrup and one kid's heavy on the nutmeg latte macchiato
+              that should be all
+        cart:
+          items:
+            - quantity: 2
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: light orange syrup
+                  sku: '2101'
+                  children: []
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 1
+                  name: extra nutmeg
+                  sku: '5403'
+                  children: []
+  - id: 25
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yeah so how about one two pump decaffeinated iced small chai latte
+              with eggnog and one iced venti one percent chai latte that should
+              do all
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 2
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 1
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+            - quantity: 1
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+  - id: 26
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes I will have an iced chai latte with two pumps of travelling
+              grande that'll do it
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children:
+                - quantity: 2
+                  name: to go
+                  sku: '6000'
+                  children: []
+  - id: 27
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hi may I also get two tall coconut milk one third decaf latte
+              macchiatoes and one tall chai with lid that will do everything
+        cart:
+          items:
+            - quantity: 2
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+                - quantity: 1
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+  - id: 28
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yeah may I just also have two large iced additional yellow packet
+              caffe lattes with none raspberry and two iced small latte
+              macchiatoes with hazelnut thanks
+        cart:
+          items:
+            - quantity: 2
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: extra splenda
+                  sku: '6503'
+                  children: []
+                - quantity: 1
+                  name: no raspberry syrup
+                  sku: '2300'
+                  children: []
+            - quantity: 2
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: hazelnut syrup
+                  sku: '2002'
+                  children: []
+  - id: 29
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello could we please get two tall no ice lattes and two tall
+              lattes with three pumps of for here cup thank you
+        cart:
+          items:
+            - quantity: 2
+              name: tall latte
+              sku: '601'
+              children:
+                - quantity: 1
+                  name: no ice
+                  sku: '5300'
+                  children: []
+            - quantity: 2
+              name: tall latte
+              sku: '601'
+              children:
+                - quantity: 3
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+  - id: 30
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay so I'll also do a two pump buttered rum kid's caffe latte
+              macchiato with some sweet n low and splenda thank you
+        cart:
+          items:
+            - quantity: 1
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 2
+                  name: buttered rum syrup
+                  sku: '1702'
+                  children: []
+                - quantity: 1
+                  name: sweet n low
+                  sku: '6802'
+                  children: []
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+  - id: 31
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy there may I please also do three iced one pump orange heavy
+              blue packet caffe latte macchiatoes venti and one tall iced to go
+              caffe latte that'll do it
+        cart:
+          items:
+            - quantity: 3
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: orange syrup
+                  sku: '2102'
+                  children: []
+                - quantity: 1
+                  name: extra equal
+                  sku: '6303'
+                  children: []
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+  - id: 32
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              um may I please also do three one pump vanilla iced chais with
+              three pumps of hazelnut syrup medium and a little bit of sugar
+              that's it
+        cart:
+          items:
+            - quantity: 3
+              name: iced grande chai latte
+              sku: '904'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 3
+                  name: hazelnut syrup
+                  sku: '2002'
+                  children: []
+                - quantity: 1
+                  name: light sugar
+                  sku: '6601'
+                  children: []
+  - id: 33
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so can you do two iced small chai lattes with two pumps of
+              honey and three venti iced two pump vanilla syrup caffe latte
+              macchiatoes with two pumps of almond milk and some ice that'll be
+              everything
+        cart:
+          items:
+            - quantity: 2
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 2
+                  name: honey
+                  sku: '6402'
+                  children: []
+            - quantity: 3
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 2
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 2
+                  name: almond milk
+                  sku: '3700'
+                  children: []
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+  - id: 34
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right I want three iced caffe lattes medium with heavy on the
+              raspberry and two medium caffe lattes with a pump of almond
+              that'll be all
+        cart:
+          items:
+            - quantity: 3
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: extra raspberry syrup
+                  sku: '2303'
+                  children: []
+            - quantity: 2
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: almond syrup
+                  sku: '1602'
+                  children: []
+  - id: 35
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so could we get one one pump one third caf iced chai large with
+              three pumps of vanilla and nonfat milk that will be everything
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 3
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+  - id: 36
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy there can you just do three large iced with no equal one
+              pump room chais with lots of cinnamon that'll be it
+        cart:
+          items:
+            - quantity: 3
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: no equal
+                  sku: '6300'
+                  children: []
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+                - quantity: 1
+                  name: extra cinnamon
+                  sku: '5103'
+                  children: []
+  - id: 37
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              um can we just also get one iced large latte with soy milk an iced
+              large room one pump hazelnut caffe latte macchiato and a two
+              percent child size chai latte with room for cream thanks
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+            - quantity: 1
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+                - quantity: 1
+                  name: hazelnut syrup
+                  sku: '2002'
+                  children: []
+            - quantity: 1
+              name: short chai latte
+              sku: '900'
+              children:
+                - quantity: 1
+                  name: two percent milk
+                  sku: '3200'
+                  children: []
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+  - id: 38
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok we would like three two pump peppermint small caffe latte
+              macchiatoes two iced caffe latte macchiatoes with one pump of
+              water grande and a three pump one third decaf grande chai latte
+              with two percent milk that will do it
+        cart:
+          items:
+            - quantity: 3
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 2
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+            - quantity: 2
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 1
+                  name: water
+                  sku: '5602'
+                  children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 3
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+                - quantity: 1
+                  name: two percent milk
+                  sku: '3200'
+                  children: []
+  - id: 39
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see so can you please also have an iced caffe latte
+              macchiato with light sugar in the raw large and one pump of whip
+              topping three with no nutmeg small oat decaffeinated chai lattes
+              and one tall two pump wet caffe latte macchiato I'm ready
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: light sugar in the raw
+                  sku: '6701'
+                  children: []
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+            - quantity: 3
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: no nutmeg
+                  sku: '5400'
+                  children: []
+                - quantity: 1
+                  name: oat milk
+                  sku: '3800'
+                  children: []
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 2
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 40
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay could you just also get an iced medium additional pink packet
+              latte macchiato with none hazelnut syrup that'll do it
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 1
+                  name: extra sweet n low
+                  sku: '6803'
+                  children: []
+                - quantity: 1
+                  name: no hazelnut syrup
+                  sku: '2000'
+                  children: []
+  - id: 41
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yeah we would also like three venti iced one third caf lattes with
+              to go cup and one pump of lid okay
+        cart:
+          items:
+            - quantity: 3
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+  - id: 42
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              I will also get three iced tall heavy on the vanilla chais with no
+              honey and two thirds caf three two thirds caf tall chai lattes
+              with two pumps of almond and two iced small chai lattes with one
+              pump of honey that will be all
+        cart:
+          items:
+            - quantity: 3
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: extra vanilla syrup
+                  sku: '2503'
+                  children: []
+                - quantity: 1
+                  name: no honey
+                  sku: '6400'
+                  children: []
+                - quantity: 1
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+            - quantity: 3
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+                - quantity: 2
+                  name: almond milk
+                  sku: '3700'
+                  children: []
+            - quantity: 2
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: honey
+                  sku: '6402'
+                  children: []
+  - id: 43
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay may I get two tall without vanilla syrup caffe latte
+              macchiatoes with three pumps of caramel that'll be everything
+        cart:
+          items:
+            - quantity: 2
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: no vanilla syrup
+                  sku: '2500'
+                  children: []
+                - quantity: 3
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+  - id: 44
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hi could I just also get three child size chai lattes with a pump
+              of yellow packet that will do everything
+        cart:
+          items:
+            - quantity: 3
+              name: short chai latte
+              sku: '900'
+              children:
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+  - id: 45
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see I will also do two medium with no shot caffe lattes with
+              three pumps of for here cup two lattes medium with a pump of
+              travelling and a two pump peppermint iced caffe latte with two
+              pumps of fat free grande and room that's all
+        cart:
+          items:
+            - quantity: 2
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: no espresso shot
+                  sku: '6900'
+                  children: []
+                - quantity: 3
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+            - quantity: 2
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 2
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+                - quantity: 2
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+  - id: 46
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes may I please also have two iced venti oat chais with two pumps
+              of one third caf and easy on the water three none foam small
+              peppermint two pump almond chai lattes and one lightly foam iced
+              chai latte with without water grande and dry that will do all
+        cart:
+          items:
+            - quantity: 2
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: oat milk
+                  sku: '3800'
+                  children: []
+                - quantity: 2
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 1
+                  name: light water
+                  sku: '5601'
+                  children: []
+            - quantity: 3
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: no foam
+                  sku: '5200'
+                  children: []
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+                - quantity: 2
+                  name: almond syrup
+                  sku: '1602'
+                  children: []
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children:
+                - quantity: 1
+                  name: light foam
+                  sku: '5201'
+                  children: []
+                - quantity: 1
+                  name: no water
+                  sku: '5600'
+                  children: []
+                - quantity: 1
+                  name: dry
+                  sku: '6100'
+                  children: []
+  - id: 47
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello there I'll have one one third caf iced grande wet latte and
+              one three pump ice latte medium that should be everything
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 3
+                  name: ice
+                  sku: '5302'
+                  children: []
+  - id: 48
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy there can you please do two child one pump one third caf
+              extra almond lattes with wet I'm done
+        cart:
+          items:
+            - quantity: 2
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 1
+                  name: extra almond syrup
+                  sku: '1603'
+                  children: []
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 49
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ah may you also have three small latte macchiatoes with heavy on
+              the yellow packet none buttered rum syrup and lightly cinnamon
+              three venti iced caffe lattes with no caramel syrup and one pump
+              of honey and a chai latte grande with lots of raw sugar that will
+              do all
+        cart:
+          items:
+            - quantity: 3
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: extra splenda
+                  sku: '6503'
+                  children: []
+                - quantity: 1
+                  name: no buttered rum syrup
+                  sku: '1700'
+                  children: []
+                - quantity: 1
+                  name: light cinnamon syrup
+                  sku: '1901'
+                  children: []
+            - quantity: 3
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: no caramel syrup
+                  sku: '1800'
+                  children: []
+                - quantity: 1
+                  name: honey
+                  sku: '6402'
+                  children: []
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: extra sugar in the raw
+                  sku: '6703'
+                  children: []
+  - id: 50
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              um could we please also get one iced small for here latte
+              macchiato one iced small one pump wet latte macchiato with more
+              water and one pump of rum syrup and two more blue packet iced
+              small slightly less cinnamon syrup three pump room for cream chais
+              that will do everything
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+                - quantity: 1
+                  name: extra water
+                  sku: '5603'
+                  children: []
+                - quantity: 1
+                  name: buttered rum syrup
+                  sku: '1702'
+                  children: []
+            - quantity: 2
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: extra equal
+                  sku: '6303'
+                  children: []
+                - quantity: 1
+                  name: light cinnamon syrup
+                  sku: '1901'
+                  children: []
+                - quantity: 3
+                  name: with room
+                  sku: '5900'
+                  children: []
+  - id: 51
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so I'll also have two chai lattes with one pump of regular
+              medium and one pump of wet that will do it
+        cart:
+          items:
+            - quantity: 2
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: regular
+                  sku: '2600'
+                  children: []
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 52
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see I'll take an one pump orange tall chai latte with three
+              pumps of eggnog that'll do all
+        cart:
+          items:
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: orange syrup
+                  sku: '2102'
+                  children: []
+                - quantity: 3
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+  - id: 53
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes could you please get one a little bit of ice iced three pump
+              low fat latte grande with slightly less hazelnut and two one
+              percent grande chai lattes with two pumps of nutmeg that will do
+              all
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: light ice
+                  sku: '5301'
+                  children: []
+                - quantity: 3
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+                - quantity: 1
+                  name: light hazelnut syrup
+                  sku: '2001'
+                  children: []
+            - quantity: 2
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+                - quantity: 2
+                  name: nutmeg
+                  sku: '5402'
+                  children: []
+  - id: 54
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              could we just also have three one pump one third caf chais with
+              easy cinnamon grande and one pump of ice and three wet iced venti
+              chai lattes that'll be it
+        cart:
+          items:
+            - quantity: 3
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+                - quantity: 1
+                  name: light cinnamon syrup
+                  sku: '1901'
+                  children: []
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+            - quantity: 3
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 55
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see so could you please have three for here cup tall latte
+              macchiatoes with lid and a pump of half decaf two small caffe
+              latte macchiatoes with a pump of wet and one iced small caffe
+              latte macchiato with a little bit of honey that should do
+              everything
+        cart:
+          items:
+            - quantity: 3
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+            - quantity: 2
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: light honey
+                  sku: '6401'
+                  children: []
+  - id: 56
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see so may I please get three toffee syrup iced caffe latte
+              macchiatoes venti that should do everything
+        cart:
+          items:
+            - quantity: 3
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: toffee syrup
+                  sku: '2402'
+                  children: []
+  - id: 57
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes so can I also get one small iced caffe latte with two pumps of
+              half decaf that'll do it
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 2
+                  name: half caf
+                  sku: '2800'
+                  children: []
+  - id: 58
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay can we just also do one short caffe latte with some ice two
+              pumps of equal and coconut milk a tall buttered rum latte and two
+              iced tall two thirds decaf chai lattes I'm good
+        cart:
+          items:
+            - quantity: 1
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+                - quantity: 2
+                  name: equal
+                  sku: '6302'
+                  children: []
+                - quantity: 1
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children:
+                - quantity: 1
+                  name: buttered rum syrup
+                  sku: '1702'
+                  children: []
+            - quantity: 2
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+  - id: 59
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok could you have a small iced oat chai latte with additional
+              equal and additional hazelnut and one iced tall three pump
+              decaffeinated latte with three pumps of hazelnut syrup and one
+              pump of for here cup how much is that
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: oat milk
+                  sku: '3800'
+                  children: []
+                - quantity: 1
+                  name: extra equal
+                  sku: '6303'
+                  children: []
+                - quantity: 1
+                  name: extra hazelnut syrup
+                  sku: '2003'
+                  children: []
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 3
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 3
+                  name: hazelnut syrup
+                  sku: '2002'
+                  children: []
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+  - id: 60
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right so can you also do a chai latte with slightly less
+              raspberry syrup grande and one pump of to go cup two oat milk
+              kid's latte macchiatoes and a lots of raspberry short chai that'll
+              be everything
+        cart:
+          items:
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: light raspberry syrup
+                  sku: '2301'
+                  children: []
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+            - quantity: 2
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 1
+                  name: oat milk
+                  sku: '3800'
+                  children: []
+            - quantity: 1
+              name: short chai latte
+              sku: '900'
+              children:
+                - quantity: 1
+                  name: extra raspberry syrup
+                  sku: '2303'
+                  children: []
+  - id: 61
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes can I also get three nutmeg iced tall two pump raspberry latte
+              macchiatoes a three pump decaffeinated iced caffe latte macchiato
+              with a pump of lid grande and three shot child size caffe latte
+              macchiatoes
+        cart:
+          items:
+            - quantity: 3
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: nutmeg
+                  sku: '5402'
+                  children: []
+                - quantity: 2
+                  name: raspberry syrup
+                  sku: '2302'
+                  children: []
+            - quantity: 1
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 3
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+            - quantity: 3
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 1
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+  - id: 62
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yeah so could you just also have a zero percent milk tall latte
+              macchiato with one pump of cinnamon
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+                - quantity: 1
+                  name: cinnamon
+                  sku: '5102'
+                  children: []
+  - id: 63
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello can we please also have one medium without raw sugar latte
+              with fully caffeinated and a little almond syrup three slightly
+              less foam iced venti chais and three splenda child cinnamon chais
+              with some two thirds decaf
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: no sugar in the raw
+                  sku: '6700'
+                  children: []
+                - quantity: 1
+                  name: regular
+                  sku: '2600'
+                  children: []
+                - quantity: 1
+                  name: light almond syrup
+                  sku: '1601'
+                  children: []
+            - quantity: 3
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: light foam
+                  sku: '5201'
+                  children: []
+            - quantity: 3
+              name: short chai latte
+              sku: '900'
+              children:
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+                - quantity: 1
+                  name: cinnamon
+                  sku: '5102'
+                  children: []
+                - quantity: 1
+                  name: one third caf
+                  sku: '2900'
+                  children: []
+  - id: 64
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see so could we please also have three iced grande one pump
+              two percent two pump raw sugar caffe lattes three grande caffe
+              lattes with one pump of cinnamon three pumps of low fat milk and
+              two pumps of nutmeg and three three pump half decaf iced large
+              latte macchiatoes that's everything
+        cart:
+          items:
+            - quantity: 3
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: two percent milk
+                  sku: '3200'
+                  children: []
+                - quantity: 2
+                  name: sugar in the raw
+                  sku: '6702'
+                  children: []
+            - quantity: 3
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: cinnamon
+                  sku: '5102'
+                  children: []
+                - quantity: 3
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+                - quantity: 2
+                  name: nutmeg
+                  sku: '5402'
+                  children: []
+            - quantity: 3
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 3
+                  name: half caf
+                  sku: '2800'
+                  children: []
+  - id: 65
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello there get me a small caffe latte macchiato with for here one
+              iced large wet one pump eggnog latte macchiato with a pump of lid
+              and three three pump honey small caffe latte macchiatoes with
+              extra sweet n low that'll be it
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+            - quantity: 1
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+                - quantity: 1
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+            - quantity: 3
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 3
+                  name: honey
+                  sku: '6402'
+                  children: []
+                - quantity: 1
+                  name: extra sweet n low
+                  sku: '6803'
+                  children: []
+  - id: 66
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ah I want a medium two percent chai with split shot and heavy on
+              the buttered rum syrup and a grande iced latte with three pumps of
+              wet and regular milk that'll be it
+        cart:
+          items:
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: two percent milk
+                  sku: '3200'
+                  children: []
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+                - quantity: 1
+                  name: extra buttered rum syrup
+                  sku: '1703'
+                  children: []
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 3
+                  name: wet
+                  sku: '6200'
+                  children: []
+                - quantity: 1
+                  name: whole milk
+                  sku: '3100'
+                  children: []
+  - id: 67
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right so could you please have two tall iced two thirds caf
+              caffe lattes with coconut milk an one pump soy tall caffe latte
+              macchiato and three iced chai lattes venti with a pump of yellow
+              packet and some cinnamon that should be everything
+        cart:
+          items:
+            - quantity: 2
+              name: iced tall latte
+              sku: '603'
+              children:
+                - quantity: 1
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+                - quantity: 1
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: soy milk
+                  sku: '3600'
+                  children: []
+            - quantity: 3
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+                - quantity: 1
+                  name: cinnamon syrup
+                  sku: '1902'
+                  children: []
+  - id: 68
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes so could we have one iced tall one pump peppermint syrup chai
+              that'll do all
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+  - id: 69
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see could I just also get one iced large blue packet caffe
+              latte with more peppermint syrup and one pump of almond milk two
+              iced vanilla heavy on the buttered rum lattes large and three one
+              pump toffee syrup caffe lattes grande with none sugar that should
+              be all
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: equal
+                  sku: '6302'
+                  children: []
+                - quantity: 1
+                  name: extra peppermint syrup
+                  sku: '2203'
+                  children: []
+                - quantity: 1
+                  name: almond milk
+                  sku: '3700'
+                  children: []
+            - quantity: 2
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+                - quantity: 1
+                  name: extra buttered rum syrup
+                  sku: '1703'
+                  children: []
+            - quantity: 3
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: toffee syrup
+                  sku: '2402'
+                  children: []
+                - quantity: 1
+                  name: no sugar
+                  sku: '6600'
+                  children: []
+  - id: 70
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello there please add one lid medium three pump rum syrup caffe
+              latte macchiato and one iced venti latte macchiato with two pumps
+              of wet thank you
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte macchiato
+              sku: '702'
+              children:
+                - quantity: 1
+                  name: lid
+                  sku: '5800'
+                  children: []
+                - quantity: 3
+                  name: buttered rum syrup
+                  sku: '1702'
+                  children: []
+            - quantity: 1
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 2
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 71
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              um could you just also do three tall chai lattes with one pump of
+              for here and shot I'm done
+        cart:
+          items:
+            - quantity: 3
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+                - quantity: 1
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+  - id: 72
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hi there we want one two pump lid iced venti caffe latte macchiato
+              and two one third decaf kid's size extra honey additional almond
+              syrup lattes that should do all
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 2
+                  name: lid
+                  sku: '5800'
+                  children: []
+            - quantity: 2
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+                - quantity: 1
+                  name: extra honey
+                  sku: '6403'
+                  children: []
+                - quantity: 1
+                  name: extra almond syrup
+                  sku: '1603'
+                  children: []
+  - id: 73
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right may I please also get three with no almond iced tall
+              latte macchiatoes and three one percent small caffe lattes that
+              will do it
+        cart:
+          items:
+            - quantity: 3
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: no almond syrup
+                  sku: '1600'
+                  children: []
+            - quantity: 3
+              name: tall latte
+              sku: '601'
+              children:
+                - quantity: 1
+                  name: one percent milk
+                  sku: '3300'
+                  children: []
+  - id: 74
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so could you also have two oat iced latte macchiatoes venti
+              with one pump of honey and one iced caffe latte medium with one
+              pump of regular milk and three pumps of caramel syrup that will be
+              it
+        cart:
+          items:
+            - quantity: 2
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: oat milk
+                  sku: '3800'
+                  children: []
+                - quantity: 1
+                  name: honey
+                  sku: '6402'
+                  children: []
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: whole milk
+                  sku: '3100'
+                  children: []
+                - quantity: 3
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+  - id: 75
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right so could I please also get one decaffeinated iced tall
+              three pump for here cup latte macchiato that will do it
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 3
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+  - id: 76
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so may I please also do two iced medium latte macchiatoes with
+              some room for cream that'll do everything
+        cart:
+          items:
+            - quantity: 2
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+  - id: 77
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see we'll have three iced venti three pump peppermint chais
+              I'm done
+        cart:
+          items:
+            - quantity: 3
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 3
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+  - id: 78
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello may we please get three medium easy on the sugar in the raw
+              caffe latte macchiatoes with wet okay
+        cart:
+          items:
+            - quantity: 3
+              name: grande latte macchiato
+              sku: '702'
+              children:
+                - quantity: 1
+                  name: light sugar in the raw
+                  sku: '6701'
+                  children: []
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 79
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy there set me up with an a little honey iced large two pump
+              skinny latte with shot I'm done
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti latte
+              sku: '605'
+              children:
+                - quantity: 1
+                  name: light honey
+                  sku: '6401'
+                  children: []
+                - quantity: 2
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+                - quantity: 1
+                  name: espresso shot
+                  sku: '6902'
+                  children: []
+  - id: 80
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              please add one small latte with some sugar in the raw and two
+              short two pump toffee lattes thanks
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children:
+                - quantity: 1
+                  name: sugar in the raw
+                  sku: '6702'
+                  children: []
+            - quantity: 2
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 2
+                  name: toffee syrup
+                  sku: '2402'
+                  children: []
+  - id: 81
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok may you do one iced chai with easy whipped cream grande and
+              eggnog that should be everything
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children:
+                - quantity: 1
+                  name: light whipped cream
+                  sku: '5501'
+                  children: []
+                - quantity: 1
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+  - id: 82
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right could we please get one lightly cinnamon medium latte
+              macchiato with two pumps of orange and two pumps of nutmeg three
+              medium iced caffe lattes with heavy raspberry syrup and two
+              coconut kid's size three pump sugar chais with some toffee syrup
+              I'm done
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte macchiato
+              sku: '702'
+              children:
+                - quantity: 1
+                  name: light cinnamon syrup
+                  sku: '1901'
+                  children: []
+                - quantity: 2
+                  name: orange syrup
+                  sku: '2102'
+                  children: []
+                - quantity: 2
+                  name: nutmeg
+                  sku: '5402'
+                  children: []
+            - quantity: 3
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: extra raspberry syrup
+                  sku: '2303'
+                  children: []
+            - quantity: 2
+              name: short chai latte
+              sku: '900'
+              children:
+                - quantity: 1
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+                - quantity: 3
+                  name: sugar
+                  sku: '6602'
+                  children: []
+                - quantity: 1
+                  name: toffee syrup
+                  sku: '2402'
+                  children: []
+  - id: 83
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok so may I please also get one none blue packet iced chai large
+              three a little bit of caramel syrup short lattes and one small
+              iced two pump orange caffe latte macchiato with some sugar that
+              will do all
+        cart:
+          items:
+            - quantity: 1
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: no equal
+                  sku: '6300'
+                  children: []
+            - quantity: 3
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: light caramel syrup
+                  sku: '1801'
+                  children: []
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 2
+                  name: orange syrup
+                  sku: '2102'
+                  children: []
+                - quantity: 1
+                  name: sugar
+                  sku: '6602'
+                  children: []
+  - id: 84
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hi there may you also get one full caf caffe latte macchiato
+              medium with three pumps of eggnog and a two pump lid iced with no
+              cinnamon chai large with two pumps of raw sugar that should do
+              everything
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte macchiato
+              sku: '702'
+              children:
+                - quantity: 1
+                  name: regular
+                  sku: '2600'
+                  children: []
+                - quantity: 3
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+            - quantity: 1
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 2
+                  name: lid
+                  sku: '5800'
+                  children: []
+                - quantity: 1
+                  name: no cinnamon syrup
+                  sku: '1900'
+                  children: []
+                - quantity: 2
+                  name: sugar in the raw
+                  sku: '6702'
+                  children: []
+  - id: 85
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see could I also do one two pump splenda tall latte
+              macchiato bye
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 2
+                  name: splenda
+                  sku: '6502'
+                  children: []
+  - id: 86
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay so I will also do one tall caffe latte macchiato with extra
+              equal three small three pump decaffeinated chais and three one
+              pump split shot chai lattes grande bye
+        cart:
+          items:
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: extra equal
+                  sku: '6303'
+                  children: []
+            - quantity: 3
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 3
+                  name: decaf
+                  sku: '3000'
+                  children: []
+            - quantity: 3
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: half caf
+                  sku: '2800'
+                  children: []
+  - id: 87
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              howdy may I please also do two medium iced one pump whip caffe
+              lattes and two splenda iced three pump cinnamon caffe latte
+              macchiatoes venti with almond syrup that should be it
+        cart:
+          items:
+            - quantity: 2
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+            - quantity: 2
+              name: iced venti latte macchiato
+              sku: '705'
+              children:
+                - quantity: 1
+                  name: splenda
+                  sku: '6502'
+                  children: []
+                - quantity: 3
+                  name: cinnamon
+                  sku: '5102'
+                  children: []
+                - quantity: 1
+                  name: almond syrup
+                  sku: '1602'
+                  children: []
+  - id: 88
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello there could we also have an iced caffe latte macchiato with
+              oat milk grande and two small three pump coconut milk chais with
+              three pumps of for here cup and wet that'll be all
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 1
+                  name: oat milk
+                  sku: '3800'
+                  children: []
+            - quantity: 2
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 3
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+                - quantity: 3
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+                - quantity: 1
+                  name: wet
+                  sku: '6200'
+                  children: []
+  - id: 89
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right so may we just get a chai latte grande with one pump of
+              ice one tall peppermint syrup chai with some skim and three pumps
+              of two thirds caf and three child size lattes with whip and water
+              that will be it
+        cart:
+          items:
+            - quantity: 1
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+                - quantity: 1
+                  name: nonfat milk
+                  sku: '3400'
+                  children: []
+                - quantity: 3
+                  name: two thirds caf
+                  sku: '2700'
+                  children: []
+            - quantity: 3
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+                - quantity: 1
+                  name: water
+                  sku: '5602'
+                  children: []
+  - id: 90
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right may I please also have three grande chais with some
+              almond three room chai lattes grande with some eggnog and a pump
+              of peppermint and a just a little bit of toffee syrup small dry
+              latte that will be all
+        cart:
+          items:
+            - quantity: 3
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: almond syrup
+                  sku: '1602'
+                  children: []
+            - quantity: 3
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+                - quantity: 1
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+                - quantity: 1
+                  name: peppermint syrup
+                  sku: '2202'
+                  children: []
+            - quantity: 1
+              name: tall latte
+              sku: '601'
+              children:
+                - quantity: 1
+                  name: light toffee syrup
+                  sku: '2401'
+                  children: []
+                - quantity: 1
+                  name: dry
+                  sku: '6100'
+                  children: []
+  - id: 91
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hello can I also get an iced latte with just a little caramel
+              syrup medium a vanilla syrup tall caffe latte macchiato and three
+              three pump water tall caffe latte macchiatoes with a pump of
+              hazelnut syrup I'm ready
+        cart:
+          items:
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: light caramel syrup
+                  sku: '1801'
+                  children: []
+            - quantity: 1
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+            - quantity: 3
+              name: tall latte macchiato
+              sku: '701'
+              children:
+                - quantity: 3
+                  name: water
+                  sku: '5602'
+                  children: []
+                - quantity: 1
+                  name: hazelnut syrup
+                  sku: '2002'
+                  children: []
+  - id: 92
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              let's see so we will have two small chais with three pumps of to
+              go cup and a pump of hazelnut one grande iced light cinnamon a
+              little equal latte and three foam iced small two pump whip topping
+              chai lattes with room that should be all
+        cart:
+          items:
+            - quantity: 2
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 3
+                  name: to go
+                  sku: '6000'
+                  children: []
+                - quantity: 1
+                  name: hazelnut syrup
+                  sku: '2002'
+                  children: []
+            - quantity: 1
+              name: iced grande latte
+              sku: '604'
+              children:
+                - quantity: 1
+                  name: light cinnamon
+                  sku: '5101'
+                  children: []
+                - quantity: 1
+                  name: light equal
+                  sku: '6301'
+                  children: []
+            - quantity: 3
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: foam
+                  sku: '5202'
+                  children: []
+                - quantity: 2
+                  name: whipped cream
+                  sku: '5502'
+                  children: []
+                - quantity: 1
+                  name: with room
+                  sku: '5900'
+                  children: []
+  - id: 93
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              all right could you just get two iced chais with coconut medium
+              that's everything
+        cart:
+          items:
+            - quantity: 2
+              name: iced grande chai latte
+              sku: '904'
+              children:
+                - quantity: 1
+                  name: coconut milk
+                  sku: '3500'
+                  children: []
+  - id: 94
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yes so may we also do a two pump lid grande two pump cinnamon
+              syrup to go latte macchiato two kid's extra vanilla chai lattes
+              with non caf and a pump of nutmeg and two for here without sugar
+              lattes medium that should be all
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte macchiato
+              sku: '702'
+              children:
+                - quantity: 2
+                  name: lid
+                  sku: '5800'
+                  children: []
+                - quantity: 2
+                  name: cinnamon syrup
+                  sku: '1902'
+                  children: []
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+            - quantity: 2
+              name: short chai latte
+              sku: '900'
+              children:
+                - quantity: 1
+                  name: extra vanilla syrup
+                  sku: '2503'
+                  children: []
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 1
+                  name: nutmeg
+                  sku: '5402'
+                  children: []
+            - quantity: 2
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+                - quantity: 1
+                  name: no sugar
+                  sku: '6600'
+                  children: []
+  - id: 95
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              ok can we please also get three foam three pump eggnog chai lattes
+              grande with cinnamon and one iced to go chai latte venti with just
+              a little nutmeg bye
+        cart:
+          items:
+            - quantity: 3
+              name: grande chai latte
+              sku: '902'
+              children:
+                - quantity: 1
+                  name: foam
+                  sku: '5202'
+                  children: []
+                - quantity: 3
+                  name: eggnog
+                  sku: '3900'
+                  children: []
+                - quantity: 1
+                  name: cinnamon
+                  sku: '5102'
+                  children: []
+            - quantity: 1
+              name: iced venti chai latte
+              sku: '905'
+              children:
+                - quantity: 1
+                  name: to go
+                  sku: '6000'
+                  children: []
+                - quantity: 1
+                  name: light nutmeg
+                  sku: '5401'
+                  children: []
+  - id: 96
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              yeah can we also get one tall iced latte macchiato with three
+              pumps of sugar and three water kid's size caffe latte macchiatoes
+              with without peppermint syrup that'll be it
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 3
+                  name: sugar
+                  sku: '6602'
+                  children: []
+            - quantity: 3
+              name: short latte macchiato
+              sku: '700'
+              children:
+                - quantity: 1
+                  name: water
+                  sku: '5602'
+                  children: []
+                - quantity: 1
+                  name: no peppermint syrup
+                  sku: '2200'
+                  children: []
+  - id: 97
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              hi can we also have a small iced dry latte macchiato with no shot
+              and three pumps of caramel that's it
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte macchiato
+              sku: '703'
+              children:
+                - quantity: 1
+                  name: dry
+                  sku: '6100'
+                  children: []
+                - quantity: 1
+                  name: no espresso shot
+                  sku: '6900'
+                  children: []
+                - quantity: 3
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+  - id: 98
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay could you just get an additional almond child latte that's
+              everything
+        cart:
+          items:
+            - quantity: 1
+              name: short latte
+              sku: '600'
+              children:
+                - quantity: 1
+                  name: extra almond syrup
+                  sku: '1603'
+                  children: []
+  - id: 99
+    suites: unverified
+    comment: synthetic
+    steps:
+      - turns:
+          - speaker: customer
+            transcription: >-
+              okay so may I just do a two pump for here small chai latte with
+              three pumps of caramel syrup three iced medium non caf caffe latte
+              macchiatoes with one pump of ice and no hazelnut and a tall iced
+              chai with dry and sugar that should do everything
+        cart:
+          items:
+            - quantity: 1
+              name: tall chai latte
+              sku: '901'
+              children:
+                - quantity: 2
+                  name: for here cup
+                  sku: '5700'
+                  children: []
+                - quantity: 3
+                  name: caramel syrup
+                  sku: '1802'
+                  children: []
+            - quantity: 3
+              name: iced grande latte macchiato
+              sku: '704'
+              children:
+                - quantity: 1
+                  name: decaf
+                  sku: '3000'
+                  children: []
+                - quantity: 1
+                  name: ice
+                  sku: '5302'
+                  children: []
+                - quantity: 1
+                  name: no hazelnut syrup
+                  sku: '2000'
+                  children: []
+            - quantity: 1
+              name: iced tall chai latte
+              sku: '903'
+              children:
+                - quantity: 1
+                  name: dry
+                  sku: '6100'
+                  children: []
+                - quantity: 1
+                  name: sugar
+                  sku: '6602'
+                  children: []
