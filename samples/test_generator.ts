@@ -2,10 +2,13 @@ import * as dotenv from 'dotenv';
 
 import {
     AID,
+    GenericCase,
     PID,
     MENUITEM,
     OPTION,
     TestCase,
+    TextTurn,
+    ValidationStep,
     World,
 } from 'prix-fixe';
 
@@ -50,11 +53,11 @@ async function go()
             description: 'Level C: multiple products with quantifiers, attributes, and options',
             factory: levelC,
         },
-        {
-            name: 'd',
-            description: 'Level D: remove a single product by its generic name',
-            factory: remove,
-        }
+        // {
+        //     name: 'd',
+        //     description: 'Level D: remove a single product by its generic name',
+        //     factory: remove,
+        // }
     ]);
 
     // TODO: add your processors here to enable the "-v" test verification option.
@@ -276,7 +279,8 @@ function* generateOrders(
     world: World,
     segmentCountRange: [number, number],
     optionCount: [number, number]
-): IterableIterator<TestCase> {
+): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
+// ): IterableIterator<TestCase> {
     const {prologueGenerator, productGenerator, epilogueGenerator} =
         configureProductGenerators(world, optionCount);
 
@@ -300,44 +304,44 @@ function* generateOrders(
     }
 }
 
-function* remove(
-    world: World
-): IterableIterator<TestCase> {
-    const optionCountRange: [number, number] = [1, 3];
-    const {prologueGenerator, productGenerator, epilogueGenerator} =
-        configureProductGenerators(world, optionCountRange);
+// function* remove(
+//     world: World
+// ): IterableIterator<TestCase> {
+//     const optionCountRange: [number, number] = [1, 3];
+//     const {prologueGenerator, productGenerator, epilogueGenerator} =
+//         configureProductGenerators(world, optionCountRange);
 
-    //
-    // Remove Prologues
-    //
-    const removes = [
-        "[can we,can you,would you,i want to,i'd like to,please] (cancel,delete,drop,eighty six,lose,remove,removed,skip,take off,take away) [the]",
-    ];
-    const removePrologueGenerator = new AliasGenerator([prologues, removes]);
+//     //
+//     // Remove Prologues
+//     //
+//     const removes = [
+//         "[can we,can you,would you,i want to,i'd like to,please] (cancel,delete,drop,eighty six,lose,remove,removed,skip,take off,take away) [the]",
+//     ];
+//     const removePrologueGenerator = new AliasGenerator([prologues, removes]);
 
-    //
-    // Remove Epilogues
-    //
-    const removeEpilogueGenerator = new AliasGenerator([epilogues]);
+//     //
+//     // Remove Epilogues
+//     //
+//     const removeEpilogueGenerator = new AliasGenerator([epilogues]);
 
-    const removalGenerator = new RemovalGenerator(
-        prologueGenerator,
-        productGenerator,
-        epilogueGenerator,
-        2,
-        removePrologueGenerator,
-        removeEpilogueGenerator
-    );
+//     const removalGenerator = new RemovalGenerator(
+//         prologueGenerator,
+//         productGenerator,
+//         epilogueGenerator,
+//         2,
+//         removePrologueGenerator,
+//         removeEpilogueGenerator
+//     );
 
-    const random = new Random("1234");
+//     const random = new Random("1234");
 
-    while (true) {
-        yield createTestCase(
-            world.catalog,
-            removalGenerator.randomGenericEntityRemoval(random)
-        );
-    }
-}
+//     while (true) {
+//         yield createTestCase(
+//             world.catalog,
+//             removalGenerator.randomGenericEntityRemoval(random)
+//         );
+//     }
+// }
 
 
 go();

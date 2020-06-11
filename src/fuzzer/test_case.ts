@@ -1,10 +1,14 @@
 import {
+    GenericCase,
     ICatalog,
     ItemInstance,
+    logicalCartFromCart,
     TestCase,
     TestLineItem, 
     TestOrder,
-    TestStep
+    TestStep,
+    TextTurn,
+    ValidationStep,
 } from 'prix-fixe';
 
 import {
@@ -17,29 +21,43 @@ let counter = 0;
 export function createTestCase(
     catalog: ICatalog,
     steps: StepX[]
-): TestCase {
-    const testSteps: TestStep[] = [];
+): GenericCase<ValidationStep<TextTurn>> {
+// ): TestCase {
+    const testSteps: Array<ValidationStep<TextTurn>> = [];
 
     let items: ItemInstance[] = [];
     for (const order of steps) {
-        const lines: TestLineItem[] = [];
+        // const lines: TestLineItem[] = [];
         items = order.buildItems(items);
-        for (const item of items) {
-            appendItemLines(0, item, lines, catalog);
-        }
+        // for (const item of items) {
+        //     appendItemLines(0, item, lines, catalog);
+        // }
+        const cart = logicalCartFromCart({ items }, catalog);
 
-        const step: TestStep = {
-            rawSTT: order.buildText().join(' '),
-            cart: lines
+        const step: ValidationStep<TextTurn> = {
+            turns: [
+                {
+                    speaker: 'customer',
+                    transcription: order.buildText().join(' '),
+                }
+            ],
+            cart,
         };
         testSteps.push(step);
     }
 
-    const testCase = new TestCase(
-        counter++,
-        ['unverified'],
-        'synthetic',        // TODO: put info in comment?
-        testSteps);
+    // const testCase = new TestCase(
+    //     counter++,
+    //     ['unverified'],
+    //     'synthetic',        // TODO: put info in comment?
+    //     testSteps);
+
+    const testCase: GenericCase<ValidationStep<TextTurn>> = {
+        id: counter++,
+        suites: 'unverified',
+        comment: 'synthetic',
+        steps: testSteps
+    };
 
     return testCase;
 }

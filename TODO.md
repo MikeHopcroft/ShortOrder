@@ -67,6 +67,8 @@ Parser
   * Flattening might be able to catch errors earlier, but there shouldn't be errors.
   * Probably the reason for flattening as we go is that future iterations need the state to interpret targets.
 
+* Singleton options, like the milks and the caffination levels
+  * Fuzzer support, as well
 * TokenSequence.takeIf takes if peek shows expected token.
 * Remove WEAK_ADD
 * Does HypotheticalItem.item need to allow undefined?

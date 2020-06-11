@@ -3,7 +3,15 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { createWorld2, CorrectionLevel} from 'prix-fixe';
+import {
+    createWorld2,
+    CorrectionLevel,
+    enumerateTestCases,
+    GenericCase,
+    TextTurn,
+    ValidationStep,
+    LogicalValidationSuite,
+} from 'prix-fixe';
 
 import { createShortOrderWorld } from '../integration';
 
@@ -135,22 +143,35 @@ export async function runFuzzer(
 
     const world = createWorld2(dataPath);
 
-    const tests: IterableIterator<TestCase> = testCaseGeneratorFactory.get(name, world);
+    const tests = testCaseGeneratorFactory.get(name, world);
 
     ///////////////////////////////////////////////////////////////////////////
     //
     // Run tests as they are generated.
     //
     ///////////////////////////////////////////////////////////////////////////
-    let results: AggregatedResults;
-    if (verify !== undefined) {
-        const processor = processorFactory.get(verify, world, dataPath);
+    // let results: AggregatedResults;
+    // if (verify !== undefined) {
+    //     const processor = processorFactory.get(verify, world, dataPath);
 
-        results = await runTests(tests, world.catalog, processor, count);
-        results.print(!showOnlyFailingCases);
-    } else {
-        results = makeTests(tests, world.catalog, count);
+    //     results = await runTests(tests, world.catalog, processor, count);
+    //     results.print(!showOnlyFailingCases);
+    // } else {
+    //     results = makeTests(tests, world.catalog, count);
+    // }
+    const testCases: Array<GenericCase<ValidationStep<TextTurn>>> = [];
+    let counter = 0;
+    for (const test of tests) {
+        if (counter === count) {
+            break;
+        }
+        ++counter;
+        testCases.push(test);
     }
+    const suite: LogicalValidationSuite<TextTurn> = {
+        comment: process.argv.join(' '),
+        tests: testCases,
+    };
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -158,43 +179,60 @@ export async function runFuzzer(
     //
     ///////////////////////////////////////////////////////////////////////////
     if (outFile !== undefined) {
-        console.log(`Writing ${results.results.length} test cases to ${outFile}.`);
-        const yamlCases = results.rebase();
-        for (const yamlCase of yamlCases) {
-            yamlCase.suites = 'synthetic';
-        }
-        const yamlText = yaml.safeDump(yamlCases, { noRefs: true });
+        console.log(`Writing ${suite.tests.length} test cases to ${outFile}.`);
+        const yamlText = yaml.safeDump(suite, { noRefs: true });
         fs.writeFileSync(outFile, yamlText, 'utf-8');
         console.log(`Test cases written successfully.`);
-    }
-
-    if (verify === undefined && outFile === undefined) {
-        console.log(' ');
-        console.log("*** Performing dry run of test case generation. ***");
-        console.log('Use the "-v" option to run the generated tests.');
-        console.log('Use the "-o" option to write the generated tests to a file.');
-        console.log('');
-
-        let counter = 0;
-        for (const result of results.results) {
-            for (let i = 0; i < result.test.steps.length; ++i) {
-                console.log(`${counter}: "${result.test.steps[i].rawSTT}"`);
-            }
-            if (result.test.steps.length > 1) {
-                console.log(' ');
-            }
-            counter++;
-        }
-        // for (const result of results.results) {
-        //     for (let i = 0; i < result.test.inputs.length; ++i) {
-        //         console.log(`${counter}: "${result.test.inputs[i]}"`);
-        //     }
-        //     if (result.test.inputs.length > 1) {
-        //         console.log(' ');
-        //     }
-        //     counter++;
+        // console.log(`Writing ${results.results.length} test cases to ${outFile}.`);
+        // const yamlCases = results.rebase();
+        // for (const yamlCase of yamlCases) {
+        //     yamlCase.suites = 'synthetic';
         // }
+        // const yamlText = yaml.safeDump(yamlCases, { noRefs: true });
+        // fs.writeFileSync(outFile, yamlText, 'utf-8');
+        // console.log(`Test cases written successfully.`);
+    } else {
+        for (const test of enumerateTestCases(suite)) {
+            console.log(`Test ${test.id}: ${test.comment}`);
+            for (const [i, step] of test.steps.entries()) {
+              console.log(`  Step ${i}`);
+              for (const turn of step.turns) {
+                console.log(`    ${turn.speaker}: ${turn.transcription}`);
+              }
+            }
+            console.log(' ');
+        }
     }
+
+
+
+    // if (verify === undefined && outFile === undefined) {
+    //     console.log(' ');
+    //     console.log("*** Performing dry run of test case generation. ***");
+    //     console.log('Use the "-v" option to run the generated tests.');
+    //     console.log('Use the "-o" option to write the generated tests to a file.');
+    //     console.log('');
+
+    //     let counter = 0;
+    //     for (const result of results.results) {
+    //         for (let i = 0; i < result.test.steps.length; ++i) {
+    //             console.log(`${counter}: "${result.test.steps[i].rawSTT}"`);
+    //         }
+    //         if (result.test.steps.length > 1) {
+    //             console.log(' ');
+    //         }
+    //         counter++;
+    //     }
+    //     // for (const result of results.results) {
+    //     //     for (let i = 0; i < result.test.inputs.length; ++i) {
+    //     //         console.log(`${counter}: "${result.test.inputs[i]}"`);
+    //     //     }
+    //     //     if (result.test.inputs.length > 1) {
+    //     //         console.log(' ');
+    //     //     }
+    //     //     counter++;
+    //     // }
+    // }
 }
 
 export async function runTests(
@@ -254,7 +292,7 @@ export function makeTests(
 //
 ///////////////////////////////////////////////////////////////////////////////
 export type TestCaseGenerator = 
-    (world: World) => IterableIterator<TestCase>;
+    (world: World) => IterableIterator<GenericCase<ValidationStep<TextTurn>>>;
 
 export interface TestCaseGeneratorDescription
 {
@@ -277,7 +315,7 @@ export class TestCaseGeneratorFactory {
         }
     }
 
-    get(name: string, world: World): IterableIterator<TestCase> {
+    get(name: string, world: World): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
         if (this.generators.has(name)) {
             return this.generators.get(name)!.factory(world);
         } else {
