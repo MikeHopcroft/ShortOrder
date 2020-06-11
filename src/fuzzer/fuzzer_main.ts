@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { createWorld, CorrectionLevel} from 'prix-fixe';
+import { createWorld2, CorrectionLevel} from 'prix-fixe';
 
 import { createShortOrderWorld } from '../integration';
 
@@ -132,7 +132,8 @@ export async function runFuzzer(
     }
     console.log('');
 
-    const world = createWorld(dataPath);
+
+    const world = createWorld2(dataPath);
 
     const tests: IterableIterator<TestCase> = testCaseGeneratorFactory.get(name, world);
 

@@ -70,19 +70,22 @@ async function go()
 //
 ///////////////////////////////////////////////////////////////////////////////
 const prologues = [
-    "(ok,okay) [so]",
-    "(all right,alright,alrighty) [so]",
-    "(great,yes,yeah) [so]",
-    "(sure,sure thing)[no problem,not a problem] [so]",
-    "(let's see,you got it,you've got it) [so]",
-    "(no,not a) problem [so]",
+    "(hi,hello,howdy) [there]",
+    "(all right,ok,okay,yes,yeah,let's see) [so]",
+    "(ah,um)",
+    "",
 ];
 
 const epilogues = [
-    "(anything else for, is that all for, is there anything else for) (you, ya) [this morning, this afternoon, this evening, today]",
-    "what else (are we getting, can I get for you) [this morning, this afternoon, this evening, today]",
-    "is that everything (for you, for ya) [this morning, this afternoon, this evening, today]",
-    "(is that everything, is that all, anything else, is there anything else) [for you, for ya]",
+    "I'm (done,good,ready)",
+    "thank you",
+    "thanks",
+    "that's (all,everything,it)",
+    "(that'll,that will,that should) (be,do) (all,everything,it)",
+    "bye",
+    "okay",
+    "how much is that",
+    "",
 ];
 
 interface ProductGenerators {
@@ -229,14 +232,20 @@ function configureProductGenerators(
     // Prologues
     //
     const adds = [
-        "(i'll,i will,we'll,we will) [go ahead and] (add,have)",
-        "(i,i've,i have,we,we've,we have) added"
-
-        // "(that's,that is)",
-        // "(we've got,we have,I have)",
-        // "[I'll] add",
-        // "[I,I've,I have] added",
-    ];
+        "(I'd,I would) [also] like",
+        "(I'll,I will) [also] (do,get,have,take)",
+        "I (need,wanna,want)",
+        "(get,give) me",
+        "(can,could,may) (I,we,you) [just,please] [also] (do,get,have)",
+        "[please] set me up with",
+        "[please] hook me up with",
+        "we need",
+        "we want",
+        "(we'd,we would) [also] like",
+        "(we'll, we will) [also] have",
+        "how about",
+        "[please,also] add",
+      ];
     const prologueGenerator = new AliasGenerator([prologues, adds]);
 
     //
@@ -301,8 +310,8 @@ function* remove(
     //
     // Remove Prologues
     //
-    const removes = [ 
-        "[i,i've,i have,i'll,i will,we,we've,we have,we'll,we will] (lose,cancell,took off,take off,remove)",
+    const removes = [
+        "[can we,can you,would you,i want to,i'd like to,please] (cancel,delete,drop,eighty six,lose,remove,removed,skip,take off,take away) [the]",
     ];
     const removePrologueGenerator = new AliasGenerator([prologues, removes]);
 
