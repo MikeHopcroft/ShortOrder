@@ -55,7 +55,9 @@ export class ProductGenerator {
             if (random.randomBoolean()) {
                 options.push(generator.randomAttributedOption(random));
             } else {
-                options.push(generator.randomQuantifiedOption(random));
+                options.push(
+                    generator.randomQuantifiedOption(entity.key, random)
+                );
             }
         }
 
@@ -71,7 +73,6 @@ export class ProductGenerator {
     }
 
     randomOptions(key: Key, count: number, random: Random): OptionGenerator[] {
-        const pool = [...this.rules.getValidChildren(key)];
         const pids = this.randomChooseNCompatibleChildren(key, count, random);
 
         const generators: OptionGenerator[] = [];

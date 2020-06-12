@@ -1,9 +1,10 @@
 import {
     AttributeInfo,
     ICatalog,
+    IRuleChecker,
     Key,
     PID,
-    TID
+    TID,
 } from 'prix-fixe';
 
 import { AttributeGenerator } from './attribute_generator';
@@ -29,6 +30,7 @@ export type PositionPredicate = (alias:string) => Position;
 export class OptionGenerator {
     attributeInfo: AttributeInfo;
     attributes: AttributeGenerator;
+    rules: IRuleChecker;
     pid: PID;
     keys: Key[];
     defaultKey: Key;
@@ -41,21 +43,22 @@ export class OptionGenerator {
         attributeInfo: AttributeInfo,
         attributeGenerator: AttributeGenerator,
         catalog: ICatalog,
+        rules: IRuleChecker,
         pid: PID,
         positionPredicate: PositionPredicate,
         leftQuantifiers: QuantityX[],
         rightQuantifiers: QuantityX[]
     ) {
         this.attributeInfo = attributeInfo;
-        this.pid = pid;
-
-        this.keys = [...catalog.getSpecificsForGeneric(pid)];
-        this.defaultKey = catalog.getGeneric(pid).defaultKey;
-
         this.attributes = attributeGenerator;
+        this.rules = rules;
+        this.pid = pid;
         this.positionPredicate = positionPredicate;
         this.leftQuantifiers = leftQuantifiers;
         this.rightQuantifiers = rightQuantifiers;
+
+        this.keys = [...catalog.getSpecificsForGeneric(pid)];
+        this.defaultKey = catalog.getGeneric(pid).defaultKey;
 
         const item = catalog.getGeneric(pid);
         this.aliases = [...aliasesFromOneItem(item)];
@@ -77,7 +80,7 @@ export class OptionGenerator {
         );
     }
 
-    randomQuantifiedOption(random: Random): OptionX {
+    randomQuantifiedOption(parent: Key, random: Random): OptionX {
         const key = this.defaultKey;
 
         let position: Position = LEFT;
@@ -85,8 +88,19 @@ export class OptionGenerator {
             position = RIGHT;
         }
 
-        const quantity = random.randomChoice(
-            position === LEFT ? this.leftQuantifiers: this.rightQuantifiers);
+        let quantity = random.randomChoice(
+            position === LEFT ? this.leftQuantifiers: this.rightQuantifiers
+        );
+
+        // Special case if quantifier not allowed for this parent-child
+        // combination. Just use an empty-string QuantityX.
+        const info = this.rules.getQuantityInfo(parent, key);
+        if (info && info.minQty === 1 && info.maxQty === 1) {
+            quantity = {
+                text: '',
+                value: 1
+            };
+        }
 
         const alias = random.randomChoice(this.aliases);
 

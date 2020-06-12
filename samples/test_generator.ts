@@ -138,7 +138,7 @@ function configureProductGenerators(
         new QuantityX(3, 'three'),
     ];
 
-    const entityBlackList = new Set<PID>([2122273]);
+    const entityBlackList = new Set<PID>([]);
     const entityPIDs: PID[] = [];
     for (const entity of world.catalog.genericEntities()) {
         // Skip over items that don't have aliases.
@@ -213,6 +213,7 @@ function configureProductGenerators(
             world.attributeInfo,
             attributes,
             world.catalog,
+            world.ruleChecker,
             pid,
             optionPositionPredicate,
             optionLeftQuantites,

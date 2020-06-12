@@ -80,7 +80,7 @@ Parser
   * fuzzerC2
     * Investigate long processing times
   * Don't fuzz ambiguous options - e.g. "almond milk" and "almond syrup"
-  * Singleton options - e.g. "two pump one third caf", "three pump lid lattes"
+  * x Singleton options - e.g. "two pump one third caf", "three pump lid lattes"
   * Correct units
   * Why are most drinks "small"?
   * Finish porting remove

@@ -236,7 +236,8 @@ export class EntityBuilderBase {
                     option.id,
                     [attribute.id].values(),
                     [].values(),
-                    this.generateRegexOptions);
+                    this.generateRegexOptions
+                );
                 this.options.push(item);
                 this.optionTokenCounts.push(2);
                 tokens.take(2);
@@ -254,6 +255,7 @@ export class EntityBuilderBase {
             const quantity = tokens.peek(0) as NumberToken;
             const option = tokens.peek(2) as OptionToken;
             const item = this.cartOps.createItem(
+                // NEED to clamp value to legal ranges or fail if out of range
                 quantity.value,
                 option.id,
                 [].values(),
@@ -270,6 +272,7 @@ export class EntityBuilderBase {
             const quantity = tokens.peek(0) as NumberToken;
             const option = tokens.peek(1) as OptionToken;
             const item = this.cartOps.createItem(
+                // NEED to clamp value to legal ranges or fail if out of range
                 quantity.value,
                 option.id,
                 [].values(),
@@ -289,7 +292,8 @@ export class EntityBuilderBase {
                 option.id,
                 [].values(),
                 [].values(),
-                this.generateRegexOptions);
+                this.generateRegexOptions
+            );
             this.options.push(item);
             this.optionTokenCounts.push(1);
             tokens.take(1);

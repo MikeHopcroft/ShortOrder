@@ -348,26 +348,28 @@ catalog:
 rules:
   - parents: [latte_drinks]
     children: 
+      - sweeteners
+      - syrups
+      - toppings
+  - parents: [latte_drinks, coffee_drinks, espresso_drinks]
+    children:
       - caffeines
       - here-or-to-go
       - latte_preparations
       - milks
-      - sweeteners
-      - syrups
-      - toppings
       - wet-or-dry
+    info:
+      minQty: 1
+      maxQty: 1
+      defaultQty: 1
   - parents: [coffee_drinks, espresso_drinks]
     children: 
-      - caffeines
       - creamers
-      - here-or-to-go
-      - latte_preparations
       - sweeteners
       - syrups
       - toppings
   - parents: [coffee_drinks, espresso_drinks, latte_drinks]
     exclusive: [milks, caffeines, here-or-to-go, wet-or-dry]
-# recipes: []
 recipes:
   - name: double double
     aliases: [double double]
