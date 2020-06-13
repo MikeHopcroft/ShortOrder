@@ -18,6 +18,7 @@ import {
     QuantityX,
     RIGHT,
     Position,
+    Quantifiers,
 } from './fuzzer';
 
 import {
@@ -46,16 +47,23 @@ export class OptionGenerator {
         rules: IRuleChecker,
         pid: PID,
         positionPredicate: PositionPredicate,
-        leftQuantifiers: QuantityX[],
-        rightQuantifiers: QuantityX[]
+        quantifiers: Quantifiers
     ) {
         this.attributeInfo = attributeInfo;
         this.attributes = attributeGenerator;
         this.rules = rules;
         this.pid = pid;
         this.positionPredicate = positionPredicate;
-        this.leftQuantifiers = leftQuantifiers;
-        this.rightQuantifiers = rightQuantifiers;
+
+        const units = rules.getUnits(pid) || 'default';
+        const q = quantifiers.get(units);
+        if (q) {
+            this.leftQuantifiers = q.left;
+            this.rightQuantifiers = q.right;
+        } else {
+            const message = `No quantifiers specified for ${units}`;
+            throw new TypeError(message);
+        }
 
         this.keys = [...catalog.getSpecificsForGeneric(pid)];
         this.defaultKey = catalog.getGeneric(pid).defaultKey;

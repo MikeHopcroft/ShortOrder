@@ -222,13 +222,12 @@ export class ShortOrderReplExtension implements IReplExtension {
         repl.getReplServer().defineCommand('menu', {
             help: "Display menu",
             action: (line: string) => {
-                const catalog = this.world.catalog;
                 const world = this.world;
 
                 if (line.length === 0) {
                     // No Key or PID was specified. Print out name of all of the
                     // MENUITEM generics.
-                    printCatalog(catalog, MENUITEM);
+                    printCatalog(world, MENUITEM);
                 }
                 else if (line.indexOf(':') !== -1) {
                     // This is a specific entity. Just print out its options.

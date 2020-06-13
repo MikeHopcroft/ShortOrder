@@ -79,9 +79,16 @@ Parser
     * x Why are they being generated? Same BUG in rules checker.
   * fuzzerC2
     * Investigate long processing times
+  * Peephole filter 
+    * "with without" => "without"
+    * "with extra shot" => "with an extra shot"
+    * "with lid" => "with a lid"
+    * "with yellow packet" => "with a yellow packet"
+    * "that should do all"
+    * "slightly less blue packet" - this might be a tensor error - should packets have attributes?
   * Don't fuzz ambiguous options - e.g. "almond milk" and "almond syrup"
   * x Singleton options - e.g. "two pump one third caf", "three pump lid lattes"
-  * Correct units
+  * x Correct units
   * Why are most drinks "small"?
   * Finish porting remove
   * Verify while generating?

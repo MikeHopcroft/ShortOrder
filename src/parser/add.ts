@@ -142,11 +142,12 @@ export function parseAdd(
     if (interpretations.length > 0) {
         // We found at least one interpretation.
         // Sort interpretations by decreasing score.
+        // TODO: Generalize compare function here?
         interpretations.sort((a, b) => b.score - a.score);
 
         // Return the highest scoring interpretation.
         // TODO: when there is more than one top-scoring interpretations,
-        // probably want to pick the one that associates right.
+        // probably want to pick the one that associates right. Look at this
         return interpretations[0];
     } else {
         // We didn't find any interpretations.
@@ -163,7 +164,7 @@ function interpretSegmentArray(parser: Parser, segments: Segment[]): Interpretat
         const x = interpretOneSegment(parser, segment);
         if (x.item !== undefined) {
             score += x.score;
-            tokenCount2 += segmentLength(segment);
+            tokenCount2 += segmentLength(segment); // TODO: Why not x.tokenCount?
             items.push(x.item);
         }
     }

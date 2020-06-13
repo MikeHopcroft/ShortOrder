@@ -24,6 +24,8 @@ export class QuantityX {
     }
 }
 
+export type Quantifiers = Map<string, {left: QuantityX[], right: QuantityX[]}>;
+
 export interface ModifierX {
     text: string;
     position: Position;

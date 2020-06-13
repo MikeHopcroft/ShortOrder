@@ -142,6 +142,7 @@ catalog:
   - type: option
     items:
     - tags: [syrups]
+      units: pump
       tensor: options
       default: [regular]
       items:
@@ -232,6 +233,7 @@ catalog:
           aliases:
             - "eggnog"
     - tags: [creamers]
+      units: splash
       tensor: none
       items:
         - name: whole milk creamer
@@ -272,6 +274,7 @@ catalog:
       default: [regular]
       items:
         - name: cinnamon
+          units: dash
           aliases:
             - cinnamon
         - name: foam
@@ -281,6 +284,7 @@ catalog:
           aliases:
             - ice
         - name: nutmeg
+          units: dash
           aliases:
             - nutmeg
         - name: whipped cream
@@ -321,6 +325,7 @@ catalog:
       default: [regular]
       items:
         - name: equal
+          units: packet
           aliases:
             - equal
             - blue packet
@@ -328,17 +333,21 @@ catalog:
           aliases:
             - honey
         - name: splenda
+          units: packet
           aliases:
             - splenda
             - yellow packet
         - name: sugar
+          units: packet
           aliases:
             - sugar
         - name: sugar in the raw
+          units: packet
           aliases:
             - sugar in the raw
             - raw sugar
         - name: sweet n low
+          units: packet
           aliases:
             - sweet n low
             - pink packet

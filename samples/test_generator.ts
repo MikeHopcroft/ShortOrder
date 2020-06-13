@@ -31,6 +31,7 @@ import {
     RemovalGenerator,
     RIGHT,
     TestCaseGeneratorFactory,
+    Quantifiers,
 } from '../src';
 
 
@@ -189,6 +190,115 @@ function configureProductGenerators(
         new QuantityX(3, 'three pumps of'),
     ];
 
+    const quantifiers = new Map<
+        string,
+        {left: QuantityX[], right: QuantityX[]}
+    >([
+        [
+            'dash',
+            {
+                left: [
+                    new QuantityX(1, 'one dash'),
+                    new QuantityX(1, 'one sprinkle'),
+                    new QuantityX(1, 'two dash'),
+                    new QuantityX(1, 'two sprinkle'),
+                    new QuantityX(1, 'three dash'),
+                    new QuantityX(1, 'three sprinkle'),
+                ],
+                right: [
+                    new QuantityX(1, 'a bit of'),
+                    new QuantityX(1, 'some'),
+                    new QuantityX(1, 'a dash of'),
+                    new QuantityX(1, 'one dash of'),
+                    new QuantityX(2, 'two dashes of'),
+                    new QuantityX(3, 'three dashes of'),            
+                    new QuantityX(1, 'a sprinkle of'),
+                    new QuantityX(1, 'one sprinkle of'),
+                    new QuantityX(2, 'two sprinkle of'),
+                    new QuantityX(3, 'three sprinkle of'),            
+                ],
+            }
+        ],
+        [
+            'default',
+            {
+                left: [
+                    new QuantityX(1, ''),
+                ],
+                right: [
+                    new QuantityX(1, ''),
+                ],
+            }
+        ],
+        [
+            'packet',
+            {
+                left: [
+                    new QuantityX(1, 'one'),
+                    new QuantityX(2, 'two'),
+                    new QuantityX(3, 'three'),
+                ],
+                right: [
+                    new QuantityX(1, 'some'),
+                    new QuantityX(1, 'a packet of'),
+                    new QuantityX(1, 'one packet of'),
+                    new QuantityX(2, 'two packets of'),
+                    new QuantityX(3, 'three packets of'),
+                    new QuantityX(1, 'a pack of'),
+                    new QuantityX(1, 'one pack of'),
+                    new QuantityX(2, 'two packs of'),
+                    new QuantityX(3, 'three packs of'),
+                    new QuantityX(1, 'a package of'),
+                    new QuantityX(1, 'one package of'),
+                    new QuantityX(2, 'two packages of'),
+                    new QuantityX(3, 'three packages of'),
+                ],
+            }
+        ],
+        [
+            'pump',
+            {
+                left: [
+                    new QuantityX(1, ''),
+                    new QuantityX(1, 'one pump'),
+                    new QuantityX(2, 'two pump'),
+                    new QuantityX(3, 'three pump'),
+                    new QuantityX(1, 'one squirt'),
+                    new QuantityX(2, 'two squirt'),
+                    new QuantityX(3, 'three squirt'),
+                ],
+                right: [
+                    new QuantityX(1, 'some'),
+                    new QuantityX(1, 'a pump of'),
+                    new QuantityX(1, 'one pump of'),
+                    new QuantityX(2, 'two pumps of'),
+                    new QuantityX(3, 'three pumps of'),
+                    new QuantityX(1, 'a squirt of'),
+                    new QuantityX(1, 'one squirt of'),
+                    new QuantityX(2, 'two squirts of'),
+                    new QuantityX(3, 'three squirts of'),
+                ],
+            }
+        ],
+        [
+            'splash',
+            {
+                left: [
+                    new QuantityX(1, 'one'),
+                    new QuantityX(2, 'two'),
+                    new QuantityX(3, 'three'),
+                ],
+                right: [
+                    new QuantityX(1, 'a splash of'),
+                    new QuantityX(1, 'some'),
+                    new QuantityX(1, 'one splash of'),
+                    new QuantityX(2, 'two splashes of'),
+                    new QuantityX(3, 'three splashes of'),
+                ],
+            }
+        ],
+    ]);
+
     const optionPositionPredicate = (alias: string): Position => {
         return EITHER;
     };
@@ -216,8 +326,7 @@ function configureProductGenerators(
             world.ruleChecker,
             pid,
             optionPositionPredicate,
-            optionLeftQuantites,
-            optionRightQuantites,
+            quantifiers
         );
         optionGenerators.push(generator);
     }
