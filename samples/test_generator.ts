@@ -110,18 +110,11 @@ function configureProductGenerators(
     //
     // Attributes
     //
-
-    // TODO: These should map DID to Position.
-    const positions = new Map<AID, Position>();
-    // Latte sizes restricted to LEFT
-    positions.set(1, LEFT);
-    positions.set(2, LEFT);
-    positions.set(3, LEFT);
-    // Espresso sizes restricted to LEFT
-    positions.set(50, LEFT);
-    positions.set(51, LEFT);
-    positions.set(52, LEFT);
-    positions.set(53, LEFT);
+    const positions = new Map<string, Position>([
+        ['coffee_size', LEFT],
+        ['espresso_size', LEFT],
+        ['option_quantity', LEFT],
+    ]);
 
     const attributes = new AttributeGenerator(
         world.attributeInfo,
@@ -155,9 +148,12 @@ function configureProductGenerators(
             continue;
         }
 
-        if (entity.name.indexOf('latte') !== -1) {
-            entityPIDs.push(entity.pid);
-        }
+        // // TEMPORARY code to restrict fuzzer to products
+        // // with 'latte' in their names.
+        // if (entity.name.indexOf('latte') !== -1) {
+        //     entityPIDs.push(entity.pid);
+        // }
+        entityPIDs.push(entity.pid);
     }
 
     const entityGenerators: EntityGenerator[] = [];
@@ -175,21 +171,9 @@ function configureProductGenerators(
     //
     // Options
     //
-    const optionLeftQuantites: QuantityX[] = [
-        new QuantityX(1, ''),
-        new QuantityX(1, 'one pump'),
-        new QuantityX(2, 'two pump'),
-        new QuantityX(3, 'three pump'),
-    ];
-
-    const optionRightQuantites: QuantityX[] = [
-        new QuantityX(1, 'a pump of'),
-        new QuantityX(1, 'some'),
-        new QuantityX(1, 'one pump of'),
-        new QuantityX(2, 'two pumps of'),
-        new QuantityX(3, 'three pumps of'),
-    ];
-
+    // TODO: consider putting the option position hints into
+    // the menu as annotations.
+    //
     const quantifiers = new Map<
         string,
         {left: QuantityX[], right: QuantityX[]}
@@ -200,10 +184,10 @@ function configureProductGenerators(
                 left: [
                     new QuantityX(1, 'one dash'),
                     new QuantityX(1, 'one sprinkle'),
-                    new QuantityX(1, 'two dash'),
-                    new QuantityX(1, 'two sprinkle'),
-                    new QuantityX(1, 'three dash'),
-                    new QuantityX(1, 'three sprinkle'),
+                    new QuantityX(1, 'two dashes'),
+                    new QuantityX(1, 'two sprinkles'),
+                    new QuantityX(1, 'three dashes'),
+                    new QuantityX(1, 'three sprinkles'),
                 ],
                 right: [
                     new QuantityX(1, 'a bit of'),
@@ -214,8 +198,8 @@ function configureProductGenerators(
                     new QuantityX(3, 'three dashes of'),            
                     new QuantityX(1, 'a sprinkle of'),
                     new QuantityX(1, 'one sprinkle of'),
-                    new QuantityX(2, 'two sprinkle of'),
-                    new QuantityX(3, 'three sprinkle of'),            
+                    new QuantityX(2, 'two sprinkles of'),
+                    new QuantityX(3, 'three sprinkles of'),            
                 ],
             }
         ],
@@ -299,8 +283,29 @@ function configureProductGenerators(
         ],
     ]);
 
-    const optionPositionPredicate = (alias: string): Position => {
-        return EITHER;
+    const optionPositions = new Map<string, Position>([
+        ['foam', RIGHT],
+        ['ice', RIGHT],
+        ['whipped cream', RIGHT],
+        ['water', RIGHT],
+        ['for here cup', RIGHT],
+        ['lid', RIGHT],
+        ['with room', RIGHT],
+        ['to go', RIGHT],
+        ['equal', RIGHT],
+        ['honey', RIGHT],
+        ['splenda', RIGHT],
+        ['sugar', RIGHT],
+        ['sugar in the raw', RIGHT],
+        ['sweet n low', RIGHT],
+        ['espresso shot', RIGHT],
+        ['butter', RIGHT],
+        ['strawberry jam', RIGHT],
+        ['warmed', RIGHT],
+        ['cut in half', RIGHT],
+    ]);
+    const optionPositionPredicate = (name: string): Position => {
+        return optionPositions.get(name) || EITHER;
     };
 
     const optionPIDs: PID[] = [];

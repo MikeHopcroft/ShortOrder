@@ -4,7 +4,6 @@ import {
     IRuleChecker,
     Key,
     PID,
-    TID,
 } from 'prix-fixe';
 
 import { AttributeGenerator } from './attribute_generator';
@@ -14,11 +13,11 @@ import {
     EITHER,
     LEFT,
     OptionX,
+    Position,
     QuantifiedOptionX,
+    Quantifiers,
     QuantityX,
     RIGHT,
-    Position,
-    Quantifiers,
 } from './fuzzer';
 
 import {
@@ -33,6 +32,7 @@ export class OptionGenerator {
     attributes: AttributeGenerator;
     rules: IRuleChecker;
     pid: PID;
+    name: string;
     keys: Key[];
     defaultKey: Key;
     positionPredicate: PositionPredicate;
@@ -54,6 +54,9 @@ export class OptionGenerator {
         this.rules = rules;
         this.pid = pid;
         this.positionPredicate = positionPredicate;
+
+        this.name = catalog.getGeneric(pid).name;
+        console.log(`name=${this.name}`);
 
         const units = rules.getUnits(pid) || 'default';
         const q = quantifiers.get(units);
@@ -78,7 +81,10 @@ export class OptionGenerator {
         const attributes = this.attributes.get(aids, random);
 
         const alias = random.randomChoice(this.aliases);
-        const position = this.positionPredicate(alias);
+        const position = this.positionPredicate(this.name);
+        console.log(`position for ${this.name} is ${
+            position === LEFT ? 'LEFT' : position === RIGHT ? 'RIGHT' : 'EITHER'
+        }`);
 
         return new AttributedOptionX(
             attributes,
@@ -91,9 +97,9 @@ export class OptionGenerator {
     randomQuantifiedOption(parent: Key, random: Random): OptionX {
         const key = this.defaultKey;
 
-        let position: Position = LEFT;
-        if (random.randomBoolean()) {
-            position = RIGHT;
+        let position = this.positionPredicate(this.name);
+        if (position === EITHER) {
+            position = random.randomBoolean() ? RIGHT : LEFT;
         }
 
         let quantity = random.randomChoice(

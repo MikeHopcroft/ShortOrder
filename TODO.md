@@ -86,6 +86,21 @@ Parser
     * "with yellow packet" => "with a yellow packet"
     * "that should do all"
     * "slightly less blue packet" - this might be a tensor error - should packets have attributes?
+  * Suppress "regular" as in "with room regular"
+  * articles before some singletons and now others. Need idea of quantifiable
+    * with a lid
+    * cut in half
+    * warmed
+    * togo
+    * with a shot (not with shot)
+    * with travelling
+    * with caffeinated
+    * with none hazelnut
+  * No "with" in some cases
+    * with warmed
+    * with for here
+  * Should have conjunction between right attribute and options
+    * ah add three venti latte macchiatoes with one third decaf iced (HERE) ice and without sugar in the raw that should be everything
   * Don't fuzz ambiguous options - e.g. "almond milk" and "almond syrup"
   * x Singleton options - e.g. "two pump one third caf", "three pump lid lattes"
   * x Correct units
