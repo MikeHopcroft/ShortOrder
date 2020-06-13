@@ -3,26 +3,26 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as minimist from 'minimist';
 import * as path from 'path';
+
 import {
+    AggregatedResults,
     createWorld2,
     CorrectionLevel,
     enumerateTestCases,
     GenericCase,
+    ICatalog,
+    LogicalValidationSuite,
+    Processor,
+    Result,
+    TestCase,
     TextTurn,
     ValidationStep,
-    LogicalValidationSuite,
+    World,
 } from 'prix-fixe';
 
 import { createShortOrderWorld } from '../integration';
 
-import {
-    AggregatedResults,
-    ICatalog,
-    Processor,
-    Result,
-    TestCase,
-    World
-} from 'prix-fixe';
+import { Random } from './utilities';
 
 
 export async function fuzzerMain(
@@ -57,13 +57,15 @@ export async function fuzzerMain(
         console.log('Use -d flag or PRIX_FIXE_DATA environment variable to specify data path');
         return;
     }
-   
+
+    const seed = args.s || 'default';
 
     if (help) {
         showUsage(processorFactory, testCaseGeneratorFactory, defaultCount);
     }
     else {
         runFuzzer(
+            seed,
             testCaseGeneratorFactory,
             processorFactory,
             dataPath,
@@ -82,6 +84,7 @@ function showUsage(
 ) {
     const program = path.basename(process.argv[1]);
 
+    // TODO: Command line usage
     console.log('Test case generator');
     console.log('');
     console.log(`Usage: node ${program} [-d datapath] [-n count] [-o outfile] [-v] [-h|help|?]`);
@@ -97,6 +100,7 @@ function showUsage(
     console.log(`                (default is ${defaultCount})`);
     console.log('-o outfile      Write cases to YAML file.');
     console.log('                Without -o, cases will be printed to the console.');
+    console.log('-s seed         Seed for random number generator.');
     console.log('-t [generator]  Use the named test case generator.');
     console.log(`                (default is '-t=${testCaseGeneratorFactory.getDefaultName()}').`);
     console.log('-v [processor]  Run the generated cases with the specified processor.');
@@ -119,6 +123,7 @@ function showUsage(
 }
 
 export async function runFuzzer(
+    seed: string,
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
     processorFactory: ProcessorFactory,
     dataPath: string,
@@ -140,10 +145,12 @@ export async function runFuzzer(
     }
     console.log('');
 
-
     const world = createWorld2(dataPath);
 
-    const tests = testCaseGeneratorFactory.get(name, world);
+    console.log(`Random number seed = "${seed}"`);
+    const random = new Random(seed);
+
+    const tests = testCaseGeneratorFactory.get(name, world, random);
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -291,8 +298,10 @@ export function makeTests(
 // TestCaseGeneratorFactory
 //
 ///////////////////////////////////////////////////////////////////////////////
-export type TestCaseGenerator = 
-    (world: World) => IterableIterator<GenericCase<ValidationStep<TextTurn>>>;
+export type TestCaseGenerator = (
+    world: World,
+    random: Random
+) => IterableIterator<GenericCase<ValidationStep<TextTurn>>>;
 
 export interface TestCaseGeneratorDescription
 {
@@ -315,9 +324,13 @@ export class TestCaseGeneratorFactory {
         }
     }
 
-    get(name: string, world: World): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
+    get(
+        name: string,
+        world: World,
+        random: Random
+    ): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
         if (this.generators.has(name)) {
-            return this.generators.get(name)!.factory(world);
+            return this.generators.get(name)!.factory(world, random);
         } else {
             const message = `Unknown test case generator "${name}".`;
             throw TypeError(message);

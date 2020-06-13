@@ -82,9 +82,9 @@ export class OptionGenerator {
 
         const alias = random.randomChoice(this.aliases);
         const position = this.positionPredicate(this.name);
-        console.log(`position for ${this.name} is ${
-            position === LEFT ? 'LEFT' : position === RIGHT ? 'RIGHT' : 'EITHER'
-        }`);
+        // console.log(`position for ${this.name} is ${
+        //     position === LEFT ? 'LEFT' : position === RIGHT ? 'RIGHT' : 'EITHER'
+        // }`);
 
         return new AttributedOptionX(
             attributes,

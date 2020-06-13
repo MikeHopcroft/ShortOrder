@@ -242,24 +242,28 @@ export class SegmentX {
         // Last right modifier in a sequence of two or more is preceded by 'and'.
         let beforeWith = true;
         for (const [index, modifier] of this.right.entries()) {
-            if (beforeWith && 
-                // TODO: use instanceof
-                modifier.isOption()
-            ) {
-                beforeWith = false;
-                words.push('with');
+            if (modifier.text === '') {
+                continue;
             }
-            else if (
-                index === this.right.length - 1 &&
-                // TODO: use instanceOf
-                modifier.isOption()
-            ) {
-                words.push('and');
+            if (modifier.isOption()) {
+                if (beforeWith) {
+                    beforeWith = false;
+                    words.push('with');
+                } else if (index === this.right.length - 1) {
+                    words.push('and');
+                }
+            } else {
+                beforeWith = true;
             }
             words.push(modifier.text);
         }
 
-        if (words.length >= 2 && words[0] === 'a' && startsWithEnglishVowel(words[1])) {
+        // Move this to a peephole optimization stage.
+        // Should also handle with/without
+        if (
+            words.length >= 2 && words[0] === 'a' && 
+            startsWithEnglishVowel(words[1])
+        ) {
             words[0] = 'an';
         }
 

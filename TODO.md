@@ -75,6 +75,12 @@ Parser
 * Simplified catalog dump - for groups evaluating algorithms
 * Fuzzer
   * Top
+    * Enable remove
+    * Implement modify
+    * Restore verify while generating
+    * x -s=seed command line parameter for random number generator
+    * "cup of" should be units for coffee, not part of name
+      * problem is pluralization: "cup of dark roasts" vs "cups of dark roast"
     * nearly every drink is iced
       * Replacing hidden options with '' leads to double space gaps.
     * shots should not have a tensor
@@ -84,6 +90,7 @@ Parser
     * with travelling => "travelling"
     * "with wet" => "wet"
     * "with lid" => "with a lid"
+    * "with to go cup" => "in a to go cup"
   * fuzzerB:81
     * x Why are all three mutually exclusive milks being added? BUG in rules checker.
     * x Why are they being generated? Same BUG in rules checker.
