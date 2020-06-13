@@ -81,11 +81,13 @@ const prologues = [
 ];
 
 const epilogues = [
-    "I'm (done,good,ready)",
+    "(I'm,I am,we're,we are) (done,good)",
+    "(I'm,I am,we're,we are) ready to (pay, check out)",
     "thank you",
     "thanks",
     "that's (all,everything,it)",
-    "(that'll,that will,that should) (be,do) (all,everything,it)",
+    "(that'll,that will,that should) (be) (all,everything)",
+    "(that'll,that will,that should) (do) (it)",
     "bye",
     "okay",
     "how much is that",
@@ -283,6 +285,7 @@ function configureProductGenerators(
         ],
     ]);
 
+    // TODO: consider getting these from menu annotations.
     const optionPositions = new Map<string, Position>([
         ['foam', RIGHT],
         ['ice', RIGHT],
@@ -303,6 +306,17 @@ function configureProductGenerators(
         ['strawberry jam', RIGHT],
         ['warmed', RIGHT],
         ['cut in half', RIGHT],
+        ['whole milk creamer', RIGHT],
+        ['two percent milk creamer', RIGHT],
+        ['one percent milk creamer', RIGHT],
+        ['nonfat milk creamer', RIGHT],
+        ['coconut milk creamer', RIGHT],
+        ['soy milk creamer', RIGHT],
+        ['almond milk creamer', RIGHT],
+        ['oat milk creamer', RIGHT],
+        ['eggnog creamer', RIGHT],
+        ['half and half', RIGHT],
+        ['heavy cream', RIGHT],
     ]);
     const optionPositionPredicate = (name: string): Position => {
         return optionPositions.get(name) || EITHER;
@@ -349,12 +363,13 @@ function configureProductGenerators(
     //
     // Prologues
     //
+    // TODO: consider getting these from the lexicon.
     const adds = [
         "(I'd,I would) [also] like",
         "(I'll,I will) [also] (do,get,have,take)",
         "I (need,wanna,want)",
         "(get,give) me",
-        "(can,could,may) (I,we,you) [just,please] [also] (do,get,have)",
+        "(can,could,may) (I,we,you) [just,please] [also] (do,get,get me,get us,have)",
         "[please] set me up with",
         "[please] hook me up with",
         "we need",
@@ -395,7 +410,6 @@ function* generateOrders(
     segmentCountRange: [number, number],
     optionCount: [number, number]
 ): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
-// ): IterableIterator<TestCase> {
     const {prologueGenerator, productGenerator, epilogueGenerator} =
         configureProductGenerators(world, optionCount);
 

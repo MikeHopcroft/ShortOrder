@@ -22,16 +22,11 @@ export function createTestCase(
     catalog: ICatalog,
     steps: StepX[]
 ): GenericCase<ValidationStep<TextTurn>> {
-// ): TestCase {
     const testSteps: Array<ValidationStep<TextTurn>> = [];
 
     let items: ItemInstance[] = [];
     for (const order of steps) {
-        // const lines: TestLineItem[] = [];
         items = order.buildItems(items);
-        // for (const item of items) {
-        //     appendItemLines(0, item, lines, catalog);
-        // }
         const cart = logicalCartFromCart({ items }, catalog);
 
         const step: ValidationStep<TextTurn> = {
@@ -45,12 +40,6 @@ export function createTestCase(
         };
         testSteps.push(step);
     }
-
-    // const testCase = new TestCase(
-    //     counter++,
-    //     ['unverified'],
-    //     'synthetic',        // TODO: put info in comment?
-    //     testSteps);
 
     const testCase: GenericCase<ValidationStep<TextTurn>> = {
         id: counter++,

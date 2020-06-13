@@ -37,14 +37,15 @@ export class AttributeGenerator {
             const position = positions.get(dimension.name) || EITHER;
             for (const attribute of dimension.attributes) {
                 const ax: AttributeX[] = [];
-                if (!attribute.hidden) {
+                // if (!attribute.hidden) {
                     for (const alias of attribute.aliases) {
                         const pattern = patternFromExpression(alias);
                         for (const text of generateAliases(pattern)) {
-                            ax.push(new AttributeX(attribute.aid, text, position));
+                            const t = attribute.hidden ? '' : text;
+                            ax.push(new AttributeX(attribute.aid, t, position));
                         }
                     }
-                }
+                // }
                 this.attributes.set(attribute.aid, ax);
             }
         }

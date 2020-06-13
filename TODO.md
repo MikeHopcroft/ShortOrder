@@ -74,6 +74,16 @@ Parser
   * // TODO: these counts don't include the intent token.
 * Simplified catalog dump - for groups evaluating algorithms
 * Fuzzer
+  * Top
+    * nearly every drink is iced
+      * Replacing hidden options with '' leads to double space gaps.
+    * shots should not have a tensor
+    * options without a tensor should only be quantified
+    * with without =? with
+    * with/without polarity change introduces "and"
+    * with travelling => "travelling"
+    * "with wet" => "wet"
+    * "with lid" => "with a lid"
   * fuzzerB:81
     * x Why are all three mutually exclusive milks being added? BUG in rules checker.
     * x Why are they being generated? Same BUG in rules checker.
@@ -86,7 +96,13 @@ Parser
     * "with yellow packet" => "with a yellow packet"
     * "that should do all"
     * "slightly less blue packet" - this might be a tensor error - should packets have attributes?
-  * Suppress "regular" as in "with room regular"
+    * shots should not have light, extra, etc. Same for
+      * lids
+      * warmed
+      * cut in half
+      * to go
+      * for here - recipe?
+  * x Suppress "regular" as in "with room regular" - this was "regular caffeine"
   * articles before some singletons and now others. Need idea of quantifiable
     * with a lid
     * cut in half

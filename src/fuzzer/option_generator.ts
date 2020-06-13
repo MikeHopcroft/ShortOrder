@@ -56,7 +56,7 @@ export class OptionGenerator {
         this.positionPredicate = positionPredicate;
 
         this.name = catalog.getGeneric(pid).name;
-        console.log(`name=${this.name}`);
+        // console.log(`name=${this.name}`);
 
         const units = rules.getUnits(pid) || 'default';
         const q = quantifiers.get(units);

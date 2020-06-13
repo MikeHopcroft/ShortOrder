@@ -51,7 +51,7 @@ dimensions:
         aliases: 
           - 'no'
           - without
-          - none
+          # - none      # Consider removing this alias. Bad for fuzzer.
           - with no
       - name: light
         aliases:
@@ -181,7 +181,7 @@ catalog:
       items:
         - name: regular
           aliases:
-            - regular
+            - regular caffeine
             - "[fully] caffeinated"
             - full caf
         - name: two thirds caf
@@ -328,7 +328,7 @@ catalog:
           units: packet
           aliases:
             - equal
-            - blue packet
+            - blue (packet,sweetener)
         - name: honey
           aliases:
             - honey
@@ -336,7 +336,7 @@ catalog:
           units: packet
           aliases:
             - splenda
-            - yellow packet
+            - yellow (packet,sweetener)
         - name: sugar
           units: packet
           aliases:
@@ -346,11 +346,12 @@ catalog:
           aliases:
             - sugar in the raw
             - raw sugar
+            - brown (packet,sweetener)
         - name: sweet n low
           units: packet
           aliases:
             - sweet n low
-            - pink packet
+            - pink (packet,sweetener)
         - name: espresso shot
           aliases:
             - shot
