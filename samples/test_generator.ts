@@ -217,6 +217,31 @@ function configureProductGenerators(
             }
         ],
         [
+            'extra',
+            {
+                left: [
+                    new QuantityX(1, 'a'),
+                    new QuantityX(1, 'an extra'),
+                    new QuantityX(1, 'an added'),
+                    new QuantityX(2, 'two'),
+                    new QuantityX(2, 'two extra'),
+                    new QuantityX(2, 'two added'),
+                    new QuantityX(3, 'three extra'),
+                    new QuantityX(3, 'three added'),
+                ],
+                right: [
+                    new QuantityX(1, 'a'),
+                    new QuantityX(1, 'an extra'),
+                    new QuantityX(1, 'an added'),
+                    new QuantityX(2, 'two'),
+                    new QuantityX(2, 'two extra'),
+                    new QuantityX(2, 'two added'),
+                    new QuantityX(3, 'three extra'),
+                    new QuantityX(3, 'three added'),
+                ],
+            }
+        ],
+        [
             'packet',
             {
                 left: [

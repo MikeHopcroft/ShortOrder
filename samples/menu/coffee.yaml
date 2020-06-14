@@ -43,7 +43,7 @@ dimensions:
           - three shot
       - name: quad
         aliases:
-          - "quad [shot]"
+          - "(quad,quadruple) [shot]"
           - four shot
   - name: option_quantity
     attributes:
@@ -353,6 +353,7 @@ catalog:
             - sweet n low
             - pink (packet,sweetener)
         - name: espresso shot
+          units: extra
           aliases:
             - shot
 rules:
