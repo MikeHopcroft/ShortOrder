@@ -82,7 +82,7 @@ Parser
     * 1: hello there may we also get us two small cappuccinos with a pump of orange syrup iced with to go cup we're done
       * "with to go cup" => "in a to go cup"
     * 2: OK
-    * 3: ok so may you please also get me three heavy on the toffee syrup iced triple espressos one tall regular caffeine chai latte and a child flat white with  sugar that's it
+    * x 3: ok so may you please also get me three heavy on the toffee syrup iced triple espressos one tall regular caffeine chai latte and a child flat white with  sugar that's it
       * "with  sugar" => "with sugar"
     * 4: let's see so could you just have three venti cup of dark roasts with non caf iced and two blueberry muffins with butter and warmed how much is that
       * "with non caf iced" => "non caf iced"
@@ -92,12 +92,12 @@ Parser
     * 6: OK
     * 7: yeah I will also take one iced venti caffe americano with three packages of equal and half and half and three blueberry muffins with cut in two and warmed we're good
       * "with cut in two" => "cut in two"
-    * 8: okay may I also get me three apple bran muffins with with no butter warmed and extra strawberry three small half decaf latte macchiatoes with  cinnamon syrup iced with three packs of blue sweetener and one quad shot without buttered rum syrup espresso with some half and half that'll be all
+    * x 8: okay may I also get me three apple bran muffins with with no butter warmed and extra strawberry three small half decaf latte macchiatoes with  cinnamon syrup iced with three packs of blue sweetener and one quad shot without buttered rum syrup espresso with some half and half that'll be all
       * "with  cinnamon" => "with cinnamon"
     * 16: howdy there could we also get us three tall latte macchiatoes with split shot and shot and a quad shot caffe lungo with  shot iced we're done
       * "with split shot" => "split shot"
       * "and shot" => "and an extra shot"
-      * "with  shot" => "with an extra shot"
+      * x "with  shot" => "with an extra shot"
       * REPL doesn't get this one correct. Problem is with "get us".
     * 17: all right could I have three kid's size cappuccinos with for here and one soy iced large flat white I am ready to check out
       * "with for here" => "for here"

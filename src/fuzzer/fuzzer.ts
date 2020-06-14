@@ -108,7 +108,11 @@ export class AttributedOptionX implements OptionX {
         // or change the functionality, below, to support multiple attributes.
         // TODO: HACK: BUGBUG. Remove special handling for 'modifier' and 'quantity'
         // if (attributes.length > 0 && attributes[0].text !== 'modifier' && attributes[0].text !== 'quantity') {
-        if (attributes.length > 0) {
+        // DESIGN NOTE: some attribute values are hidden 
+        //   (e.g. "hot latte" => "latte").
+        // In this case, the attribute text is '' and should not be prepended
+        // to the option text.
+        if (attributes.length > 0 && attributes[0].text.length > 0) {
             this.text = `${attributes[0].text} ${text}`;
         } else {
             this.text = text;
