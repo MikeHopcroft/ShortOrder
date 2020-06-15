@@ -14,7 +14,7 @@ dimensions:
       - name: short
         aliases:
           - short
-          - "(kid's,child) [size]"
+          - "(kid,kid's,child) [size]"
       - name: tall
         aliases:
           - tall
@@ -51,8 +51,12 @@ dimensions:
       - name: "no"
         aliases: 
           - 'no'
+          # TODO: not sure how to avoid without.
+          # Almost want to preprocess input to "with no".
+          # Or have attribute recipes.
           - without
           # - none      # Consider removing this alias. Bad for fuzzer.
+          # TODO: don't need "with" since it is a conjunction
           - with no
       - name: light
         aliases:
@@ -138,6 +142,7 @@ catalog:
           - "[caffe] americano"
       - name: dark roast coffee
         aliases:
+          # TODO: "cup of" should be a unit
           - "[cup of] [house,plain,regular] coffee"
           - "[cup of] (dark roast,drip) [coffee]"
   - type: option

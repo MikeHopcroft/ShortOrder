@@ -58,7 +58,6 @@ export async function fuzzerMain(
         return;
     }
 
-    const argS = (args.s !== undefined) ? args.s : 'default';
     const seedText = args.s || '0';
     const seed = Number(seedText);
     if (isNaN(seed)) {
@@ -71,7 +70,6 @@ export async function fuzzerMain(
     }
     else {
         runFuzzer(
-            argS,
             seed,
             testCaseGeneratorFactory,
             processorFactory,
@@ -80,7 +78,8 @@ export async function fuzzerMain(
             count,
             verify,
             showOnlyFailingCases,
-            outFile);
+            outFile
+        );
     }
 }
 
@@ -131,7 +130,6 @@ function showUsage(
 
 export async function runFuzzer(
     // tslint:disable-next-line:no-any
-    argS: any,
     seed: number,
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
     processorFactory: ProcessorFactory,
@@ -155,36 +153,7 @@ export async function runFuzzer(
     console.log('');
 
     const world = createWorld2(dataPath);
-
-    console.log(`seed === argS: ${seed === argS}`);
-    console.log(`typeof(seed): ${typeof(seed)}, "${JSON.stringify(seed)}"`);
-    console.log(`typeof(argS): ${typeof(argS)}, "${JSON.stringify(argS)}"`);
-    console.log(`Random number seed = "${seed}"`);
-    // const random = new Random(seed.toString());
-
-    // const r2 = new Random(seed as unknown as string);
-    // console.log(`r2: ${r2.randomNonNegative(1000)}`);
-    // console.log(`r2: ${r2.randomNonNegative(1000)}`);
-    // console.log(`r2: ${r2.randomNonNegative(1000)}`);
-
-    // Works for all numeric argS values.
-    // seed === '6\0'
-    const random = new Random(argS);
-    // console.log(`random: ${random.randomNonNegative(1000)}`);
-    // console.log(`random: ${random.randomNonNegative(1000)}`);
-    // console.log(`random: ${random.randomNonNegative(1000)}`);
-
-    // Works for all but argS === 0.
-    // const random = new Random(argS.toString() + '\0');
-
-    // const random = new Random('0');
-    // const random = new Random(0 as unknown as string);
-    // const random = new Random(1 as unknown as string);
-    // const random = new Random(0 + '\0');
-    // const random = new Random(1 + '\0');
-
-    // const tests = testCaseGeneratorFactory.get(name, world, seed);
-    const tests = testCaseGeneratorFactory.get(name, world, random, seed);
+    const tests = testCaseGeneratorFactory.get(name, world, seed);
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -334,7 +303,6 @@ export function makeTests(
 ///////////////////////////////////////////////////////////////////////////////
 export type TestCaseGenerator = (
     world: World,
-    random: Random,
     seed: number
 ) => IterableIterator<GenericCase<ValidationStep<TextTurn>>>;
 
@@ -362,12 +330,11 @@ export class TestCaseGeneratorFactory {
     get(
         name: string,
         world: World,
-        random: Random,
         seed: number
     ): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
         if (this.generators.has(name)) {
             // return this.generators.get(name)!.factory(world, seed);
-            return this.generators.get(name)!.factory(world, random, seed);
+            return this.generators.get(name)!.factory(world, seed);
         } else {
             const message = `Unknown test case generator "${name}".`;
             throw TypeError(message);

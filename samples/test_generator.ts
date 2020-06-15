@@ -418,21 +418,20 @@ function configureProductGenerators(
     };
 }
 
-function *levelA(world: World, random: Random, seed: number) {
-    yield *generateOrders(world, random, seed, [1, 1], [0, 0]);
+function *levelA(world: World, seed: number) {
+    yield *generateOrders(world, seed, [1, 1], [0, 0]);
 }
 
-function *levelB(world: World, random: Random, seed: number) {
-    yield *generateOrders(world, random, seed, [1, 1], [1, 3]);
+function *levelB(world: World, seed: number) {
+    yield *generateOrders(world, seed, [1, 1], [1, 3]);
 }
 
-function *levelC(world: World, random: Random, seed: number) {
-    yield *generateOrders(world, random, seed, [1, 3], [1, 3]);
+function *levelC(world: World, seed: number) {
+    yield *generateOrders(world, seed, [1, 3], [1, 3]);
 }
 
 function* generateOrders(
     world: World,
-    random: Random,
     seed: number,
     segmentCountRange: [number, number],
     optionCount: [number, number]
@@ -440,9 +439,6 @@ function* generateOrders(
     const {prologueGenerator, productGenerator, epilogueGenerator} =
         configureProductGenerators(world, optionCount);
 
-    //
-    // Orders
-    //
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
         productGenerator,
@@ -451,12 +447,13 @@ function* generateOrders(
     );
 
     while (true) {
-        // const random = new Random(seed.toString());
-        // const random = new Random(0 as unknown as string);
+        // DESIGN NOTE: Converting zero-value seed to 'default' to
+        // maintain backward compatability with a bug in the command
+        // line parameter processing that evaluated args.s as a truthy
+        // value and supplied 'default' for both undefined and 0.
+        // TODO: create a new baseline and then remove this code.
         const s = seed === 0 ? 'default' : seed;
         const random = new Random(s as unknown as string);
-        // console.log(`random1: ${random.randomNonNegative(1000)}`);
-        // console.log(`random2: ${random2.randomNonNegative(1000)}`);
         yield createTestCase(
             world.catalog,
             [orderGenerator.randomOrder(random)],

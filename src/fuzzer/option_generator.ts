@@ -88,9 +88,9 @@ export class OptionGenerator {
         const position = this.positionPredicate(this.name);
 
         const pid = AttributeInfo.pidFromKey(key);
-        console.log(`position for ${this.name} is ${
-            position === LEFT ? 'LEFT' : position === RIGHT ? 'RIGHT' : 'EITHER'
-        }`);
+        // console.log(`position for ${this.name} is ${
+        //     position === LEFT ? 'LEFT' : position === RIGHT ? 'RIGHT' : 'EITHER'
+        // }`);
 
         return new AttributedOptionX(
             attributes,
@@ -117,13 +117,12 @@ export class OptionGenerator {
         // combination. Just use an empty-string QuantityX.
         const info = this.rules.getQuantityInfo(parent, key);
         if (info && info.minQty === 1 && info.maxQty === 1) {
-            console.log('here 1');
             quantity = {
                 text: '',
                 value: 1
             };
         }
-        console.log(`Role for "${this.name}" is ${this.role}`);
+        // console.log(`Role for "${this.name}" is ${this.role}`);
 
         const alias = random.randomChoice(this.aliases);
 

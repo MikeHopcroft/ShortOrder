@@ -247,7 +247,7 @@ export class SegmentX {
     }
 
     buildText = ():string[] => {
-        console.log('========== buildText ==========');
+        console.log('========== SegmentX: buildText ==========');
         const words: string[] = [];
 
         // Leading quantifier.
@@ -255,6 +255,7 @@ export class SegmentX {
 
         // Left modifiers don't have seperators.
         for (const modifier of this.left) {
+            console.log(`ModifierX "${modifier.text}": ${modifier.role}`);
             words.push(modifier.text);
         }
 
@@ -270,9 +271,17 @@ export class SegmentX {
             if (modifier.text !== '') {
                 if (modifier.role === Role.APPLIED) {
                     beforeWith = true;
-                    // if (visibleCount !== 0 && index === this.right.length - 1) {
-                    //     words.push('and');
-                    // }
+                    // In most cases we want the following code
+                    //   iced and to go
+                    //   non caf and iced
+                    //   sliced and warmed
+                    //   cut in two and warmed
+                    // In some cases it is natural to drop the conjunction
+                    //   I'd like a grande latte, iced, decaf and a muffin
+                    //   I'd like a grande latte, iced, to go and a muffin
+                    if (visibleCount !== 0 && index === this.right.length - 1) {
+                        words.push('and');
+                    }
                 } else {
                     if (beforeWith) {
                         beforeWith = false;
