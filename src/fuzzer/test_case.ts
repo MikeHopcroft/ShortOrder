@@ -11,9 +11,9 @@ import {
     ValidationStep,
 } from 'prix-fixe';
 
-import {
-    StepX
-} from './fuzzer';
+import { StepX } from './fuzzer';
+
+export type PostProcessor = (text: string) => string;
 
 // TODO: perhaps createTestCase should be a class? (instead of side-effecting counter)
 // let counter = 0;
@@ -21,7 +21,8 @@ import {
 export function createTestCase(
     catalog: ICatalog,
     steps: StepX[],
-    seed: number
+    seed: number,
+    postProcessor: PostProcessor
 ): GenericCase<ValidationStep<TextTurn>> {
     const testSteps: Array<ValidationStep<TextTurn>> = [];
 
@@ -30,11 +31,13 @@ export function createTestCase(
         items = order.buildItems(items);
         const cart = logicalCartFromCart({ items }, catalog);
 
+        const transcription = postProcessor(order.buildText().join(' '));
+        // const transcription = order.buildText().join(' ');
         const step: ValidationStep<TextTurn> = {
             turns: [
                 {
                     speaker: 'customer',
-                    transcription: order.buildText().join(' '),
+                    transcription,
                 }
             ],
             cart,

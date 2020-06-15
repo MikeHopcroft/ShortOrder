@@ -78,7 +78,7 @@ Parser
     * 0: um could you also get me an iced medium three pump buttered rum extra toffee syrup cappuccino with slightly less peppermint and two child milk cup of coffees I'm ready to pay
       * "child" => "child sized"
       * !!! "milk" => "whole milk" - actually the menu is wrong - milk should not be a legal child. Can't change this in the menu without losing the seeded baseline. Will change after fixing other problems.
-      * !!! "cup of coffees" => "cups of coffee" - peephole optimizer
+      * x "cup of coffees" => "cups of coffee" - peephole optimizer
     * 1: hello there may we also get us two small cappuccinos with a pump of orange syrup iced with to go cup we're done
       * "with to go cup" => "in a to go cup"
       * NOW, AFTER CHANGES "and to go cup" => "to go cup"
@@ -89,7 +89,7 @@ Parser
       * x "with  sugar" => "with sugar"
     * 4: let's see so could you just have three venti cup of dark roasts with non caf iced and two blueberry muffins with butter and warmed how much is that
       * x "with non caf iced" => "non caf iced"
-      * !!! "cup of dark roasts" => "cups of dark roast"
+      * x "cup of dark roasts" => "cups of dark roast"
     * 5: all right can you just also get us three blueberry muffins with sliced and warmed one tall iced flat white with two thirds caf three squirts of caramel and nonfat milk and one bran muffin with sliced in two that'll be everything
       * x "with sliced" => "sliced"
       * x "with sliced in two" => "sliced in two"
@@ -99,8 +99,8 @@ Parser
     * 7: yeah I will also take one iced venti caffe americano with three packages of equal and half and half and three blueberry muffins with cut in two and warmed we're good
       * x "with cut in two" => "cut in two"
       * x "cut in two warmed" => "cut in two and warmed"
-    * x 8: okay may I also get me three apple bran muffins with with no butter warmed and extra strawberry three small half decaf latte macchiatoes with  cinnamon syrup iced with three packs of blue sweetener and one quad shot without buttered rum syrup espresso with some half and half that'll be all
-      * !!! "with with" - what is happening here? Attribute is "with no"
+    * 8: okay may I also get me three apple bran muffins with with no butter warmed and extra strawberry three small half decaf latte macchiatoes with  cinnamon syrup iced with three packs of blue sweetener and one quad shot without buttered rum syrup espresso with some half and half that'll be all
+      * x "with with" - what is happening here? Attribute is "with no"
       * x "with  cinnamon" => "with cinnamon"
     * 16: howdy there could we also get us three tall latte macchiatoes with split shot and shot and a quad shot caffe lungo with  shot iced we're done
       * x "with split shot" => "split shot"

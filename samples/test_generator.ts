@@ -24,6 +24,7 @@ import {
     OrderGenerator,
     OrderX,
     Position,
+    PostProcessor,
     ProcessorFactory,
     ProductGenerator,
     QuantityX,
@@ -430,6 +431,20 @@ function *levelC(world: World, seed: number) {
     yield *generateOrders(world, seed, [1, 3], [1, 3]);
 }
 
+function configurePostprocessor(): PostProcessor {
+    // TODO: 'cup of' should probably be modelled in the menu as a unit,
+    // rather than relying on post processing.
+
+    return createPostProcessor([
+        ['with with', 'with'],
+        // NOTE: the following case handled by the "with with" case.
+        // ['with without', 'with'],
+        [/cup of (.*)coffees/, 'cups of $1coffee'],
+        ['cup of dark roasts', 'cups of dark roast'],
+        ['cup of drips', 'cups of drip'],
+    ]);
+}
+
 function* generateOrders(
     world: World,
     seed: number,
@@ -438,6 +453,7 @@ function* generateOrders(
 ): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
     const {prologueGenerator, productGenerator, epilogueGenerator} =
         configureProductGenerators(world, optionCount);
+    const postProcessor = configurePostprocessor();
 
     const orderGenerator = new OrderGenerator(
         prologueGenerator,
@@ -457,10 +473,20 @@ function* generateOrders(
         yield createTestCase(
             world.catalog,
             [orderGenerator.randomOrder(random)],
-            seed
+            seed,
+            postProcessor
         );
         seed++;
     }
+}
+
+function createPostProcessor(patterns: Array<[RegExp | string, string]>) {
+    return (text: string) => {
+        for (const [pattern, replacement] of patterns) {
+            text = text.replace(pattern, replacement);
+        }
+        return text;
+    };
 }
 
 // function* remove(
