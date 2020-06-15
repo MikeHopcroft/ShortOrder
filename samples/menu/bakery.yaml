@@ -30,9 +30,11 @@ catalog:
         tensor: none
         items:
           - name: warmed
+            role: applied
             aliases:
               - warmed
           - name: cut in half
+            role: applied
             aliases:
               - '(cut,sliced) [in half,in two,into two pieces]'
               - halved

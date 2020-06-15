@@ -81,24 +81,30 @@ Parser
       * "cup of coffees" => "cups of coffee"
     * 1: hello there may we also get us two small cappuccinos with a pump of orange syrup iced with to go cup we're done
       * "with to go cup" => "in a to go cup"
+      * NOW, AFTER CHANGES "and to go cup" => "to go cup"
+        * Fix to that problem yields "iced to go cup"
+        * Challenge is that "to go" is "applied", while "to go cup" is something else.
     * 2: OK
     * x 3: ok so may you please also get me three heavy on the toffee syrup iced triple espressos one tall regular caffeine chai latte and a child flat white with  sugar that's it
       * "with  sugar" => "with sugar"
     * 4: let's see so could you just have three venti cup of dark roasts with non caf iced and two blueberry muffins with butter and warmed how much is that
-      * "with non caf iced" => "non caf iced"
+      * !!! "with non caf iced" => "non caf iced"
+      * "cup of dark roasts" => "cups of dark roast"
     * 5: all right can you just also get us three blueberry muffins with sliced and warmed one tall iced flat white with two thirds caf three squirts of caramel and nonfat milk and one bran muffin with sliced in two that'll be everything
-      * "with sliced" => "sliced"
-      * "with sliced in two" => "sliced in two"
-    * 6: OK
+      * !!! "with sliced" => "sliced"
+      * !!! "with sliced in two" => "sliced in two"
+    * 6: okay we need an iced two caffe macchiato with a package of sugar in the raw and some nonfat milk
+      * quantifier "two" - what is this for?
     * 7: yeah I will also take one iced venti caffe americano with three packages of equal and half and half and three blueberry muffins with cut in two and warmed we're good
-      * "with cut in two" => "cut in two"
+      * !!!"with cut in two" => "cut in two"
     * x 8: okay may I also get me three apple bran muffins with with no butter warmed and extra strawberry three small half decaf latte macchiatoes with  cinnamon syrup iced with three packs of blue sweetener and one quad shot without buttered rum syrup espresso with some half and half that'll be all
-      * "with  cinnamon" => "with cinnamon"
+      * x "with  cinnamon" => "with cinnamon"
     * 16: howdy there could we also get us three tall latte macchiatoes with split shot and shot and a quad shot caffe lungo with  shot iced we're done
-      * "with split shot" => "split shot"
+      * !!! "with split shot" => "split shot"
       * "and shot" => "and an extra shot"
       * x "with  shot" => "with an extra shot"
       * REPL doesn't get this one correct. Problem is with "get us".
+      * espresso shot should not have option tensor
     * 17: all right could I have three kid's size cappuccinos with for here and one soy iced large flat white I am ready to check out
       * "with for here" => "for here"
   * Top

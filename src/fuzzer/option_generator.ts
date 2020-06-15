@@ -4,6 +4,7 @@ import {
     IRuleChecker,
     Key,
     PID,
+    Role,
 } from 'prix-fixe';
 
 import { AttributeGenerator } from './attribute_generator';
@@ -32,6 +33,7 @@ export class OptionGenerator {
     attributes: AttributeGenerator;
     rules: IRuleChecker;
     pid: PID;
+    role: Role;
     name: string;
     keys: Key[];
     defaultKey: Key;
@@ -55,7 +57,9 @@ export class OptionGenerator {
         this.pid = pid;
         this.positionPredicate = positionPredicate;
 
-        this.name = catalog.getGeneric(pid).name;
+        const generic = catalog.getGeneric(pid);
+        this.name = generic.name;
+        this.role = generic.fuzzerHints.role;
         // console.log(`name=${this.name}`);
 
         const units = rules.getUnits(pid) || 'default';
@@ -82,15 +86,18 @@ export class OptionGenerator {
 
         const alias = random.randomChoice(this.aliases);
         const position = this.positionPredicate(this.name);
-        // console.log(`position for ${this.name} is ${
-        //     position === LEFT ? 'LEFT' : position === RIGHT ? 'RIGHT' : 'EITHER'
-        // }`);
+
+        const pid = AttributeInfo.pidFromKey(key);
+        console.log(`position for ${this.name} is ${
+            position === LEFT ? 'LEFT' : position === RIGHT ? 'RIGHT' : 'EITHER'
+        }`);
 
         return new AttributedOptionX(
             attributes,
             key,
             alias,
-            position
+            position,
+            this.role
         );
     }
 
@@ -110,11 +117,13 @@ export class OptionGenerator {
         // combination. Just use an empty-string QuantityX.
         const info = this.rules.getQuantityInfo(parent, key);
         if (info && info.minQty === 1 && info.maxQty === 1) {
+            console.log('here 1');
             quantity = {
                 text: '',
                 value: 1
             };
         }
+        console.log(`Role for "${this.name}" is ${this.role}`);
 
         const alias = random.randomChoice(this.aliases);
 
@@ -122,7 +131,8 @@ export class OptionGenerator {
             quantity,
             key,
             alias,
-            position
+            position,
+            this.role
         );
     }
 }

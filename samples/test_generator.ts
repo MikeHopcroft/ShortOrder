@@ -418,21 +418,22 @@ function configureProductGenerators(
     };
 }
 
-function *levelA(world: World, random: Random) {
-    yield *generateOrders(world, random, [1, 1], [0, 0]);
+function *levelA(world: World, random: Random, seed: number) {
+    yield *generateOrders(world, random, seed, [1, 1], [0, 0]);
 }
 
-function *levelB(world: World, random: Random) {
-    yield *generateOrders(world, random, [1, 1], [1, 3]);
+function *levelB(world: World, random: Random, seed: number) {
+    yield *generateOrders(world, random, seed, [1, 1], [1, 3]);
 }
 
-function *levelC(world: World, random: Random) {
-    yield *generateOrders(world, random, [1, 3], [1, 3]);
+function *levelC(world: World, random: Random, seed: number) {
+    yield *generateOrders(world, random, seed, [1, 3], [1, 3]);
 }
 
 function* generateOrders(
     world: World,
     random: Random,
+    seed: number,
     segmentCountRange: [number, number],
     optionCount: [number, number]
 ): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
@@ -450,16 +451,24 @@ function* generateOrders(
     );
 
     while (true) {
+        // const random = new Random(seed.toString());
+        // const random = new Random(0 as unknown as string);
+        const s = seed === 0 ? 'default' : seed;
+        const random = new Random(s as unknown as string);
+        // console.log(`random1: ${random.randomNonNegative(1000)}`);
+        // console.log(`random2: ${random2.randomNonNegative(1000)}`);
         yield createTestCase(
             world.catalog,
-            [orderGenerator.randomOrder(random)]
+            [orderGenerator.randomOrder(random)],
+            seed
         );
+        seed++;
     }
 }
 
 // function* remove(
 //     world: World,
-//     random: Random
+//     seed: number
 // ): IterableIterator<TestCase> {
 //     const optionCountRange: [number, number] = [1, 3];
 //     const {prologueGenerator, productGenerator, epilogueGenerator} =

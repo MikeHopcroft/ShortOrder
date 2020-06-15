@@ -36,7 +36,8 @@ dimensions:
       - name: doppio
         aliases:
           - doppio
-          - (double,two) [shot]
+          - double [shot]
+          - two shot
       - name: triple
         aliases:
           - triple [shot]
@@ -143,6 +144,7 @@ catalog:
     items:
     - tags: [syrups]
       units: pump
+      role: measured
       tensor: options
       default: [regular]
       items:
@@ -178,6 +180,7 @@ catalog:
             - "vanilla [syrup]"
     - tags: [caffeines]
       tensor: none
+      role: applied
       items:
         - name: regular
           aliases:
@@ -298,6 +301,7 @@ catalog:
       tensor: none
       items:
         - name: for here cup
+          role: applied
           tags: [here-or-to-go]
           aliases:
             - for here [cup]
@@ -308,15 +312,18 @@ catalog:
           aliases:
             - room [for cream]
         - name: to go
+          role: applied
           tags: [here-or-to-go]
           aliases:
             - to go [cup]
             - travelling
         - name: dry
+          role: applied
           tags: [wet-or-dry]
           aliases:
             - dry
         - name: wet
+          role: applied
           tags: [wet-or-dry]
           aliases:
             - wet

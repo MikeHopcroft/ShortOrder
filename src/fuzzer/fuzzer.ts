@@ -1,5 +1,5 @@
 import * as pluralize from 'pluralize';
-import { AID, ItemInstance, Key } from 'prix-fixe';
+import { AID, ItemInstance, Key, Role, AttributeInfo } from 'prix-fixe';
 
 import { permutation, Random } from './utilities';
 
@@ -29,6 +29,7 @@ export type Quantifiers = Map<string, {left: QuantityX[], right: QuantityX[]}>;
 export interface ModifierX {
     text: string;
     position: Position;
+    role: Role;
 
     buildItem(): ItemInstance | null;
     isOption(): boolean;
@@ -38,6 +39,7 @@ export class AttributeX implements ModifierX {
     aid: AID;
     text: string;
     position: Position;
+    role = Role.APPLIED;
 
     constructor(aid: AID, text: string, position: Position) {
         this.aid = aid;
@@ -62,10 +64,18 @@ export class QuantifiedOptionX implements OptionX {
     key: Key;
     text: string;
     position: Position;
+    role: Role;
 
-    constructor(quantity: QuantityX, key: Key, text: string, position: Position) {
+    constructor(
+        quantity: QuantityX,
+        key: Key,
+        text: string,
+        position: Position,
+        role: Role
+    ) {
         this.quantity = quantity;
         this.key = key;
+        this.role = role;
 
         if (quantity.text === 'a' && startsWithEnglishVowel(text)) {
             this.text = `an ${text}`;
@@ -74,7 +84,6 @@ export class QuantifiedOptionX implements OptionX {
         } else {
             this.text = text;
         }
-
 
         this.position = position;
     }
@@ -97,10 +106,18 @@ export class AttributedOptionX implements OptionX {
     key: Key;
     text: string;
     position: Position;
+    role: Role;
 
-    constructor(attributes: AttributeX[], key: Key, text: string, position: Position) {
+    constructor(
+        attributes: AttributeX[],
+        key: Key,
+        text: string,
+        position: Position,
+        role: Role
+    ) {
         this.key = key;
-
+        this.role = role;
+        
         // TODO: HACK: BUGBUG.
         // This class is designed to have zero or one attributes,
         // but API allows arbitrary number.
@@ -230,6 +247,7 @@ export class SegmentX {
     }
 
     buildText = ():string[] => {
+        console.log('========== buildText ==========');
         const words: string[] = [];
 
         // Leading quantifier.
@@ -240,26 +258,32 @@ export class SegmentX {
             words.push(modifier.text);
         }
 
+        console.log(`entity is "${this.entity.text}, quantity=${JSON.stringify(this.quantity)}"`);
         words.push(this.entity.text);
 
         // First right modifiers are prefaced by 'with'.
         // Last right modifier in a sequence of two or more is preceded by 'and'.
         let beforeWith = true;
+        let visibleCount = 0;
         for (const [index, modifier] of this.right.entries()) {
-            if (modifier.text === '') {
-                continue;
-            }
-            if (modifier.isOption()) {
-                if (beforeWith) {
-                    beforeWith = false;
-                    words.push('with');
-                } else if (index === this.right.length - 1) {
-                    words.push('and');
+            console.log(`ModifierX "${modifier.text}": ${modifier.role}`);
+            if (modifier.text !== '') {
+                if (modifier.role === Role.APPLIED) {
+                    beforeWith = true;
+                    // if (visibleCount !== 0 && index === this.right.length - 1) {
+                    //     words.push('and');
+                    // }
+                } else {
+                    if (beforeWith) {
+                        beforeWith = false;
+                        words.push('with');
+                    } else if (index === this.right.length - 1) {
+                        words.push('and');
+                    }
                 }
-            } else {
-                beforeWith = true;
+                words.push(modifier.text);
+                ++visibleCount;
             }
-            words.push(modifier.text);
         }
 
         // Move this to a peephole optimization stage.

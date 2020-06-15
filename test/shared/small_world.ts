@@ -8,16 +8,18 @@ import {
     DID,
     Dimension,
     DimensionDescription,
+    FuzzerHints,
     GenericTypedEntity,
     Key,
-    TensorDescription,
     MENUITEM,
     OPTION,
     PID,
     RecipeList,
+    Role,
     RuleChecker,
     RuleConfig,
     SpecificTypedEntity,
+    TensorDescription,
 } from 'prix-fixe';
 
 // A PID that is not indexed in any data structure in this file. For testing
@@ -28,6 +30,12 @@ export const unknownPID: PID = 9999;
 // error cases.
 export const unknownKey: Key = '9999:9:9:9';
 
+export const fuzzerHints: FuzzerHints = {
+    role: Role.ANY,
+    units: '',
+};
+  
+  
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Generic product entities for Cones and Coffees
@@ -43,6 +51,7 @@ export const genericCone: GenericTypedEntity = {
     defaultKey: '8000:0:0',
     tensor: 1,
     kind: MENUITEM,
+    fuzzerHints,
 };
 
 export const genericCoffeePID: PID = 9000;
@@ -55,6 +64,7 @@ export const genericCoffee: GenericTypedEntity = {
     defaultKey: '9000:0:0:0',
     tensor: 2,
     kind: MENUITEM,
+    fuzzerHints,
 };
 
 export const genericMilkPID = 5000;
@@ -67,6 +77,7 @@ export const genericMilk: GenericTypedEntity = {
     defaultKey: '5000:1',
     tensor: 3,
     kind: MENUITEM,
+    fuzzerHints,
 };
 
 export const genericItems: GenericTypedEntity[] = [

@@ -16,11 +16,12 @@ import {
 } from './fuzzer';
 
 // TODO: perhaps createTestCase should be a class? (instead of side-effecting counter)
-let counter = 0;
+// let counter = 0;
 
 export function createTestCase(
     catalog: ICatalog,
-    steps: StepX[]
+    steps: StepX[],
+    seed: number
 ): GenericCase<ValidationStep<TextTurn>> {
     const testSteps: Array<ValidationStep<TextTurn>> = [];
 
@@ -42,7 +43,7 @@ export function createTestCase(
     }
 
     const testCase: GenericCase<ValidationStep<TextTurn>> = {
-        id: counter++,
+        id: seed, // counter++,
         suites: 'unverified',
         comment: 'synthetic',
         steps: testSteps
