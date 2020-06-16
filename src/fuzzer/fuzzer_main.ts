@@ -22,9 +22,6 @@ import {
 
 import { createShortOrderWorld } from '../integration';
 
-import { Random } from './utilities';
-
-
 export async function fuzzerMain(
     testCaseGeneratorFactory: TestCaseGeneratorFactory,
     processorFactory: ProcessorFactory

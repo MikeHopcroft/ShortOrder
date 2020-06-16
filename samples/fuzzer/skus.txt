@@ -1,0 +1,217 @@
+sku,type,name
+1,option,no butter
+2,option,light butter
+3,option,butter
+4,option,extra butter
+100,option,no strawberry jam
+101,option,light strawberry jam
+102,option,strawberry jam
+103,option,extra strawberry jam
+200,option,warmed
+300,option,cut in half
+400,product,short cappuccino
+401,product,tall cappuccino
+402,product,grande cappuccino
+403,product,iced tall cappuccino
+404,product,iced grande cappuccino
+405,product,iced venti cappuccino
+500,product,short flat white
+501,product,tall flat white
+502,product,grande flat white
+503,product,iced tall flat white
+504,product,iced grande flat white
+505,product,iced venti flat white
+600,product,short latte
+601,product,tall latte
+602,product,grande latte
+603,product,iced tall latte
+604,product,iced grande latte
+605,product,iced venti latte
+700,product,short latte macchiato
+701,product,tall latte macchiato
+702,product,grande latte macchiato
+703,product,iced tall latte macchiato
+704,product,iced grande latte macchiato
+705,product,iced venti latte macchiato
+800,product,short mocha
+801,product,tall mocha
+802,product,grande mocha
+803,product,iced tall mocha
+804,product,iced grande mocha
+805,product,iced venti mocha
+900,product,short chai latte
+901,product,tall chai latte
+902,product,grande chai latte
+903,product,iced tall chai latte
+904,product,iced grande chai latte
+905,product,iced venti chai latte
+1000,product,solo espresso
+1001,product,doppio espresso
+1002,product,triple espresso
+1003,product,quad espresso
+1004,product,iced solo espresso
+1005,product,iced doppio espresso
+1006,product,iced triple espresso
+1007,product,iced quad espresso
+1100,product,solo lungo
+1101,product,doppio lungo
+1102,product,triple lungo
+1103,product,quad lungo
+1104,product,iced solo lungo
+1105,product,iced doppio lungo
+1106,product,iced triple lungo
+1107,product,iced quad lungo
+1200,product,solo ristretto
+1201,product,doppio ristretto
+1202,product,triple ristretto
+1203,product,quad ristretto
+1204,product,iced solo ristretto
+1205,product,iced doppio ristretto
+1206,product,iced triple ristretto
+1207,product,iced quad ristretto
+1300,product,solo macchiato
+1301,product,doppio macchiato
+1302,product,triple macchiato
+1303,product,quad macchiato
+1304,product,iced solo macchiato
+1305,product,iced doppio macchiato
+1306,product,iced triple macchiato
+1307,product,iced quad macchiato
+1400,product,short americano
+1401,product,tall americano
+1402,product,grande americano
+1403,product,iced tall americano
+1404,product,iced grande americano
+1405,product,iced venti americano
+1500,product,short dark roast coffee
+1501,product,tall dark roast coffee
+1502,product,grande dark roast coffee
+1503,product,iced tall dark roast coffee
+1504,product,iced grande dark roast coffee
+1505,product,iced venti dark roast coffee
+1600,option,no almond syrup
+1601,option,light almond syrup
+1602,option,almond syrup
+1603,option,extra almond syrup
+1700,option,no buttered rum syrup
+1701,option,light buttered rum syrup
+1702,option,buttered rum syrup
+1703,option,extra buttered rum syrup
+1800,option,no caramel syrup
+1801,option,light caramel syrup
+1802,option,caramel syrup
+1803,option,extra caramel syrup
+1900,option,no cinnamon syrup
+1901,option,light cinnamon syrup
+1902,option,cinnamon syrup
+1903,option,extra cinnamon syrup
+2000,option,no hazelnut syrup
+2001,option,light hazelnut syrup
+2002,option,hazelnut syrup
+2003,option,extra hazelnut syrup
+2100,option,no orange syrup
+2101,option,light orange syrup
+2102,option,orange syrup
+2103,option,extra orange syrup
+2200,option,no peppermint syrup
+2201,option,light peppermint syrup
+2202,option,peppermint syrup
+2203,option,extra peppermint syrup
+2300,option,no raspberry syrup
+2301,option,light raspberry syrup
+2302,option,raspberry syrup
+2303,option,extra raspberry syrup
+2400,option,no toffee syrup
+2401,option,light toffee syrup
+2402,option,toffee syrup
+2403,option,extra toffee syrup
+2500,option,no vanilla syrup
+2501,option,light vanilla syrup
+2502,option,vanilla syrup
+2503,option,extra vanilla syrup
+2600,option,regular
+2700,option,two thirds caf
+2800,option,half caf
+2900,option,one third caf
+3000,option,decaf
+3100,option,whole milk
+3200,option,two percent milk
+3300,option,one percent milk
+3400,option,nonfat milk
+3500,option,coconut milk
+3600,option,soy milk
+3700,option,almond milk
+3800,option,oat milk
+3900,option,eggnog
+4000,option,whole milk creamer
+4100,option,two percent milk creamer
+4200,option,one percent milk creamer
+4300,option,nonfat milk creamer
+4400,option,coconut milk creamer
+4500,option,soy milk creamer
+4600,option,almond milk creamer
+4700,option,oat milk creamer
+4800,option,eggnog creamer
+4900,option,half and half
+5000,option,heavy cream
+5100,option,no cinnamon
+5101,option,light cinnamon
+5102,option,cinnamon
+5103,option,extra cinnamon
+5200,option,no foam
+5201,option,light foam
+5202,option,foam
+5203,option,extra foam
+5300,option,no ice
+5301,option,light ice
+5302,option,ice
+5303,option,extra ice
+5400,option,no nutmeg
+5401,option,light nutmeg
+5402,option,nutmeg
+5403,option,extra nutmeg
+5500,option,no whipped cream
+5501,option,light whipped cream
+5502,option,whipped cream
+5503,option,extra whipped cream
+5600,option,no water
+5601,option,light water
+5602,option,water
+5603,option,extra water
+5700,option,for here cup
+5800,option,lid
+5900,option,with room
+6000,option,to go
+6100,option,dry
+6200,option,wet
+6300,option,no equal
+6301,option,light equal
+6302,option,equal
+6303,option,extra equal
+6400,option,no honey
+6401,option,light honey
+6402,option,honey
+6403,option,extra honey
+6500,option,no splenda
+6501,option,light splenda
+6502,option,splenda
+6503,option,extra splenda
+6600,option,no sugar
+6601,option,light sugar
+6602,option,sugar
+6603,option,extra sugar
+6700,option,no sugar in the raw
+6701,option,light sugar in the raw
+6702,option,sugar in the raw
+6703,option,extra sugar in the raw
+6800,option,no sweet n low
+6801,option,light sweet n low
+6802,option,sweet n low
+6803,option,extra sweet n low
+6900,option,no espresso shot
+6901,option,light espresso shot
+6902,option,espresso shot
+6903,option,extra espresso shot
+10000,product,apple bran muffin
+10100,product,blueberry muffin
+10200,product,lemon poppyseed muffin

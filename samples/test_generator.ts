@@ -187,10 +187,10 @@ function configureProductGenerators(
                 left: [
                     new QuantityX(1, 'one dash'),
                     new QuantityX(1, 'one sprinkle'),
-                    new QuantityX(1, 'two dashes'),
-                    new QuantityX(1, 'two sprinkles'),
-                    new QuantityX(1, 'three dashes'),
-                    new QuantityX(1, 'three sprinkles'),
+                    new QuantityX(2, 'two dashes'),
+                    new QuantityX(2, 'two sprinkles'),
+                    new QuantityX(3, 'three dashes'),
+                    new QuantityX(4, 'three sprinkles'),
                 ],
                 right: [
                     new QuantityX(1, 'a bit of'),
@@ -442,6 +442,7 @@ function configurePostprocessor(): PostProcessor {
         [/cup of (.*)coffees/, 'cups of $1coffee'],
         ['cup of dark roasts', 'cups of dark roast'],
         ['cup of drips', 'cups of drip'],
+        ['to go cup', 'to go']
     ]);
 }
 

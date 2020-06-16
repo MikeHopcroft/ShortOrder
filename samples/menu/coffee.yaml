@@ -75,6 +75,7 @@ dimensions:
       - name: extra
         aliases:
           - extra
+          - added
           - additional
           - more
           - lots of
@@ -371,6 +372,7 @@ catalog:
 rules:
   - parents: [latte_drinks]
     children: 
+      - milks
       - sweeteners
       - syrups
       - toppings
@@ -379,7 +381,7 @@ rules:
       - caffeines
       - here-or-to-go
       - latte_preparations
-      - milks
+      # - milks
       - wet-or-dry
     info:
       minQty: 1

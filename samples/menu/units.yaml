@@ -3,10 +3,13 @@ items:
     name: pump
     aliases:
       - pump [of]
+      - shakes [of]
+      - sprinkles [of]
       - splash [of]
       - squirt [of]
       - drop [of]
       - dollop [of]
       - (pack,packet,package) [of]
       - order [of]
+      - dash [of]
 

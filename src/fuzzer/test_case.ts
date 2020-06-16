@@ -3,10 +3,7 @@ import {
     ICatalog,
     ItemInstance,
     logicalCartFromCart,
-    TestCase,
     TestLineItem, 
-    TestOrder,
-    TestStep,
     TextTurn,
     ValidationStep,
 } from 'prix-fixe';
@@ -32,7 +29,6 @@ export function createTestCase(
         const cart = logicalCartFromCart({ items }, catalog);
 
         const transcription = postProcessor(order.buildText().join(' '));
-        // const transcription = order.buildText().join(' ');
         const step: ValidationStep<TextTurn> = {
             turns: [
                 {

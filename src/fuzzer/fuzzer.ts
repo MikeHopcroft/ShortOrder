@@ -247,7 +247,7 @@ export class SegmentX {
     }
 
     buildText = ():string[] => {
-        console.log('========== SegmentX: buildText ==========');
+        // console.log('========== SegmentX: buildText ==========');
         const words: string[] = [];
 
         // Leading quantifier.
@@ -255,11 +255,11 @@ export class SegmentX {
 
         // Left modifiers don't have seperators.
         for (const modifier of this.left) {
-            console.log(`ModifierX "${modifier.text}": ${modifier.role}`);
+            // console.log(`ModifierX "${modifier.text}": ${modifier.role}`);
             words.push(modifier.text);
         }
 
-        console.log(`entity is "${this.entity.text}, quantity=${JSON.stringify(this.quantity)}"`);
+        // console.log(`entity is "${this.entity.text}, quantity=${JSON.stringify(this.quantity)}"`);
         words.push(this.entity.text);
 
         // First right modifiers are prefaced by 'with'.
@@ -267,7 +267,7 @@ export class SegmentX {
         let beforeWith = true;
         let visibleCount = 0;
         for (const [index, modifier] of this.right.entries()) {
-            console.log(`ModifierX "${modifier.text}": ${modifier.role}`);
+            // console.log(`ModifierX "${modifier.text}": ${modifier.role}`);
             if (modifier.text !== '') {
                 if (modifier.role === Role.APPLIED) {
                     beforeWith = true;

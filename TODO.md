@@ -74,12 +74,21 @@ Parser
   * // TODO: these counts don't include the intent token.
 * Simplified catalog dump - for groups evaluating algorithms
 * Fuzzer
+  * node build\samples\test_generator.js -t=b -n=1 -s=492
+    * where does "extra" in "extra shot" come from?
+    * it comes from quantifiers
+    * the problem is that shot should not have an option tensor
+  * Ambiguity
+    * "cinnamon" vs "cinnamon syrup"
+    * "almond syrup" vs "almost milk" vs "almond milk creamer"
+    * "iced" vs "with ice"
   * Seeds
     * 0: um could you also get me an iced medium three pump buttered rum extra toffee syrup cappuccino with slightly less peppermint and two child milk cup of coffees I'm ready to pay
       * "child" => "child sized"
       * !!! "milk" => "whole milk" - actually the menu is wrong - milk should not be a legal child. Can't change this in the menu without losing the seeded baseline. Will change after fixing other problems.
       * x "cup of coffees" => "cups of coffee" - peephole optimizer
     * 1: hello there may we also get us two small cappuccinos with a pump of orange syrup iced with to go cup we're done
+      * NOTE: temporariliy fixed with a post-processing rule
       * "with to go cup" => "in a to go cup"
       * NOW, AFTER CHANGES "and to go cup" => "to go cup"
         * x Fix to that problem yields "iced to go cup"
