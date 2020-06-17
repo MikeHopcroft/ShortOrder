@@ -2,7 +2,6 @@ import * as minimist from 'minimist';
 
 import {
     TestProcessors,
-    testRunnerMain,
     testRunnerMain2,
     World
 } from 'prix-fixe';
@@ -20,7 +19,8 @@ async function go() {
             name: 'so',
             description: 'short-order',
             create: (w: World, d: string) => {
-                const shortOrderWorld = createShortOrderWorld(w, d, args.t, false);
+                const shortOrderWorld =
+                    createShortOrderWorld(w, d, args.t, false);
                 return shortOrderWorld.processor;
             },
         },

@@ -37,10 +37,12 @@ items:
 
   - pid: 3
     name: "3"
-    aliases:
-      - triple
+    aliases: []
+      # The triple quantifier causes excess tokenizations
+      # - triple
 
   - pid: 4
     name: "4"
-    aliases:
-      - quadruple
+    aliases: []
+      # The quadruple quantifier causes excess tokenizations
+      # - quadruple

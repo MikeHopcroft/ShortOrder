@@ -175,8 +175,11 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
+    // Exception thrown when using coalesceGraph
+    "add one double iced ristretto one third caf",
+
     // fuzzerB2: 10, simplified
-    "add a grande chai latte with some water",
+    // "add a grande chai latte with some water",
 
     // // fuzzerB: 81, simplified
     // "add a decaf latte with two percent milk and some eggnog",

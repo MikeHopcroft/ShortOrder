@@ -190,7 +190,7 @@ function configureProductGenerators(
                     new QuantityX(2, 'two dashes'),
                     new QuantityX(2, 'two sprinkles'),
                     new QuantityX(3, 'three dashes'),
-                    new QuantityX(4, 'three sprinkles'),
+                    new QuantityX(3, 'three sprinkles'),
                 ],
                 right: [
                     new QuantityX(1, 'a bit of'),
@@ -198,11 +198,11 @@ function configureProductGenerators(
                     new QuantityX(1, 'a dash of'),
                     new QuantityX(1, 'one dash of'),
                     new QuantityX(2, 'two dashes of'),
-                    new QuantityX(3, 'three dashes of'),            
+                    new QuantityX(3, 'three dashes of'),
                     new QuantityX(1, 'a sprinkle of'),
                     new QuantityX(1, 'one sprinkle of'),
                     new QuantityX(2, 'two sprinkles of'),
-                    new QuantityX(3, 'three sprinkles of'),            
+                    new QuantityX(3, 'three sprinkles of'),
                 ],
             }
         ],

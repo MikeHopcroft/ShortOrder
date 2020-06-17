@@ -1,4 +1,5 @@
 # comment 1
 // comment 2
-iced,ice
-tacos,tacosaaa
+// Preventing iced from stemming to ice is essential
+// for reducing the number of tokenizations.
+iced,iced

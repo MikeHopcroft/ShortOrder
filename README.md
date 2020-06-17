@@ -31,7 +31,7 @@ In order to use `short-order` you must have
 `short-order` has been tested with Node version 10.15.3.
 ~~~
 % git clone git@github.com:MikeHopcroft/ShortOrder.git
-% npm run install
+% npm install
 % npm run compile
 ~~~
 

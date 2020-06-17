@@ -74,6 +74,22 @@ Parser
   * // TODO: these counts don't include the intent token.
 * Simplified catalog dump - for groups evaluating algorithms
 * Fuzzer
+  * Consider .filteredGraph command
+  * 9215 tokenizations:
+    * could you please also do two small chai lattes with shot iced with oat milk three tall cups of drip coffee with a splash of fat free milk cream and oat and a small cinnamon flat white with ice i am ready to pay
+  * 1151 tokenizations:
+    * hello there can we just also do one double iced ristretto one third caf with heavy on the foam and two splashes of almond two tall mochas with room iced with two packets of sugar in the raw and three double iced three pump orange syrup macchiatoes with heavy on the cinnamon and oat milk that should do it
+    * 12 tokenizations: .tokenize hello there can we just also do one double iced ristretto one third caf with heavy on the foam and two splashes of almond
+    * 2 tokenizations: .tokenize two tall mochas with room iced with two packets of sugar in the raw and 
+    * 48 tokenizations: .tokenize three double iced three pump orange syrup macchiatoes with heavy on the cinnamon and oat milk that should do it
+    * Breaking the last one down
+    * 4 tokenizations: .tokenize three double iced three pump orange syrup macchiatoes with
+    * 12 tokenizations: .tokenize heavy on the cinnamon and oat milk that should do it
+      * cinnamon vs cinnamon syrup
+      * oat milk vs oat milk creamer
+      * oat milk whole milk vs oat milk creamer whole milk vs etc.
+
+
   * node build\samples\test_generator.js -t=b -n=1 -s=492
     * where does "extra" in "extra shot" come from?
     * it comes from quantifiers
@@ -996,3 +1012,137 @@ parseReplaceImplcit replacementTokens
 * Corrections
     * The frappe should be chocolate
 
+
+Performace
+~~~
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Time: 1783.9489ms
+  "all right I will also have one kid size three squirt orange syrup one percent latte macchiato with some cinnamon two medium soy milk chai lattes without shot and three small chai lattes with soy milk and iced I am done"
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Time: 569.711599ms
+  "um I will also do one iced tall decaf chai latte with foam and soy a double caffe macchiato with three splashes of whole milk a splash of coconut milk and half and half and three four shot caffe macchiatoes for here I am done"
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Time: 3215.0473ms
+  "ah I'll also get a triple caffe espresso iced for here cup with ice and a splash of almond milk one large americano iced with ice and some soy milk and three short latte macchiatoes with room a package of raw sugar and two percent we're ready to pay"
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Time: 2172.068299ms
+  "ah may I please have three quadruple shot caffe lungos with a pump of toffee syrup and a splash of two percent milk one triple caffe espresso with a splash of soy milk easy peppermint syrup and with no whip topping and two grande drips with lid and iced that will be everything"
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Time: 4042.8841ms
+  "could you please also do two small chai lattes with shot iced with oat milk three tall cups of drip coffee with a splash of fat free milk cream and oat and a small cinnamon flat white with ice I am ready to pay"
+
+~~~
+
+
+Correctness
+~~~
+---------------------------------------
+944: synthetic
+  step 0: NEEDS REPAIRS
+    customer: let's see we'll have an one shot caffe macchiato with a shot iced with three dashes of nutmeg and water three small espressos with a shot and two two percent milk tall rum syrup caffe latte macchiatoes with light raw sugar and iced that should be everything
+
+      1 iced solo macchiato (1304)                1304
+        1 espresso shot (6902)                    6902
+        3 nutmeg (5402)                           5402
+        1 water (5602)                            5602
+      3 solo espresso (1000)                      1000
+      1 iced tall latte macchiato (703)            703
+        1 espresso shot (6902)                    6902
+        2 two percent milk (3200)                 3200
+        1 buttered rum syrup (1702)               1702
+        1 light sugar in the raw (6701)           6701
+
+      id(11182): insert default item(espresso shot)
+    id(11176): change item(iced tall latte macchiato) quantity to 2
+      id(11178): change item(two percent milk) quantity to 1
+      id(11180): delete item(espresso shot)
+---------------------------------------
+887: synthetic
+  step 0: NEEDS REPAIRS
+    customer: hello can we please have three two shot caffe lungos dry with a package of brown packet and two extra shot
+
+      3 doppio lungo (1101)                       1101
+        1 dry (6100)                              6100
+        1 sugar in the raw (6702)                 6702
+        1 extra espresso shot (6903)              6903
+
+      id(10520): change item(extra espresso shot) quantity to 2
+      id(10520): change item(extra espresso shot) attribute "extra" to "regular"
+---------------------------------------
+877: synthetic
+  step 0: NEEDS REPAIRS
+    customer: ok so may I please get me two small dark roasts with three splashes of zero percent milk and an extra shot that will be all
+
+      2 tall dark roast coffee (1501)             1501
+        3 nonfat milk creamer (4300)              4300
+        1 extra espresso shot (6903)              6903
+
+      id(10393): change item(extra espresso shot) attribute "extra" to "regular"
+---------------------------------------
+FIXED. Fuzzer problem. This was a bad QuantityX in test_generator.ts.
+765: synthetic
+  step 0: NEEDS REPAIRS
+    customer: yeah so can we just have three three sprinkles nutmeg tall less vanilla half decaf mochas iced and two bran muffins warmed with strawberry jam I'm done
+
+      3 iced tall mocha (803)                      803
+        3 nutmeg (5402)                           5402
+        1 light vanilla syrup (2501)              2501
+        1 half caf (2800)                         2800
+      2 apple bran muffin (10000)                10000
+        1 warmed (200)                             200
+        1 strawberry jam (102)                     102
+
+      id(9023): change item(nutmeg) quantity to 4
+---------------------------------------
+Suspected fuzzer problem
+642: synthetic
+  step 0: NEEDS REPAIRS
+    customer: hi there may I just have three without peppermint syrup grande cappuccinos iced non caf with two extra shot and one kid's size cappuccino with easy on the orange syrup almond milk and almond bye
+
+      3 iced grande cappuccino (404)               404
+        1 no peppermint syrup (2200)              2200
+        1 decaf (3000)                            3000
+      2 short cappuccino (400)                     400
+        1 extra espresso shot (6903)              6903
+        1 light orange syrup (2101)               2101
+        1 almond milk (3700)                      3700
+        1 almond syrup (1602)                     1602
+
+    id(7525): change item(short cappuccino) quantity to 1
+      id(7529): delete item(extra espresso shot)
+      id(7540): insert default item(espresso shot)
+      id(7540): make item(espresso shot) quantity 2
+---------------------------------------
+616: synthetic
+  step 0: NEEDS REPAIRS
+    customer: let's see so may you just get us two no caramel quad shot caffe espressos with an extra shot and one third caf one double caffe lungo iced with sugar and one kid size caffe latte macchiato with lightly splenda that'll do it
+
+      2 quad espresso (1003)                      1003
+        1 no caramel syrup (1800)                 1800
+      1 iced doppio lungo (1105)                  1105
+        1 extra espresso shot (6903)              6903
+        1 one third caf (2900)                    2900
+        1 sugar (6602)                            6602
+      1 short latte macchiato (700)                700
+        1 light splenda (6501)                    6501
+
+      id(7177): insert default item(one third caf)
+      id(7178): insert default item(espresso shot)
+      id(7170): delete item(one third caf)
+      id(7172): delete item(extra espresso shot)
+---------------------------------------
+587: synthetic
+  step 0: NEEDS REPAIRS
+    customer: ah could you have one tall non caf latte macchiato with three extra shot and almond that'll do it
+
+      1 tall latte macchiato (701)                 701
+        1 decaf (3000)                            3000
+        1 extra espresso shot (6903)              6903
+        1 almond syrup (1602)                     1602
+
+      id(6806): delete item(almond syrup)
+      id(6811): insert default item(almond milk)
+      id(6808): change item(extra espresso shot) quantity to 3
+      id(6808): change item(extra espresso shot) attribute "extra" to "regular"
+
+~~~

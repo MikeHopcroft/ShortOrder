@@ -9,6 +9,7 @@ import {
     Tokenizer,
     TokenizerAlias,
     Token,
+    coalesceGraph,
 } from 'token-flow';
 
 import {
@@ -184,7 +185,16 @@ export class LexicalAnalyzer {
         const terms = this.lexicon.termModel.breakWords(query);
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
-        return this.tokenizer.generateGraph(hashed, stemmed);
+        const rawGraph = this.tokenizer.generateGraph(hashed, stemmed);
+        return rawGraph;
+
+        // DESIGN NOTE: coalesced graph is not needed because maximalPaths()
+        // calls addTopScoringBackLink() which coalesces paths on the fly.
+        //
+        // const coalesced = coalesceGraph(this.tokenizer, rawGraph);
+        // return coalesced;
+
+        // return this.tokenizer.generateGraph(hashed, stemmed);
     }
 
     // Generator for tokenizations of the input string that are equivanent to

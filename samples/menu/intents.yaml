@@ -7,8 +7,9 @@ items:
     - "(all right,alright)"
     - "let's see"
     - "(hello,hi) [there]"
-    - ah
-    - um
+    # Following collide with SEPERATOR, causing excess tokenizations
+    # - ah
+    # - um
 
   # TODO: are these EPILOGUE or END_OF_ORDER
   - pid: 200002
