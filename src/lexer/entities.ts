@@ -12,7 +12,7 @@ export interface EntityToken extends Token {
     name: string;
 }
 
-export function CreateEntity(pid: PID, name: string) {
+export function createEntity(pid: PID, name: string) {
     return { type: ENTITY, pid, name } as EntityToken;
 }
 

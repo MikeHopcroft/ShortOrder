@@ -14,6 +14,6 @@ export function unitTokenFactory(item:Item): Token {
     return { type: UNIT, id: item.pid, name: item.name } as UnitToken;
 }
 
-export function CreateUnit(id: PID, name: string) {
+export function createUnit(id: PID, name: string) {
     return { type: UNIT, id, name } as UnitToken;
 }

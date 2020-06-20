@@ -82,6 +82,6 @@ export function intentTokenFactory(item:Item): Token {
     return { type: symbol };
 }
 
-export function CreateIntent(type: symbol) {
+export function createIntent(type: symbol) {
     return { type };
 }

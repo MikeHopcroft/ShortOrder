@@ -12,10 +12,10 @@ export function quantityTokenFactory(item:Item): Token {
     return { type: QUANTITY, value: item.pid } as QuantityToken;
 }
 
-export function CreateQuantity(value: number) {
+export function createQuantity(value: number) {
     return { type: QUANTITY, value } as QuantityToken;
 }
 
-export function CreateNumber(value: number) {
+export function createNumber(value: number) {
     return { type: NUMBERTOKEN, value } as NumberToken;
 }

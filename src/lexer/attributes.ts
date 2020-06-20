@@ -10,6 +10,6 @@ export interface AttributeToken extends Token {
     name: string;
 }
 
-export function CreateAttribute(id: PID, name: string) {
+export function createAttribute(id: PID, name: string) {
     return { type: ATTRIBUTE, id, name } as AttributeToken;
 }

@@ -11,6 +11,6 @@ export function optionTokenFactory(item: Item): Token {
     return { type: OPTION, id: item.pid, name: item.name } as OptionToken;
 }
 
-export function CreateOption(id: PID, name: string) {
+export function createOption(id: PID, name: string) {
     return { type: OPTION, id, name } as OptionToken;
 }

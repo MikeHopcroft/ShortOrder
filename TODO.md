@@ -1,12 +1,17 @@
 # TODO List
 
 * Top
+  * Upgrade gts. TabSize = 2.
+  * LexiconSpec io-ts validation
+  * Integrate into createShortOrderWorld, confusion_matrix, and parser.test.ts
+  * x Casing for CreateQuantity(), CreateNumber(), other token factory helpers.
+  * Definition of ENTITY vs OPTION in lexical_analyzers. One from prix-fix. One local.
   * LexicalAnalyzer
-    * ILexicalAnalyzer
-    * LexicalAnalyzer implements ILexicalAnalyzer
-    * LexicalAnalyzer2 implements ILexicalAnalyzer
-    * Can we make a generatic token file? Special case for making tokens, based on name? (e.g. adding value to quantifier)
-    * Can stopwords become an intent? UNKNOWN_TOKEN
+    * x ILexicalAnalyzer
+    * x LexicalAnalyzer implements ILexicalAnalyzer
+    * x LexicalAnalyzer2 implements ILexicalAnalyzer
+    * x Can we make a generatic token file? Special case for making tokens, based on name? (e.g. adding value to quantifier)
+    * x Can stopwords become an intent? UNKNOWN_TOKEN
     * Do we even need quantifiers? The only ones defined are "an" and "couple"
   * Remove WEAK_ADD
   * Is order.ts (OrderOps) still used? Where did the functionality go?
