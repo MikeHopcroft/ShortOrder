@@ -1,5 +1,27 @@
 # TODO List
 
+* Top
+  * LexicalAnalyzer
+    * ILexicalAnalyzer
+    * LexicalAnalyzer implements ILexicalAnalyzer
+    * LexicalAnalyzer2 implements ILexicalAnalyzer
+    * Can we make a generatic token file? Special case for making tokens, based on name? (e.g. adding value to quantifier)
+    * Can stopwords become an intent? UNKNOWN_TOKEN
+    * Do we even need quantifiers? The only ones defined are "an" and "couple"
+  * Remove WEAK_ADD
+  * Is order.ts (OrderOps) still used? Where did the functionality go?
+  * Refactor createShortOrderWorld for browser
+  * Refactor LexicalAnalyzer for browser
+  * fuzzer
+    * All but fuzzer_main can probably go into core
+  * core
+    * lexer
+    * order
+    * parser
+    * stemmers
+    * stopwords
+    * utilities
+
 Parser Map
 * processRootInternal()
   * for all tokenizations

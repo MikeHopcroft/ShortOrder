@@ -1,0 +1,153 @@
+lexicon:
+  #############################################################################
+  #
+  # Intents
+  #
+  #############################################################################
+  # TODO: is PROLOGUE even needed?
+  - name: PROLOGUE
+    aliases:
+    - "(ok,okay,yes,yeah) [so]"
+    - "(all right,alright)"
+    - "let's see"
+    - "(hello,hi) [there]"
+    # Following collide with SEPERATOR, causing excess tokenizations
+    # - ah
+    # - um
+
+  # TODO: are these EPILOGUE or END_OF_ORDER
+  - name: EPILOGUE
+    aliases:
+      - I'm (done,good,ready)
+      - thank you
+      - thanks
+      - that's (all,everything,it)
+      - (that'll,that will,that should) (be,do) (all,everything,it)
+      - bye
+      - okay
+
+  # Introduce concept of catcher for "junk"
+  - name: JUNK
+    aliases: []
+
+  - name: PREPOSITION 
+    aliases:
+      - to [have]
+      - "(for,in,to) (the,that,your,be)"
+      - that [to]
+      - from [the,that,those]
+      # - with
+
+      # - into
+      # - "(to) (a,the,that,your,be)"
+
+      # 959/1000
+      # - into
+      # - "(to) (that,your,be)"
+
+      # - modify that to be
+      # What about those, them, them thar?
+      # What about in? e.g. in a to go cup?
+
+  - name: ADD_TO_ORDER
+    aliases:
+      # IDEA: might move "also" to stopwords. Same with "please", "ah", "um"
+      - (I'd,I would) [also] like
+      - (I'll,I will) [also] (do,get,have,take)
+      - I (need,wanna,want)
+      - (get,give) me
+      - "(can,could,may) (I,we,you,y'all) [just,please] [also] (do,get,get me,get us,have,add)"
+      - "[please] set me up with"
+      - "[please] hook me up with"
+      - we need
+      - we want
+      - (we'd,we would) [also] like
+      - (we'll, we will) [also] have
+      - how about
+      # TODO: please and also should probably go into stopwords or prologue
+      - "[please,also] add"
+
+  - name: REMOVE_ITEM
+    aliases:
+      # NOTE: added "removed" here for use with hybrid-metaphone. Could, instead, add it to singularize.csv.
+      - "[can we,can you,would you,i want to,i'd like to,please] (cancel,delete,drop,eighty six,lose,remove,removed,skip,take off,take away) [the]"
+
+
+  - name: MODIFY_ITEM
+    aliases:
+      # TODO: match future tenses
+      - "[can we,can you,would you,i want to,i'd like to,please] (make,modify,change,replace) [the]"
+
+  - name: CONJUNCTION
+    aliases:
+      - also
+      - and
+      - with
+
+  # ISSUE: "yeah" is a separator and also an affirmative answer.
+  # ISSUE: not sure about "I don't know" and "one more".
+  - name: SEPERATOR
+    aliases:
+      # - yeah
+      - ah
+      - oh
+      - uh
+      - um
+      - please
+      - I don't know
+      - one more
+
+  #############################################################################
+  #
+  # Units
+  #
+  #############################################################################
+  - name: UNIT
+    aliases:
+      - pump [of]
+      - shakes [of]
+      - sprinkles [of]
+      - splash [of]
+      - squirt [of]
+      - drop [of]
+      - dollop [of]
+      - (pack,packet,package) [of]
+      - order [of]
+      - dash [of]
+
+  #############################################################################
+  #
+  # Stopwords
+  #
+  #############################################################################
+  - name: UNKNOWNTOKEN
+    aliases:
+      - for
+      - that
+      - i
+      - we
+      - i've
+
+  #############################################################################
+  #
+  # Quantifiers
+  #
+  #############################################################################
+  - name: QUANTITY
+    value: 1
+    aliases:
+      # NOTE: following line may rely on stemmer to handle "a"
+      - an
+  - name: QUANTITY
+    value: 2
+    aliases:
+      # ISSUE: double as quantifer vs double as product name,
+      # e.g. "double shot" vs "double espresso"
+      # PLAN: use cookbook for double shot
+      # - double
+
+      # ISSUE: The term "of" is a partial match for "couple of".
+      # Potential error in "Make one of them large".
+      # What about "pair", "few", "some"?
+      - couple
+quantifiers:

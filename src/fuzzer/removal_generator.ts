@@ -1,7 +1,5 @@
 import * as pluralize from 'pluralize';
 
-import { ItemInstance } from 'prix-fixe';
-
 import { AliasGenerator } from './alias_generator';
 import { OrderX, RemoveX, SegmentX, StepX, WordX } from './fuzzer';
 import { OrderGenerator } from './order_generator';

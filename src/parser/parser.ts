@@ -15,7 +15,7 @@ import {
     CONJUNCTION,
     ENTITY,
     EPILOGUE,
-    LexicalAnalyzer,
+    ILexicalAnalyzer,
     OPTION_RECIPE,
     PRODUCT_RECIPE,
     PROLOGUE,
@@ -30,7 +30,7 @@ export class Parser {
     readonly cartOps: ICartOps;
     readonly catalog: ICatalog;
     readonly cookbook: ICookbook;
-    readonly lexer: LexicalAnalyzer;
+    readonly lexer: ILexicalAnalyzer;
     readonly rules: IRuleChecker;
     readonly debugMode: boolean;
 
@@ -64,7 +64,7 @@ export class Parser {
         catalog: ICatalog,
         cookbook: ICookbook,
         attributes: AttributeInfo,
-        lexer: LexicalAnalyzer,
+        lexer: ILexicalAnalyzer,
         rules: IRuleChecker,
         debugMode: boolean
     ) {

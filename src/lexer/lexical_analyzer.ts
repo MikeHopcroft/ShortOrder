@@ -27,6 +27,7 @@ import { CreateAttribute, AttributeToken, ATTRIBUTE } from './attributes';
 import { generateRecipes } from './cookbook';
 import { CreateEntity, EntityToken, ENTITY } from './entities';
 import { IntentTokenFactory } from './intents';
+import { ILexicalAnalyzer, Span } from './interfaces';
 
 import {
     aliasesFromYamlString,
@@ -39,13 +40,7 @@ import { CreateOption, OptionToken } from './options';
 import { quantityTokenFactory } from './quantities';
 import { unitTokenFactory } from './units';
 
-
-export interface Span {
-    start: number;
-    length: number;
-}
-
-export class LexicalAnalyzer {
+export class LexicalAnalyzer implements ILexicalAnalyzer {
     lexicon: Lexicon;
     tokenizer: Tokenizer;
 

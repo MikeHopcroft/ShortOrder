@@ -18,7 +18,7 @@ import {
 import {
     ATTRIBUTE,
     ENTITY,
-    LexicalAnalyzer,
+    ILexicalAnalyzer,
     Span,
 } from '../lexer';
 
@@ -39,7 +39,7 @@ import { splitOnEntities } from './parser_utilities';
 ///////////////////////////////////////////////////////////////////////////////
 export function subgraphFromItems(
     attributes: AttributeInfo,
-    lexer: LexicalAnalyzer,
+    lexer: ILexicalAnalyzer,
     cart: Cart,
     graph: Graph,
     span: Span,
@@ -55,7 +55,7 @@ export function subgraphFromItems(
 
 function addTokens(
     attributes: AttributeInfo,
-    lexer: LexicalAnalyzer,
+    lexer: ILexicalAnalyzer,
     item: ItemInstance,
     tokens: Set<Token>,
     includeProducts: boolean
@@ -157,7 +157,7 @@ export function *productTargets(
 ): IterableIterator<HypotheticalItem> {
     const attributes: AttributeInfo = parser.attributes;
     const cartOps: ICartOps = parser.cartOps;
-    const lexer: LexicalAnalyzer = parser.lexer;
+    const lexer: ILexicalAnalyzer = parser.lexer;
     const cart = state.cart;
 
     if (span.length === 0) {
@@ -238,7 +238,7 @@ export function *optionTargets(
 ): IterableIterator<HypotheticalItem> {
     const attributes: AttributeInfo = parser.attributes;
     const cartOps: ICartOps = parser.cartOps;
-    const lexer: LexicalAnalyzer = parser.lexer;
+    const lexer: ILexicalAnalyzer = parser.lexer;
 
     if (span.length === 0) {
         return;

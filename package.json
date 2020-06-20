@@ -47,7 +47,6 @@
   "dependencies": {
     "ajv": "^6.12.2",
     "ansi-styles": "^3.2.1",
-    "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "dotenv": "^8.0.0",
     "fast-csv": "^4.3.0",
@@ -57,7 +56,6 @@
     "number-to-words": "^1.2.4",
     "pluralize": "^7.0.0",
     "prix-fixe": "0.0.53",
-    "readline-sync": "^1.4.9",
     "seedrandom": "^3.0.1",
     "talisman": "^0.21.0",
     "token-flow": "0.0.36"

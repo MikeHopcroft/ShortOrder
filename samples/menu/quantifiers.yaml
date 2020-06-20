@@ -34,6 +34,7 @@ items:
       # ISSUE: The term "of" is a partial match for "couple of".
       # Potential error in "Make one of them large".
       - couple
+      # What about "pair of", "few", "some"?
 
   - pid: 3
     name: "3"

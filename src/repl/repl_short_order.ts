@@ -31,10 +31,10 @@ import { createShortOrderWorld, ShortOrderWorld } from '../integration';
 import {
     ENTITY,
     EntityToken,
-    tokenToString,
+    ILexicalAnalyzer,
     OptionToken,
-    LexicalAnalyzer,
     Span,
+    tokenToString,
 } from '../lexer';
 
 import { Parser, productTargets, HypotheticalItem } from '../parser';
@@ -42,7 +42,7 @@ import { Parser, productTargets, HypotheticalItem } from '../parser';
 export class ShortOrderReplExtension implements IReplExtension {
     world: World;
     world2: ShortOrderWorld;
-    lexer: LexicalAnalyzer;
+    lexer: ILexicalAnalyzer;
 
     // Prefix for token-flow scoring.
     // Set by .prefix command.
@@ -369,7 +369,7 @@ export const shortOrderReplExtensionFactory: IReplExtensionFactory = {
     }
 };
 
-export function printMatchingGenerics(lexer: LexicalAnalyzer, text: string) {
+export function printMatchingGenerics(lexer: ILexicalAnalyzer, text: string) {
     const graph = lexer.createGraph(text);
 
     const tokens = new Set<EntityToken | OptionToken>();

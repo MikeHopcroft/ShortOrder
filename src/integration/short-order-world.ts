@@ -8,12 +8,12 @@ import {
 
 import { DefaultTermModel, Lexicon } from 'token-flow';
 
-import { LexicalAnalyzer } from '../lexer';
+import { ILexicalAnalyzer, LexicalAnalyzer } from '../lexer';
 import { Parser, processRoot } from '../parser';
 import { StemmerFactory } from '../stemmers';
 
 export interface ShortOrderWorld extends World {
-    lexer: LexicalAnalyzer;
+    lexer: ILexicalAnalyzer;
     processor: Processor;
 }
 
