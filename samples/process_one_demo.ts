@@ -9,7 +9,7 @@ import {
     CorrectionLevel
 } from 'prix-fixe';
 
-import { createShortOrderWorld, ShortOrderWorld } from '../src';
+import { createShortOrderWorld, loadShortOrderWorld, ShortOrderWorld } from '../src';
 
 function showUsage() {
     const program = path.basename(process.argv[1]);
@@ -54,7 +54,8 @@ async function go(utterances: string[]) {
     }
 
     const world = createWorld2(dataPath);
-    const shortOrderWorld = createShortOrderWorld(world, dataPath, args.t, true);
+    // const shortOrderWorld = createShortOrderWorld(world, dataPath, args.t, true);
+    const shortOrderWorld = loadShortOrderWorld(world, dataPath, args.t, true);
     const processor = shortOrderWorld.processor;
 
     const steps = utterances.map( x => ({
@@ -175,8 +176,11 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
+    // Testing lexicon.yaml
+    "i want a five pump caramel flat white",
+
     // Exception thrown when using coalesceGraph
-    "add one double iced ristretto one third caf",
+    // "add one double iced ristretto one third caf",
 
     // fuzzerB2: 10, simplified
     // "add a grande chai latte with some water",

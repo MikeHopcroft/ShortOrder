@@ -1,8 +1,15 @@
 # TODO List
 
 * Top
+  * x Stemmer configurations should go in lexicon.yaml.
+    * x stopwords - already in lexicon.yaml
+    * x snowball
+    * x metaphone
+    * x singularize
+    * x cases 41 and 1027 - due to "iced" vs "ice" after stemming?
+  * x Port StemmerFactory to use ILoader.
   * Upgrade gts. TabSize = 2.
-  * LexiconSpec io-ts validation
+  * x LexiconSpec io-ts validation
   * Integrate into createShortOrderWorld, confusion_matrix, and parser.test.ts
   * x Casing for CreateQuantity(), CreateNumber(), other token factory helpers.
   * Definition of ENTITY vs OPTION in lexical_analyzers. One from prix-fix. One local.
@@ -1173,3 +1180,24 @@ Suspected fuzzer problem
       id(6808): change item(extra espresso shot) attribute "extra" to "regular"
 
 ~~~
+From Oliver. Not a legal specific
+
+% add an iced grande latte
+
+  1 iced grande latte (604)                302:1:2
+
+% make that short
+
+  1 UNKNOWN(302:1:0) (undefined)           302:1:0
+
+%   
+
+% add an iced venti latte
+
+  1 iced venti latte (605)                 302:1:3
+
+% make that hot
+
+  1 UNKNOWN(302:0:3) (undefined)           302:0:3
+
+% 

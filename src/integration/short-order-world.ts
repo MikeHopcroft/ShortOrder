@@ -53,7 +53,8 @@ export function createShortOrderWorld(
         world.attributeInfo,
         lexer,
         world.ruleChecker,
-        debugMode);
+        debugMode
+    );
 
     const processor = async (text: string, state: State): Promise<State> => {
         return processRoot(parser, state, text);

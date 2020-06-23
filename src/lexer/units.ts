@@ -1,7 +1,7 @@
 import { PID } from 'prix-fixe';
 import { Item, Token } from 'token-flow';
 
-export const UNIT: unique symbol = Symbol('UNIT');
+export const UNIT: unique symbol = Symbol.for('UNIT');
 export type UNIT = typeof UNIT;
 
 export interface UnitToken extends Token {

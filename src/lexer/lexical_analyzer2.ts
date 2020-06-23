@@ -1,6 +1,7 @@
 import {
   Alias,
   allTokenizations,
+  DefaultTermModel,
   Graph,
   Lexicon,
   maximalTokenizations,
@@ -29,21 +30,14 @@ import {
   generateProducts
 } from './lexical_analyzer';
 
-import { matcherFromExpression, patternFromExpression,
+import {
+  matcherFromExpression,
+  patternFromExpression,
 } from './lexical_utilities';
 
 import { OptionToken } from './options';
 import { createQuantity, QuantityToken } from './quantities';
-
-interface TokenSpec {
-  name: string;
-  aliases: string[];
-  value?: number;
-}
-
-interface LexiconSpec {
-  lexicon: TokenSpec[];
-}
+import { LexiconSpec, TokenSpec } from './types';
 
 export class LexicalAnalyzer2 implements ILexicalAnalyzer {
   lexicon: Lexicon;
@@ -57,14 +51,10 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
   constructor(
     world: World,
     spec: LexiconSpec,
-    lexicon?: Lexicon,
+    lexicon: Lexicon,
     debugMode = true,
   ) {
-    if (lexicon) {
-      this.lexicon = lexicon;
-    } else {
-      this.lexicon = new Lexicon();
-    }
+    this.lexicon = lexicon;
 
     this.tokenizer = new Tokenizer(
       this.lexicon.termModel,

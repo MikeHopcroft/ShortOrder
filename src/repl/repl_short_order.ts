@@ -26,7 +26,7 @@ import {
     levenshtein
 } from 'token-flow';
 
-import { createShortOrderWorld, ShortOrderWorld } from '../integration';
+import { createShortOrderWorld, loadShortOrderWorld, ShortOrderWorld } from '../integration';
 
 import {
     ENTITY,
@@ -55,7 +55,8 @@ export class ShortOrderReplExtension implements IReplExtension {
         const args = minimist(process.argv.slice());
 
         this.world = world;
-        this.world2 = createShortOrderWorld(world, dataPath, args.t, false);
+        // this.world2 = createShortOrderWorld(world, dataPath, args.t, false);
+        this.world2 = loadShortOrderWorld(world, dataPath, args.t, false);
         this.lexer = this.world2.lexer;
 
         Debug.enable('tf-interactive,tf:*');

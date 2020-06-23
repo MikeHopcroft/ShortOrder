@@ -63,7 +63,6 @@ export class EntityBuilderBase {
 
         this.pid = pid;
         this.tokensUsed += 1;
-
     }
 
     getScore(): number {

@@ -40,6 +40,15 @@ import { TokenSequence } from './token_sequence';
 //
 ///////////////////////////////////////////////////////////////////////////
 export function processRoot(
+  parser: Parser,
+  state: State,
+  text: string
+): State {
+  state = processRootInternal(parser, state, text);
+  return state;
+}
+
+export function processRootOld(
     parser: Parser,
     state: State,
     text: string

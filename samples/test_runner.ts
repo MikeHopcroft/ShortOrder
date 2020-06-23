@@ -7,6 +7,7 @@ import {
 } from 'prix-fixe';
 
 import { createShortOrderWorld } from '../src';
+import { loadShortOrderWorld } from '../src/integration/loader';
 
 async function go() {
     // TODO: figure out how to merge command-line argument processing
@@ -20,7 +21,8 @@ async function go() {
             description: 'short-order',
             create: (w: World, d: string) => {
                 const shortOrderWorld =
-                    createShortOrderWorld(w, d, args.t, false);
+                    //createShortOrderWorld(w, d, args.t, false);
+                    loadShortOrderWorld(w, d, args.t, false);
                 return shortOrderWorld.processor;
             },
         },

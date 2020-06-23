@@ -150,4 +150,14 @@ lexicon:
       # Potential error in "Make one of them large".
       # What about "pair", "few", "some"?
       - couple
-quantifiers:
+replacers:
+  - name: metaphone
+    replacements:
+      - [to,T-0]
+      - [two,T-0]
+      - [white,WT]
+  - name: singularize
+    replacements: []
+  - name: snowball
+    replacements:
+      - [iced,iced]

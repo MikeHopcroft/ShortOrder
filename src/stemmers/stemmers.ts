@@ -6,7 +6,7 @@ const metaphone = require('talisman/phonetics/metaphone') as (word:string)=>stri
 const doubleMetaphone = require('talisman/phonetics/double-metaphone') as (word:string)=>[string, string];
 import { StemmerFunction } from 'token-flow';
 
-export interface StemmerDescription {
+interface StemmerDescription {
     name: string;
     description: string;
     create(dataPath: string): StemmerFunction;

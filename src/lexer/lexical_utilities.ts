@@ -84,8 +84,9 @@ export function tokenToString(t: Token) {
             name = `[OPTION_RECIPE:${optionRecipe},${token.rid}]`;
             break;
         case UNIT:
-            const unit = token.name.replace(/\s/g, '_').toUpperCase();
-            name = `[UNIT:${unit},${token.id}]`;
+            // const unit = token.name.replace(/\s/g, '_').toUpperCase();
+            // name = `[UNIT:${unit},${token.id}]`;
+            name = `[UNIT:${token.id}]`;
             break;
         case WORD:
             name = `[WORD:${token.text}]`;
