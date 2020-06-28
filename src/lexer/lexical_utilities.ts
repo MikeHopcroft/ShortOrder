@@ -86,7 +86,10 @@ export function tokenToString(t: Token) {
         case UNIT:
             // const unit = token.name.replace(/\s/g, '_').toUpperCase();
             // name = `[UNIT:${unit},${token.id}]`;
-            name = `[UNIT:${token.id}]`;
+
+            // Version before lexical_analyzer2.
+            // name = `[UNIT:${token.id}]`;
+            name = `[UNIT]`;
             break;
         case WORD:
             name = `[WORD:${token.text}]`;
