@@ -3,8 +3,10 @@ import * as fs from 'fs';
 import {
     Alias,
     allTokenizations,
+    Edge,
     Graph,
     Lexicon,
+    maximalPaths,
     maximalTokenizations,
     Tokenizer,
     TokenizerAlias,
@@ -196,6 +198,10 @@ export class LexicalAnalyzer implements ILexicalAnalyzer {
     // the top-scoring tokenization.
     *tokenizationsFromGraph2(graph: Graph): IterableIterator<Array<Token & Span>> {
         yield* maximalTokenizations(graph.edgeLists);
+    }
+
+    *pathsFromGraph2(graph: Graph): IterableIterator<Edge[]> {
+        yield* maximalPaths(graph.edgeLists);
     }
 
     *allTokenizations(graph: Graph): IterableIterator<Array<Token & Span>> {

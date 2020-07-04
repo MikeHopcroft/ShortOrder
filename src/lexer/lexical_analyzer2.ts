@@ -2,6 +2,7 @@ import {
   Alias,
   allTokenizations,
   DefaultTermModel,
+  Edge,
   Graph,
   Lexicon,
   maximalTokenizations,
@@ -9,6 +10,7 @@ import {
   TokenizerAlias,
   Token,
   coalesceGraph,
+  maximalPaths,
 } from 'token-flow';
 
 import {
@@ -170,6 +172,10 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
   // the top-scoring tokenization.
   *tokenizationsFromGraph2(graph: Graph): IterableIterator<Array<Token & Span>> {
     yield* maximalTokenizations(graph.edgeLists);
+  }
+
+  *pathsFromGraph2(graph: Graph): IterableIterator<Edge[]> {
+    yield* maximalPaths(graph.edgeLists);
   }
 
   *allTokenizations(graph: Graph): IterableIterator<Array<Token & Span>> {

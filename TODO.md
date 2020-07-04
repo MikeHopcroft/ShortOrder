@@ -1,6 +1,7 @@
 # TODO List
 
 * Top
+  * Product recipces - e.g. "add a double double"
   * x Stemmer configurations should go in lexicon.yaml.
     * x stopwords - already in lexicon.yaml
     * x snowball

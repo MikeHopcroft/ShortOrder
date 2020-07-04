@@ -176,8 +176,11 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
+    // Recipe bug
+    "add a double double"
+
     // Testing lexicon.yaml
-    "i want a five pump caramel flat white",
+    // "i want a five pump caramel flat white",
 
     // Exception thrown when using coalesceGraph
     // "add one double iced ristretto one third caf",
