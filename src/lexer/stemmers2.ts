@@ -22,6 +22,11 @@ export class StemmerFactory2 {
       create: createSnowballStemmer
     },
     {
+      name: 'snowball-es',
+      description: 'snowball v2 stemmer',
+      create: createSnowballStemmerES
+    },
+    {
       name: 'metaphone',
       description: 'double metaphone',
       create: createMetaphone
@@ -105,6 +110,12 @@ export class StemmerFactory2 {
 function createSnowballStemmer(factory: StemmerFactory2): StemmerFunction {
   const replacements = factory.getReplacements('snowball');
   const snowballStemmer = newStemmer('english');
+  return replacer(replacements, snowballStemmer.stem);
+}
+
+function createSnowballStemmerES(factory: StemmerFactory2): StemmerFunction {
+  const replacements = factory.getReplacements('snowball');
+  const snowballStemmer = newStemmer('spanish');
   return replacer(replacements, snowballStemmer.stem);
 }
 
