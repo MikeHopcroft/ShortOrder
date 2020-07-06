@@ -62,7 +62,7 @@
     "token-flow": "0.0.38"
   },
   "peerDependencies": {
-    "prix-fixe": "0.0.55",
-    "token-flow": "0.0.37"
+    "prix-fixe": "0.0.56",
+    "token-flow": "0.0.38"
   }
 }
