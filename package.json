@@ -55,11 +55,11 @@
     "murmurhash": "0.0.2",
     "number-to-words": "^1.2.4",
     "pluralize": "^7.0.0",
-    "prix-fixe": "0.0.55",
+    "prix-fixe": "0.0.56",
     "seedrandom": "^3.0.1",
     "snowball-stemmers": "^0.6.0",
     "talisman": "^0.21.0",
-    "token-flow": "0.0.37"
+    "token-flow": "0.0.38"
   },
   "peerDependencies": {
     "prix-fixe": "0.0.55",
