@@ -1,5 +1,5 @@
 import { OPTION, State } from 'prix-fixe';
-import { filterGraph, Graph, Token, UNKNOWNTOKEN } from 'token-flow';
+import { filterGraph, Graph, Token, UNKNOWNTOKEN, maximalPaths, maximalTokenizations } from 'token-flow';
 
 import {
     ADD_TO_ORDER,
@@ -117,7 +117,9 @@ function processRootInternal(
     // }
 
     let best: Interpretation | null = null;
-    for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
+    
+    for (const tokenization of maximalTokenizations(filteredGraph.edgeLists)) {
+    // for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
         // XXX
         if (parser.debugMode) {
             console.log(' ');

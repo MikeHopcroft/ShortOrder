@@ -8,11 +8,11 @@ import {
 } from 'prix-fixe';
 
 import {
-    DynamicGraph,
+    allTokenizations,
+    DynamicGraph2,
     Edge,
     Graph,
     Token,
-    UNKNOWNTOKEN
 } from 'token-flow';
 
 import {
@@ -95,14 +95,11 @@ function createSubgraph(
                     // Entities (products and options) and Attributes
                     // are copied if they are in the subset.
                     return subset.has(token);
-                } else if (token.type !== UNKNOWNTOKEN) {
-                    // All other, non-default edges are copied.
-                    // The default edges will be added by the DynamicGraph constructor.
-                    // TODO: REVIEW: do UNKNOWNTOKEN only correspond to default edges?
-                    // Can they be anything else?
-                    return true;
                 } else {
-                    return false;
+                    // All other edges are copied.
+                    // TODO: REVIEW: does UNKNOWNTOKEN only correspond to default edges?
+                    // Can they be anything else? Perhaps stopwords?
+                    return true;
                 }
             }));
         }
@@ -125,7 +122,7 @@ function createSubgraph(
     //     }
     // }
 
-    return new DynamicGraph(filtered);
+    return new DynamicGraph2(filtered);
 }
 
 
@@ -181,7 +178,7 @@ export function *productTargets(
     // Need to look at all tokenizations, not just the top-scoring ones because
     // targets are often partially/poorly specified (e.g. "latte" instead of
     // "cinnamon dolce latte")
-    const tokenizations = lexer.allTokenizations(subgraph);
+    const tokenizations = allTokenizations(subgraph.edgeLists);
     for (const tokenization of tokenizations) {
         // console.log('Tokenization:');
         // for (const token of tokenization) {
@@ -263,7 +260,7 @@ export function *optionTargets(
     // Need to look at all tokenizations, not just the top-scoring ones because
     // targets are often partially/poorly specified (e.g. "latte" instead of
     // "cinnamon dolce latte")
-    const tokenizations = lexer.allTokenizations(subgraph);
+    const tokenizations = allTokenizations(subgraph.edgeLists);
     for (const tokenization of tokenizations) {
         // console.log('Tokenization:');
         // for (const token of tokenization) {

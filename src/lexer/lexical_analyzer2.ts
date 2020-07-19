@@ -1,16 +1,10 @@
 import {
   Alias,
-  allTokenizations,
-  DefaultTermModel,
-  Edge,
   Graph,
   Lexicon,
-  maximalTokenizations,
   Tokenizer,
   TokenizerAlias,
   Token,
-  coalesceGraph,
-  maximalPaths,
 } from 'token-flow';
 
 import {
@@ -24,7 +18,7 @@ import {
 import { AttributeToken, ATTRIBUTE } from './attributes';
 import { generateRecipes } from './cookbook';
 import { EntityToken, ENTITY } from './entities';
-import { ILexicalAnalyzer, Span } from './interfaces';
+import { ILexicalAnalyzer } from './interfaces';
 
 import {
   generateAttributes,
@@ -157,29 +151,11 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
     const stemmed = terms.map(this.lexicon.termModel.stem);
     const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
     const rawGraph = this.tokenizer.generateGraph(hashed, stemmed);
-    return rawGraph;
 
     // DESIGN NOTE: coalesced graph is not needed because maximalPaths()
     // calls addTopScoringBackLink() which coalesces paths on the fly.
-    //
-    // const coalesced = coalesceGraph(this.tokenizer, rawGraph);
-    // return coalesced;
 
-    // return this.tokenizer.generateGraph(hashed, stemmed);
-  }
-
-  // Generator for tokenizations of the input string that are equivanent to
-  // the top-scoring tokenization.
-  *tokenizationsFromGraph2(graph: Graph): IterableIterator<Array<Token & Span>> {
-    yield* maximalTokenizations(graph.edgeLists);
-  }
-
-  *pathsFromGraph2(graph: Graph): IterableIterator<Edge[]> {
-    yield* maximalPaths(graph.edgeLists);
-  }
-
-  *allTokenizations(graph: Graph): IterableIterator<Array<Token & Span>> {
-    yield* allTokenizations(graph.edgeLists);
+    return rawGraph;
   }
 
   *generateGeneralAliases(specs: TokenSpec[]): IterableIterator<Alias> {

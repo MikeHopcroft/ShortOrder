@@ -23,7 +23,8 @@ import {
     DownstreamTermPredicate,
     filterGraph,
     Graph,
-    levenshtein
+    levenshtein,
+    maximalTokenizations
 } from 'token-flow';
 
 import { createShortOrderWorld, loadShortOrderWorld, ShortOrderWorld } from '../integration';
@@ -200,7 +201,7 @@ export class ShortOrderReplExtension implements IReplExtension {
                 //     }
                 // }
 
-                const tokenizations = this.lexer.tokenizationsFromGraph2(filteredGraph);
+                const tokenizations = maximalTokenizations(filteredGraph.edgeLists);
 
                 const terms = this.lexer.lexicon.termModel.breakWords(line);
                 let counter = 0;

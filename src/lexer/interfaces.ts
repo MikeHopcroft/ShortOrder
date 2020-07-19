@@ -26,7 +26,4 @@ export interface ILexicalAnalyzer {
   getEntityToken(pid: PID): Token;
   getAttributeToken(aid: AID): AttributeToken;
   createGraph(query: string): Graph;
-  tokenizationsFromGraph2(graph: Graph): IterableIterator<Array<Token & Span>>;
-  pathsFromGraph2(graph: Graph): IterableIterator<Edge[]>;
-  allTokenizations(graph: Graph): IterableIterator<Array<Token & Span>>;
 }

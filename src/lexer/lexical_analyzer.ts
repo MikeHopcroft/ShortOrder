@@ -183,29 +183,11 @@ export class LexicalAnalyzer implements ILexicalAnalyzer {
         const stemmed = terms.map(this.lexicon.termModel.stem);
         const hashed = stemmed.map(this.lexicon.termModel.hashTerm);
         const rawGraph = this.tokenizer.generateGraph(hashed, stemmed);
-        return rawGraph;
 
         // DESIGN NOTE: coalesced graph is not needed because maximalPaths()
         // calls addTopScoringBackLink() which coalesces paths on the fly.
-        //
-        // const coalesced = coalesceGraph(this.tokenizer, rawGraph);
-        // return coalesced;
 
-        // return this.tokenizer.generateGraph(hashed, stemmed);
-    }
-
-    // Generator for tokenizations of the input string that are equivanent to
-    // the top-scoring tokenization.
-    *tokenizationsFromGraph2(graph: Graph): IterableIterator<Array<Token & Span>> {
-        yield* maximalTokenizations(graph.edgeLists);
-    }
-
-    *pathsFromGraph2(graph: Graph): IterableIterator<Edge[]> {
-        yield* maximalPaths(graph.edgeLists);
-    }
-
-    *allTokenizations(graph: Graph): IterableIterator<Array<Token & Span>> {
-        yield* allTokenizations(graph.edgeLists);
+        return rawGraph;
     }
 }
 
@@ -214,19 +196,6 @@ export class LexicalAnalyzer implements ILexicalAnalyzer {
 // Catalog items and aliases
 //
 ///////////////////////////////////////////////////////////////////////////////
-function* generateAliases(
-    entries: IterableIterator<[Token, string]>
-): IterableIterator<Alias> {
-    for (const [token, aliases] of entries) {
-        for (const alias of aliases) {
-            const matcher = matcherFromExpression(alias);
-            const pattern = patternFromExpression(alias);
-            for (const text of aliasesFromPattern(pattern)) {
-                yield { token, text, matcher };
-            }
-        }
-    }
-}
 
 // Prints out information about dimensions associated with a set of DIDs.
 export function* generateAttributes(world: World): IterableIterator<Alias> {
