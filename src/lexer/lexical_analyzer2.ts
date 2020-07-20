@@ -235,4 +235,3 @@ function sortTokenSpecs(specs: TokenSpec[]): SortedTokens {
 
   return sorted;
 }
-

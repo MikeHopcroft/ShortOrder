@@ -59,10 +59,10 @@
     "seedrandom": "^3.0.1",
     "snowball-stemmers": "^0.6.0",
     "talisman": "^0.21.0",
-    "token-flow": "0.0.38"
+    "token-flow": "0.0.39"
   },
   "peerDependencies": {
     "prix-fixe": "0.0.56",
-    "token-flow": "0.0.38"
+    "token-flow": "0.0.39"
   }
 }
