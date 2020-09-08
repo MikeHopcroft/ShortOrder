@@ -381,7 +381,6 @@ rules:
       - caffeines
       - here-or-to-go
       - latte_preparations
-      # - milks
       - wet-or-dry
     info:
       minQty: 1
@@ -421,6 +420,9 @@ recipes:
       - name: espresso shot
         quantity: 2
         children: []
+# skus:
+#   - name: iced grande latte
+#     sku: 123456
 # shaken, stirred
 # gin and tonic
 # rum and coke

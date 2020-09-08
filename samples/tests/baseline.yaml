@@ -1,9 +1,7 @@
 tests:
   - id: 0
     suites: regression add
-    comment: |
-      ### Generic Items
-      Adding one single-term product
+    comment: Adding one single-term product.
     steps:
       - turns:
           - speaker: speaker
@@ -22,7 +20,7 @@ tests:
             steps: []
   - id: 1
     suites: regression add
-    comment: 'Adding one multi-term product, exact match'
+    comment: 'Adding one multi-term product, exact match.'
     steps:
       - turns:
           - speaker: speaker
@@ -41,7 +39,7 @@ tests:
             steps: []
   - id: 2
     suites: regression add
-    comment: 'Adding one multi-term product, partial match'
+    comment: 'Adding one multi-term product, partial match.'
     steps:
       - turns:
           - speaker: speaker
@@ -60,7 +58,7 @@ tests:
             steps: []
   - id: 3
     suites: regression add
-    comment: Adding two instances
+    comment: Adding two instances.
     steps:
       - turns:
           - speaker: speaker
@@ -79,7 +77,7 @@ tests:
             steps: []
   - id: 4
     suites: regression add
-    comment: Adding 25 instances
+    comment: Adding 25 instances.
     steps:
       - turns:
           - speaker: speaker
@@ -98,9 +96,7 @@ tests:
             steps: []
   - id: 5
     suites: regression add
-    comment: |
-      ### Attributes
-      One leading attribute
+    comment: One leading attribute.
     steps:
       - turns:
           - speaker: speaker
@@ -119,7 +115,7 @@ tests:
             steps: []
   - id: 6
     suites: regression add
-    comment: Two leading attributes
+    comment: Two leading attributes.
     steps:
       - turns:
           - speaker: speaker
@@ -138,7 +134,7 @@ tests:
             steps: []
   - id: 7
     suites: regression add
-    comment: 'Two leading attributes, different order'
+    comment: 'Two leading attributes, different order.'
     steps:
       - turns:
           - speaker: speaker
@@ -157,7 +153,7 @@ tests:
             steps: []
   - id: 8
     suites: regression add
-    comment: 'Two attributes, one leading and one trailing'
+    comment: 'Two attributes, one leading and one trailing.'
     steps:
       - turns:
           - speaker: speaker
@@ -176,7 +172,7 @@ tests:
             steps: []
   - id: 9
     suites: regression add
-    comment: Two trailing attributes
+    comment: Two trailing attributes.
     steps:
       - turns:
           - speaker: speaker
@@ -195,7 +191,7 @@ tests:
             steps: []
   - id: 10
     suites: regression add
-    comment: Adding a product with conflicting attributes
+    comment: Adding a product with conflicting attributes.
     steps:
       - turns:
           - speaker: speaker
@@ -214,9 +210,7 @@ tests:
             steps: []
   - id: 11
     suites: regression add
-    comment: |
-      ### Options
-      One simple, trailing option
+    comment: 'One simple, trailing option.'
     steps:
       - turns:
           - speaker: speaker
@@ -239,7 +233,7 @@ tests:
             steps: []
   - id: 12
     suites: regression add
-    comment: 'One simple, leading attribute'
+    comment: 'One simple, leading attribute.'
     steps:
       - turns:
           - speaker: speaker
@@ -262,7 +256,7 @@ tests:
             steps: []
   - id: 13
     suites: regression add
-    comment: Multiple simple leading and trailing options
+    comment: Multiple simple leading and trailing options.
     steps:
       - turns:
           - speaker: speaker
@@ -307,7 +301,7 @@ tests:
             steps: []
   - id: 14
     suites: regression add
-    comment: adding drink with option repeated
+    comment: Adding drink with option repeated.
     steps:
       - turns:
           - speaker: speaker
@@ -330,7 +324,7 @@ tests:
             steps: []
   - id: 15
     suites: regression add
-    comment: Adding a drink with two options in same exclusion set
+    comment: Adding a drink with two options in same exclusion set.
     steps:
       - turns:
           - speaker: speaker
@@ -353,7 +347,7 @@ tests:
             steps: []
   - id: 16
     suites: regression add
-    comment: Adding a drink with two options in same exclusion set
+    comment: Adding a drink with two options in same exclusion set.
     steps:
       - turns:
           - speaker: speaker
@@ -376,7 +370,7 @@ tests:
             steps: []
   - id: 19
     suites: regression add
-    comment: leading attributed option
+    comment: Leading attributed option.
     steps:
       - turns:
           - speaker: speaker
@@ -398,8 +392,8 @@ tests:
             cost: 0
             steps: []
   - id: 20
-    suites: ''
-    comment: ''
+    suites: regression add
+    comment: Trailing attributed option.
     steps:
       - turns:
           - speaker: speaker
@@ -422,7 +416,7 @@ tests:
             steps: []
   - id: 21
     suites: regression add
-    comment: trailing attributed option after conjunction
+    comment: Trailing attributed option after conjunction.
     steps:
       - turns:
           - speaker: speaker
@@ -445,7 +439,7 @@ tests:
             steps: []
   - id: 22
     suites: regression add
-    comment: Multiple leading and trailing attributed options
+    comment: Multiple leading and trailing attributed options.
     steps:
       - turns:
           - speaker: speaker
@@ -482,7 +476,7 @@ tests:
             steps: []
   - id: 23
     suites: regression add illegal-option
-    comment: Attempt to add drink with illegal option
+    comment: Attempt to add drink with illegal option.
     steps:
       - turns:
           - speaker: speaker
@@ -501,7 +495,7 @@ tests:
             steps: []
   - id: 24
     suites: regression add illegal-option
-    comment: Attempt to add drink with illegal option
+    comment: Attempt to add drink with illegal option.
     steps:
       - turns:
           - speaker: speaker
@@ -520,7 +514,7 @@ tests:
             steps: []
   - id: 25
     suites: regression add
-    comment: 'One leading, quantified option with units'
+    comment: 'One leading, quantified option with units.'
     steps:
       - turns:
           - speaker: speaker
@@ -543,7 +537,7 @@ tests:
             steps: []
   - id: 26
     suites: regression add
-    comment: 'One trailing, quantified option with units'
+    comment: 'One trailing, quantified option with units.'
     steps:
       - turns:
           - speaker: speaker
@@ -566,7 +560,7 @@ tests:
             steps: []
   - id: 27
     suites: regression add
-    comment: 'Multiple leading and trailing quantified options, some with units'
+    comment: 'Multiple leading and trailing quantified options, some with units.'
     steps:
       - turns:
           - speaker: speaker
@@ -611,9 +605,7 @@ tests:
             steps: []
   - id: 28
     suites: regression add multiple
-    comment: |
-      ### Multiple Items
-      Add a comma-separated list of products
+    comment: Add a comma-separated list of products
     steps:
       - turns:
           - speaker: speaker
@@ -644,7 +636,7 @@ tests:
             steps: []
   - id: 29
     suites: regression add multiple complex ambiguous
-    comment: Add a comma-separated list of products with attributes and options
+    comment: Add a comma-separated list of products with attributes and options.
     steps:
       - turns:
           - speaker: speaker
@@ -694,7 +686,7 @@ tests:
               - '  id(118): delete item(espresso shot)'
   - id: 33
     suites: regression add overloaded
-    comment: 'Adding correct overloaded option, depending on context'
+    comment: 'Adding correct overloaded option, depending on context.'
     steps:
       - turns:
           - speaker: speaker
@@ -896,19 +888,22 @@ tests:
         cart:
           items:
             - quantity: 1
-              name: tall latte
-              sku: '601'
-              children: []
-            - quantity: 1
               name: short latte macchiato
               sku: '700'
               children: []
+            - quantity: 1
+              name: iced grande chai latte
+              sku: '904'
+              children: []
         measures:
-          perfect: true
-          complete: true
+          perfect: false
+          complete: false
           repairs:
-            cost: 0
-            steps: []
+            cost: 3
+            steps:
+              - 'id(173): delete item(iced grande chai latte)'
+              - 'id(174): insert default item(grande latte)'
+              - 'id(174): change item(grande latte) attribute "grande" to "tall"'
   - id: 42
     suites: regression remove
     comment: Remove by trailing attribute
@@ -1054,7 +1049,6 @@ tests:
   - id: 44.1
     suites: placeholder
     comment: |
-      ### Removing Options
       This is a placeholder test used as a reminder to add in the full
       set of cases for removing options.
     steps:
@@ -1074,7 +1068,7 @@ tests:
               - 'id(206): change item(grande latte) attribute "grande" to "tall"'
   - id: 45
     suites: regression modify bug
-    comment: Add option x to product y
+    comment: Add option x to product y.
     steps:
       - turns:
           - speaker: speaker
@@ -1120,7 +1114,7 @@ tests:
             steps: []
   - id: 45.1
     suites: regression modify
-    comment: Make that with option X
+    comment: Make that with option X.
     steps:
       - turns:
           - speaker: speaker
@@ -1166,7 +1160,7 @@ tests:
             steps: []
   - id: 45.2
     suites: regression modify
-    comment: make that a triple
+    comment: Make that a triple.
     steps:
       - turns:
           - speaker: speaker
@@ -1208,7 +1202,7 @@ tests:
             steps: []
   - id: 46
     suites: regression modify
-    comment: add option x to product y
+    comment: Add option x to product y.
     steps:
       - turns:
           - speaker: speaker
@@ -1254,7 +1248,7 @@ tests:
             steps: []
   - id: 47
     suites: regression modify
-    comment: add option x and option y to product z
+    comment: Add option x and option y to product z.
     steps:
       - turns:
           - speaker: speaker
@@ -1296,7 +1290,7 @@ tests:
             steps: []
   - id: 48
     suites: regression modify
-    comment: add a mutually exclusive option - make that option x
+    comment: Add a mutually exclusive option - make that option x.
     steps:
       - turns:
           - speaker: speaker
@@ -1334,7 +1328,7 @@ tests:
             steps: []
   - id: 49
     suites: regression modify
-    comment: change a mutually exclusive option - make that product x option y
+    comment: Change a mutually exclusive option - make that product x option y.
     steps:
       - turns:
           - speaker: speaker
@@ -1376,7 +1370,7 @@ tests:
             steps: []
   - id: 49.1
     suites: regression modify
-    comment: 'change a mutually exclusive option, implicit - make that option y'
+    comment: 'Change a mutually exclusive option, implicit - make that option y.'
     steps:
       - turns:
           - speaker: speaker
@@ -1418,7 +1412,7 @@ tests:
             steps: []
   - id: 50
     suites: regression modify
-    comment: change an attribute - make that product x attribute y
+    comment: Change an attribute - make that product x attribute y.
     steps:
       - turns:
           - speaker: speaker
@@ -1452,7 +1446,7 @@ tests:
             steps: []
   - id: 50.1
     suites: regression modify
-    comment: 'change an attribute, implicit - make that attribute y'
+    comment: 'Change an attribute, implicit - make that attribute y.'
     steps:
       - turns:
           - speaker: speaker
@@ -1486,7 +1480,7 @@ tests:
             steps: []
   - id: 51
     suites: regression modify
-    comment: add a mutually exclusive option - make product x with y
+    comment: Add a mutually exclusive option - make product x with y.
     steps:
       - turns:
           - speaker: speaker
@@ -1524,7 +1518,7 @@ tests:
             steps: []
   - id: 51.1
     suites: regression modify
-    comment: 'add a mutually exclusive option, implicit - make that with option y'
+    comment: 'Add a mutually exclusive option, implicit - make that with option y.'
     steps:
       - turns:
           - speaker: speaker
@@ -1562,7 +1556,7 @@ tests:
             steps: []
   - id: 51.2
     suites: regression modify
-    comment: 'add a mutually exclusive option, implicit - change that to option y'
+    comment: 'Add a mutually exclusive option, implicit - change that to option y.'
     steps:
       - turns:
           - speaker: speaker
@@ -1600,7 +1594,7 @@ tests:
             steps: []
   - id: 52
     suites: regression modify
-    comment: change a mutually exclusive option - change that product x to option y
+    comment: Change a mutually exclusive option - change that product x to option y.
     steps:
       - turns:
           - speaker: speaker
@@ -1638,7 +1632,7 @@ tests:
             steps: []
   - id: 53
     suites: regression modify
-    comment: change quantity of an option - make that prduct x with n of option y
+    comment: Change quantity of an option - make that prduct x with n of option y.
     steps:
       - turns:
           - speaker: speaker
@@ -1681,8 +1675,8 @@ tests:
   - id: 54
     suites: regression modify
     comment: >-
-      change the quantity of an option that is not mutually exclusive - make
-      that product x with n option y
+      Change the quantity of an option that is not mutually exclusive - make
+      that product x with n option y.
     steps:
       - turns:
           - speaker: speaker
@@ -1725,8 +1719,8 @@ tests:
   - id: 54.1
     suites: regression modify
     comment: >-
-      change the quantity of an option that is not mutually exclusive, implicit
-      - make that product x with n option y
+      Change the quantity of an option that is not mutually exclusive, implicit
+      - make that product x with n option y.
     steps:
       - turns:
           - speaker: speaker
@@ -1769,8 +1763,8 @@ tests:
   - id: 55
     suites: regression modify
     comment: >-
-      add an additional quantity of existing option - add n option y to product
-      x
+      Add an additional quantity of existing option - add n option y to product
+      x.
     steps:
       - turns:
           - speaker: speaker
@@ -1813,8 +1807,8 @@ tests:
   - id: 55.1
     suites: regression modify
     comment: >-
-      add an additional quantity of existing option, implicit - add n option y
-      to that
+      Add an additional quantity of existing option, implicit - add n option y
+      to that.
     steps:
       - turns:
           - speaker: speaker
@@ -1856,7 +1850,7 @@ tests:
             steps: []
   - id: 56
     suites: regression modify
-    comment: change an attribute - change that product x to attribute y
+    comment: Change an attribute - change that product x to attribute y.
     steps:
       - turns:
           - speaker: speaker
@@ -1890,7 +1884,7 @@ tests:
             steps: []
   - id: 56.1
     suites: regression modify
-    comment: 'change an attribute, implict - make that attribute y'
+    comment: 'Change an attribute, implict - make that attribute y.'
     steps:
       - turns:
           - speaker: speaker
@@ -1924,7 +1918,7 @@ tests:
             steps: []
   - id: 56.2
     suites: regression modify
-    comment: 'change an attribute, implicit - change that to attribute y'
+    comment: 'Change an attribute, implicit - change that to attribute y.'
     steps:
       - turns:
           - speaker: speaker
@@ -1959,8 +1953,8 @@ tests:
   - id: 56.3
     suites: regression modify
     comment: >-
-      change two attributes, implicit - change that to attribute y and attribute
-      z
+      Change two attributes, implicit - change that to attribute y and attribute
+      z.
     steps:
       - turns:
           - speaker: speaker
@@ -1994,7 +1988,7 @@ tests:
             steps: []
   - id: 56.4
     suites: regression modify
-    comment: change an attribute and add an option
+    comment: Change an attribute and add an option.
     steps:
       - turns:
           - speaker: speaker
@@ -2032,7 +2026,7 @@ tests:
             steps: []
   - id: 57
     suites: regression modify
-    comment: explicit target change mutually exclusive option
+    comment: Explicit target change mutually exclusive option.
     steps:
       - turns:
           - speaker: speaker
@@ -2904,9 +2898,9 @@ tests:
               name: grande dark roast coffee
               sku: '1502'
               children:
-                - quantity: 2
-                  name: equal
-                  sku: '6302'
+                - quantity: 1
+                  name: no equal
+                  sku: '6300'
                   children: []
         measures:
           perfect: false
@@ -2914,14 +2908,16 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(502): delete item(equal)'
+              - '  id(502): delete item(no equal)'
   - id: 1002
     suites: extras add ambiguous
     comment: chai latte can be a chai latte and a latte or just a latte
     steps:
       - turns:
           - speaker: speaker
-            transcription: i want a tall latte a short latte macchiato and a venti chai latte
+            transcription: >-
+              i want a tall latte a short latte macchiato and a venti chai latte
+              iced
         cart:
           items:
             - quantity: 1
@@ -2929,35 +2925,19 @@ tests:
               sku: '601'
               children: []
             - quantity: 1
-              name: short latte
-              sku: '600'
+              name: short latte macchiato
+              sku: '700'
               children: []
             - quantity: 1
-              name: doppio macchiato
-              sku: '1301'
-              children: []
-            - quantity: 1
-              name: grande chai latte
-              sku: '902'
-              children: []
-            - quantity: 1
-              name: grande latte
-              sku: '602'
+              name: iced venti chai latte
+              sku: '905'
               children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 6
-            steps:
-              - 'id(504): delete item(doppio macchiato)'
-              - 'id(505): delete item(short latte)'
-              - 'id(510): insert default item(grande latte macchiato)'
-              - >-
-                id(510): change item(grande latte macchiato) attribute "grande"
-                to "short"
-              - 'id(507): delete item(grande latte)'
-              - 'id(508): delete item(grande chai latte)'
+            cost: 0
+            steps: []
   - id: 1003
     suites: extras add modify spec-issue
     comment: |
@@ -3003,8 +2983,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - '  id(516): change item(whipped cream) quantity to 1'
-              - '  id(519): insert default item(whipped cream)'
+              - '  id(515): change item(whipped cream) quantity to 1'
+              - '  id(518): insert default item(whipped cream)'
   - id: 1004
     suites: regression remove implicit
     comment: should remove the whipped cream
@@ -3185,8 +3165,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(542): delete item(grande latte)'
-              - 'id(545): insert default item(grande flat white)'
+              - 'id(541): delete item(grande latte)'
+              - 'id(544): insert default item(grande flat white)'
   - id: 1011
     suites: regression remove implicit
     comment: |
@@ -3807,7 +3787,10 @@ tests:
             steps: []
   - id: 1027
     suites: extras
-    comment: demonstrated an option with the same name as an attribute
+    comment: |
+      Demonstrates an option with the same name as an attributes.
+      This one should add the 'ice' option because 'iced short' is
+      not a legal form.
     steps:
       - turns:
           - speaker: speaker
@@ -3815,13 +3798,37 @@ tests:
         cart:
           items:
             - quantity: 1
-              name: short latte
-              sku: '600'
-              children:
-                - quantity: 1
-                  name: ice
-                  sku: '5302'
-                  children: []
+              name: iced grande latte
+              sku: '604'
+              children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 3
+            steps:
+              - >-
+                id(661): change item(iced grande latte) attribute "iced" to
+                "hot"
+              - >-
+                id(661): change item(iced grande latte) attribute "grande" to
+                "short"
+              - '  id(663): insert default item(ice)'
+  - id: 1027.1
+    suites: extras
+    comment: |
+      Demonstrates an option with the same name as an attributes.
+      This one should use 'iced' attribute.
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: i want a tall iced latte
+        cart:
+          items:
+            - quantity: 1
+              name: iced tall latte
+              sku: '603'
+              children: []
         measures:
           perfect: true
           complete: true
@@ -4044,10 +4051,106 @@ tests:
           repairs:
             cost: 0
             steps: []
+  - id: 1035
+    suites: extras bug
+    comment: 'should add two shots. fuzzerB4:887, 318'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a latte and two extra shot
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: extra espresso shot
+                  sku: '6903'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(703): change item(extra espresso shot) quantity to 2'
+  - id: 1036
+    suites: extras bug
+    comment: 'fuzzerB4:474'
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add latte with two added shot
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: extra espresso shot
+                  sku: '6903'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 2
+            steps:
+              - '  id(707): change item(extra espresso shot) quantity to 2'
+              - '  id(707): change item(extra espresso shot) attribute "extra" to "regular"'
+  - id: 1037
+    suites: extras bug
+    comment: found in web app
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: add a muffin with butter
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children:
+                - quantity: 1
+                  name: butter
+                  sku: '3'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+      - turns:
+          - speaker: speaker
+            transcription: make that with extra butter
+        cart:
+          items:
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children:
+                - quantity: 1
+                  name: butter
+                  sku: '3'
+                  children: []
+                - quantity: 1
+                  name: extra butter
+                  sku: '4'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 1
+            steps:
+              - '  id(715): delete item(butter)'
 measures:
   notes: menu-based
-  totalTests: 115
-  totalSteps: 191
-  perfectSteps: 181
-  completeSteps: 181
-  totalRepairs: 21
+  totalTests: 119
+  totalSteps: 196
+  perfectSteps: 182
+  completeSteps: 182
+  totalRepairs: 25

@@ -20,9 +20,9 @@ async function go() {
             name: 'so',
             description: 'short-order',
             create: (w: World, d: string) => {
-                const shortOrderWorld =
-                    //createShortOrderWorld(w, d, args.t, false);
-                    loadShortOrderWorld(w, d, args.t, false);
+                const shortOrderWorld = args.x ?
+                    loadShortOrderWorld(w, d, args.t, false) :
+                    createShortOrderWorld(w, d, args.t, false);
                 return shortOrderWorld.processor;
             },
         },
