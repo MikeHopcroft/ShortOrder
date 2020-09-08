@@ -1205,3 +1205,37 @@ From Oliver. Not a legal specific
   1 UNKNOWN(302:0:3) (undefined)           302:0:3
 
 % 
+~~~
+
+----
+Issues related to adding PRODUCT_0,1,N:
+
+Allowing PRODUCT_0, PRODUCT_1, PRODUCT_N:
+~~~
+49.1: OK => FAILED(1)
+52: OK => FAILED(1)
+54.1: OK => FAILED(1)
+56: OK => FAILED(1)
+57: OK => FAILED(1)
+61.1: OK => FAILED(3)
+62: OK => FAILED(2)
+63: OK => FAILED(2)
+1001: OK => FAILED(1)
+1006: OK => FAILED(1)
+1021: OK => FAILED(1)
+1023: OK => FAILED(1)
+1025: OK => FAILED(1)
+1026: OK => FAILED(1)
+1028: FAILED(2) => OK
+1030: FAILED(1) => OK
+1031: FAILED(1) => FAILED(2)
+~~~
+
+Allowing PRODUCT_1, PRODUCT_N:
+~~~
+61.1: OK => FAILED(3)
+62: OK => FAILED(2)
+63: OK => FAILED(2)
+1028: FAILED(2) => OK
+1031: FAILED(1) => FAILED(2)
+~~~

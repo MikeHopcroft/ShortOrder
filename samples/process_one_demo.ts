@@ -176,8 +176,14 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
+    ///////////////////////////////////////////////////////////////////////////
+    // Allowing PRODUCT_0, PRODUCT_1, PRODUCT_N
+    ///////////////////////////////////////////////////////////////////////////
+    "i want a decaf latte",
+    "make that latte a cappuccino"
+
     // Recipe bug
-    "add a double double"
+    // "add a double double"
 
     // Testing lexicon.yaml
     // "i want a five pump caramel flat white",

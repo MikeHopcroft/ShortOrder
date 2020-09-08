@@ -191,6 +191,9 @@ function processAllActiveRegions(
         if (
             tokens.startsWith([PROLOGUE, ADD_TO_ORDER]) ||
             tokens.startsWith([ADD_TO_ORDER]) ||
+            tokens.startsWith([PRODUCT_PARTS_0]) ||
+            tokens.startsWith([PRODUCT_PARTS_1]) ||
+            tokens.startsWith([PRODUCT_PARTS_N]) ||
             (weakAddAllowed && tokens.startsWith([WEAK_ADD]))
         ) {
             const interpretation = processAdd(parser, state, baseGraph, tokens);

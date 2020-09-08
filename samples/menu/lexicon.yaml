@@ -36,6 +36,14 @@ lexicon:
       - "(for,in,to) (the,that,your,be)"
       - that [to]
       - from [the,that,those]
+
+      # While investigating allowing addition without ADD token, considered
+      # adding "the" to handle "warm the muffin" (case 1029). This regresses
+      # cases 38 ("remove the latte macchiato") and 1029 ("and can you warm the
+      # muffin"). Perhaps want some notion of tokens that can be filtered from
+      # input before parsing.
+      # - the
+
       # - with
 
       # - into
@@ -120,13 +128,13 @@ lexicon:
   # Stopwords
   #
   #############################################################################
-  - name: UNKNOWNTOKEN
-    aliases:
-      - for
-      - that
-      - i
-      - we
-      - i've
+  # - name: UNKNOWNTOKEN
+  #   aliases:
+  #     - for
+  #     - that
+  #     - i
+  #     - we
+  #     - i've
 
   #############################################################################
   #
