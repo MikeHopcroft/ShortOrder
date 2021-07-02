@@ -379,7 +379,9 @@ export class EntityBuilder extends EntityBuilderBase {
     ) {
         super(parser, segment.entity, false);
 
-        this.processLeft(new TokenSequence<GapToken>(segment.left), false);
+        // this.processLeft(new TokenSequence<GapToken>(segment.left), false);
+        // This change enables scenarios that don't start with a quantity.
+        this.processLeft(new TokenSequence<GapToken>(segment.left), /* false */ true);
         this.processRight(new TokenSequence<GapToken>(segment.right));
 
         // Initially, create item without options, in order to get key.

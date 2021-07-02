@@ -1,6 +1,29 @@
 # TODO List
 
 * Top
+  * NEW
+    * Put test suite under control of unit tests
+      * Get test_runner working with new menu.
+      * Return code for failed tests
+      * Flag to temporarily suppress tests
+        * Need to add this in prix-fixe
+      * Test suite and baseline checked in here
+      * node build\samples\test_runner.js ..\PrixFixe\samples\tests\regression.yaml --baseline=..\PrixFixe\samples\tests\baseline.yaml -x
+    * Implicit quantifier issues
+      * two pump vanilla latte
+      * add to test suite
+    * Take latest prix-fixe@61
+    * Publish
+    * Clean build
+      * TSLint => ESLint
+      * Upgrade gts
+      * Tabsize = 2
+    * Switch from travis to github actions
+    * Set up code coverage
+    * Remove old menu and concept from all samples.
+    * Burger menu
+    * Pizza menu
+    * Take recursive generator expression PR
   * Explore adding new token type: INPUT (vs UNKNOWNTOKEN)
     * What are all of the uses of UNKNOWNTOKEN that are not inputs?
     * Stopwords?
@@ -1208,6 +1231,10 @@ From Oliver. Not a legal specific
 ~~~
 
 ----
+~~~
+node build\samples\test_runner.js ..\PrixFixe\samples\tests\regression.yaml --baseline=..\PrixFixe\samples\tests\baseline.yaml -x
+~~~
+
 Issues related to adding PRODUCT_0,1,N:
 
 Allowing PRODUCT_0, PRODUCT_1, PRODUCT_N:
@@ -1238,4 +1265,13 @@ Allowing PRODUCT_1, PRODUCT_N:
 63: OK => FAILED(2)
 1028: FAILED(2) => OK
 1031: FAILED(1) => FAILED(2)
+~~~
+
+Allowing implicit quantifiers (entity_builder.ts, line 384)
+  * this.processLeft(new TokenSequence<GapToken>(segment.left), /* false */ true);
+
+~~~
+29: FAILED(1) => OK
+1028: FAILED(2) => OK
+1030: FAILED(1) => OK
 ~~~

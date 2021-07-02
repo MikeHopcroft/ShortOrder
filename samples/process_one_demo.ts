@@ -176,11 +176,12 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
+  "skinny vanilla cinnamon latte please"
     ///////////////////////////////////////////////////////////////////////////
     // Allowing PRODUCT_0, PRODUCT_1, PRODUCT_N
     ///////////////////////////////////////////////////////////////////////////
-    "i want a decaf latte",
-    "make that latte a cappuccino"
+    // "i want a decaf latte",
+    // "make that latte a cappuccino"
 
     // Recipe bug
     // "add a double double"
@@ -271,3 +272,12 @@ go([
 // OK: Actually make that an iced decaf and add a muffin
 // ADDS A MUFFIN: And can you warm the muffin
 // NOP: Warm that
+
+
+
+
+// vanilla latte => correct
+// two pump vanilla latte => incorrect - gives two lattes with one pump vanilla
+// five two pump vanilla latte => correct
+// a two pump vanilla latte => correct
+
