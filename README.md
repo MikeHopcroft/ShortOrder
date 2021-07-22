@@ -1,4 +1,4 @@
-# short-order ![Build Status](https://github.com/MikeHopcroft/shortorder/workflows/build/badge.svg)
+# short-order [![build](https://github.com/MikeHopcroft/ShortOrder/actions/workflows/ci.yaml/badge.svg)](https://github.com/MikeHopcroft/ShortOrder/actions/workflows/ci.yaml)
 
 ## **NOTICE:** we're in the process of a major refactoring.
 
