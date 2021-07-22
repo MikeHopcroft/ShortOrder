@@ -1,4 +1,4 @@
-# short-order ![Build Status](https://github.com/MikeHopcroft/shortorder/workflows/Node.js%20CI/badge.svg)
+# short-order ![Build Status](https://github.com/MikeHopcroft/shortorder/workflows/build/badge.svg)
 
 ## **NOTICE:** we're in the process of a major refactoring.
 
