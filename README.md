@@ -1,4 +1,4 @@
-# short-order [![Build Status](https://travis-ci.com/MikeHopcroft/ShortOrder.svg?branch=master)](https://travis-ci.com/MikeHopcroft/ShortOrder)
+# short-order ![Build Status](https://github.com/MikeHopcroft/shortorder/workflows/Node.js%20CI/badge.svg)
 
 ## **NOTICE:** we're in the process of a major refactoring.
 
