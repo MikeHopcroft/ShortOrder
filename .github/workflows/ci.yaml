@@ -4,11 +4,12 @@ on:
   push:
     branches:
       - $default-branch
-      - main
+      - master
+      - mhop/githubactions
   pull_request:
     branches: 
       - $default-branch
-      - main
+      - master
 
 jobs:
   build:
