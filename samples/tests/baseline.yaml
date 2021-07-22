@@ -656,11 +656,7 @@ tests:
             - quantity: 1
               name: grande cappuccino
               sku: '402'
-              children:
-                - quantity: 2
-                  name: espresso shot
-                  sku: '6902'
-                  children: []
+              children: []
             - quantity: 1
               name: doppio espresso
               sku: '1001'
@@ -678,12 +674,11 @@ tests:
                   sku: '300'
                   children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 1
-            steps:
-              - '  id(118): delete item(espresso shot)'
+            cost: 0
+            steps: []
   - id: 33
     suites: regression add overloaded
     comment: 'Adding correct overloaded option, depending on context.'
@@ -901,9 +896,9 @@ tests:
           repairs:
             cost: 3
             steps:
-              - 'id(173): delete item(iced grande chai latte)'
-              - 'id(174): insert default item(grande latte)'
-              - 'id(174): change item(grande latte) attribute "grande" to "tall"'
+              - 'id(172): delete item(iced grande chai latte)'
+              - 'id(173): insert default item(grande latte)'
+              - 'id(173): change item(grande latte) attribute "grande" to "tall"'
   - id: 42
     suites: regression remove
     comment: Remove by trailing attribute
@@ -1063,9 +1058,9 @@ tests:
           repairs:
             cost: 3
             steps:
-              - 'id(206): insert default item(grande latte)'
-              - 'id(206): change item(grande latte) attribute "hot" to "iced"'
-              - 'id(206): change item(grande latte) attribute "grande" to "tall"'
+              - 'id(205): insert default item(grande latte)'
+              - 'id(205): change item(grande latte) attribute "hot" to "iced"'
+              - 'id(205): change item(grande latte) attribute "grande" to "tall"'
   - id: 45
     suites: regression modify bug
     comment: Add option x to product y.
@@ -2908,7 +2903,7 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(502): delete item(no equal)'
+              - '  id(501): delete item(no equal)'
   - id: 1002
     suites: extras add ambiguous
     comment: chai latte can be a chai latte and a latte or just a latte
@@ -2983,8 +2978,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - '  id(515): change item(whipped cream) quantity to 1'
-              - '  id(518): insert default item(whipped cream)'
+              - '  id(514): change item(whipped cream) quantity to 1'
+              - '  id(517): insert default item(whipped cream)'
   - id: 1004
     suites: regression remove implicit
     comment: should remove the whipped cream
@@ -3165,8 +3160,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(541): delete item(grande latte)'
-              - 'id(544): insert default item(grande flat white)'
+              - 'id(540): delete item(grande latte)'
+              - 'id(543): insert default item(grande flat white)'
   - id: 1011
     suites: regression remove implicit
     comment: |
@@ -3808,12 +3803,12 @@ tests:
             cost: 3
             steps:
               - >-
-                id(661): change item(iced grande latte) attribute "iced" to
+                id(660): change item(iced grande latte) attribute "iced" to
                 "hot"
               - >-
-                id(661): change item(iced grande latte) attribute "grande" to
+                id(660): change item(iced grande latte) attribute "grande" to
                 "short"
-              - '  id(663): insert default item(ice)'
+              - '  id(662): insert default item(ice)'
   - id: 1027.1
     suites: extras
     comment: |
@@ -3843,15 +3838,21 @@ tests:
           - speaker: speaker
             transcription: Hi um i'd like a ah a latte with vanilla syrup
         cart:
-          items: []
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 2
-            steps:
-              - 'id(666): insert default item(grande latte)'
-              - '  id(667): insert default item(vanilla syrup)'
+            cost: 0
+            steps: []
   - id: 1029
     suites: extras bug option-as-verb not-implemented
     comment: |
@@ -3883,8 +3884,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(670): insert default item(apple bran muffin)'
-              - '  id(671): insert default item(warmed)'
+              - 'id(671): insert default item(apple bran muffin)'
+              - '  id(672): insert default item(warmed)'
   - id: 1030
     suites: extras implicit option-as-verb not-implemented
     comment: option-as-verb should warm the muffin
@@ -3912,14 +3913,17 @@ tests:
             - quantity: 1
               name: apple bran muffin
               sku: '10000'
-              children: []
+              children:
+                - quantity: 1
+                  name: warmed
+                  sku: '200'
+                  children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 1
-            steps:
-              - '  id(676): insert default item(warmed)'
+            cost: 0
+            steps: []
   - id: 1031
     suites: extras option-as-verb not-implemented
     comment: option-as-verb should slice the muffin
@@ -3948,13 +3952,21 @@ tests:
               name: apple bran muffin
               sku: '10000'
               children: []
+            - quantity: 1
+              name: apple bran muffin
+              sku: '10000'
+              children:
+                - quantity: 1
+                  name: cut in half
+                  sku: '300'
+                  children: []
         measures:
           perfect: false
           complete: false
           repairs:
             cost: 1
             steps:
-              - '  id(681): insert default item(cut in half)'
+              - 'id(681): delete item(apple bran muffin)'
   - id: 1032
     suites: extras recipes regression
     comment: double shot
@@ -4074,7 +4086,7 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(703): change item(extra espresso shot) quantity to 2'
+              - '  id(707): change item(extra espresso shot) quantity to 2'
   - id: 1036
     suites: extras bug
     comment: 'fuzzerB4:474'
@@ -4098,8 +4110,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - '  id(707): change item(extra espresso shot) quantity to 2'
-              - '  id(707): change item(extra espresso shot) attribute "extra" to "regular"'
+              - '  id(711): change item(extra espresso shot) quantity to 2'
+              - '  id(711): change item(extra espresso shot) attribute "extra" to "regular"'
   - id: 1037
     suites: extras bug
     comment: found in web app
@@ -4146,11 +4158,11 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(715): delete item(butter)'
+              - '  id(719): delete item(butter)'
 measures:
   notes: menu-based
   totalTests: 119
   totalSteps: 196
-  perfectSteps: 182
-  completeSteps: 182
-  totalRepairs: 25
+  perfectSteps: 185
+  completeSteps: 185
+  totalRepairs: 21

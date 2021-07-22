@@ -579,6 +579,76 @@ tests:
                           sku: '4500'
                           children: []
           # Skipped 33-37. Recipe.
+      - comment: '### Implcit add intent'
+        tests:
+        - id: 34.1
+          suites: regression add
+          comment: implicit add implicit quantity
+          steps:
+            - turns:
+              - speaker: speaker
+                transcription: vanilla grande latte
+              cart:
+                items:
+                  - quantity: 1
+                    name: grande latte
+                    sku: '602'
+                    children:
+                      - quantity: 1
+                        name: vanilla syrup
+                        sku: '2502'
+                        children: []
+        - id: 34.2
+          suites: regression add
+          comment: implicit add implicit quantity
+          steps:
+            - turns:
+              - speaker: speaker
+                transcription: two pump vanilla grande latte
+              cart:
+                items:
+                  - quantity: 1
+                    name: grande latte
+                    sku: '602'
+                    children:
+                      - quantity: 2
+                        name: vanilla syrup
+                        sku: '2502'
+                        children: []
+        - id: 34.3
+          suites: regression add
+          comment: implicit add implicit quantity
+          steps:
+            - turns:
+              - speaker: speaker
+                transcription: a two pump vanilla grande latte
+              cart:
+                items:
+                  - quantity: 1
+                    name: grande latte
+                    sku: '602'
+                    children:
+                      - quantity: 2
+                        name: vanilla syrup
+                        sku: '2502'
+                        children: []
+        - id: 34.4
+          suites: regression add
+          comment: implicit add implicit quantity
+          steps:
+            - turns:
+              - speaker: speaker
+                transcription: five two pump vanilla grande lattes
+              cart:
+                items:
+                  - quantity: 5
+                    name: grande latte
+                    sku: '602'
+                    children:
+                      - quantity: 2
+                        name: vanilla syrup
+                        sku: '2502'
+                        children: []
   - comment: '## Removing Items and Options'
     tests:
       - comment: '### Removing Items'

@@ -2,11 +2,16 @@
 
 * Top
   * NEW
+    * Make prix-fixe the source of regression tests
+      * Need some way for short-order users to find prix-fixe menu and regression suite.
+    * Baseline should reside in prix-fixe
     * Put test suite under control of unit tests
-      * Get test_runner working with new menu.
-      * Return code for failed tests
+      * x Get test_runner working with new menu.
+      * . Return code for failed tests
       * Flag to temporarily suppress tests
         * Need to add this in prix-fixe
+        * Publish prix-fixe
+        * Take new version
       * Test suite and baseline checked in here
       * node build\samples\test_runner.js ..\PrixFixe\samples\tests\regression.yaml --baseline=..\PrixFixe\samples\tests\baseline.yaml -x
     * Implicit quantifier issues
