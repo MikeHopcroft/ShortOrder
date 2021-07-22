@@ -1,6 +1,6 @@
-import * as AJV from 'ajv';
-import * as Debug from 'debug';
-import * as yaml from 'js-yaml';
+import AJV from 'ajv';
+import Debug from 'debug';
+import yaml from 'js-yaml';
 
 const debug = Debug('so:stopwordsFromYamlString');
 

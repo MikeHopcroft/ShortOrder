@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import * as path from 'path';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import path from 'path';
 import { validate, World } from 'prix-fixe';
 
 import { LexiconSpec, lexiconSpecType } from '../lexer';

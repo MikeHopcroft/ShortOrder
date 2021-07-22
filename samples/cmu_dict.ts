@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import fs from 'fs';
 const metaphone = require('talisman/phonetics/metaphone') as (word:string)=>string;
 
 import { createHistogram, Random } from '../src';

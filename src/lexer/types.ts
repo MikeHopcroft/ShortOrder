@@ -1,3 +1,5 @@
+// TODO: REVIEW: why doesn't "esModuleInterop": true allow the following:
+// import t from 'io-ts';
 import * as t from 'io-ts';
 
 const tokenSpecType = t.intersection([

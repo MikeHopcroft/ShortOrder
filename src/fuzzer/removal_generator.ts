@@ -1,4 +1,4 @@
-import * as pluralize from 'pluralize';
+import pluralize from 'pluralize';
 
 import { AliasGenerator } from './alias_generator';
 import { OrderX, RemoveX, SegmentX, StepX, WordX } from './fuzzer';

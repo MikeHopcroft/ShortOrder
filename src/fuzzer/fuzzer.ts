@@ -1,4 +1,4 @@
-import * as pluralize from 'pluralize';
+import pluralize from 'pluralize';
 import { AID, ItemInstance, Key, Role, AttributeInfo } from 'prix-fixe';
 
 import { permutation, Random } from './utilities';

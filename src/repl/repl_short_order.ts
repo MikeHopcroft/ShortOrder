@@ -1,6 +1,6 @@
-import * as style from 'ansi-styles';
-import * as Debug from 'debug';
-import * as minimist from 'minimist';
+import style from 'ansi-styles';
+import Debug from 'debug';
+import minimist from 'minimist';
 
 import {
     describeGeneric,

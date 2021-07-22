@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as pluralize from 'pluralize';
+import fs from 'fs';
+import path from 'path';
+import pluralize from 'pluralize';
 import { newStemmer, Stemmer as SnowballStemmer } from 'snowball-stemmers';
 const metaphone = require('talisman/phonetics/metaphone') as (word:string)=>string;
 const doubleMetaphone = require('talisman/phonetics/double-metaphone') as (word:string)=>[string, string];

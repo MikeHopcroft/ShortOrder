@@ -1,8 +1,8 @@
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import * as minimist from 'minimist';
-import * as path from 'path';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import minimist from 'minimist';
+import path from 'path';
 
 import {
     Catalog,
