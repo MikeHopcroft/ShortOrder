@@ -21,7 +21,8 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "postcompile": "copyfiles samples/data/**/*.yaml build && copyfiles samples/data/**/*.txt build"
+    "postcompile": "copyfiles samples/data/**/*.yaml build && copyfiles samples/data/**/*.txt build",
+    "regression": "node build/samples/test_runner.js samples/tests/regression.yaml --baseline=samples/tests/baseline.yaml -x"
   },
   "devDependencies": {
     "@types/ansi-styles": "^3.2.1",

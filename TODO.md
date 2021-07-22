@@ -2,6 +2,7 @@
 
 * Top
   * NEW
+    * x Switch from travis to github actions
     * Make prix-fixe the source of regression tests
       * Need some way for short-order users to find prix-fixe menu and regression suite.
     * Baseline should reside in prix-fixe
@@ -23,7 +24,6 @@
       * TSLint => ESLint
       * Upgrade gts
       * Tabsize = 2
-    * Switch from travis to github actions
     * Set up code coverage
     * Remove old menu and concept from all samples.
     * Burger menu
