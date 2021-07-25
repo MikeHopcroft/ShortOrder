@@ -3,7 +3,8 @@ import { Item, Token } from 'token-flow';
 export const ADD_TO_ORDER: unique symbol = Symbol.for('ADD_TO_ORDER');
 export type ADD_TO_ORDER = typeof ADD_TO_ORDER;
 
-export const ANSWER_AFFIRMATIVE: unique symbol = Symbol.for('ANSWER_AFFIRMATIVE');
+export const ANSWER_AFFIRMATIVE: unique symbol =
+  Symbol.for('ANSWER_AFFIRMATIVE');
 export type ANSWER_AFFIRMATIVE = typeof ANSWER_AFFIRMATIVE;
 
 export const ANSWER_NEGATIVE: unique symbol = Symbol.for('ANSWER_NEGATIVE');
@@ -55,33 +56,33 @@ export const WEAK_ADD: unique symbol = Symbol.for('WEAK_ADD');
 export type WEAK_ADD = typeof WEAK_ADD;
 
 export class IntentTokenFactory {
-    tokens = new Map<Symbol, Token>();
+  tokens = new Map<Symbol, Token>();
 
-    createToken = (item:Item): Token => {
-        let name = "UNKNOWN";
-        if (item) {
-            name = item.name;
-        }
-        const symbol = Symbol.for(name);
-
-        let token = this.tokens.get(symbol);
-        if (!token) {
-            token = { type: symbol };
-            this.tokens.set(symbol, token);
-        }
-        return  token;
-    }
-}
-
-export function intentTokenFactory(item:Item): Token {
-    let name = "UNKNOWN";
+  createToken = (item: Item): Token => {
+    let name = 'UNKNOWN';
     if (item) {
-        name = item.name;
+      name = item.name;
     }
     const symbol = Symbol.for(name);
-    return { type: symbol };
+
+    let token = this.tokens.get(symbol);
+    if (!token) {
+      token = { type: symbol };
+      this.tokens.set(symbol, token);
+    }
+    return token;
+  };
+}
+
+export function intentTokenFactory(item: Item): Token {
+  let name = 'UNKNOWN';
+  if (item) {
+    name = item.name;
+  }
+  const symbol = Symbol.for(name);
+  return { type: symbol };
 }
 
 export function createIntent(type: symbol) {
-    return { type };
+  return { type };
 }

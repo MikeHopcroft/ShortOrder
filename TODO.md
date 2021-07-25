@@ -2,9 +2,14 @@
 
 * Top
   * NEW
-    * Upgrade GTS, spacing, linter
+    * x Upgrade GTS, spacing, linter
+    * Take new prix-fixe
     * Setup code coverage
     * Consider removing concept of WEAK_ADD
+    * Redundant code
+      * integration/short-order-world2.ts - also use underscores in name
+      * lexer/lexical_analyzer2.ts
+      * lexer/stemmer2.ts, stemmers/stemmer.ts
     * Rename tokenCount2
     * Patterns
     * x Switch from travis to github actions
@@ -25,10 +30,10 @@
       * add to test suite
     * Take latest prix-fixe@61
     * Publish
-    * Clean build
-      * TSLint => ESLint
-      * Upgrade gts
-      * Tabsize = 2
+    * x Clean build
+      * x TSLint => ESLint
+      * x Upgrade gts
+      * x Tabsize = 2
     * Set up code coverage
     * Remove old menu and concept from all samples.
     * Burger menu

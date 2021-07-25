@@ -1,72 +1,67 @@
 import dotenv from 'dotenv';
 
 import {
-    AID,
-    GenericCase,
-    PID,
-    MENUITEM,
-    OPTION,
-    TestCase,
-    TextTurn,
-    ValidationStep,
-    World,
+  GenericCase,
+  PID,
+  MENUITEM,
+  OPTION,
+  TextTurn,
+  ValidationStep,
+  World,
 } from 'prix-fixe';
 
 import {
-    AliasGenerator,
-    AttributeGenerator,
-    createTestCase,
-    EITHER,
-    EntityGenerator,
-    fuzzerMain,
-    LEFT,
-    OptionGenerator,
-    OrderGenerator,
-    OrderX,
-    Position,
-    PostProcessor,
-    ProcessorFactory,
-    ProductGenerator,
-    QuantityX,
-    Random,
-    RemovalGenerator,
-    RIGHT,
-    TestCaseGeneratorFactory,
-    Quantifiers,
+  AliasGenerator,
+  AttributeGenerator,
+  createTestCase,
+  EITHER,
+  EntityGenerator,
+  fuzzerMain,
+  LEFT,
+  OptionGenerator,
+  OrderGenerator,
+  Position,
+  PostProcessor,
+  ProcessorFactory,
+  ProductGenerator,
+  QuantityX,
+  Random,
+  RIGHT,
+  TestCaseGeneratorFactory,
 } from '../src';
 
+async function go() {
+  dotenv.config();
+  const testCaseGeneratorFactory = new TestCaseGeneratorFactory([
+    {
+      name: 'a',
+      description: 'Level A: single product with quantifiers and attributes',
+      factory: levelA,
+    },
+    {
+      name: 'b',
+      description:
+        'Level B: single product with quantifiers, attributes, and options',
+      factory: levelB,
+    },
+    {
+      name: 'c',
+      description:
+        'Level C: multiple products with quantifiers, attributes, and options',
+      factory: levelC,
+    },
+    // {
+    //     name: 'd',
+    //     description: 'Level D: remove a single product by its generic name',
+    //     factory: remove,
+    // }
+  ]);
 
-async function go()
-{
-    dotenv.config();
-    const testCaseGeneratorFactory = new TestCaseGeneratorFactory([
-        {
-            name: 'a',
-            description: 'Level A: single product with quantifiers and attributes',
-            factory: levelA,
-        },
-        {
-            name: 'b',
-            description: 'Level B: single product with quantifiers, attributes, and options',
-            factory: levelB,
-        },
-        {
-            name: 'c',
-            description: 'Level C: multiple products with quantifiers, attributes, and options',
-            factory: levelC,
-        },
-        // {
-        //     name: 'd',
-        //     description: 'Level D: remove a single product by its generic name',
-        //     factory: remove,
-        // }
-    ]);
+  // TODO: add your processors here to enable the "-v" test verification option.
+  const processorFactory = new ProcessorFactory([]);
 
-    // TODO: add your processors here to enable the "-v" test verification option.
-    const processorFactory = new ProcessorFactory([]);
-
-    // Run the fuzzer application.
-    fuzzerMain(testCaseGeneratorFactory, processorFactory);
+  // Run the fuzzer application.
+  fuzzerMain(testCaseGeneratorFactory, processorFactory);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -75,419 +70,411 @@ async function go()
 //
 ///////////////////////////////////////////////////////////////////////////////
 const prologues = [
-    "(hi,hello,howdy) [there]",
-    "(all right,ok,okay,yes,yeah,let's see) [so]",
-    "(ah,um)",
-    "",
+  '(hi,hello,howdy) [there]',
+  "(all right,ok,okay,yes,yeah,let's see) [so]",
+  '(ah,um)',
+  '',
 ];
 
 const epilogues = [
-    "(I'm,I am,we're,we are) (done,good)",
-    "(I'm,I am,we're,we are) ready to (pay, check out)",
-    "thank you",
-    "thanks",
-    "that's (all,everything,it)",
-    "(that'll,that will,that should) (be) (all,everything)",
-    "(that'll,that will,that should) (do) (it)",
-    "bye",
-    "okay",
-    "how much is that",
-    "",
+  "(I'm,I am,we're,we are) (done,good)",
+  "(I'm,I am,we're,we are) ready to (pay, check out)",
+  'thank you',
+  'thanks',
+  "that's (all,everything,it)",
+  "(that'll,that will,that should) (be) (all,everything)",
+  "(that'll,that will,that should) (do) (it)",
+  'bye',
+  'okay',
+  'how much is that',
+  '',
 ];
 
 interface ProductGenerators {
-    prologueGenerator: AliasGenerator;
-    productGenerator: ProductGenerator;
-    epilogueGenerator: AliasGenerator;
+  prologueGenerator: AliasGenerator;
+  productGenerator: ProductGenerator;
+  epilogueGenerator: AliasGenerator;
 }
 
-interface RemoveGenerators {
-    removePrologues: AliasGenerator;
-    removeEpilogues: AliasGenerator;
-}
+// interface RemoveGenerators {
+//   removePrologues: AliasGenerator;
+//   removeEpilogues: AliasGenerator;
+// }
 
 function configureProductGenerators(
-    world: World,
-    optionCountRange: [number, number]
+  world: World,
+  optionCountRange: [number, number]
 ): ProductGenerators {
-    //
-    // Attributes
-    //
-    const positions = new Map<string, Position>([
-        ['coffee_size', LEFT],
-        ['espresso_size', LEFT],
-        ['option_quantity', LEFT],
-    ]);
+  //
+  // Attributes
+  //
+  const positions = new Map<string, Position>([
+    ['coffee_size', LEFT],
+    ['espresso_size', LEFT],
+    ['option_quantity', LEFT],
+  ]);
 
-    const attributes = new AttributeGenerator(
-        world.attributeInfo,
-        positions
+  const attributes = new AttributeGenerator(world.attributeInfo, positions);
+
+  //
+  // Entities
+  //
+  const entityQuantities: QuantityX[] = [
+    new QuantityX(1, 'a'),
+    new QuantityX(1, 'one'),
+    new QuantityX(2, 'two'),
+    new QuantityX(3, 'three'),
+  ];
+
+  const entityBlackList = new Set<PID>([]);
+  const entityPIDs: PID[] = [];
+  for (const entity of world.catalog.genericEntities()) {
+    // Skip over items that don't have aliases.
+    if (entity.aliases.length === 0 || entity.aliases[0].length === 0) {
+      continue;
+    }
+
+    if (entity.kind !== MENUITEM) {
+      continue;
+    }
+
+    if (entityBlackList.has(entity.pid)) {
+      continue;
+    }
+
+    // // TEMPORARY code to restrict fuzzer to products
+    // // with 'latte' in their names.
+    // if (entity.name.indexOf('latte') !== -1) {
+    //     entityPIDs.push(entity.pid);
+    // }
+    entityPIDs.push(entity.pid);
+  }
+
+  const entityGenerators: EntityGenerator[] = [];
+  for (const pid of entityPIDs) {
+    const generator = new EntityGenerator(
+      world.attributeInfo,
+      attributes,
+      world.catalog,
+      pid,
+      entityQuantities
     );
+    entityGenerators.push(generator);
+  }
 
+  //
+  // Options
+  //
+  // TODO: consider putting the option position hints into
+  // the menu as annotations.
+  //
+  const quantifiers = new Map<
+    string,
+    { left: QuantityX[]; right: QuantityX[] }
+  >([
+    [
+      'dash',
+      {
+        left: [
+          new QuantityX(1, 'one dash'),
+          new QuantityX(1, 'one sprinkle'),
+          new QuantityX(2, 'two dashes'),
+          new QuantityX(2, 'two sprinkles'),
+          new QuantityX(3, 'three dashes'),
+          new QuantityX(3, 'three sprinkles'),
+        ],
+        right: [
+          new QuantityX(1, 'a bit of'),
+          new QuantityX(1, 'some'),
+          new QuantityX(1, 'a dash of'),
+          new QuantityX(1, 'one dash of'),
+          new QuantityX(2, 'two dashes of'),
+          new QuantityX(3, 'three dashes of'),
+          new QuantityX(1, 'a sprinkle of'),
+          new QuantityX(1, 'one sprinkle of'),
+          new QuantityX(2, 'two sprinkles of'),
+          new QuantityX(3, 'three sprinkles of'),
+        ],
+      },
+    ],
+    [
+      'default',
+      {
+        left: [new QuantityX(1, '')],
+        right: [new QuantityX(1, '')],
+      },
+    ],
+    [
+      'extra',
+      {
+        left: [
+          new QuantityX(1, 'a'),
+          new QuantityX(1, 'an extra'),
+          new QuantityX(1, 'an added'),
+          new QuantityX(2, 'two'),
+          new QuantityX(2, 'two extra'),
+          new QuantityX(2, 'two added'),
+          new QuantityX(3, 'three extra'),
+          new QuantityX(3, 'three added'),
+        ],
+        right: [
+          new QuantityX(1, 'a'),
+          new QuantityX(1, 'an extra'),
+          new QuantityX(1, 'an added'),
+          new QuantityX(2, 'two'),
+          new QuantityX(2, 'two extra'),
+          new QuantityX(2, 'two added'),
+          new QuantityX(3, 'three extra'),
+          new QuantityX(3, 'three added'),
+        ],
+      },
+    ],
+    [
+      'packet',
+      {
+        left: [
+          new QuantityX(1, 'one'),
+          new QuantityX(2, 'two'),
+          new QuantityX(3, 'three'),
+        ],
+        right: [
+          new QuantityX(1, 'some'),
+          new QuantityX(1, 'a packet of'),
+          new QuantityX(1, 'one packet of'),
+          new QuantityX(2, 'two packets of'),
+          new QuantityX(3, 'three packets of'),
+          new QuantityX(1, 'a pack of'),
+          new QuantityX(1, 'one pack of'),
+          new QuantityX(2, 'two packs of'),
+          new QuantityX(3, 'three packs of'),
+          new QuantityX(1, 'a package of'),
+          new QuantityX(1, 'one package of'),
+          new QuantityX(2, 'two packages of'),
+          new QuantityX(3, 'three packages of'),
+        ],
+      },
+    ],
+    [
+      'pump',
+      {
+        left: [
+          new QuantityX(1, ''),
+          new QuantityX(1, 'one pump'),
+          new QuantityX(2, 'two pump'),
+          new QuantityX(3, 'three pump'),
+          new QuantityX(1, 'one squirt'),
+          new QuantityX(2, 'two squirt'),
+          new QuantityX(3, 'three squirt'),
+        ],
+        right: [
+          new QuantityX(1, 'some'),
+          new QuantityX(1, 'a pump of'),
+          new QuantityX(1, 'one pump of'),
+          new QuantityX(2, 'two pumps of'),
+          new QuantityX(3, 'three pumps of'),
+          new QuantityX(1, 'a squirt of'),
+          new QuantityX(1, 'one squirt of'),
+          new QuantityX(2, 'two squirts of'),
+          new QuantityX(3, 'three squirts of'),
+        ],
+      },
+    ],
+    [
+      'splash',
+      {
+        left: [
+          new QuantityX(1, 'one'),
+          new QuantityX(2, 'two'),
+          new QuantityX(3, 'three'),
+        ],
+        right: [
+          new QuantityX(1, 'a splash of'),
+          new QuantityX(1, 'some'),
+          new QuantityX(1, 'one splash of'),
+          new QuantityX(2, 'two splashes of'),
+          new QuantityX(3, 'three splashes of'),
+        ],
+      },
+    ],
+  ]);
 
-    //
-    // Entities
-    //
-    const entityQuantities: QuantityX[] = [
-        new QuantityX(1, 'a'),
-        new QuantityX(1, 'one'),
-        new QuantityX(2, 'two'),
-        new QuantityX(3, 'three'),
-    ];
+  // TODO: consider getting these from menu annotations.
+  const optionPositions = new Map<string, Position>([
+    ['foam', RIGHT],
+    ['ice', RIGHT],
+    ['whipped cream', RIGHT],
+    ['water', RIGHT],
+    ['for here cup', RIGHT],
+    ['lid', RIGHT],
+    ['with room', RIGHT],
+    ['to go', RIGHT],
+    ['equal', RIGHT],
+    ['honey', RIGHT],
+    ['splenda', RIGHT],
+    ['sugar', RIGHT],
+    ['sugar in the raw', RIGHT],
+    ['sweet n low', RIGHT],
+    ['espresso shot', RIGHT],
+    ['butter', RIGHT],
+    ['strawberry jam', RIGHT],
+    ['warmed', RIGHT],
+    ['cut in half', RIGHT],
+    ['whole milk creamer', RIGHT],
+    ['two percent milk creamer', RIGHT],
+    ['one percent milk creamer', RIGHT],
+    ['nonfat milk creamer', RIGHT],
+    ['coconut milk creamer', RIGHT],
+    ['soy milk creamer', RIGHT],
+    ['almond milk creamer', RIGHT],
+    ['oat milk creamer', RIGHT],
+    ['eggnog creamer', RIGHT],
+    ['half and half', RIGHT],
+    ['heavy cream', RIGHT],
+  ]);
+  const optionPositionPredicate = (name: string): Position => {
+    return optionPositions.get(name) || EITHER;
+  };
 
-    const entityBlackList = new Set<PID>([]);
-    const entityPIDs: PID[] = [];
-    for (const entity of world.catalog.genericEntities()) {
-        // Skip over items that don't have aliases.
-        if (entity.aliases.length === 0 || entity.aliases[0].length === 0) {
-            continue;
-        }
-
-        if (entity.kind !== MENUITEM) {
-            continue;
-        }
-
-        if (entityBlackList.has(entity.pid)) {
-            continue;
-        }
-
-        // // TEMPORARY code to restrict fuzzer to products
-        // // with 'latte' in their names.
-        // if (entity.name.indexOf('latte') !== -1) {
-        //     entityPIDs.push(entity.pid);
-        // }
-        entityPIDs.push(entity.pid);
+  const optionPIDs: PID[] = [];
+  for (const entity of world.catalog.genericEntities()) {
+    // Skip over items that don't have aliases.
+    if (entity.aliases.length === 0 || entity.aliases[0].length === 0) {
+      continue;
     }
 
-    const entityGenerators: EntityGenerator[] = [];
-    for (const pid of entityPIDs) {
-        const generator = new EntityGenerator(
-            world.attributeInfo,
-            attributes,
-            world.catalog,
-            pid,
-            entityQuantities
-        );
-        entityGenerators.push(generator);
+    if (entity.kind !== OPTION) {
+      continue;
     }
 
-    //
-    // Options
-    //
-    // TODO: consider putting the option position hints into
-    // the menu as annotations.
-    //
-    const quantifiers = new Map<
-        string,
-        {left: QuantityX[], right: QuantityX[]}
-    >([
-        [
-            'dash',
-            {
-                left: [
-                    new QuantityX(1, 'one dash'),
-                    new QuantityX(1, 'one sprinkle'),
-                    new QuantityX(2, 'two dashes'),
-                    new QuantityX(2, 'two sprinkles'),
-                    new QuantityX(3, 'three dashes'),
-                    new QuantityX(3, 'three sprinkles'),
-                ],
-                right: [
-                    new QuantityX(1, 'a bit of'),
-                    new QuantityX(1, 'some'),
-                    new QuantityX(1, 'a dash of'),
-                    new QuantityX(1, 'one dash of'),
-                    new QuantityX(2, 'two dashes of'),
-                    new QuantityX(3, 'three dashes of'),
-                    new QuantityX(1, 'a sprinkle of'),
-                    new QuantityX(1, 'one sprinkle of'),
-                    new QuantityX(2, 'two sprinkles of'),
-                    new QuantityX(3, 'three sprinkles of'),
-                ],
-            }
-        ],
-        [
-            'default',
-            {
-                left: [
-                    new QuantityX(1, ''),
-                ],
-                right: [
-                    new QuantityX(1, ''),
-                ],
-            }
-        ],
-        [
-            'extra',
-            {
-                left: [
-                    new QuantityX(1, 'a'),
-                    new QuantityX(1, 'an extra'),
-                    new QuantityX(1, 'an added'),
-                    new QuantityX(2, 'two'),
-                    new QuantityX(2, 'two extra'),
-                    new QuantityX(2, 'two added'),
-                    new QuantityX(3, 'three extra'),
-                    new QuantityX(3, 'three added'),
-                ],
-                right: [
-                    new QuantityX(1, 'a'),
-                    new QuantityX(1, 'an extra'),
-                    new QuantityX(1, 'an added'),
-                    new QuantityX(2, 'two'),
-                    new QuantityX(2, 'two extra'),
-                    new QuantityX(2, 'two added'),
-                    new QuantityX(3, 'three extra'),
-                    new QuantityX(3, 'three added'),
-                ],
-            }
-        ],
-        [
-            'packet',
-            {
-                left: [
-                    new QuantityX(1, 'one'),
-                    new QuantityX(2, 'two'),
-                    new QuantityX(3, 'three'),
-                ],
-                right: [
-                    new QuantityX(1, 'some'),
-                    new QuantityX(1, 'a packet of'),
-                    new QuantityX(1, 'one packet of'),
-                    new QuantityX(2, 'two packets of'),
-                    new QuantityX(3, 'three packets of'),
-                    new QuantityX(1, 'a pack of'),
-                    new QuantityX(1, 'one pack of'),
-                    new QuantityX(2, 'two packs of'),
-                    new QuantityX(3, 'three packs of'),
-                    new QuantityX(1, 'a package of'),
-                    new QuantityX(1, 'one package of'),
-                    new QuantityX(2, 'two packages of'),
-                    new QuantityX(3, 'three packages of'),
-                ],
-            }
-        ],
-        [
-            'pump',
-            {
-                left: [
-                    new QuantityX(1, ''),
-                    new QuantityX(1, 'one pump'),
-                    new QuantityX(2, 'two pump'),
-                    new QuantityX(3, 'three pump'),
-                    new QuantityX(1, 'one squirt'),
-                    new QuantityX(2, 'two squirt'),
-                    new QuantityX(3, 'three squirt'),
-                ],
-                right: [
-                    new QuantityX(1, 'some'),
-                    new QuantityX(1, 'a pump of'),
-                    new QuantityX(1, 'one pump of'),
-                    new QuantityX(2, 'two pumps of'),
-                    new QuantityX(3, 'three pumps of'),
-                    new QuantityX(1, 'a squirt of'),
-                    new QuantityX(1, 'one squirt of'),
-                    new QuantityX(2, 'two squirts of'),
-                    new QuantityX(3, 'three squirts of'),
-                ],
-            }
-        ],
-        [
-            'splash',
-            {
-                left: [
-                    new QuantityX(1, 'one'),
-                    new QuantityX(2, 'two'),
-                    new QuantityX(3, 'three'),
-                ],
-                right: [
-                    new QuantityX(1, 'a splash of'),
-                    new QuantityX(1, 'some'),
-                    new QuantityX(1, 'one splash of'),
-                    new QuantityX(2, 'two splashes of'),
-                    new QuantityX(3, 'three splashes of'),
-                ],
-            }
-        ],
-    ]);
+    optionPIDs.push(entity.pid);
+  }
 
-    // TODO: consider getting these from menu annotations.
-    const optionPositions = new Map<string, Position>([
-        ['foam', RIGHT],
-        ['ice', RIGHT],
-        ['whipped cream', RIGHT],
-        ['water', RIGHT],
-        ['for here cup', RIGHT],
-        ['lid', RIGHT],
-        ['with room', RIGHT],
-        ['to go', RIGHT],
-        ['equal', RIGHT],
-        ['honey', RIGHT],
-        ['splenda', RIGHT],
-        ['sugar', RIGHT],
-        ['sugar in the raw', RIGHT],
-        ['sweet n low', RIGHT],
-        ['espresso shot', RIGHT],
-        ['butter', RIGHT],
-        ['strawberry jam', RIGHT],
-        ['warmed', RIGHT],
-        ['cut in half', RIGHT],
-        ['whole milk creamer', RIGHT],
-        ['two percent milk creamer', RIGHT],
-        ['one percent milk creamer', RIGHT],
-        ['nonfat milk creamer', RIGHT],
-        ['coconut milk creamer', RIGHT],
-        ['soy milk creamer', RIGHT],
-        ['almond milk creamer', RIGHT],
-        ['oat milk creamer', RIGHT],
-        ['eggnog creamer', RIGHT],
-        ['half and half', RIGHT],
-        ['heavy cream', RIGHT],
-    ]);
-    const optionPositionPredicate = (name: string): Position => {
-        return optionPositions.get(name) || EITHER;
-    };
-
-    const optionPIDs: PID[] = [];
-    for (const entity of world.catalog.genericEntities()) {
-        // Skip over items that don't have aliases.
-        if (entity.aliases.length === 0 || entity.aliases[0].length === 0) {
-            continue;
-        }
-
-        if (entity.kind !== OPTION) {
-            continue;
-        }
-
-        optionPIDs.push(entity.pid);
-    }
-
-    const optionGenerators: OptionGenerator[] = [];
-    for (const pid of optionPIDs) {
-        const generator = new OptionGenerator(
-            world.attributeInfo,
-            attributes,
-            world.catalog,
-            world.ruleChecker,
-            pid,
-            optionPositionPredicate,
-            quantifiers
-        );
-        optionGenerators.push(generator);
-    }
-
-    //
-    // Products
-    //
-    const productGenerator = new ProductGenerator(
-        entityGenerators,
-        optionGenerators,
-        optionCountRange,
-        world.ruleChecker
+  const optionGenerators: OptionGenerator[] = [];
+  for (const pid of optionPIDs) {
+    const generator = new OptionGenerator(
+      world.attributeInfo,
+      attributes,
+      world.catalog,
+      world.ruleChecker,
+      pid,
+      optionPositionPredicate,
+      quantifiers
     );
+    optionGenerators.push(generator);
+  }
 
-    //
-    // Prologues
-    //
-    // TODO: consider getting these from the lexicon.
-    const adds = [
-        "(I'd,I would) [also] like",
-        "(I'll,I will) [also] (do,get,have,take)",
-        "I (need,wanna,want)",
-        "(get,give) me",
-        "(can,could,may) (I,we,you) [just,please] [also] (do,get,get me,get us,have)",
-        "[please] set me up with",
-        "[please] hook me up with",
-        "we need",
-        "we want",
-        "(we'd,we would) [also] like",
-        "(we'll, we will) [also] have",
-        "how about",
-        "[please,also] add",
-      ];
-    const prologueGenerator = new AliasGenerator([prologues, adds]);
+  //
+  // Products
+  //
+  const productGenerator = new ProductGenerator(
+    entityGenerators,
+    optionGenerators,
+    optionCountRange,
+    world.ruleChecker
+  );
 
-    //
-    // Epilogues
-    //
-    const epilogueGenerator = new AliasGenerator([epilogues]);
+  //
+  // Prologues
+  //
+  // TODO: consider getting these from the lexicon.
+  const adds = [
+    "(I'd,I would) [also] like",
+    "(I'll,I will) [also] (do,get,have,take)",
+    'I (need,wanna,want)',
+    '(get,give) me',
+    '(can,could,may) (I,we,you) [just,please] [also] (do,get,get me,get us,have)',
+    '[please] set me up with',
+    '[please] hook me up with',
+    'we need',
+    'we want',
+    "(we'd,we would) [also] like",
+    "(we'll, we will) [also] have",
+    'how about',
+    '[please,also] add',
+  ];
+  const prologueGenerator = new AliasGenerator([prologues, adds]);
 
-    return {
-        prologueGenerator,
-        productGenerator,
-        epilogueGenerator
-    };
+  //
+  // Epilogues
+  //
+  const epilogueGenerator = new AliasGenerator([epilogues]);
+
+  return {
+    prologueGenerator,
+    productGenerator,
+    epilogueGenerator,
+  };
 }
 
-function *levelA(world: World, seed: number) {
-    yield *generateOrders(world, seed, [1, 1], [0, 0]);
+function* levelA(world: World, seed: number) {
+  yield* generateOrders(world, seed, [1, 1], [0, 0]);
 }
 
-function *levelB(world: World, seed: number) {
-    yield *generateOrders(world, seed, [1, 1], [1, 3]);
+function* levelB(world: World, seed: number) {
+  yield* generateOrders(world, seed, [1, 1], [1, 3]);
 }
 
-function *levelC(world: World, seed: number) {
-    yield *generateOrders(world, seed, [1, 3], [1, 3]);
+function* levelC(world: World, seed: number) {
+  yield* generateOrders(world, seed, [1, 3], [1, 3]);
 }
 
 function configurePostprocessor(): PostProcessor {
-    // TODO: 'cup of' should probably be modelled in the menu as a unit,
-    // rather than relying on post processing.
+  // TODO: 'cup of' should probably be modelled in the menu as a unit,
+  // rather than relying on post processing.
 
-    return createPostProcessor([
-        ['with with', 'with'],
-        // NOTE: the following case handled by the "with with" case.
-        // ['with without', 'with'],
-        [/cup of (.*)coffees/, 'cups of $1coffee'],
-        ['cup of dark roasts', 'cups of dark roast'],
-        ['cup of drips', 'cups of drip'],
-        ['to go cup', 'to go']
-    ]);
+  return createPostProcessor([
+    ['with with', 'with'],
+    // NOTE: the following case handled by the "with with" case.
+    // ['with without', 'with'],
+    [/cup of (.*)coffees/, 'cups of $1coffee'],
+    ['cup of dark roasts', 'cups of dark roast'],
+    ['cup of drips', 'cups of drip'],
+    ['to go cup', 'to go'],
+  ]);
 }
 
 function* generateOrders(
-    world: World,
-    seed: number,
-    segmentCountRange: [number, number],
-    optionCount: [number, number]
+  world: World,
+  seed: number,
+  segmentCountRange: [number, number],
+  optionCount: [number, number]
 ): IterableIterator<GenericCase<ValidationStep<TextTurn>>> {
-    const {prologueGenerator, productGenerator, epilogueGenerator} =
-        configureProductGenerators(world, optionCount);
-    const postProcessor = configurePostprocessor();
+  const { prologueGenerator, productGenerator, epilogueGenerator } =
+    configureProductGenerators(world, optionCount);
+  const postProcessor = configurePostprocessor();
 
-    const orderGenerator = new OrderGenerator(
-        prologueGenerator,
-        productGenerator,
-        segmentCountRange,
-        epilogueGenerator
+  const orderGenerator = new OrderGenerator(
+    prologueGenerator,
+    productGenerator,
+    segmentCountRange,
+    epilogueGenerator
+  );
+
+  while (true) {
+    // DESIGN NOTE: Converting zero-value seed to 'default' to
+    // maintain backward compatability with a bug in the command
+    // line parameter processing that evaluated args.s as a truthy
+    // value and supplied 'default' for both undefined and 0.
+    // TODO: create a new baseline and then remove this code.
+    const s = seed === 0 ? 'default' : seed;
+    const random = new Random(s as unknown as string);
+    yield createTestCase(
+      world.catalog,
+      [orderGenerator.randomOrder(random)],
+      seed,
+      postProcessor
     );
-
-    while (true) {
-        // DESIGN NOTE: Converting zero-value seed to 'default' to
-        // maintain backward compatability with a bug in the command
-        // line parameter processing that evaluated args.s as a truthy
-        // value and supplied 'default' for both undefined and 0.
-        // TODO: create a new baseline and then remove this code.
-        const s = seed === 0 ? 'default' : seed;
-        const random = new Random(s as unknown as string);
-        yield createTestCase(
-            world.catalog,
-            [orderGenerator.randomOrder(random)],
-            seed,
-            postProcessor
-        );
-        seed++;
-    }
+    seed++;
+  }
 }
 
 function createPostProcessor(patterns: Array<[RegExp | string, string]>) {
-    return (text: string) => {
-        for (const [pattern, replacement] of patterns) {
-            text = text.replace(pattern, replacement);
-        }
-        return text;
-    };
+  return (text: string) => {
+    for (const [pattern, replacement] of patterns) {
+      text = text.replace(pattern, replacement);
+    }
+    return text;
+  };
 }
 
 // function* remove(
@@ -529,6 +516,5 @@ function createPostProcessor(patterns: Array<[RegExp | string, string]>) {
 //         );
 //     }
 // }
-
 
 go();

@@ -7,13 +7,7 @@ import {
   Token,
 } from 'token-flow';
 
-import {
-  AID,
-  aliasesFromPattern,
-  OPTION,
-  PID,
-  World,
-} from 'prix-fixe';
+import { AID, aliasesFromPattern, OPTION, PID, World } from 'prix-fixe';
 
 import { AttributeToken, ATTRIBUTE } from './attributes';
 import { generateRecipes } from './cookbook';
@@ -23,7 +17,7 @@ import { ILexicalAnalyzer } from './interfaces';
 import {
   generateAttributes,
   generateOptions,
-  generateProducts
+  generateProducts,
 } from './lexical_analyzer';
 
 import {
@@ -48,7 +42,7 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
     world: World,
     spec: LexiconSpec,
     lexicon: Lexicon,
-    debugMode = true,
+    debugMode = true
   ) {
     this.lexicon = lexicon;
 
@@ -71,8 +65,9 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
     this.lexicon.addDomain(generateRecipes(world));
 
     // LexiconSpec
-    const { intents, quantifiers, stopwords, units } =
-      sortTokenSpecs(spec.lexicon);
+    const { intents, quantifiers, stopwords, units } = sortTokenSpecs(
+      spec.lexicon
+    );
 
     this.lexicon.addDomain(this.generateQuantifierAliases(quantifiers));
     this.lexicon.addDomain(this.generateGeneralAliases(units));
@@ -93,8 +88,7 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
         const existing = this.pidToToken.get(token.pid);
         if (existing) {
           if (token !== existing) {
-            const message =
-              `indexEntityTokens: tokens must be unique  (pid=${token.pid}).`;
+            const message = `indexEntityTokens: tokens must be unique  (pid=${token.pid}).`;
             throw TypeError(message);
           }
         } else {
@@ -104,8 +98,7 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
         const existing = this.pidToToken.get(token.id);
         if (existing) {
           if (token !== existing) {
-            const message =
-              `indexEntityTokens: tokens must be unique  (pid=${token.id}).`;
+            const message = `indexEntityTokens: tokens must be unique  (pid=${token.id}).`;
             throw TypeError(message);
           }
         } else {
@@ -115,8 +108,7 @@ export class LexicalAnalyzer2 implements ILexicalAnalyzer {
         const existing = this.aidToToken.get(token.id);
         if (existing) {
           if (token !== existing) {
-            const message =
-              `indexAttributeTokens: tokens must be unique  (aid=${token.id}).`;
+            const message = `indexAttributeTokens: tokens must be unique  (aid=${token.id}).`;
             throw TypeError(message);
           }
         } else {

@@ -1,15 +1,6 @@
-import {
-  Edge,
-  Graph,
-  Lexicon,
-  Token,
-  Tokenizer,
-} from 'token-flow';
+import { Graph, Lexicon, Token, Tokenizer } from 'token-flow';
 
-import {
-  AID,
-  PID,
-} from 'prix-fixe';
+import { AID, PID } from 'prix-fixe';
 
 import { AttributeToken } from './attributes';
 

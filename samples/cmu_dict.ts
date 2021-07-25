@@ -1,140 +1,141 @@
 import fs from 'fs';
-const metaphone = require('talisman/phonetics/metaphone') as (word:string)=>string;
+const metaphone = require('talisman/phonetics/metaphone') as (
+  word: string
+) => string;
 
 import { createHistogram, Random } from '../src';
 
 class CMUDict {
-    metaphoneToWords = new Map<string, string[]>();
-    phoneticToWords = new Map<string, string[]>();
-    wordToPhonetic = new Map<string, string[]>();
-    words: string[];
+  metaphoneToWords = new Map<string, string[]>();
+  phoneticToWords = new Map<string, string[]>();
+  wordToPhonetic = new Map<string, string[]>();
+  words: string[];
 
-    constructor(infile: string) {
-        const inputText = fs.readFileSync(infile, 'utf-8');
-        const lines = inputText.split(/\r?\n/);
+  constructor(infile: string) {
+    const inputText = fs.readFileSync(infile, 'utf-8');
+    const lines = inputText.split(/\r?\n/);
 
-        const re = /(.*)\(\d+\)$/;
+    const re = /(.*)\(\d+\)$/;
 
-        let lineNumber = 0;
-        for (const line of lines) {
-            lineNumber++;
-            if (line.startsWith(';;;')) {
-                // Skip over comments
-                continue;
-            }
-            const parts = line.split('  ');
-            if (parts.length === 2) {
-                let word = parts[0];
-                const match = word.match(re);
-                if (match) {
-                    word = match[1];
-                }
-                const phonetic = parts[1];
-
-                // Update phonetic => { word } map.
-                const words = this.phoneticToWords.get(phonetic);
-                if (words) {
-                    words.push(word);
-                } else {
-                    this.phoneticToWords.set(phonetic, [word]);
-                }
-
-                // Update metaphone => { Word } map.
-                const meta = metaphone(word);
-                const mwords = this.metaphoneToWords.get(meta);
-                if (mwords) {
-                    mwords.push(word);
-                } else {
-                    this.metaphoneToWords.set(meta, [word]);
-                }
-
-                // Update word => { pronounciation } map
-                const phonetics = this.wordToPhonetic.get(word);
-                if (phonetics) {
-                    phonetics.push(phonetic);
-                } else {
-                    this.wordToPhonetic.set(word, [phonetic]);
-                }
-                // if (this.wordToPhonetic.has(word)) {
-                //     console.log(`Duplicate word "${word}" on line ${lineNumber}`);
-                // } else {
-                //     this.wordToPhonetic.set(word, phonetic);
-                // }
-            } else {
-                console.log(`Skipping line ${lineNumber}: "${line}"`);
-            }
+    let lineNumber = 0;
+    for (const line of lines) {
+      lineNumber++;
+      if (line.startsWith(';;;')) {
+        // Skip over comments
+        continue;
+      }
+      const parts = line.split('  ');
+      if (parts.length === 2) {
+        let word = parts[0];
+        const match = word.match(re);
+        if (match) {
+          word = match[1];
         }
-        this.words = [...this.wordToPhonetic.keys()];
+        const phonetic = parts[1];
+
+        // Update phonetic => { word } map.
+        const words = this.phoneticToWords.get(phonetic);
+        if (words) {
+          words.push(word);
+        } else {
+          this.phoneticToWords.set(phonetic, [word]);
+        }
+
+        // Update metaphone => { Word } map.
+        const meta = metaphone(word);
+        const mwords = this.metaphoneToWords.get(meta);
+        if (mwords) {
+          mwords.push(word);
+        } else {
+          this.metaphoneToWords.set(meta, [word]);
+        }
+
+        // Update word => { pronounciation } map
+        const phonetics = this.wordToPhonetic.get(word);
+        if (phonetics) {
+          phonetics.push(phonetic);
+        } else {
+          this.wordToPhonetic.set(word, [phonetic]);
+        }
+        // if (this.wordToPhonetic.has(word)) {
+        //     console.log(`Duplicate word "${word}" on line ${lineNumber}`);
+        // } else {
+        //     this.wordToPhonetic.set(word, phonetic);
+        // }
+      } else {
+        console.log(`Skipping line ${lineNumber}: "${line}"`);
+      }
+    }
+    this.words = [...this.wordToPhonetic.keys()];
+  }
+
+  summarize() {
+    console.log(`Words: ${this.wordToPhonetic.size}`);
+    console.log(`Phonetics: ${this.phoneticToWords.size}`);
+
+    const p = [...this.phoneticToWords.entries()].sort((a, b): number => {
+      return b[1].length - a[1].length;
+    });
+    console.log('Histogram of phonetic set sizes:');
+    const histogram = createHistogram(p.map((x) => x[1].length).values());
+    for (const [size, count] of histogram) {
+      console.log(`    ${size}: ${count}`);
     }
 
-    summarize() {
-        console.log(`Words: ${this.wordToPhonetic.size}`);
-        console.log(`Phonetics: ${this.phoneticToWords.size}`);
-
-        const p = [...this.phoneticToWords.entries()].sort((a,b): number => {
-            return b[1].length - a[1].length;
-        });
-        console.log('Histogram of phonetic set sizes:');
-        const histogram = createHistogram(p.map(x => x[1].length).values());
-        for (const [size, count] of histogram) {
-            console.log(`    ${size}: ${count}`);
-        }
-
-        for (let i=0; i<1000; ++i) {
-            console.log(`${p[i][1].join(" ")}`);
-        }
-
-        // let counter = 0;
-        // for (const word of this.wordToPhonetic.keys()) {
-        //     ++counter;
-        //     if (counter > 135000) {
-        //         break;
-        //     }
-        //     const segments = [...this.segment(word)];
-        //     if (segments.length > 0) {
-        //         const text = segments.map(x => `(${x.join(",")})`).join(' ');
-        //         console.log(`${word}: ${text}`);
-        //     }
-        // }
-
-        const random = new Random('XYZ1234567');
-        for (let count = 0; count < 10000000; ++count) {
-            const word1 = random.randomChoice(this.words);
-            const word2 = random.randomChoice(this.words);
-
-            const segments = [...this.segment2(word1, word2)];
-            if (segments.length > 0) {
-                const text = segments.map(x => `(${x.join(",")})`).join(' ');
-                console.log(`${word1} ${word2}: ${text}`);
-            }
-        }
-
-        // let counter1 = 0;
-        // for (const word1 of this.wordToPhonetic.keys()) {
-        //     ++counter1;
-        //     if (counter1 > 1000) {
-        //         let counter2 = 0;
-        //         for (const word2 of this.wordToPhonetic.keys()) {
-        //             ++counter2;
-        //             if (counter2 > 135000) {
-        //                 break;
-        //             } else if (counter2 > 1000) {
-        //                 const segments = [...this.segment2(word1, word2)];
-        //                 if (segments.length > 0) {
-        //                     const text = segments.map(x => `(${x.join(",")})`).join(' ');
-        //                     console.log(`${word1} ${word2}: ${text}`);
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-
-        // const segments = [...this.segment('ISLAND')];
-        // console.log(segments);
+    for (let i = 0; i < 1000; ++i) {
+      console.log(`${p[i][1].join(' ')}`);
     }
 
-/*
+    // let counter = 0;
+    // for (const word of this.wordToPhonetic.keys()) {
+    //     ++counter;
+    //     if (counter > 135000) {
+    //         break;
+    //     }
+    //     const segments = [...this.segment(word)];
+    //     if (segments.length > 0) {
+    //         const text = segments.map(x => `(${x.join(",")})`).join(' ');
+    //         console.log(`${word}: ${text}`);
+    //     }
+    // }
+
+    const random = new Random('XYZ1234567');
+    for (let count = 0; count < 10000000; ++count) {
+      const word1 = random.randomChoice(this.words);
+      const word2 = random.randomChoice(this.words);
+
+      const segments = [...this.segment2(word1, word2)];
+      if (segments.length > 0) {
+        const text = segments.map((x) => `(${x.join(',')})`).join(' ');
+        console.log(`${word1} ${word2}: ${text}`);
+      }
+    }
+
+    // let counter1 = 0;
+    // for (const word1 of this.wordToPhonetic.keys()) {
+    //     ++counter1;
+    //     if (counter1 > 1000) {
+    //         let counter2 = 0;
+    //         for (const word2 of this.wordToPhonetic.keys()) {
+    //             ++counter2;
+    //             if (counter2 > 135000) {
+    //                 break;
+    //             } else if (counter2 > 1000) {
+    //                 const segments = [...this.segment2(word1, word2)];
+    //                 if (segments.length > 0) {
+    //                     const text = segments.map(x => `(${x.join(",")})`).join(' ');
+    //                     console.log(`${word1} ${word2}: ${text}`);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    // const segments = [...this.segment('ISLAND')];
+    // console.log(segments);
+  }
+
+  /*
 MOLDED MICHIE: (MOHL,DID,MICHIE)
 UNWILLING COMPARABLY: ('N,WILLING,COMPARABLY) ('N,WILLING,COMPARABLY)
 AGGRIEVE VALENSUELA: (A,GREAVE,VALENSUELA)
@@ -177,7 +178,7 @@ ADDRESSED ADDRESS: (A,ADDRESS,DRESSED) (A,ADDRESS,DRESSED)
 ADDRESSED ADDRESSABLE: (A,ADDRESSABLE,DRESSED)
 */
 
-/*
+  /*
 CONCEALED: (CAN,SEALED)
 CONCEALING: (CAN,CEILING)
 DEEPENED: (DEEP,AND)
@@ -230,137 +231,138 @@ WORKIN': (WE'RE,CAN)
 
 be four the tray knees way did to the aisle and they left the some it
 what waded the engine ears
-welded the engine ears 
+welded the engine ears
 can sealed eggs its
 */
 
-    // Find segmentations of one word into two
-    *segment(word: string): IterableIterator<[string, string]> {
-        const pronunciations = this.wordToPhonetic.get(word);
-        if (pronunciations) {
-            for (const pronunciation of pronunciations) {
-                const phonemes = pronunciation.split(' ');
-                if (phonemes.length > 1) {
-                    for (let i = 0; i < phonemes.length - 2; ++i) {
-                        const left = phonemes.slice(0,i).join(' ');
-                        const right = phonemes.slice(i).join(' ');
+  // Find segmentations of one word into two
+  *segment(word: string): IterableIterator<[string, string]> {
+    const pronunciations = this.wordToPhonetic.get(word);
+    if (pronunciations) {
+      for (const pronunciation of pronunciations) {
+        const phonemes = pronunciation.split(' ');
+        if (phonemes.length > 1) {
+          for (let i = 0; i < phonemes.length - 2; ++i) {
+            const left = phonemes.slice(0, i).join(' ');
+            const right = phonemes.slice(i).join(' ');
 
-                        const leftWord = this.phoneticToWords.get(left);
-                        const rightWord = this.phoneticToWords.get(right);
+            const leftWord = this.phoneticToWords.get(left);
+            const rightWord = this.phoneticToWords.get(right);
 
-                        if (leftWord && rightWord) {
-                            // TODO: look at all words, not just first
-                            yield [leftWord[0],rightWord[0]];
-                        }
-                    }
+            if (leftWord && rightWord) {
+              // TODO: look at all words, not just first
+              yield [leftWord[0], rightWord[0]];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Find segmentations of two adjacent words into one
+  *segment2(
+    word1: string,
+    word2: string
+  ): IterableIterator<[string, string, string]> {
+    const pronunciations1 = this.wordToPhonetic.get(word1);
+    const pronunciations2 = this.wordToPhonetic.get(word2);
+    if (pronunciations1 && pronunciations2) {
+      for (const pronunciation1 of pronunciations1) {
+        for (const pronunciation2 of pronunciations2) {
+          const phonemes1 = pronunciation1.split(' ');
+          const phonemes2 = pronunciation2.split(' ');
+          if (phonemes1.length > 1 && phonemes2.length > 1) {
+            for (let i = 1; i < phonemes1.length - 2; ++i) {
+              for (let j = 1; j < phonemes2.length - 2; ++j) {
+                const left = phonemes1.slice(0, i).join(' ');
+                const middle = [
+                  ...phonemes1.slice(i),
+                  ...phonemes2.slice(0, j),
+                ].join(' ');
+                const right = phonemes2.slice(j).join(' ');
+
+                const leftWord = this.phoneticToWords.get(left);
+                const middleWord = this.phoneticToWords.get(middle);
+                const rightWord = this.phoneticToWords.get(right);
+
+                if (leftWord && rightWord && middleWord) {
+                  // TODO: look at all words, not just first
+                  yield [leftWord[0], middleWord[0], rightWord[0]];
                 }
+              }
             }
+          }
         }
+      }
     }
+  }
 
-    // Find segmentations of two adjacent words into one
-    *segment2(word1: string, word2: string): IterableIterator<[string, string, string]> {
-        const pronunciations1 = this.wordToPhonetic.get(word1);
-        const pronunciations2 = this.wordToPhonetic.get(word2);
-        if (pronunciations1 && pronunciations2) {
-            for (const pronunciation1 of pronunciations1) {
-                for (const pronunciation2 of pronunciations2) {
-                    const phonemes1 = pronunciation1.split(' ');
-                    const phonemes2 = pronunciation2.split(' ');
-                    if (phonemes1.length > 1 && phonemes2.length > 1) {
-                        for (let i = 1; i < phonemes1.length - 2; ++i) {
-                            for (let j = 1; j < phonemes2.length - 2; ++j) {
-                                const left = phonemes1.slice(0,i).join(' ');
-                                const middle = [
-                                    ...phonemes1.slice(i),
-                                    ...phonemes2.slice(0,j)
-                                ].join(' ');
-                                const right = phonemes2.slice(j).join(' ');
+  metaphoneProject(text: string) {
+    const words = text.split(/\s+/);
+    for (const word of words) {
+      console.log(`${word}`);
+      const m = metaphone(word);
+      console.log(`  ${m}`);
+      const w = this.metaphoneToWords.get(m);
+      if (w) {
+        console.log(`  ${w.length}: ${w.join(', ').toLowerCase()}`);
+      } else {
+        console.log('  ---');
+      }
+    }
+  }
 
-                                const leftWord = this.phoneticToWords.get(left);
-                                const middleWord = this.phoneticToWords.get(middle);
-                                const rightWord = this.phoneticToWords.get(right);
-
-                                if (leftWord && rightWord && middleWord) {
-                                    // TODO: look at all words, not just first
-                                    yield [leftWord[0],middleWord[0],rightWord[0]];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+  phoneticExpand(word: string): string {
+    const phonetics = this.wordToPhonetic.get(word.toUpperCase());
+    if (phonetics) {
+      const words = [];
+      for (const phonetic of phonetics) {
+        const w = this.phoneticToWords.get(phonetic);
+        if (w) {
+          words.push(...w);
         }
+      }
+      return words.join(', ');
+    } else {
+      return word;
     }
-
-    metaphoneProject(text: string) {
-        const words = text.split(/\s+/);
-        for (const word of words) {
-            console.log(`${word}`);
-            const m = metaphone(word);
-            console.log(`  ${m}`);
-            const w = this.metaphoneToWords.get(m);
-            if (w) {
-                console.log(`  ${w.length}: ${w.join(', ').toLowerCase()}`);
-            } else {
-                console.log('  ---');
-            }
-        }
-    }
-
-    phoneticExpand(word: string): string {
-        const phonetics = this.wordToPhonetic.get(word.toUpperCase());
-        if (phonetics) {
-            const words = [];
-            for (const phonetic of phonetics) {
-                const w = this.phoneticToWords.get(phonetic);
-                if (w) {
-                    words.push(...w);
-                }
-            }
-            return words.join(', ');
-        } else {
-            return word;
-        }
-    }
+  }
 }
 
-
 function go() {
-    // const line = 'AARDVARKS  AA1 R D V AA2 R K S';
-    // const parts = line.split('  ');
-    // console.log(`word: "${parts[0]}"`);
-    // console.log(`phonetic: "${parts[1]}"`);
+  // const line = 'AARDVARKS  AA1 R D V AA2 R K S';
+  // const parts = line.split('  ');
+  // console.log(`word: "${parts[0]}"`);
+  // console.log(`phonetic: "${parts[1]}"`);
 
-    // const line = "a(1)";
-    // const re = /(.*)\(\d+\)$/;
-    // const m = line.match(re);
+  // const line = "a(1)";
+  // const re = /(.*)\(\d+\)$/;
+  // const m = line.match(re);
 
-    // const line2 = "a";
-    // const m2 = line2.match(re);
+  // const line2 = "a";
+  // const m2 = line2.match(re);
 
-    const d = new CMUDict("d:\\git\\menubot\\cmudict\\cmudict-0.7b.txt");
-    // d.summarize();
+  const d = new CMUDict('d:\\git\\menubot\\cmudict\\cmudict-0.7b.txt');
+  // d.summarize();
 
-    // d.metaphoneProject('latte with light foam');
-    // d.metaphoneProject('latte with white phone');
+  // d.metaphoneProject('latte with light foam');
+  // d.metaphoneProject('latte with white phone');
 
-    console.log(d.phoneticExpand('their'));
-    console.log(d.phoneticExpand('bow'));
-    console.log(d.phoneticExpand('two'));
-    console.log(d.phoneticExpand('the'));
-    console.log(d.phoneticExpand('sea'));
+  console.log(d.phoneticExpand('their'));
+  console.log(d.phoneticExpand('bow'));
+  console.log(d.phoneticExpand('two'));
+  console.log(d.phoneticExpand('the'));
+  console.log(d.phoneticExpand('sea'));
 
-    console.log(d.phoneticExpand('i'));
-    console.log(d.phoneticExpand('scream'));
-    console.log(d.phoneticExpand('for'));
-    console.log(d.phoneticExpand('ice'));
-    console.log(d.phoneticExpand('cream'));
+  console.log(d.phoneticExpand('i'));
+  console.log(d.phoneticExpand('scream'));
+  console.log(d.phoneticExpand('for'));
+  console.log(d.phoneticExpand('ice'));
+  console.log(d.phoneticExpand('cream'));
 
-
-    // console.log(d.phoneticExpand('tear'));
-    // console.log(d.phoneticExpand('lead'));
-    // console.log(d.phoneticExpand('fair'));
+  // console.log(d.phoneticExpand('tear'));
+  // console.log(d.phoneticExpand('lead'));
+  // console.log(d.phoneticExpand('fair'));
 }
 
 go();

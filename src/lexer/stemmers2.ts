@@ -1,7 +1,15 @@
 import pluralize from 'pluralize';
+
+// TODO: more ideomatic imports for snowball-stemmers, metaphone, and double-metaphone.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { newStemmer, Stemmer as SnowballStemmer } from 'snowball-stemmers';
-const metaphone = require('talisman/phonetics/metaphone') as (word: string) => string;
-const doubleMetaphone = require('talisman/phonetics/double-metaphone') as (word: string) => [string, string];
+const metaphone = require('talisman/phonetics/metaphone') as (
+  word: string
+) => string;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const doubleMetaphone = require('talisman/phonetics/double-metaphone') as (
+  word: string
+) => [string, string];
 import { StemmerFunction } from 'token-flow';
 
 import { ReplacerSpec } from './types';
@@ -19,33 +27,33 @@ export class StemmerFactory2 {
     {
       name: 'snowball',
       description: 'snowball v2 stemmer',
-      create: createSnowballStemmer
+      create: createSnowballStemmer,
     },
     {
       name: 'snowball-es',
       description: 'snowball v2 stemmer',
-      create: createSnowballStemmerES
+      create: createSnowballStemmerES,
     },
     {
       name: 'metaphone',
       description: 'double metaphone',
-      create: createMetaphone
+      create: createMetaphone,
     },
     {
       name: 'hybrid',
       description: 'double metaphone with singularization',
-      create: createHybridMetaphone
+      create: createHybridMetaphone,
     },
     {
       name: 'nop',
       description: 'nop stemmer - does nothing',
-      create: createNop
+      create: createNop,
     },
     {
       name: 'singularizer',
       description: 'singularize only',
-      create: createSingularizer
-    }
+      create: createSingularizer,
+    },
   ];
 
   private readonly nameToStemmer = new Map<string, StemmerDescription2>();
@@ -69,14 +77,13 @@ export class StemmerFactory2 {
 
   register(stemmer: StemmerDescription2) {
     if (this.nameToStemmer.has(stemmer.name)) {
-      const message = `Duplicate stemmer description "${
-        stemmer.name
-        }"`;
+      const message = `Duplicate stemmer description "${stemmer.name}"`;
       throw new TypeError(message);
     }
     this.nameToStemmer.set(stemmer.name, stemmer);
   }
 
+  // eslint-disable-next-line require-yield
   *stemmers(): IterableIterator<StemmerDescription2> {
     return this.nameToStemmer.values();
   }
@@ -141,6 +148,7 @@ function createHybridMetaphone(factory: StemmerFactory2): StemmerFunction {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createNop(factory: StemmerFactory2): StemmerFunction {
   return (term: string): string => term;
 }

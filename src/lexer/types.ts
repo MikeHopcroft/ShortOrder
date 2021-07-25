@@ -8,7 +8,7 @@ const tokenSpecType = t.intersection([
     aliases: t.array(t.string),
   }),
   t.partial({
-    value: t.number
+    value: t.number,
   }),
 ]);
 export type TokenSpec = t.TypeOf<typeof tokenSpecType>;

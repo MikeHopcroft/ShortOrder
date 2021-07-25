@@ -1,14 +1,8 @@
-import path from 'path';
+import { State, World } from 'prix-fixe';
 
-import {
-  Processor,
-  State,
-  World
-} from 'prix-fixe';
+import { DefaultTermModel, Lexicon } from 'token-flow';
 
-import { DefaultTermModel, Lexicon, StemmerFunction } from 'token-flow';
-
-import { ILexicalAnalyzer, LexicalAnalyzer2 } from '../lexer';
+import { LexicalAnalyzer2 } from '../lexer';
 import { Parser, processRoot } from '../parser';
 import { StemmerFactory2 } from '../lexer/stemmers2';
 import { LexiconSpec } from '../lexer/types';
@@ -26,16 +20,11 @@ export function createShortOrderWorld2(
   //
   const stemmerFactory = new StemmerFactory2(lexiconSpec.replacers);
   const stemmer = stemmerFactory.create(stemmerName);
-  const termModel = new DefaultTermModel({stemmer});
+  const termModel = new DefaultTermModel({ stemmer });
   const lexicon = new Lexicon(termModel);
   //const lexicon = new Lexicon();
 
-  const lexer = new LexicalAnalyzer2(
-    world,
-    lexiconSpec,
-    lexicon,
-    debugMode,
-  );
+  const lexer = new LexicalAnalyzer2(world, lexiconSpec, lexicon, debugMode);
 
   const parser = new Parser(
     world.cartOps,

@@ -5,11 +5,11 @@ export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
 export type ATTRIBUTE = typeof ATTRIBUTE;
 
 export interface AttributeToken extends Token {
-    type: ATTRIBUTE;
-    id: PID;
-    name: string;
+  type: ATTRIBUTE;
+  id: PID;
+  name: string;
 }
 
 export function createAttribute(id: PID, name: string) {
-    return { type: ATTRIBUTE, id, name } as AttributeToken;
+  return { type: ATTRIBUTE, id, name } as AttributeToken;
 }

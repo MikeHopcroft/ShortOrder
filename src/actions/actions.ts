@@ -17,7 +17,7 @@
 // Perhaps run token-flow on pattern of Actions.
 
 export interface Action {
-    type: Symbol;
+  type: Symbol;
 }
 
 // Acknowledge user response to question.
@@ -49,7 +49,7 @@ export const COMPLETE: unique symbol = Symbol('COMPLETE');
 export type COMPLETE = typeof COMPLETE;
 
 export interface CompleteAction extends Action {
-    type: COMPLETE;
+  type: COMPLETE;
 }
 
 // Errors processing order. May not have added everything correctly.
@@ -58,7 +58,7 @@ export const CONFUSED: unique symbol = Symbol('CONFUSED');
 export type CONFUSED = typeof CONFUSED;
 
 export interface ConfusedAction extends Action {
-    type: CONFUSED;
+  type: CONFUSED;
 }
 
 // User has completed order.
@@ -67,7 +67,7 @@ export const DONE: unique symbol = Symbol('DONE');
 export type DONE = typeof DONE;
 
 export interface DoneAction extends Action {
-    type: DONE;
+  type: DONE;
 }
 
 // Acknowledging transaction performed successfully.
@@ -75,7 +75,7 @@ export const OK: unique symbol = Symbol('OK');
 export type OK = typeof OK;
 
 export interface OkAction {
-    type: OK;
+  type: OK;
 }
 
 // Times up (after waiting, after getting a complete order w/o DONE).
@@ -105,7 +105,7 @@ export const WAIT: unique symbol = Symbol('WAIT');
 export type WAIT = typeof WAIT;
 
 export interface WaitAction extends Action {
-    type: WAIT;
+  type: WAIT;
 }
 
 // Welcome at start of order
@@ -114,50 +114,50 @@ export const WELCOME: unique symbol = Symbol('WELCOME');
 export type WELCOME = typeof WELCOME;
 
 export interface WelcomeAction extends Action {
-    type: WELCOME;
+  type: WELCOME;
 }
 
-export type AnyAction = 
-    // Choices were removed when Catalog was moved to prix-fixe
-    // TODO: reinstate this functionality or remove concept.
-    // ChoiceAction |
-    CompleteAction |
-    ConfusedAction |
-    DoneAction |
-    OkAction |
-    WaitAction |
-    WelcomeAction;
+export type AnyAction =
+  // Choices were removed when Catalog was moved to prix-fixe
+  // TODO: reinstate this functionality or remove concept.
+  // ChoiceAction |
+  | CompleteAction
+  | ConfusedAction
+  | DoneAction
+  | OkAction
+  | WaitAction
+  | WelcomeAction;
 
 export function actionToString(action: AnyAction): string {
-    let result = `UNKNOWN action ${String(action.type)}`;
+  let result = `UNKNOWN action ${String(action.type)}`;
 
-    switch (action.type) {
-        // Choices were removed when Catalog was moved to prix-fixe
-        // TODO: reinstate this functionality or remove concept.
-        // case CHOICE:
-        //     result = `CHOICE: ${action.choice.className} for ${action.item.pid}`;
-        //     break;
-        //     case COMPLETE:
-        //     result = `COMPLETE`;
-        //     break;
-        case CONFUSED:
-            result = `CONFUSED`;
-            break;
-        case DONE:
-            result = `DONE`;
-            break;
-        case OK:
-            result = `OK`;
-            break;
-        case WAIT:
-            result = `WAIT`;
-            break;
-        case WELCOME:
-            result = 'WELCOME';
-            break;
-        default:
-            break;
-    }
+  switch (action.type) {
+    // Choices were removed when Catalog was moved to prix-fixe
+    // TODO: reinstate this functionality or remove concept.
+    // case CHOICE:
+    //     result = `CHOICE: ${action.choice.className} for ${action.item.pid}`;
+    //     break;
+    //     case COMPLETE:
+    //     result = `COMPLETE`;
+    //     break;
+    case CONFUSED:
+      result = 'CONFUSED';
+      break;
+    case DONE:
+      result = 'DONE';
+      break;
+    case OK:
+      result = 'OK';
+      break;
+    case WAIT:
+      result = 'WAIT';
+      break;
+    case WELCOME:
+      result = 'WELCOME';
+      break;
+    default:
+      break;
+  }
 
-    return result;
+  return result;
 }
