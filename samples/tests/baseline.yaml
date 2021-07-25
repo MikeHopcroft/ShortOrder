@@ -710,6 +710,100 @@ tests:
           repairs:
             cost: 0
             steps: []
+  - id: 34.1
+    suites: regression add
+    comment: implicit add implicit quantity
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: vanilla grande latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 34.2
+    suites: regression add
+    comment: implicit add implicit quantity
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: two pump vanilla grande latte
+        cart:
+          items:
+            - quantity: 2
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 1
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: false
+          complete: false
+          repairs:
+            cost: 2
+            steps:
+              - 'id(139): change item(grande latte) quantity to 1'
+              - '  id(140): change item(vanilla syrup) quantity to 2'
+  - id: 34.3
+    suites: regression add
+    comment: implicit add implicit quantity
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: a two pump vanilla grande latte
+        cart:
+          items:
+            - quantity: 1
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 2
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
+  - id: 34.4
+    suites: regression add
+    comment: implicit add implicit quantity
+    steps:
+      - turns:
+          - speaker: speaker
+            transcription: five two pump vanilla grande lattes
+        cart:
+          items:
+            - quantity: 5
+              name: grande latte
+              sku: '602'
+              children:
+                - quantity: 2
+                  name: vanilla syrup
+                  sku: '2502'
+                  children: []
+        measures:
+          perfect: true
+          complete: true
+          repairs:
+            cost: 0
+            steps: []
   - id: 38
     suites: regression remove
     comment: |
@@ -896,9 +990,9 @@ tests:
           repairs:
             cost: 3
             steps:
-              - 'id(172): delete item(iced grande chai latte)'
-              - 'id(173): insert default item(grande latte)'
-              - 'id(173): change item(grande latte) attribute "grande" to "tall"'
+              - 'id(188): delete item(iced grande chai latte)'
+              - 'id(189): insert default item(grande latte)'
+              - 'id(189): change item(grande latte) attribute "grande" to "tall"'
   - id: 42
     suites: regression remove
     comment: Remove by trailing attribute
@@ -1058,9 +1152,9 @@ tests:
           repairs:
             cost: 3
             steps:
-              - 'id(205): insert default item(grande latte)'
-              - 'id(205): change item(grande latte) attribute "hot" to "iced"'
-              - 'id(205): change item(grande latte) attribute "grande" to "tall"'
+              - 'id(221): insert default item(grande latte)'
+              - 'id(221): change item(grande latte) attribute "hot" to "iced"'
+              - 'id(221): change item(grande latte) attribute "grande" to "tall"'
   - id: 45
     suites: regression modify bug
     comment: Add option x to product y.
@@ -2903,7 +2997,7 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(501): delete item(no equal)'
+              - '  id(517): delete item(no equal)'
   - id: 1002
     suites: extras add ambiguous
     comment: chai latte can be a chai latte and a latte or just a latte
@@ -2978,8 +3072,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - '  id(514): change item(whipped cream) quantity to 1'
-              - '  id(517): insert default item(whipped cream)'
+              - '  id(530): change item(whipped cream) quantity to 1'
+              - '  id(533): insert default item(whipped cream)'
   - id: 1004
     suites: regression remove implicit
     comment: should remove the whipped cream
@@ -3160,8 +3254,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(540): delete item(grande latte)'
-              - 'id(543): insert default item(grande flat white)'
+              - 'id(556): delete item(grande latte)'
+              - 'id(559): insert default item(grande flat white)'
   - id: 1011
     suites: regression remove implicit
     comment: |
@@ -3803,12 +3897,12 @@ tests:
             cost: 3
             steps:
               - >-
-                id(660): change item(iced grande latte) attribute "iced" to
+                id(676): change item(iced grande latte) attribute "iced" to
                 "hot"
               - >-
-                id(660): change item(iced grande latte) attribute "grande" to
+                id(676): change item(iced grande latte) attribute "grande" to
                 "short"
-              - '  id(662): insert default item(ice)'
+              - '  id(678): insert default item(ice)'
   - id: 1027.1
     suites: extras
     comment: |
@@ -3884,8 +3978,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - 'id(671): insert default item(apple bran muffin)'
-              - '  id(672): insert default item(warmed)'
+              - 'id(687): insert default item(apple bran muffin)'
+              - '  id(688): insert default item(warmed)'
   - id: 1030
     suites: extras implicit option-as-verb not-implemented
     comment: option-as-verb should warm the muffin
@@ -3966,7 +4060,7 @@ tests:
           repairs:
             cost: 1
             steps:
-              - 'id(681): delete item(apple bran muffin)'
+              - 'id(697): delete item(apple bran muffin)'
   - id: 1032
     suites: extras recipes regression
     comment: double shot
@@ -4086,7 +4180,7 @@ tests:
           repairs:
             cost: 1
             steps:
-              - '  id(707): change item(extra espresso shot) quantity to 2'
+              - '  id(723): change item(extra espresso shot) quantity to 2'
   - id: 1036
     suites: extras bug
     comment: 'fuzzerB4:474'
@@ -4110,8 +4204,8 @@ tests:
           repairs:
             cost: 2
             steps:
-              - '  id(711): change item(extra espresso shot) quantity to 2'
-              - '  id(711): change item(extra espresso shot) attribute "extra" to "regular"'
+              - '  id(727): change item(extra espresso shot) quantity to 2'
+              - '  id(727): change item(extra espresso shot) attribute "extra" to "regular"'
   - id: 1037
     suites: extras bug
     comment: found in web app
@@ -4145,24 +4239,19 @@ tests:
               sku: '10000'
               children:
                 - quantity: 1
-                  name: butter
-                  sku: '3'
-                  children: []
-                - quantity: 1
                   name: extra butter
                   sku: '4'
                   children: []
         measures:
-          perfect: false
-          complete: false
+          perfect: true
+          complete: true
           repairs:
-            cost: 1
-            steps:
-              - '  id(719): delete item(butter)'
+            cost: 0
+            steps: []
 measures:
   notes: menu-based
-  totalTests: 119
-  totalSteps: 196
-  perfectSteps: 185
-  completeSteps: 185
-  totalRepairs: 21
+  totalTests: 123
+  totalSteps: 200
+  perfectSteps: 189
+  completeSteps: 189
+  totalRepairs: 22
