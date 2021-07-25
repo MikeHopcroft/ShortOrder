@@ -2,6 +2,11 @@
 
 * Top
   * NEW
+    * Upgrade GTS, spacing, linter
+    * Setup code coverage
+    * Consider removing concept of WEAK_ADD
+    * Rename tokenCount2
+    * Patterns
     * x Switch from travis to github actions
     * Make prix-fixe the source of regression tests
       * Need some way for short-order users to find prix-fixe menu and regression suite.
