@@ -1,6 +1,6 @@
 import minimist from 'minimist';
 
-import { TestProcessors, testRunnerMain2, World } from 'prix-fixe';
+import { TestProcessors, testRunnerMain, World } from 'prix-fixe';
 
 import { createShortOrderWorld } from '../src';
 import { loadShortOrderWorld } from '../src/integration/loader';
@@ -24,7 +24,7 @@ async function go() {
     },
   ]);
 
-  testRunnerMain2('ShortOrder', processors);
+  testRunnerMain('ShortOrder', processors);
 }
 
 go();

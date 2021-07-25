@@ -6,7 +6,7 @@ import path from 'path';
 
 import {
   AggregatedResults,
-  createWorld2,
+  createWorld,
   CorrectionLevel,
   enumerateTestCases,
   GenericCase,
@@ -156,7 +156,7 @@ export async function runFuzzer(
   }
   console.log('');
 
-  const world = createWorld2(dataPath);
+  const world = createWorld(dataPath);
   const tests = testCaseGeneratorFactory.get(name, world, seed);
 
   ///////////////////////////////////////////////////////////////////////////

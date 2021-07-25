@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import minimist from 'minimist';
 import path from 'path';
 
-import { createWorld2, fail, MENUITEM, succeed } from 'prix-fixe';
+import { createWorld, fail, MENUITEM, succeed } from 'prix-fixe';
 
 export async function main() {
   dotenv.config();
@@ -34,7 +34,7 @@ export async function main() {
     return;
   }
 
-  const world = createWorld2(dataPath);
+  const world = createWorld(dataPath);
   const catalog = world.catalog;
 
   const rows: Array<[number, string, string]> = [];

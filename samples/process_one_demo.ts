@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import minimist from 'minimist';
 import path from 'path';
 import {
-  createWorld2,
+  createWorld,
   TestCase,
   TestLineItem,
   TestOrder,
@@ -57,7 +57,7 @@ async function go(utterances: string[]) {
     return;
   }
 
-  const world = createWorld2(dataPath);
+  const world = createWorld(dataPath);
   // const shortOrderWorld = createShortOrderWorld(world, dataPath, args.t, true);
   const shortOrderWorld = loadShortOrderWorld(world, dataPath, args.t, true);
   const processor = shortOrderWorld.processor;

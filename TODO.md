@@ -3,9 +3,11 @@
 * Top
   * NEW
     * x Upgrade GTS, spacing, linter
-    * Take new prix-fixe
+    * x Take new prix-fixe
     * Setup code coverage
     * Consider removing concept of WEAK_ADD
+    * Investigate two test descriptions with name "parser2"
+    * EntityBuilder case: NUMBER ATTRIBUTE OPTION - is this legal?
     * Redundant code
       * integration/short-order-world2.ts - also use underscores in name
       * lexer/lexical_analyzer2.ts
