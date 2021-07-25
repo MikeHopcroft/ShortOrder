@@ -14,8 +14,6 @@
   "include": [
     "samples/*.ts",
     "samples/**/*.ts",
-    "samples/*.ts",
-    "samples/**/*.ts",
     "src/*.ts",
     "src/**/*.ts",
     "test/*.ts",

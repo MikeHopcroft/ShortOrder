@@ -1,0 +1,15 @@
+
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "temp-dir" : "coverage-temp",
+  "report-dir" : "coverage-report",
+  "reporter" : [
+    "text",
+    "text-summary",
+    "lcov"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "build/src/**"
+  ]
+}

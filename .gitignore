@@ -7,3 +7,11 @@ junk*
 .node_repl_history
 .repl_history
 
+# testing
+/coverage
+/coverage-report
+/coverage-temp
+
+/.nyc_output
+.coveralls.yml
+

@@ -2,18 +2,18 @@
 
 * Top
   * NEW
-    * x Upgrade GTS, spacing, linter
-    * x Take new prix-fixe
-    * Setup code coverage
+    * x Setup code coverage
     * Consider removing concept of WEAK_ADD
-    * Investigate two test descriptions with name "parser2"
-    * EntityBuilder case: NUMBER ATTRIBUTE OPTION - is this legal?
     * Redundant code
       * integration/short-order-world2.ts - also use underscores in name
       * lexer/lexical_analyzer2.ts
       * lexer/stemmer2.ts, stemmers/stemmer.ts
     * Rename tokenCount2
     * Patterns
+    * x Upgrade GTS, spacing, linter
+    * x Take new prix-fixe
+    * Investigate two test descriptions with name "parser2"
+    * EntityBuilder case: NUMBER ATTRIBUTE OPTION - is this legal?
     * x Switch from travis to github actions
     * Make prix-fixe the source of regression tests
       * Need some way for short-order users to find prix-fixe menu and regression suite.
@@ -29,7 +29,7 @@
       * node build\samples\test_runner.js ..\PrixFixe\samples\tests\regression.yaml --baseline=..\PrixFixe\samples\tests\baseline.yaml -x
     * Implicit quantifier issues
       * two pump vanilla latte
-      * add to test suite
+      * x add to test suite
     * Take latest prix-fixe@61
     * Publish
     * x Clean build

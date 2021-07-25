@@ -14,17 +14,51 @@
   ],
   "repository": "https://github.com/MikeHopcroft/ShortOrder",
   "scripts": {
-    "test": "mocha",
     "check": "gts check",
     "clean": "gts clean",
     "compile": "tsc -p .",
     "fix": "gts fix",
+    "postcompile": "copyfiles samples/data/**/*.yaml build && copyfiles samples/data/**/*.txt build",
+    "posttest": "npm run check",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "postcompile": "copyfiles samples/data/**/*.yaml build && copyfiles samples/data/**/*.txt build",
-    "regression": "node build/samples/test_runner.js samples/tests/regression.yaml --baseline=samples/tests/baseline.yaml -x -d=samples/menu"
+    "pretest-coverage": "npm run compile",
+    "regression": "node build/samples/test_runner.js samples/tests/regression.yaml --baseline=samples/tests/baseline.yaml -x -d=samples/menu",
+    "test": "mocha",
+    "test-coverage": "nyc mocha --config .mocharc-ts.json"
+  },
+  "nyc": {
+    "exclude": [
+      "src/index.ts",
+      "src/**/index.ts",
+      "src/**/interfaces.ts",
+      "test"
+    ],
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "reporter": [
+      "text"
+    ],
+    "watermarks": {
+      "lines": [
+        70,
+        80
+      ],
+      "functions": [
+        70,
+        80
+      ],
+      "branches": [
+        70,
+        80
+      ],
+      "statements": [
+        70,
+        80
+      ]
+    }
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/ansi-styles": "^3.2.1",
     "@types/chai": "^4.1.6",
     "@types/debug": "^4.1.2",
@@ -43,6 +77,10 @@
     "copyfiles": "^2.1.0",
     "gts": "^3.1.0",
     "mocha": "^5.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^15.1.0",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^10.1.0",
     "typescript": "^3.7.5"
   },
   "dependencies": {

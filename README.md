@@ -1,4 +1,4 @@
-# short-order [![build](https://github.com/MikeHopcroft/ShortOrder/actions/workflows/ci.yaml/badge.svg)](https://github.com/MikeHopcroft/ShortOrder/actions/workflows/ci.yaml)
+# short-order [![build](https://github.com/MikeHopcroft/ShortOrder/actions/workflows/ci.yaml/badge.svg)](https://github.com/MikeHopcroft/ShortOrder/actions/workflows/ci.yaml) [![codecov](https://codecov.io/gh/MikeHopcroft/ShortOrder/branch/master/graph/badge.svg)](https://codecov.io/gh/MikeHopcroft/ShortOrder)
 
 ## **NOTICE:** we're in the process of a major refactoring.
 
