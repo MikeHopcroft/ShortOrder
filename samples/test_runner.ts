@@ -2,7 +2,6 @@ import minimist from 'minimist';
 
 import { TestProcessors, testRunnerMain, World } from 'prix-fixe';
 
-import { createShortOrderWorld } from '../src';
 import { loadShortOrderWorld } from '../src/integration/loader';
 
 async function go() {
@@ -16,9 +15,7 @@ async function go() {
       name: 'so',
       description: 'short-order',
       create: (w: World, d: string) => {
-        const shortOrderWorld = args.x
-          ? loadShortOrderWorld(w, d, args.t, false)
-          : createShortOrderWorld(w, d, args.t, false);
+        const shortOrderWorld = loadShortOrderWorld(w, d, args.t, false);
         return shortOrderWorld.processor;
       },
     },

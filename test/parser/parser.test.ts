@@ -7,7 +7,7 @@ import {
   Interpretation,
   parseAdd,
   Parser,
-  LexicalAnalyzer,
+  LexicalAnalyzer2,
   SequenceToken,
   Span,
 } from '../../src';
@@ -90,7 +90,7 @@ describe('Parser2', () => {
 
     it('segment on quantifier', () => {
       // TODO: HACK: BUGBUG: Remove temporary code in following line.
-      const lexer: LexicalAnalyzer = undefined!;
+      const lexer: LexicalAnalyzer2 = undefined!;
       const parser = new Parser(
         ops,
         smallWorldCatalog,
@@ -196,7 +196,7 @@ describe('Parser2', () => {
 
     it('segment ambiguous size based on options', () => {
       // TODO: HACK: BUGBUG: Remove temporary code in following line.
-      const lexer: LexicalAnalyzer = undefined!;
+      const lexer: LexicalAnalyzer2 = undefined!;
       const parser = new Parser(
         ops,
         smallWorldCatalog,

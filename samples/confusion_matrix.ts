@@ -6,7 +6,7 @@ import { createWorld } from 'prix-fixe';
 
 import { IIngestor, Token, TokenizerAlias } from 'token-flow';
 
-import { createHistogram, LexicalAnalyzer, tokenToString } from '../src';
+import { createHistogram, loadShortOrderWorld, tokenToString } from '../src';
 
 function showUsage() {
   const program = path.basename(process.argv[1]);
@@ -56,29 +56,11 @@ async function go() {
     return;
   }
 
-  const debugMode = false;
-
   // We always look for collisions between aliases in the word,
   // i.e. products.yaml, options.yaml, attributes.yaml.
   const world = createWorld(dataPath);
-
-  // We have the option of including other yaml files in the analysis.
-  // Note that these files are not required.
-  const intentsFile = path.join(dataPath, 'intents.yaml');
-  const quantifiersFile = path.join(dataPath, 'quantifiers.yaml');
-  const unitsFile = path.join(dataPath, 'units.yaml');
-  const stopwordsFile = path.join(dataPath, 'stopwords.yaml');
-
-  const lexer = new LexicalAnalyzer(
-    world,
-    undefined, // Lexicon
-    debugMode,
-    // DESIGN NOTE: the following four parameters are optional.
-    intentsFile,
-    quantifiersFile,
-    unitsFile,
-    stopwordsFile
-  );
+  const shortOrderWorld = loadShortOrderWorld(world, dataPath);
+  const lexer = shortOrderWorld.lexer;
 
   const confusionMatrix = new ConfusionMatrix();
   lexer.lexicon.ingest(confusionMatrix);

@@ -2,13 +2,19 @@
 
 * Top
   * NEW
+    * Add regression suite to mocha. May need some way to reduce console spew.
+    * shortOrderWorld2
+    * Rename tokenCount2
+    * StemmerFactory2 - also why the specific include in short-order-world2
+    * Fix testa_from_text.js. Doesn't generate carts.
+    * Remove samples/data/restaurant-en
+    * Get clear on stemmer_confusion.ts and confusion_matrix.ts. Update docs.
     * x Setup code coverage
     * Consider removing concept of WEAK_ADD
     * Redundant code
       * integration/short-order-world2.ts - also use underscores in name
       * lexer/lexical_analyzer2.ts
       * lexer/stemmer2.ts, stemmers/stemmer.ts
-    * Rename tokenCount2
     * Patterns
     * x Upgrade GTS, spacing, linter
     * x Take new prix-fixe

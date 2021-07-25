@@ -18,7 +18,7 @@ import {
   generateAttributes,
   generateOptions,
   generateProducts,
-} from './lexical_analyzer';
+} from './lexical_generators';
 
 import {
   matcherFromExpression,

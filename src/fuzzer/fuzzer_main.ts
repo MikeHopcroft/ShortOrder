@@ -20,7 +20,7 @@ import {
   World,
 } from 'prix-fixe';
 
-import { createShortOrderWorld } from '../integration';
+import { loadShortOrderWorld } from '../integration';
 
 export async function fuzzerMain(
   testCaseGeneratorFactory: TestCaseGeneratorFactory,
@@ -350,7 +350,7 @@ export interface ProcessorDescription {
 }
 
 function shortOrderFactory(world: World, dataPath: string) {
-  return createShortOrderWorld(world, dataPath, undefined, false).processor;
+  return loadShortOrderWorld(world, dataPath, undefined, false).processor;
 }
 
 export class ProcessorFactory {

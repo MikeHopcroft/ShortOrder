@@ -4,7 +4,7 @@ import path from 'path';
 import { createWorld } from 'prix-fixe';
 import { stemmerConfusionMatrix } from 'token-flow';
 
-import { createShortOrderWorld } from '../src';
+import { loadShortOrderWorld } from '../src';
 
 function showUsage() {
   const program = path.basename(process.argv[1]);
@@ -56,7 +56,7 @@ function go() {
   }
 
   const world = createWorld(dataPath);
-  const world2 = createShortOrderWorld(world, dataPath, args.t, false);
+  const world2 = loadShortOrderWorld(world, dataPath, args.t, false);
   const lexicon = world2.lexer.lexicon;
 
   const matrix = stemmerConfusionMatrix(lexicon);

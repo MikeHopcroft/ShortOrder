@@ -4,8 +4,7 @@ import path from 'path';
 import { validate, World } from 'prix-fixe';
 
 import { LexiconSpec, lexiconSpecType } from '../lexer';
-import { ShortOrderWorld } from './short-order-world';
-import { createShortOrderWorld2 } from './short-order-world2';
+import { createShortOrderWorld2, ShortOrderWorld } from './short-order-world2';
 
 export function loadLexiconSpec(filename: string): LexiconSpec {
   const text = fs.readFileSync(filename, 'utf8');

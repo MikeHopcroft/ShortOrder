@@ -6,7 +6,7 @@ import path from 'path';
 
 import { createWorld, speechToTextFilter, TestSuite } from 'prix-fixe';
 
-import { createShortOrderWorld } from '../src';
+import { loadShortOrderWorld } from '../src';
 
 function showUsage() {
   const program = path.basename(process.argv[1]);
@@ -88,7 +88,7 @@ async function go() {
   // Set up short-order processor
   //
   const world = createWorld(dataPath);
-  const processor = createShortOrderWorld(
+  const processor = loadShortOrderWorld(
     world,
     dataPath,
     undefined,
