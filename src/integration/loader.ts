@@ -4,7 +4,7 @@ import path from 'path';
 import { validate, World } from 'prix-fixe';
 
 import { LexiconSpec, lexiconSpecType } from '../lexer';
-import { createShortOrderWorld2, ShortOrderWorld } from './short-order-world2';
+import { createShortOrderWorld, ShortOrderWorld } from './short-order-world';
 
 export function loadLexiconSpec(filename: string): LexiconSpec {
   const text = fs.readFileSync(filename, 'utf8');
@@ -22,5 +22,5 @@ export function loadShortOrderWorld(
   const filename = path.join(dataPath, 'lexicon.yaml');
   console.log(`loadShortOrderWorld(${filename})`);
   const spec = loadLexiconSpec(filename);
-  return createShortOrderWorld2(world, spec, stemmerName, debugMode);
+  return createShortOrderWorld(world, spec, stemmerName, debugMode);
 }

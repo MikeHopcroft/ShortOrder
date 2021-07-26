@@ -3,12 +3,13 @@
 * Top
   * NEW
     * Add regression suite to mocha. May need some way to reduce console spew.
-    * shortOrderWorld2
-    * Rename tokenCount2
-    * StemmerFactory2 - also why the specific include in short-order-world2
-    * Fix testa_from_text.js. Doesn't generate carts.
-    * Remove samples/data/restaurant-en
+    * Consider removing stopwords.ts
     * Get clear on stemmer_confusion.ts and confusion_matrix.ts. Update docs.
+    * Fix test_from_text.js. Doesn't generate carts.
+    * x shortOrderWorld2
+    * x Rename tokenCount2
+    * x StemmerFactory2 - also why the specific include in short-order-world2
+    * x Remove samples/data/restaurant-en
     * x Setup code coverage
     * Consider removing concept of WEAK_ADD
     * Redundant code

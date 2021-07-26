@@ -352,7 +352,7 @@ export function parseAddToItem(
 
     const interpretation: Interpretation = {
       score,
-      tokenCount2: modification.length,
+      tokenCount: modification.length,
       action: (state: State): State => {
         const cart = parser.cartOps.replaceInCart(state.cart, modified);
         return { ...state, cart };
@@ -501,7 +501,7 @@ function parseReplaceItem(
     const cart = parser.cartOps.replaceInCart(state.cart, item);
     return {
       score: target.score + replacement.score,
-      tokenCount2: target.tokenCount + replacement.tokenCount,
+      tokenCount: target.tokenCount + replacement.tokenCount,
       action: (state: State): State => {
         return { ...state, cart };
       },

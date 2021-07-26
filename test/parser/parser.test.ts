@@ -7,7 +7,7 @@ import {
   Interpretation,
   parseAdd,
   Parser,
-  LexicalAnalyzer2,
+  LexicalAnalyzer,
   SequenceToken,
   Span,
 } from '../../src';
@@ -90,7 +90,7 @@ describe('Parser2', () => {
 
     it('segment on quantifier', () => {
       // TODO: HACK: BUGBUG: Remove temporary code in following line.
-      const lexer: LexicalAnalyzer2 = undefined!;
+      const lexer: LexicalAnalyzer = undefined!;
       const parser = new Parser(
         ops,
         smallWorldCatalog,
@@ -112,7 +112,7 @@ describe('Parser2', () => {
 
       const expected: Interpretation = {
         score: 6,
-        tokenCount2: 0, // This field never inspected by test.
+        tokenCount: 0, // This field never inspected by test.
         action: nop,
       };
 
@@ -196,7 +196,7 @@ describe('Parser2', () => {
 
     it('segment ambiguous size based on options', () => {
       // TODO: HACK: BUGBUG: Remove temporary code in following line.
-      const lexer: LexicalAnalyzer2 = undefined!;
+      const lexer: LexicalAnalyzer = undefined!;
       const parser = new Parser(
         ops,
         smallWorldCatalog,
@@ -218,7 +218,7 @@ describe('Parser2', () => {
 
       const expected: Interpretation = {
         score: 5,
-        tokenCount2: 0, // This field never inspected by test.
+        tokenCount: 0, // This field never inspected by test.
         action: nop,
       };
 

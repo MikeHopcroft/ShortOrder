@@ -79,7 +79,7 @@ export interface Interpretation {
   score: number;
   // TODO: consider adding edit distance
   // edit: number;
-  tokenCount2: number;
+  tokenCount: number;
   missed?: number;
   action: ActionFunction;
 }
@@ -87,6 +87,6 @@ export interface Interpretation {
 // An interpretation that does not modify state.
 export const nop: Interpretation = {
   score: 0,
-  tokenCount2: 0,
+  tokenCount: 0,
   action: (state: State): State => state,
 };

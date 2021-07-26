@@ -29,7 +29,7 @@ import { OptionToken } from './options';
 import { createQuantity, QuantityToken } from './quantities';
 import { LexiconSpec, TokenSpec } from './types';
 
-export class LexicalAnalyzer2 implements ILexicalAnalyzer {
+export class LexicalAnalyzer implements ILexicalAnalyzer {
   lexicon: Lexicon;
   tokenizer: Tokenizer;
   tokens = new Map<Symbol, Token>();

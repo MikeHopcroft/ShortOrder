@@ -1,2 +1,2 @@
 export * from './loader';
-export * from './short-order-world2';
+export * from './short-order-world';

@@ -164,13 +164,13 @@ function interpretSegmentArray(
   segments: Segment[]
 ): Interpretation {
   let score = 0;
-  let tokenCount2 = 0;
+  let tokenCount = 0;
   const items: ItemInstance[] = [];
   for (const segment of segments) {
     const x = interpretOneSegment(parser, segment);
     if (x.item !== undefined) {
       score += x.score;
-      tokenCount2 += segmentLength(segment); // TODO: Why not x.tokenCount?
+      tokenCount += segmentLength(segment); // TODO: Why not x.tokenCount?
       items.push(x.item);
     }
   }
@@ -184,7 +184,7 @@ function interpretSegmentArray(
     return { ...state, cart: updated };
   };
 
-  return { score, tokenCount2, action };
+  return { score, tokenCount, action };
 }
 
 function interpretOneSegment(

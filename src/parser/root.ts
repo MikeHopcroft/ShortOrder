@@ -185,7 +185,7 @@ function processAllActiveRegions(
   const tokens = new TokenSequence<Token & Span>(tokenization);
 
   let score = 0;
-  let tokenCount2 = 0;
+  let tokenCount = 0;
   let weakAddAllowed = false;
   while (!tokens.atEOS()) {
     if (
@@ -198,7 +198,7 @@ function processAllActiveRegions(
     ) {
       const interpretation = processAdd(parser, state, baseGraph, tokens);
       score += interpretation.score;
-      tokenCount2 += interpretation.tokenCount2;
+      tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
       weakAddAllowed = true;
     } else if (
@@ -207,7 +207,7 @@ function processAllActiveRegions(
     ) {
       const interpretation = processRemove(parser, state, tokens, baseGraph);
       score += interpretation.score;
-      tokenCount2 += interpretation.tokenCount2;
+      tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
       weakAddAllowed = true;
     } else if (
@@ -216,7 +216,7 @@ function processAllActiveRegions(
     ) {
       const interpretation = processModify(parser, state, tokens, baseGraph);
       score += interpretation.score;
-      tokenCount2 += interpretation.tokenCount2;
+      tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
       weakAddAllowed = true;
     } else {
@@ -228,7 +228,7 @@ function processAllActiveRegions(
 
   return {
     score,
-    tokenCount2,
+    tokenCount,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     action: (s: State): State => state,
   };
@@ -382,7 +382,7 @@ function preferFirstInterpretation(
 
   if (aMissed! === bMissed!) {
     // if (a.missed! === b.missed!) {
-    return a.tokenCount2 < b.tokenCount2;
+    return a.tokenCount < b.tokenCount;
     // const ra = a.score / a.tokenCount2;
     // const rb = b.score / b.tokenCount2;
 
