@@ -2,7 +2,7 @@
 
 * Top
   * NEW
-    * Add regression suite to mocha. May need some way to reduce console spew.
+    * x Add regression suite to mocha. May need some way to reduce console spew.
     * Consider removing stopwords.ts
     * Get clear on stemmer_confusion.ts and confusion_matrix.ts. Update docs.
     * Fix test_from_text.js. Doesn't generate carts.
