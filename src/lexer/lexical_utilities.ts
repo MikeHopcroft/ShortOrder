@@ -15,7 +15,6 @@ import {
   NumberToken,
   Token,
   TokenPredicate,
-  UNKNOWNTOKEN,
   NUMBERTOKEN,
 } from 'token-flow';
 
@@ -30,7 +29,6 @@ import { ATTRIBUTE, AttributeToken } from './attributes';
 import { ENTITY, EntityToken } from './entities';
 import { OptionToken } from './options';
 import { QUANTITY, QuantityToken } from './quantities';
-import { Stopwords } from '../stopwords';
 import { UNIT, UnitToken } from './units';
 
 export const WORD: unique symbol = Symbol('WORD');
@@ -197,15 +195,4 @@ export function* aliasesFromYamlString(
 ) {
   const items = itemMapFromYamlString(yamlText);
   yield* aliasesFromItems(items.values(), factory);
-}
-
-export function* tokensFromStopwords(stopwords: Stopwords) {
-  for (const word of stopwords) {
-    const text = word.trim();
-    yield {
-      token: { type: UNKNOWNTOKEN },
-      text,
-      matcher: exact,
-    };
-  }
 }

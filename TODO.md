@@ -2,38 +2,38 @@
 
 * Top
   * NEW
-    * x Add regression suite to mocha. May need some way to reduce console spew.
-    * Consider removing stopwords.ts
+    * Patterns
     * Get clear on stemmer_confusion.ts and confusion_matrix.ts. Update docs.
     * Fix test_from_text.js. Doesn't generate carts.
+    * Consider removing concept of WEAK_ADD
+    * Investigate two test descriptions with name "parser2"
+    * EntityBuilder case: NUMBER ATTRIBUTE OPTION - is this legal?
+    * Make prix-fixe the source of regression tests
+      * Need some way for short-order users to find prix-fixe menu and regression suite.
+    * Baseline should reside in prix-fixe
+    * x Add regression suite to mocha. May need some way to reduce console spew.
+    * x Consider removing stopwords.ts
     * x shortOrderWorld2
     * x Rename tokenCount2
     * x StemmerFactory2 - also why the specific include in short-order-world2
     * x Remove samples/data/restaurant-en
     * x Setup code coverage
-    * Consider removing concept of WEAK_ADD
-    * Redundant code
-      * integration/short-order-world2.ts - also use underscores in name
-      * lexer/lexical_analyzer2.ts
-      * lexer/stemmer2.ts, stemmers/stemmer.ts
-    * Patterns
+    * x Redundant code
+      * x integration/short-order-world2.ts - also use underscores in name
+      * x lexer/lexical_analyzer2.ts
+      * x lexer/stemmer2.ts, stemmers/stemmer.ts
     * x Upgrade GTS, spacing, linter
     * x Take new prix-fixe
-    * Investigate two test descriptions with name "parser2"
-    * EntityBuilder case: NUMBER ATTRIBUTE OPTION - is this legal?
     * x Switch from travis to github actions
-    * Make prix-fixe the source of regression tests
-      * Need some way for short-order users to find prix-fixe menu and regression suite.
-    * Baseline should reside in prix-fixe
     * Put test suite under control of unit tests
       * x Get test_runner working with new menu.
-      * . Return code for failed tests
-      * Flag to temporarily suppress tests
-        * Need to add this in prix-fixe
-        * Publish prix-fixe
-        * Take new version
-      * Test suite and baseline checked in here
-      * node build\samples\test_runner.js ..\PrixFixe\samples\tests\regression.yaml --baseline=..\PrixFixe\samples\tests\baseline.yaml -x
+      * x Return code for failed tests
+      * x Flag to temporarily suppress tests
+        * x Need to add this in prix-fixe
+        * x Publish prix-fixe
+        * x Take new version
+      * x Test suite and baseline checked in here
+      * x node build\samples\test_runner.js ..\PrixFixe\samples\tests\regression.yaml --baseline=..\PrixFixe\samples\tests\baseline.yaml -x
     * Implicit quantifier issues
       * two pump vanilla latte
       * x add to test suite
