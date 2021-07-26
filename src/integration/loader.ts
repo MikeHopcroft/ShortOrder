@@ -20,7 +20,7 @@ export function loadShortOrderWorld(
   debugMode = false
 ): ShortOrderWorld {
   const filename = path.join(dataPath, 'lexicon.yaml');
-  console.log(`loadShortOrderWorld(${filename})`);
+  // console.log(`loadShortOrderWorld(${filename})`);
   const spec = loadLexiconSpec(filename);
   return createShortOrderWorld(world, spec, stemmerName, debugMode);
 }

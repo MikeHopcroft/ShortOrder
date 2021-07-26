@@ -7,7 +7,6 @@ import {
   Span,
   PREPOSITION,
   PROLOGUE,
-  WEAK_ADD,
 } from '../lexer';
 
 import { EntityBuilder } from './entity_builder';
@@ -27,11 +26,8 @@ import {
 } from './interfaces';
 
 import { parseAddToTarget, parseAddToImplicit } from './modify';
-
 import { Parser } from './parser';
-
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
-
 import { TokenSequence } from './token_sequence';
 
 // Attempts to pull off and process a squence of tokens corresponding
@@ -52,9 +48,7 @@ export function processAdd(
     tokens.take(1);
   }
 
-  if (tokens.peek(0).type === WEAK_ADD) {
-    tokens.take(1);
-  } else if (tokens.peek(0).type === ADD_TO_ORDER) {
+  if (tokens.peek(0).type === ADD_TO_ORDER) {
     tokens.take(1);
   }
 

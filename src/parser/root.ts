@@ -16,7 +16,6 @@ import {
   REMOVE_ITEM,
   Span,
   tokenToString,
-  WEAK_ADD,
   ATTRIBUTE,
   OPTION_RECIPE,
 } from '../lexer';
@@ -186,21 +185,18 @@ function processAllActiveRegions(
 
   let score = 0;
   let tokenCount = 0;
-  let weakAddAllowed = false;
   while (!tokens.atEOS()) {
     if (
       tokens.startsWith([PROLOGUE, ADD_TO_ORDER]) ||
       tokens.startsWith([ADD_TO_ORDER]) ||
       tokens.startsWith([PRODUCT_PARTS_0]) ||
       tokens.startsWith([PRODUCT_PARTS_1]) ||
-      tokens.startsWith([PRODUCT_PARTS_N]) ||
-      (weakAddAllowed && tokens.startsWith([WEAK_ADD]))
+      tokens.startsWith([PRODUCT_PARTS_N])
     ) {
       const interpretation = processAdd(parser, state, baseGraph, tokens);
       score += interpretation.score;
       tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
-      weakAddAllowed = true;
     } else if (
       tokens.startsWith([PROLOGUE, REMOVE_ITEM]) ||
       tokens.startsWith([REMOVE_ITEM])
@@ -209,7 +205,6 @@ function processAllActiveRegions(
       score += interpretation.score;
       tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
-      weakAddAllowed = true;
     } else if (
       tokens.startsWith([PROLOGUE, MODIFY_ITEM]) ||
       tokens.startsWith([MODIFY_ITEM])
@@ -218,11 +213,9 @@ function processAllActiveRegions(
       score += interpretation.score;
       tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
-      weakAddAllowed = true;
     } else {
       // We don't understand this token. Skip over it.
       tokens.take(1);
-      weakAddAllowed = false;
     }
   }
 

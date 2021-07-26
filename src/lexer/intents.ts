@@ -52,9 +52,6 @@ export type SEPERATOR = typeof SEPERATOR;
 export const SUBSTITUTE: unique symbol = Symbol.for('SUBSTITUTE');
 export type SUBSTITUTE = typeof SUBSTITUTE;
 
-export const WEAK_ADD: unique symbol = Symbol.for('WEAK_ADD');
-export type WEAK_ADD = typeof WEAK_ADD;
-
 export class IntentTokenFactory {
   tokens = new Map<Symbol, Token>();
 

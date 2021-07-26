@@ -19,7 +19,6 @@ import {
   QUANTITY,
   UNIT,
   REMOVE_ITEM,
-  WEAK_ADD,
 } from '../lexer';
 
 export class Parser {
@@ -31,7 +30,7 @@ export class Parser {
   readonly rules: IRuleChecker;
   readonly debugMode: boolean;
 
-  intentTokens = new Set<Symbol>([ADD_TO_ORDER, REMOVE_ITEM, WEAK_ADD]);
+  intentTokens = new Set<Symbol>([ADD_TO_ORDER, REMOVE_ITEM]);
 
   productTokens = new Set<Symbol>([
     // Product-related

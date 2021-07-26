@@ -71,7 +71,7 @@
     * x Can we make a generatic token file? Special case for making tokens, based on name? (e.g. adding value to quantifier)
     * x Can stopwords become an intent? UNKNOWN_TOKEN
     * Do we even need quantifiers? The only ones defined are "an" and "couple"
-  * Remove WEAK_ADD
+  * x Remove WEAK_ADD
   * Is order.ts (OrderOps) still used? Where did the functionality go?
   * Refactor createShortOrderWorld for browser
   * Refactor LexicalAnalyzer for browser
@@ -282,7 +282,7 @@ Parser
 * Singleton options, like the milks and the caffination levels
   * Fuzzer support, as well
 * TokenSequence.takeIf takes if peek shows expected token.
-* Remove WEAK_ADD
+* x Remove WEAK_ADD
 * Does HypotheticalItem.item need to allow undefined?
   * Does optionTargets() every return a HypotheticalItem with item undefined? No.
   * What about productTargets()? Nope.
