@@ -1,3 +1,5 @@
+// <T extends any[]>
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // ISequence and Sequence
@@ -143,26 +145,11 @@ function choose<T extends Token[]>(...args: T): ChooseToken<T> {
   };
 }
 
-type AnyToken =
-  | TokenA
-  | TokenB
-  | TokenC
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | OptionalToken<any>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | ChooseToken<any>;
-
 type OperatorToken =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | OptionalToken<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ChooseToken<any>;
-
-// type AnyToken =
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   | OptionalToken<any>
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   | ChooseToken<any>;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -178,9 +165,11 @@ type RESULT_ELEMENT<T> = T extends OptionalToken<infer A>
 type RESULT_EXPRESSION<T> = { [P in keyof T]: RESULT_ELEMENT<T[P]> };
 
 type binding<T> = (result: RESULT_EXPRESSION<T>, size: number) => boolean;
-type PatternMatcher = (tokens: ISequence<AnyToken>) => boolean;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PatternMatcher = (tokens: ISequence<any>) => boolean;
 
-function match<T extends AnyToken[]>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function match<T extends any[]>(
   ...pattern: T
 ): { bind: (processor: binding<T>) => PatternMatcher } {
   // console.log(`match(${JSON.stringify(pattern, null, 2)},`);
@@ -188,7 +177,8 @@ function match<T extends AnyToken[]>(
   return {
     bind:
       (processor: binding<T>) =>
-      (input: ISequence<AnyToken>): boolean => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (input: ISequence<any>): boolean => {
         const used0 = input.itemsUsed();
         const m = matchSequence(pattern, input);
         if (m !== undefined) {
@@ -201,9 +191,11 @@ function match<T extends AnyToken[]>(
   };
 }
 
-function matchSequence<T extends AnyToken[]>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function matchSequence<T extends any[]>(
   pattern: T,
-  input: ISequence<AnyToken>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  input: ISequence<any>
 ): RESULT_EXPRESSION<T> | undefined {
   // console.log(`matchSequence(${JSON.stringify(pattern, null, 2)},`);
   // console.log(`${JSON.stringify((input as any).values, null, 2)})`);
@@ -245,10 +237,8 @@ function matchSequence<T extends AnyToken[]>(
   return result;
 }
 
-function matchChoose<T extends AnyToken[]>(
-  pattern: T,
-  input: ISequence<AnyToken>
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function matchChoose<T extends any[]>(pattern: T, input: ISequence<any>) {
   // ): RESULT_EXPRESSION<T>[number] | undefined {
   // console.log(`matchChoose()`);
   for (const choice of pattern) {
@@ -262,9 +252,11 @@ function matchChoose<T extends AnyToken[]>(
   return undefined;
 }
 
-function matchOptional<T extends AnyToken[]>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function matchOptional<T extends any[]>(
   pattern: T,
-  input: ISequence<AnyToken>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  input: ISequence<any>
 ): RESULT_EXPRESSION<T> | undefined {
   // console.log(`matchOptional()`);
   input.mark();
@@ -284,9 +276,11 @@ function matchOptional<T extends AnyToken[]>(
 ///////////////////////////////////////////////////////////////////////////////
 type Grammar = PatternMatcher[];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function processGrammar(
   grammar: Grammar,
-  input: ISequence<AnyToken>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  input: ISequence<any>
 ): boolean {
   for (const matcher of grammar) {
     if (matcher(input)) {
@@ -310,7 +304,7 @@ const b2 = b('b2');
 const c2 = c(false, 'c1 is false');
 
 function summarize(
-  x: [TokenA, TokenB, [TokenB, TokenA | TokenC] | undefined, TokenA | TokenB],
+  x: [Token, TokenB, [TokenB, TokenA | TokenC] | undefined, TokenA | TokenB],
   size: number
 ): boolean {
   console.log(`============ summarize(${size}) =============`);
@@ -336,33 +330,3 @@ function go() {
 }
 
 go();
-
-// ///////////////////////////////////////////////////////////////////////////////
-// //
-// // Type inference
-// //
-// ///////////////////////////////////////////////////////////////////////////////
-// function CreateMatch<ANYTOKEN>() {
-//   type PatternMatcher = (tokens: ISequence<ANYTOKEN>) => boolean;
-
-//   function match<T extends ANYTOKEN[]>(
-//     ...pattern: T
-//   ): { bind: (processor: binding<T>) => PatternMatcher } {
-//     // console.log(`match(${JSON.stringify(pattern, null, 2)},`);
-
-//     return {
-//       bind:
-//         (processor: binding<T>) =>
-//         (input: ISequence<ANYTOKEN>): boolean => {
-//           const used0 = input.itemsUsed();
-//           const m = matchSequence(pattern, input);
-//           if (m !== undefined) {
-//             const size = input.itemsUsed() - used0;
-//             return processor(m, size);
-//           } else {
-//             return false;
-//           }
-//         },
-//     };
-//   }
-// }
