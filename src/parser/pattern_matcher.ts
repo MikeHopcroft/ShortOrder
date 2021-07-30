@@ -4,7 +4,7 @@
 //   3. Mixin Span type
 //
 // Works. Next steps:
-//   1. WIP: Clean up.
+//   1. OK: Clean up.
 //   2. FAILED: Investigate using instanceof for operators.
 //      Seems to cause ''OptionalToken<T extends {}[]> extends Token' seems to work.'
 //   3. OK: Make operator tokens unrelated to token-flow's token.
@@ -12,77 +12,23 @@
 //      leads to 'Type instantiation is excessively deep and possibly infinite.'
 //      'OptionalToken<T extends {}[]> extends Token' seems to work.
 //      'OptionalToken<T extends {}[]>' seems to work.
-//   5. WIP: equality function for matchSequence. Probably need to use curried function
+//   5. OK: equality function for matchSequence. Probably need to use curried function
 //      approach.
 //   6. Design for optional(x) and optional(x, y). Do they both need to return array | undefined?
 //      Can the first one return typeof(x) | undefined?
-//   7. Unit tests
+//   7. OK: Unit tests
+//   8. Case of pattern = 'foo? foo bar' and input = 'foo bar'
+//   9. Case of pattern = []. Should this match everything, nothing, or EOS?
+//  10. Match start, match end
+//  11. Plus and star.
 
-import { Token } from 'token-flow';
-
-import { ISequence, Sequence } from './sequence';
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// User tokens
-//
-///////////////////////////////////////////////////////////////////////////////
-export const TOKEN_A: unique symbol = Symbol.for('TOKEN_A');
-export type TOKEN_A = typeof TOKEN_A;
-
-interface TokenA extends Token {
-  type: TOKEN_A;
-  count: number;
-}
-
-function a(count: number): TokenA {
-  return { type: TOKEN_A, count };
-}
-
-const A = { type: TOKEN_A } as TokenA;
-
-export const TOKEN_B: unique symbol = Symbol.for('TOKEN_B');
-export type TOKEN_B = typeof TOKEN_B;
-
-interface TokenB extends Token {
-  type: TOKEN_B;
-  value: string;
-}
-
-function b(value: string): TokenB {
-  return { type: TOKEN_B, value };
-}
-
-const B = { type: TOKEN_B } as TokenB;
-
-export const TOKEN_C: unique symbol = Symbol.for('TOKEN_C');
-export type TOKEN_C = typeof TOKEN_C;
-
-interface TokenC extends Token {
-  type: TOKEN_C;
-  correct: boolean;
-  value: string;
-}
-
-const C = { type: TOKEN_C } as TokenC;
-
-function c(correct: boolean, value: string): TokenC {
-  return { type: TOKEN_C, correct, value };
-}
+import { ISequence } from './sequence';
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Useful type functions
 //
 ///////////////////////////////////////////////////////////////////////////////
-// // This version compiles but intellisense is wrong
-// export type MIXIN<T, M> = {
-//   [P in keyof T]: T[P] extends [infer A] | undefined
-//     ? MIXIN<A, M> | undefined
-//     : T[P] & M;
-// };
-
-// This version causes compile error, but works for intellisense
 export type MIXIN<T, M> = {
   [P in keyof T]: T[P] extends [...infer A] | undefined
     ? MIXIN<A, M> | undefined
@@ -102,7 +48,7 @@ export type MIXIN<T, M> = {
 
 const OPTIONAL: unique symbol = Symbol();
 // export const OPTIONAL: unique symbol = Symbol.for('OPTIONAL');
-export type OPTIONAL = typeof OPTIONAL;
+type OPTIONAL = typeof OPTIONAL;
 
 interface OptionalToken<T extends {}[]> {
   type: OPTIONAL;
@@ -118,7 +64,7 @@ export function optional<T extends {}[]>(...args: T): OptionalToken<T> {
 
 const CHOOSE: unique symbol = Symbol();
 // export const CHOOSE: unique symbol = Symbol.for('CHOOSE');
-export type CHOOSE = typeof CHOOSE;
+type CHOOSE = typeof CHOOSE;
 
 interface ChooseToken<T extends {}[]> {
   type: CHOOSE;
@@ -131,40 +77,6 @@ export function choose<T extends {}[]>(...args: T): ChooseToken<T> {
     children: args,
   };
 }
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Operator classes - infinite recursion
-//
-///////////////////////////////////////////////////////////////////////////////
-// export const OPERATOR: unique symbol = Symbol.for('OPERATOR');
-// export type OPERATOR = typeof OPERATOR;
-
-// class OptionalToken<T extends any[]> implements Token {
-//   readonly type = OPERATOR;
-//   readonly pattern: T;
-
-//   constructor(...pattern: T) {
-//     this.pattern = pattern;
-//   }
-// }
-
-// function optional<T extends any[]>(...pattern: T) {
-//   return new OptionalToken(...pattern);
-// }
-
-// class ChooseToken<T extends any[]> implements Token {
-//   readonly type = OPERATOR;
-//   readonly pattern: T;
-
-//   constructor(...pattern: T) {
-//     this.pattern = pattern;
-//   }
-// }
-
-// function choose<T extends any[]>(...pattern: T) {
-//   return new ChooseToken(...pattern);
-// }
 
 type OperatorToken =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -188,108 +100,111 @@ export type RESULT_EXPRESSION<T> = { [P in keyof T]: RESULT_ELEMENT<T[P]> };
 type binding<T> = (result: RESULT_EXPRESSION<T>, size: number) => boolean;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PatternMatcher = (tokens: ISequence<any>) => boolean;
+export type EqualityPredicate<T> = (a: T, b: T) => boolean;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function match<T extends any[]>(
-  ...pattern: T
-): { bind: (processor: binding<T>) => PatternMatcher } {
-  // console.log(`match(${JSON.stringify(pattern, null, 2)},`);
+export function createMatcher<ANYTOKEN>(equality: EqualityPredicate<ANYTOKEN>) {
+  return match;
 
-  return {
-    bind:
-      (processor: binding<T>) =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (input: ISequence<any>): boolean => {
-        const used0 = input.itemsUsed();
-        const m = matchSequence(pattern, input);
-        if (m !== undefined) {
-          const size = input.itemsUsed() - used0;
-          return processor(m, size);
-        } else {
-          return false;
-        }
-      },
-  };
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function matchSequence<T extends any[]>(
-  pattern: T,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  input: ISequence<any>
-): RESULT_EXPRESSION<T> | undefined {
-  // console.log(`matchSequence(${JSON.stringify(pattern, null, 2)},`);
-  // console.log(`${JSON.stringify((input as any).values, null, 2)})`);
-  input.mark();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const temp: any[] = [];
-  let result = temp as RESULT_EXPRESSION<T> | undefined;
-  // let result: RESULT_EXPRESSION<T> | undefined = [];
-  for (const token of pattern) {
-    const op = token as OperatorToken;
-    if (input.atEOS()) {
-      result = undefined;
-      break;
-    } else if (op.type === OPTIONAL) {
-      const m = matchOptional(op.children, input);
-      result!.push(m);
-    } else if (op.type === CHOOSE) {
-      const m = matchChoose(op.children, input);
-      if (m !== undefined) {
-        result!.push(m);
-      } else {
-        result = undefined;
-        break;
-      }
-    } else {
-      const next = input.peek();
-      if (token.type === next.type) {
-        result!.push(next);
-        input.take();
-      } else {
-        result = undefined;
-        break;
-      }
-    }
+  function match<T extends any[]>(
+    ...pattern: T
+  ): { bind: (processor: binding<T>) => PatternMatcher } {
+    return {
+      bind:
+        (processor: binding<T>) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (input: ISequence<any>): boolean => {
+          const used0 = input.itemsUsed();
+          const m = matchSequence(pattern, input);
+          if (m !== undefined) {
+            const size = input.itemsUsed() - used0;
+            return processor(m, size);
+          } else {
+            return false;
+          }
+        },
+    };
   }
-  if (result === undefined) {
-    input.restore();
-  }
-  return result;
-}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function matchChoose<T extends any[]>(
-  pattern: T,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  input: ISequence<any>
-): RESULT_EXPRESSION<T>[number] | undefined {
-  // console.log(`matchChoose()`);
-  for (const choice of pattern) {
+  function matchSequence<T extends any[]>(
+    pattern: T,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input: ISequence<any>
+  ): RESULT_EXPRESSION<T> | undefined {
     input.mark();
-    const m = matchSequence([choice], input);
-    if (m !== undefined) {
-      return m[0];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const temp: any[] = [];
+    let result = temp as RESULT_EXPRESSION<T> | undefined;
+    // TODO: INVESTIGATE why following line won't work.
+    // let result: RESULT_EXPRESSION<T> | undefined = [];
+    for (const token of pattern) {
+      const op = token as OperatorToken;
+      if (op.type === OPTIONAL) {
+        // NOTE: perform check for OPTIONAL before input.atEOS()
+        // because it is legal to match an OPTIONAL token to the
+        // end of stream.
+        const m = matchOptional(op.children, input);
+        result!.push(m);
+      } else if (input.atEOS()) {
+        result = undefined;
+        break;
+      } else if (op.type === CHOOSE) {
+        const m = matchChoose(op.children, input);
+        if (m !== undefined) {
+          result!.push(m);
+        } else {
+          result = undefined;
+          break;
+        }
+      } else {
+        const next = input.peek();
+        if (equality(token, next)) {
+          result!.push(next);
+          input.take();
+        } else {
+          result = undefined;
+          break;
+        }
+      }
     }
-    input.restore();
+    if (result === undefined) {
+      input.restore();
+    }
+    return result;
   }
-  return undefined;
-}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function matchOptional<T extends any[]>(
-  pattern: T,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  input: ISequence<any>
-): RESULT_EXPRESSION<T> | undefined {
-  // console.log(`matchOptional()`);
-  input.mark();
-  const m = matchSequence(pattern, input);
-  if (m === undefined) {
-    input.restore();
+  function matchChoose<T extends any[]>(
+    pattern: T,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input: ISequence<any>
+  ): RESULT_EXPRESSION<T>[number] | undefined {
+    for (const choice of pattern) {
+      input.mark();
+      const m = matchSequence([choice], input);
+      if (m !== undefined) {
+        return m[0];
+      }
+      input.restore();
+    }
     return undefined;
-  } else {
-    return m;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function matchOptional<T extends any[]>(
+    pattern: T,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input: ISequence<any>
+  ): RESULT_EXPRESSION<T> | undefined {
+    input.mark();
+    const m = matchSequence(pattern, input);
+    if (m === undefined) {
+      input.restore();
+      return undefined;
+    } else {
+      return m;
+    }
   }
 }
 
@@ -313,88 +228,3 @@ export function processGrammar(
   }
   return false;
 }
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Sample usage
-//
-///////////////////////////////////////////////////////////////////////////////
-
-const a1 = a(1);
-const a2 = a(2);
-const b1 = b('b1');
-const b2 = b('b2');
-// const c1 = c(true, 'c1 is true');
-const c2 = c(false, 'c1 is false');
-
-function summarize(
-  x: [TokenA, TokenB, [TokenB, TokenA | TokenC] | undefined, TokenA | TokenB],
-  size: number
-): boolean {
-  console.log(`============ summarize(${size}) =============`);
-  console.log(JSON.stringify(x, null, 2));
-
-  // type ADD_SPAN_ELEMENT<T> = T extends Array<infer A> ? ADD_SPAN_EXPRESSION<A> : T & Span;
-  // type ADD_SPAN_EXPRESSION<T> = { [P in keyof T]: ADD_SPAN_ELEMENT<T[P]>};
-  // type ADD_SPAN_EXPRESSION<T> = { [P in keyof T]: T[P] extends Array<infer A> ? ADD_SPAN_EXPRESSION<A> : T[P] & Span;
-
-  // type ADD_SPAN_EXPRESSION<T> = { [P in keyof T]: T[P] extends  [...(infer A)] | undefined ? number : boolean }; //T[P] & Span;
-  // type MIXIN<T, M> = { [P in keyof T]: T[P] extends  [...(infer A)] | undefined ? MIXIN<A, M> | undefined : T[P] & M }; //;
-
-  // const zz = <const>[1, 2, [3, 4], 5];
-  // const zzz = zz as unknown as MIXIN<typeof zz, Span>;
-  // const y = x as unknown as MIXIN<typeof x, Span>;
-  return true;
-}
-
-// TODO: ISSUE: ambiguity of [optional(foo), foo]
-// TODO: predefined pattern matcher to skip one token of any type
-// TODO: EntityBuilder needs number of tokens matched (e.g. for optionTokensCount)
-
-export function go() {
-  console.log(`a1 = ${a1}`);
-  const matcher = match(A, B, optional(B, choose(A, C)), choose(A, B)).bind(
-    summarize
-  );
-
-  matcher(new Sequence([a1, b1, b2, c2, a2]));
-  matcher(new Sequence([a1, b1, a2]));
-  matcher(new Sequence([b1, b1, b2, c2, a2])); // Never calls summarize.
-
-  // Example of matching nothing.
-  // const matcher2 = match().bind((x) => true);
-}
-
-function go2() {
-  function summarize2(
-    x: [
-      number,
-      string,
-      [string, number | boolean] | undefined,
-      number | string
-    ],
-    size: number
-  ): boolean {
-    console.log(`============ summarize(${size}) =============`);
-    console.log(JSON.stringify(x, null, 2));
-    return true;
-  }
-
-  const NUMBER = 1;
-  const STRING = '';
-  const BOOL = true;
-  const matcher = match(
-    NUMBER,
-    STRING,
-    optional(STRING, choose(NUMBER, BOOL)),
-    choose(NUMBER, STRING)
-  ).bind(summarize2);
-
-  // Should match
-  matcher(new Sequence([5, 'hi', 'there', true, 6]));
-
-  // Should not match - currently matches because of hard-coded equality function.
-  matcher(new Sequence(['hi', 5, 'there', true, 6]));
-}
-
-go2();
