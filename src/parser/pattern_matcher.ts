@@ -14,6 +14,9 @@
 //      'OptionalToken<T extends {}[]>' seems to work.
 //   5. WIP: equality function for matchSequence. Probably need to use curried function
 //      approach.
+//   6. Design for optional(x) and optional(x, y). Do they both need to return array | undefined?
+//      Can the first one return typeof(x) | undefined?
+//   7. Unit tests
 
 import { Token } from 'token-flow';
 
@@ -180,14 +183,14 @@ type RESULT_ELEMENT<T> = T extends OptionalToken<infer A>
   ? RESULT_EXPRESSION<B>[number]
   : T;
 
-type RESULT_EXPRESSION<T> = { [P in keyof T]: RESULT_ELEMENT<T[P]> };
+export type RESULT_EXPRESSION<T> = { [P in keyof T]: RESULT_ELEMENT<T[P]> };
 
 type binding<T> = (result: RESULT_EXPRESSION<T>, size: number) => boolean;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PatternMatcher = (tokens: ISequence<any>) => boolean;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function match<T extends any[]>(
+export function match<T extends any[]>(
   ...pattern: T
 ): { bind: (processor: binding<T>) => PatternMatcher } {
   // console.log(`match(${JSON.stringify(pattern, null, 2)},`);
@@ -386,7 +389,12 @@ function go2() {
     optional(STRING, choose(NUMBER, BOOL)),
     choose(NUMBER, STRING)
   ).bind(summarize2);
+
+  // Should match
   matcher(new Sequence([5, 'hi', 'there', true, 6]));
+
+  // Should not match - currently matches because of hard-coded equality function.
+  matcher(new Sequence(['hi', 5, 'there', true, 6]));
 }
 
 go2();

@@ -4,6 +4,7 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "type": "node",
       "request": "launch",
@@ -71,6 +72,13 @@
         "c:\\temp\\foo.yaml"
       ]
       // "args": ["-n=2", "-o=foo.yaml"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "AAA pattern_matcher3",
+      "program": "${workspaceFolder}/build/src/parser/pattern_matcher3.js",
+      "outputCapture": "std"
     },
     {
       "type": "node",
