@@ -26,7 +26,7 @@ function typesEqual(a: TestToken, b: TestToken): boolean {
   return typeof a === typeof b;
 }
 
-const match = createMatcher(typesEqual);
+const match = createMatcher<TestToken, boolean>(typesEqual);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function configure<T extends any[]>(...pattern: T) {
@@ -69,7 +69,7 @@ describe('Pattern matching', () => {
     {
       const initialCalls = callback.log().length;
       const input = new Sequence([true, 6]);
-      assert.isFalse(matcher(input));
+      assert.isUndefined(matcher(input));
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
@@ -79,7 +79,7 @@ describe('Pattern matching', () => {
     {
       const initialCalls = callback.log().length;
       const input = new Sequence([]);
-      assert.isFalse(matcher(input));
+      assert.isUndefined(matcher(input));
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.isTrue(input.atEOS());
@@ -141,7 +141,7 @@ describe('Pattern matching', () => {
     {
       const initialCalls = callback.log().length;
       const input = new Sequence([true, 6, 7]);
-      assert.isFalse(matcher(input));
+      assert.isUndefined(matcher(input));
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
@@ -151,7 +151,7 @@ describe('Pattern matching', () => {
     {
       const initialCalls = callback.log().length;
       const input = new Sequence([true, 6]);
-      assert.isFalse(matcher(input));
+      assert.isUndefined(matcher(input));
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
@@ -217,7 +217,7 @@ describe('Pattern matching', () => {
     {
       const initialCalls = callback.log().length;
       const input = new Sequence([true, true, 456, 'hello', 123]);
-      assert.isFalse(matcher(input));
+      assert.isUndefined(matcher(input));
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
@@ -227,7 +227,7 @@ describe('Pattern matching', () => {
     {
       const initialCalls = callback.log().length;
       const input = new Sequence([true]);
-      assert.isFalse(matcher(input));
+      assert.isUndefined(matcher(input));
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
@@ -249,7 +249,7 @@ describe('Pattern matching', () => {
     const callback3 = makeCallback(3);
     const callback4 = makeCallback(4);
 
-    const grammar: Grammar = [
+    const grammar: Grammar<boolean> = [
       match(NUMBER, STRING).bind(callback1),
       match(optional(BOOL, STRING), NUMBER).bind(callback2),
       match(NUMBER, NUMBER).bind(callback3),

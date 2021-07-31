@@ -97,30 +97,39 @@ type RESULT_ELEMENT<T> = T extends OptionalToken<infer A>
 
 export type RESULT_EXPRESSION<T> = { [P in keyof T]: RESULT_ELEMENT<T[P]> };
 
-type binding<T> = (result: RESULT_EXPRESSION<T>, size: number) => boolean;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type PatternMatcher = (tokens: ISequence<any>) => boolean;
+type binding<T, RESULT> = (
+  result: RESULT_EXPRESSION<T>,
+  size: number
+) => RESULT;
+
+export type PatternMatcher<RESULT> = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tokens: ISequence<any>
+) => RESULT | undefined;
+
 export type EqualityPredicate<T> = (a: T, b: T) => boolean;
 
-export function createMatcher<ANYTOKEN>(equality: EqualityPredicate<ANYTOKEN>) {
+export function createMatcher<ANYTOKEN, RESULT>(
+  equality: EqualityPredicate<ANYTOKEN>
+) {
   return match;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function match<T extends any[]>(
     ...pattern: T
-  ): { bind: (processor: binding<T>) => PatternMatcher } {
+  ): { bind: (processor: binding<T, RESULT>) => PatternMatcher<RESULT> } {
     return {
       bind:
-        (processor: binding<T>) =>
+        (processor: binding<T, RESULT>) =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (input: ISequence<any>): boolean => {
+        (input: ISequence<any>): RESULT | undefined => {
           const used0 = input.itemsUsed();
           const m = matchSequence(pattern, input);
           if (m !== undefined) {
             const size = input.itemsUsed() - used0;
             return processor(m, size);
           } else {
-            return false;
+            return undefined;
           }
         },
     };
@@ -213,11 +222,11 @@ export function createMatcher<ANYTOKEN>(equality: EqualityPredicate<ANYTOKEN>) {
 // Grammar
 //
 ///////////////////////////////////////////////////////////////////////////////
-export type Grammar = PatternMatcher[];
+export type Grammar<RESULT> = PatternMatcher<RESULT>[];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function processGrammar(
-  grammar: Grammar,
+export function processGrammar<RESULT>(
+  grammar: Grammar<RESULT>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   input: ISequence<any>
 ): boolean {
