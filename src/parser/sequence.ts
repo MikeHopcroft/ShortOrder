@@ -4,13 +4,15 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 export interface ISequence<T> {
-  mark(): void;
-  restore(): void;
-  peek(): T;
-  take(): void;
-  discard(): void;
   atEOS(): boolean;
+  commit(): void;
+  discard(): void;
   itemsUsed(): number;
+  mark(): void;
+  peek(): T;
+  restore(): void;
+  stacksize(): number;
+  take(): void;
 }
 
 export class Sequence<T> implements ISequence<T> {
@@ -27,6 +29,14 @@ export class Sequence<T> implements ISequence<T> {
     this.checkpoints.push([this.cursor, this.used]);
   }
 
+  commit() {
+    const checkpoint = this.checkpoints.pop();
+    if (checkpoint === undefined) {
+      const message = 'Checkpoint stack underflow.';
+      throw new TypeError(message);
+    }
+  }
+
   restore() {
     const checkpoint = this.checkpoints.pop();
     if (checkpoint) {
@@ -35,6 +45,10 @@ export class Sequence<T> implements ISequence<T> {
       const message = 'Checkpoint stack underflow.';
       throw new TypeError(message);
     }
+  }
+
+  stacksize() {
+    return this.checkpoints.length;
   }
 
   peek(): T {

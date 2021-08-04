@@ -5,9 +5,11 @@ import { matcherFromExpression, patternFromExpression } from '.';
 
 export const PRODUCT_RECIPE: unique symbol = Symbol.for('PRODUCT_RECIPE');
 export type PRODUCT_RECIPE = typeof PRODUCT_RECIPE;
+export const productRecipe = { type: PRODUCT_RECIPE } as ProductRecipeToken;
 
 export const OPTION_RECIPE: unique symbol = Symbol.for('OPTION_RECIPE');
 export type OPTION_RECIPE = typeof OPTION_RECIPE;
+export const optionRecipe = { type: OPTION_RECIPE } as OptionRecipeToken;
 
 export interface ProductRecipeToken extends Token {
   type: PRODUCT_RECIPE;

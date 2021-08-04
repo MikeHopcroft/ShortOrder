@@ -61,22 +61,26 @@ export function processRemove(
       return parseRemoveOptionFromImplicit(parser, state, graph, parts);
     } else if (token.type === PREPOSITION) {
       // TODO: add a test to exercise this case.
+      // This is test 44: "remove that"
+      // "that" is a pronoun, not a preposition
       // Does it ever happen? It may be that the REMOVE_ITEM
       // aliases always include a PREPOSITION.
       tokens.take(1);
       return parseRemoveImplicit(parser, state);
-    } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
-      // console.log('remove OPTION from IMPLICIT (2)');
-      const parts = tokens.peek(1) as ProductToken & Span;
-      tokens.take(2);
-      return parseRemoveOptionFromImplicit(parser, state, graph, parts);
     }
+    // } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
+    //   // TODO: BUGBUG: can this case ever fire since the last case is for PREPOSITION?
+    //   // console.log('remove OPTION from IMPLICIT (2)');
+    //   const parts = tokens.peek(1) as ProductToken & Span;
+    //   tokens.take(2);
+    //   return parseRemoveOptionFromImplicit(parser, state, graph, parts);
+    // }
   }
 
   return nop;
 }
 
-function parseRemove(
+export function parseRemove(
   parser: Parser,
   state: State,
   graph: Graph,
@@ -101,8 +105,11 @@ function parseRemove(
   return interpretation;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function parseRemoveImplicit(parser: Parser, state: State): Interpretation {
+export function parseRemoveImplicit(
+  parser: Parser,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  state: State
+): Interpretation {
   return {
     score: 1,
     tokenCount: 0,
@@ -120,7 +127,7 @@ function parseRemoveImplicit(parser: Parser, state: State): Interpretation {
   };
 }
 
-function parseRemoveOptionFromImplicit(
+export function parseRemoveOptionFromImplicit(
   parser: Parser,
   state: State,
   graph: Graph,
@@ -160,7 +167,7 @@ function parseRemoveOptionFromImplicit(
   return interpretation;
 }
 
-function parseRemoveOptionFromTarget(
+export function parseRemoveOptionFromTarget(
   parser: Parser,
   state: State,
   graph: Graph,

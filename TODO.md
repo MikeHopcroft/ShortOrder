@@ -3,6 +3,15 @@
 * Top
   * NEW
     * Patterns
+      * More prologue to its own nop rule
+      * Nested grammars
+      * Rearchitect interpretation actions
+      * Rename and document parseReplace1
+      * Rename parseFoo methods (processFoo? doFoo?)
+      * Preposition/pronoun cleanup
+      * Remove unused intents
+      * Rename src/parser/interfaces.ts
+      * Rename parser to Cart/Menu/Services
     * Get clear on stemmer_confusion.ts and confusion_matrix.ts. Update docs.
     * Fix test_from_text.js. Doesn't generate carts.
     * Consider removing concept of WEAK_ADD

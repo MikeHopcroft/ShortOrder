@@ -55,6 +55,7 @@ describe('Pattern matching', () => {
       assert.isTrue(matcher(input));
       assert.deepEqual(params(), [[5], 1]);
       assert.equal(input.peek(), 6);
+      assert.equal(input.stacksize(), 0);
     }
 
     // Match a string
@@ -63,6 +64,7 @@ describe('Pattern matching', () => {
       assert.isTrue(matcher(input));
       assert.deepEqual(params(), [['hello'], 1]);
       assert.equal(input.peek(), 6);
+      assert.equal(input.stacksize(), 0);
     }
 
     // No match due to next token
@@ -73,6 +75,7 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
     }
 
     // No match due to end of stream
@@ -83,6 +86,7 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.isTrue(input.atEOS());
+      assert.equal(input.stacksize(), 0);
     }
   });
 
@@ -98,6 +102,7 @@ describe('Pattern matching', () => {
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[[5, 'hello']], 2]);
       assert.equal(input.peek(), 6);
+      assert.equal(input.stacksize(), 0);
     }
 
     // Match missing optional pattern.
@@ -109,6 +114,7 @@ describe('Pattern matching', () => {
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[undefined], 0]);
       assert.equal(input.peek(), 'hello');
+      assert.equal(input.stacksize(), 0);
     }
 
     // Match missing optional pattern due to end of stream
@@ -119,6 +125,7 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[undefined], 0]);
+      assert.equal(input.stacksize(), 0);
       assert.isTrue(input.atEOS());
     }
   });
@@ -135,6 +142,7 @@ describe('Pattern matching', () => {
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[true, 1, 'hello'], 3]);
       assert.equal(input.peek(), 2);
+      assert.equal(input.stacksize(), 0);
     }
 
     // No match due to next token
@@ -145,6 +153,7 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
     }
 
     // No match due to end of stream
@@ -155,6 +164,7 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
     }
   });
 
@@ -170,6 +180,7 @@ describe('Pattern matching', () => {
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[], 0]);
       assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
     }
 
     // End of stream
@@ -181,6 +192,7 @@ describe('Pattern matching', () => {
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[], 0]);
       assert.isTrue(input.atEOS());
+      assert.equal(input.stacksize(), 0);
     }
   });
 
@@ -200,6 +212,7 @@ describe('Pattern matching', () => {
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[true, [1, false], 'hello'], 4]);
       assert.equal(input.peek(), 123);
+      assert.equal(input.stacksize(), 0);
     }
 
     // Match pattern case II
@@ -211,6 +224,7 @@ describe('Pattern matching', () => {
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[true, undefined, 456], 2]);
       assert.equal(input.peek(), 123);
+      assert.equal(input.stacksize(), 0);
     }
 
     // No match due to next token
@@ -221,6 +235,7 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
     }
 
     // No match due to end of stream
@@ -231,10 +246,11 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 0);
       assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
     }
   });
 
-  it('grammer', () => {
+  it('grammar', () => {
     const lines: string[] = [];
 
     function makeCallback(id: number) {
@@ -284,6 +300,7 @@ describe('Pattern matching', () => {
     ];
 
     assert.deepEqual(lines, expected);
+    assert.equal(input.stacksize(), 0);
   });
 });
 

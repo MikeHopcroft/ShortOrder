@@ -3,6 +3,7 @@ import { Token } from 'token-flow';
 
 export const ATTRIBUTE: unique symbol = Symbol('ATTRIBUTE');
 export type ATTRIBUTE = typeof ATTRIBUTE;
+export const attribute = { type: ATTRIBUTE } as AttributeToken;
 
 export interface AttributeToken extends Token {
   type: ATTRIBUTE;

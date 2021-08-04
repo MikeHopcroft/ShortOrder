@@ -1,7 +1,8 @@
-import { Item, Token } from 'token-flow';
+import { Token } from 'token-flow';
 
 export const ADD_TO_ORDER: unique symbol = Symbol.for('ADD_TO_ORDER');
 export type ADD_TO_ORDER = typeof ADD_TO_ORDER;
+export const addToOrder = { type: ADD_TO_ORDER } as Token;
 
 export const ANSWER_AFFIRMATIVE: unique symbol =
   Symbol.for('ANSWER_AFFIRMATIVE');
@@ -27,18 +28,22 @@ export type EPILOGUE = typeof EPILOGUE;
 
 export const MODIFY_ITEM: unique symbol = Symbol.for('MODIFY_ITEM');
 export type MODIFY_ITEM = typeof MODIFY_ITEM;
+export const modifyItem = { type: MODIFY_ITEM } as Token;
 
 export const NEED_MORE_TIME: unique symbol = Symbol.for('NEED_MORE_TIME');
 export type NEED_MORE_TIME = typeof NEED_MORE_TIME;
 
 export const PREPOSITION: unique symbol = Symbol.for('PREPOSITION');
 export type PREPOSITION = typeof PREPOSITION;
+export const preposition = { type: PREPOSITION } as Token;
 
 export const PROLOGUE: unique symbol = Symbol.for('PROLOGUE');
 export type PROLOGUE = typeof PROLOGUE;
+export const prologue = { type: PROLOGUE } as Token;
 
 export const REMOVE_ITEM: unique symbol = Symbol.for('REMOVE_ITEM');
 export type REMOVE_ITEM = typeof REMOVE_ITEM;
+export const removeItem = { type: REMOVE_ITEM } as Token;
 
 export const RESTATE: unique symbol = Symbol.for('RESTATE');
 export type RESTATE = typeof RESTATE;
@@ -52,34 +57,34 @@ export type SEPERATOR = typeof SEPERATOR;
 export const SUBSTITUTE: unique symbol = Symbol.for('SUBSTITUTE');
 export type SUBSTITUTE = typeof SUBSTITUTE;
 
-export class IntentTokenFactory {
-  tokens = new Map<Symbol, Token>();
+// export class IntentTokenFactory {
+//   tokens = new Map<Symbol, Token>();
 
-  createToken = (item: Item): Token => {
-    let name = 'UNKNOWN';
-    if (item) {
-      name = item.name;
-    }
-    const symbol = Symbol.for(name);
+//   createToken = (item: Item): Token => {
+//     let name = 'UNKNOWN';
+//     if (item) {
+//       name = item.name;
+//     }
+//     const symbol = Symbol.for(name);
 
-    let token = this.tokens.get(symbol);
-    if (!token) {
-      token = { type: symbol };
-      this.tokens.set(symbol, token);
-    }
-    return token;
-  };
-}
+//     let token = this.tokens.get(symbol);
+//     if (!token) {
+//       token = { type: symbol };
+//       this.tokens.set(symbol, token);
+//     }
+//     return token;
+//   };
+// }
 
-export function intentTokenFactory(item: Item): Token {
-  let name = 'UNKNOWN';
-  if (item) {
-    name = item.name;
-  }
-  const symbol = Symbol.for(name);
-  return { type: symbol };
-}
+// export function intentTokenFactory(item: Item): Token {
+//   let name = 'UNKNOWN';
+//   if (item) {
+//     name = item.name;
+//   }
+//   const symbol = Symbol.for(name);
+//   return { type: symbol };
+// }
 
-export function createIntent(type: symbol) {
-  return { type };
-}
+// export function createIntent(type: symbol) {
+//   return { type };
+// }

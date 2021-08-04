@@ -179,6 +179,8 @@ export function createMatcher<ANYTOKEN, RESULT>(
     }
     if (result === undefined) {
       input.restore();
+    } else {
+      input.commit();
     }
     return result;
   }
@@ -193,6 +195,7 @@ export function createMatcher<ANYTOKEN, RESULT>(
       input.mark();
       const m = matchSequence([choice], input);
       if (m !== undefined) {
+        input.commit();
         return m[0];
       }
       input.restore();
@@ -212,6 +215,7 @@ export function createMatcher<ANYTOKEN, RESULT>(
       input.restore();
       return undefined;
     } else {
+      input.commit();
       return m;
     }
   }
@@ -229,11 +233,18 @@ export function processGrammar<RESULT>(
   grammar: Grammar<RESULT>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   input: ISequence<any>
-): boolean {
+): RESULT | undefined {
+  // let count = 0;
   for (const matcher of grammar) {
-    if (matcher(input)) {
-      return true;
+    const result = matcher(input);
+    // console.log(
+    //   `${count++}: ${result}, curser: ${(input as any).cursor} used: ${
+    //     (input as any).used
+    //   }, checkpoints: ${(input as any).checkpoints.length}`
+    // );
+    if (result !== undefined) {
+      return result;
     }
   }
-  return false;
+  return undefined;
 }

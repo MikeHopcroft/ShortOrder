@@ -116,9 +116,14 @@
       "program": "${workspaceFolder}/build/samples/test_runner.js",
       "outputCapture": "std",
       "args": [
-        "c:/temp/data/out.yaml",
-        "-d=d:/git/menubot/mochajava/data3"
+        "samples/tests/regression.yaml",
+        "-d=samples/menu",
+        "-n=48"
       ]
+      // "args": [
+      //   "c:/temp/data/out.yaml",
+      //   "-d=d:/git/menubot/mochajava/data3"
+      // ]
     },
   ]
 }

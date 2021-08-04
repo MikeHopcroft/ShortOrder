@@ -5,6 +5,7 @@ import { ProductRecipeToken } from './cookbook';
 
 export const ENTITY: unique symbol = Symbol('ENTITY');
 export type ENTITY = typeof ENTITY;
+export const entity = { type: ENTITY } as EntityToken;
 
 export interface EntityToken extends Token {
   type: ENTITY;

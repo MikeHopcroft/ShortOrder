@@ -22,6 +22,7 @@ export interface ProductToken0 extends Token {
   type: PRODUCT_PARTS_0;
   tokens: Array<SequenceToken & Span>;
 }
+export const product0 = { type: PRODUCT_PARTS_0 } as ProductToken0;
 
 // A seqeunce of SequenceToken that does not include exactly one ENTITY token.
 export const PRODUCT_PARTS_1: unique symbol = Symbol('PRODUCT_PARTS_1');
@@ -30,6 +31,7 @@ export interface ProductToken1 extends Token {
   type: PRODUCT_PARTS_1;
   tokens: Array<SequenceToken & Span>;
 }
+export const product1 = { type: PRODUCT_PARTS_1 } as ProductToken1;
 
 // A seqeunce of SequenceToken that does not include two or more ENTITY tokens.
 export const PRODUCT_PARTS_N: unique symbol = Symbol('PRODUCT_PARTS_N');
@@ -38,6 +40,7 @@ export interface ProductTokenN extends Token {
   type: PRODUCT_PARTS_N;
   tokens: Array<SequenceToken & Span>;
 }
+export const productN = { type: PRODUCT_PARTS_N } as ProductTokenN;
 
 export type ProductToken = ProductToken0 | ProductToken1 | ProductTokenN;
 

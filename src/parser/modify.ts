@@ -229,7 +229,7 @@ export function processModify(
   return nop;
 }
 
-function processModify1(
+export function processModify1(
   parser: Parser,
   state: State,
   graph: Graph,
@@ -363,7 +363,7 @@ export function parseAddToItem(
   return nop;
 }
 
-function parseReplace1(
+export function parseReplace1(
   parser: Parser,
   state: State,
   graph: Graph,
@@ -425,7 +425,7 @@ function parseReplace1(
   return best;
 }
 
-function parseReplaceTarget(
+export function parseReplaceTarget(
   parser: Parser,
   state: State,
   graph: Graph,
@@ -511,7 +511,7 @@ function parseReplaceItem(
   return nop;
 }
 
-function parseReplaceImplicit(
+export function parseReplaceImplicit(
   parser: Parser,
   state: State,
   graph: Graph,

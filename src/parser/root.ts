@@ -33,6 +33,7 @@ import {
   SequenceToken,
 } from './interfaces';
 
+import { processAllActiveRegions2 } from './interpretation';
 import { processModify } from './modify';
 import { Parser } from './parser';
 import { processRemove } from './remove';
@@ -93,6 +94,7 @@ function processRootInternal(
   state: State,
   text: string
 ): State {
+  // console.log(text);
   const rawGraph: Graph = parser.lexer.createGraph(text);
 
   // TODO: REVIEW: MAGIC NUMBER
@@ -119,6 +121,7 @@ function processRootInternal(
   let best: Interpretation | null = null;
 
   for (const tokenization of maximalTokenizations(filteredGraph.edgeLists)) {
+    // console.log('Tokenization');
     // for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
     // XXX
     if (parser.debugMode) {
@@ -138,10 +141,24 @@ function processRootInternal(
     // use the filteredGraph.
     // const interpretation =
     //     processAllActiveRegions(parser, state, grouped, rawGraph);
-    const interpretation =
-      // Following causes stack overflow.
-      // processAllActiveRegions(parser, state, grouped, rawGraph);
-      processAllActiveRegions(parser, state, grouped, filteredGraph);
+
+    // const interpretation = processAllActiveRegions(
+    //   parser,
+    //   state,
+    //   grouped,
+    //   filteredGraph
+    // );
+
+    const interpretation = processAllActiveRegions2(
+      parser,
+      state,
+      grouped,
+      filteredGraph
+    );
+
+    // Following causes stack overflow.
+    // const interpreation = processAllActiveRegions(parser, state, grouped, rawGraph);
+
     // TODO: these counts don't include the intent token.
     interpretation.missed = tokenization.length - interpretation.score; // Missing intent
 
@@ -151,13 +168,13 @@ function processRootInternal(
     // }
 
     if (!best) {
-      // console.log("First interpreation");
+      // console.log("First interpretation");
       if (parser.debugMode) {
         console.log('Kept first interpretation');
       }
       best = interpretation;
     } else if (preferFirstInterpretation(interpretation, best)) {
-      // console.log("Better interpreation");
+      // console.log("Better interpretation");
       if (parser.debugMode) {
         console.log('Found better interpretation');
       }
@@ -176,7 +193,7 @@ function processRootInternal(
 // [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS [EPILOGUE]
 // PROLOGUE WEAK_ORDER PRODUCT_PARTS [EPILOGUE]
 // [PROLOGUE] REMOVE_ITEM PRODUCT_PARTS [EPILOGUE]
-function processAllActiveRegions(
+export function processAllActiveRegions(
   parser: Parser,
   state: State,
   tokenization: Array<Token & Span>,

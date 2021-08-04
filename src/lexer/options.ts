@@ -6,6 +6,7 @@ export interface OptionToken extends Token {
   id: PID;
   name: string;
 }
+export const option = { type: OPTION } as OptionToken;
 
 export function optionTokenFactory(item: Item): Token {
   return { type: OPTION, id: item.pid, name: item.name } as OptionToken;
