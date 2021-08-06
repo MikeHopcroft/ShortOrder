@@ -1,61 +1,29 @@
 import { State } from 'prix-fixe';
-
-import {
-  // filterGraph,
-  Graph,
-  Token,
-  // UNKNOWNTOKEN,
-  // maximalTokenizations,
-} from 'token-flow';
+import { Token } from 'token-flow';
 
 import {
   addToOrder,
-  // AnyToken,
-  // attribute,
-  // entity,
+  createSpan,
   modifyItem,
-  // option,
-  // optionRecipe,
   preposition,
   prologue,
   removeItem,
-} from '../lexer';
-
-import {
-  // ADD_TO_ORDER,
-  createSpan,
-  // ENTITY,
-  // MODIFY_ITEM,
-  // PROLOGUE,
-  // REMOVE_ITEM,
   Span,
-  // tokenToString,
-  // ATTRIBUTE,
-  // OPTION_RECIPE,
 } from '../lexer';
-
-// import { processAdd } from './add';
-
-import {
-  Interpretation,
-  // nop,
-  product0,
-  product1,
-  productN,
-  // PRODUCT_PARTS_0,
-  // PRODUCT_PARTS_1,
-  // PRODUCT_PARTS_N,
-  ProductToken,
-  // Segment,
-  // SequenceToken,
-} from './interfaces';
 
 import { parseAdd } from './add';
 
 import {
+  Interpretation,
+  product0,
+  product1,
+  productN,
+  ProductToken,
+} from './interfaces';
+
+import {
   parseAddToImplicit,
   parseAddToTarget,
-  // processModify
   parseReplace1,
   parseReplaceImplicit,
   parseReplaceTarget,
@@ -70,7 +38,7 @@ import {
   processGrammar,
 } from './pattern_matcher';
 
-import { Parser } from './parser';
+import { Context } from './parser';
 
 import {
   parseRemove,
@@ -81,28 +49,25 @@ import {
 
 import { Sequence } from './sequence';
 
-// TODO:
-//   Move prologue to its own nop rule
-//   Nested grammars
-//   Rearchitect interpretation actions
-//   Rename and document parseReplace1
-
+// Equality predicate for tokens.
 function equality(a: Token, b: Token): boolean {
   return a.type === b.type;
 }
 
 export function processAllActiveRegions2(
-  parser: Parser,
-  state: State,
-  tokenization: Array<Token & Span>,
-  graph: Graph
+  context: Context,
+  tokenization: Array<Token & Span>
 ): Interpretation {
+  let state = context.state;
+
   const match = createMatcher<Token & Span, Interpretation>(equality);
 
   const grammar: Grammar<Interpretation> = [
+    ///////////////////////////////////////////////////////////////////////////
     //
     // Add
     //
+    ///////////////////////////////////////////////////////////////////////////
 
     match(
       optional(prologue),
@@ -112,9 +77,7 @@ export function processAllActiveRegions2(
       product1
     ).bind(([, , modification, , target]) => {
       return parseAddToTarget(
-        parser,
-        state,
-        graph,
+        context,
         modification.tokens,
         target.tokens,
         true
@@ -123,13 +86,7 @@ export function processAllActiveRegions2(
 
     match(optional(prologue), optional(addToOrder), product0, preposition).bind(
       ([, , modification]) => {
-        return parseAddToImplicit(
-          parser,
-          state,
-          graph,
-          modification.tokens,
-          true
-        );
+        return parseAddToImplicit(context, modification.tokens, true);
       }
     ),
 
@@ -138,38 +95,32 @@ export function processAllActiveRegions2(
       optional(addToOrder),
       choose(product1, productN)
     ).bind(([, , product]) => {
-      return parseAdd(parser, product.tokens);
+      return parseAdd(context.services, product.tokens);
     }),
 
     match(optional(prologue), optional(addToOrder), product0).bind(
       ([, , modification]) => {
-        return parseAddToImplicit(
-          parser,
-          state,
-          graph,
-          modification.tokens,
-          true
-        );
+        return parseAddToImplicit(context, modification.tokens, true);
       }
     ),
 
+    ///////////////////////////////////////////////////////////////////////////
     //
     // Remove
     //
+    ///////////////////////////////////////////////////////////////////////////
 
     match(optional(prologue), removeItem, choose(product1, productN)).bind(
       ([, , product]) => {
         const span = createSpan(product.tokens);
-        return parseRemove(parser, state, graph, span);
+        return parseRemove(context, span);
       }
     ),
 
     match(optional(prologue), removeItem, product0, preposition, product1).bind(
       ([, , option, , target]) => {
         return parseRemoveOptionFromTarget(
-          parser,
-          state,
-          graph,
+          context,
           option as ProductToken & Span,
           target as ProductToken & Span
         );
@@ -178,16 +129,14 @@ export function processAllActiveRegions2(
 
     match(optional(prologue), removeItem, product0).bind(([, , option]) => {
       return parseRemoveOptionFromImplicit(
-        parser,
-        state,
-        graph,
+        context,
         option as ProductToken & Span
       );
     }),
 
-    // Does this ever happen? "remove that?" Test case 44.
+    // Test case 44.
     match(optional(prologue), removeItem, preposition).bind(() => {
-      return parseRemoveImplicit(parser, state);
+      return parseRemoveImplicit(context);
     }),
 
     // // This case is unreachable because the previous case fires on "preposition".
@@ -196,9 +145,11 @@ export function processAllActiveRegions2(
     //   return parseRemoveOptionFromImplicit(parser, state, graph, parts);
     // }),
 
+    ///////////////////////////////////////////////////////////////////////////
     //
     // Modify
     //
+    ///////////////////////////////////////////////////////////////////////////
 
     match(
       optional(prologue),
@@ -209,9 +160,7 @@ export function processAllActiveRegions2(
       product0
     ).bind(([, , , target, , modification]) => {
       return parseAddToTarget(
-        parser,
-        state,
-        graph,
+        context,
         modification.tokens,
         target.tokens,
         false
@@ -220,13 +169,7 @@ export function processAllActiveRegions2(
 
     match(optional(prologue), modifyItem, optional(preposition), product0).bind(
       ([, , , modification]) => {
-        return parseAddToImplicit(
-          parser,
-          state,
-          graph,
-          modification.tokens,
-          false
-        );
+        return parseAddToImplicit(context, modification.tokens, false);
       }
     ),
 
@@ -239,28 +182,22 @@ export function processAllActiveRegions2(
       optional(preposition),
       product1
     ).bind(([, , , target, , replacement]) => {
-      return parseReplaceTarget(
-        parser,
-        state,
-        graph,
-        target.tokens,
-        replacement.tokens
-      );
+      return parseReplaceTarget(context, target.tokens, replacement.tokens);
     }),
 
     match(optional(prologue), modifyItem, optional(preposition), productN).bind(
       ([, , , parts]) => {
-        return parseReplace1(parser, state, graph, parts.tokens);
+        return parseReplace1(context, parts.tokens);
       }
     ),
 
     match(optional(prologue), modifyItem, product1).bind(([, , parts]) => {
-      return processModify1(parser, state, graph, parts.tokens);
+      return processModify1(context, parts.tokens);
     }),
 
     match(optional(prologue), modifyItem, preposition, product1).bind(
       ([, , , modification]) => {
-        return parseReplaceImplicit(parser, state, graph, modification.tokens);
+        return parseReplaceImplicit(context, modification.tokens);
       }
     ),
   ];
@@ -277,10 +214,11 @@ export function processAllActiveRegions2(
       score += interpretation.score;
       tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
+
+      context = { ...context, state };
     }
   }
 
-  // return nop;
   return {
     score,
     tokenCount,

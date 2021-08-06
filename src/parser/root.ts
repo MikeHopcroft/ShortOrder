@@ -3,6 +3,7 @@ import { OPTION, State } from 'prix-fixe';
 import {
   filterGraph,
   Graph,
+  NUMBERTOKEN,
   Token,
   UNKNOWNTOKEN,
   maximalTokenizations,
@@ -10,15 +11,18 @@ import {
 
 import {
   ADD_TO_ORDER,
+  ATTRIBUTE,
+  CONJUNCTION,
   createSpan,
   ENTITY,
   MODIFY_ITEM,
+  OPTION_RECIPE,
+  QUANTITY,
   PROLOGUE,
   REMOVE_ITEM,
   Span,
   tokenToString,
-  ATTRIBUTE,
-  OPTION_RECIPE,
+  UNIT,
 } from '../lexer';
 
 import { processAdd } from './add';
@@ -35,7 +39,7 @@ import {
 
 import { processAllActiveRegions2 } from './interpretation';
 import { processModify } from './modify';
-import { Parser } from './parser';
+import { Context, InterpretationServices, Parser } from './parser';
 import { processRemove } from './remove';
 import { TokenSequence } from './token_sequence';
 
@@ -44,8 +48,12 @@ import { TokenSequence } from './token_sequence';
 // Parsing complete utterances.
 //
 ///////////////////////////////////////////////////////////////////////////
-export function processRoot(parser: Parser, state: State, text: string): State {
-  state = processRootInternal(parser, state, text);
+export function processRoot(
+  services: InterpretationServices,
+  state: State,
+  text: string
+): State {
+  state = processRootInternal(services, state, text);
   return state;
 }
 
@@ -90,16 +98,22 @@ export function processRootOld(
 }
 
 function processRootInternal(
-  parser: Parser,
+  services: InterpretationServices,
   state: State,
   text: string
 ): State {
   // console.log(text);
-  const rawGraph: Graph = parser.lexer.createGraph(text);
+  const rawGraph: Graph = services.lexer.createGraph(text);
 
   // TODO: REVIEW: MAGIC NUMBER
   // 0.35 is the score cutoff for the filtered graph.
   const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
+
+  const context: Context = {
+    services,
+    state,
+    graph: filteredGraph,
+  };
 
   // console.log('Original graph:');
   // for (const [i, edges] of rawGraph.edgeLists.entries()) {
@@ -124,14 +138,14 @@ function processRootInternal(
     // console.log('Tokenization');
     // for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
     // XXX
-    if (parser.debugMode) {
+    if (services.debugMode) {
       console.log(' ');
       console.log(tokenization.map(tokenToString).join(''));
     }
 
-    const grouped = groupProductTokens(parser, tokenization);
+    const grouped = groupProductTokens(services, tokenization);
     // XXX
-    if (parser.debugMode) {
+    if (services.debugMode) {
       console.log(grouped.map(tokenToString).join(''));
     }
 
@@ -150,10 +164,12 @@ function processRootInternal(
     // );
 
     const interpretation = processAllActiveRegions2(
-      parser,
-      state,
-      grouped,
-      filteredGraph
+      context,
+      grouped
+      // services,
+      // state,
+      // grouped,
+      // filteredGraph
     );
 
     // Following causes stack overflow.
@@ -169,13 +185,13 @@ function processRootInternal(
 
     if (!best) {
       // console.log("First interpretation");
-      if (parser.debugMode) {
+      if (services.debugMode) {
         console.log('Kept first interpretation');
       }
       best = interpretation;
     } else if (preferFirstInterpretation(interpretation, best)) {
       // console.log("Better interpretation");
-      if (parser.debugMode) {
+      if (services.debugMode) {
         console.log('Found better interpretation');
       }
       best = interpretation;
@@ -199,6 +215,12 @@ export function processAllActiveRegions(
   tokenization: Array<Token & Span>,
   baseGraph: Graph
 ): Interpretation {
+  const context: Context = {
+    graph: baseGraph,
+    services: parser,
+    state,
+  };
+
   const tokens = new TokenSequence<Token & Span>(tokenization);
 
   let score = 0;
@@ -211,7 +233,7 @@ export function processAllActiveRegions(
       tokens.startsWith([PRODUCT_PARTS_1]) ||
       tokens.startsWith([PRODUCT_PARTS_N])
     ) {
-      const interpretation = processAdd(parser, state, baseGraph, tokens);
+      const interpretation = processAdd(context, tokens);
       score += interpretation.score;
       tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
@@ -219,7 +241,7 @@ export function processAllActiveRegions(
       tokens.startsWith([PROLOGUE, REMOVE_ITEM]) ||
       tokens.startsWith([REMOVE_ITEM])
     ) {
-      const interpretation = processRemove(parser, state, tokens, baseGraph);
+      const interpretation = processRemove(context, tokens);
       score += interpretation.score;
       tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
@@ -227,7 +249,7 @@ export function processAllActiveRegions(
       tokens.startsWith([PROLOGUE, MODIFY_ITEM]) ||
       tokens.startsWith([MODIFY_ITEM])
     ) {
-      const interpretation = processModify(parser, state, tokens, baseGraph);
+      const interpretation = processModify(context, tokens);
       score += interpretation.score;
       tokenCount += interpretation.tokenCount;
       state = interpretation.action(state);
@@ -245,6 +267,21 @@ export function processAllActiveRegions(
   };
 }
 
+const productTokens = new Set<Symbol>([
+  // Product-related
+  ATTRIBUTE,
+  CONJUNCTION,
+  ENTITY,
+  OPTION,
+  OPTION_RECIPE,
+  NUMBERTOKEN,
+  // PRODUCT_RECIPE,
+  QUANTITY,
+  UNIT,
+
+  UNKNOWNTOKEN,
+]);
+
 function groupProductTokens(
   parser: Parser,
   tokens: Array<Token & Span>
@@ -257,7 +294,7 @@ function groupProductTokens(
   // eslint-disable-next-line no-constant-condition
   while (true) {
     // if (input.atEOS() || parser.intentTokens.has(input.peek(0).type)) {
-    if (input.atEOS() || !parser.productTokens.has(input.peek(0).type)) {
+    if (input.atEOS() || !productTokens.has(input.peek(0).type)) {
       // When we reach the end of stream or encounter an intent token,
       // dump and product parts we have been collecting.
       if (productParts.length > 0) {

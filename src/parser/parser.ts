@@ -4,22 +4,27 @@ import {
   ICatalog,
   ICookbook,
   IRuleChecker,
-  OPTION,
+  State,
 } from 'prix-fixe';
 
-import { NUMBERTOKEN, UNKNOWNTOKEN } from 'token-flow';
+import { Graph } from 'token-flow';
+import { ILexicalAnalyzer } from '../lexer';
 
-import {
-  ADD_TO_ORDER,
-  ATTRIBUTE,
-  CONJUNCTION,
-  ENTITY,
-  ILexicalAnalyzer,
-  OPTION_RECIPE,
-  QUANTITY,
-  UNIT,
-  REMOVE_ITEM,
-} from '../lexer';
+export interface InterpretationServices {
+  readonly attributes: AttributeInfo;
+  readonly cartOps: ICartOps;
+  readonly catalog: ICatalog;
+  readonly cookbook: ICookbook;
+  readonly debugMode: boolean;
+  readonly lexer: ILexicalAnalyzer;
+  readonly rules: IRuleChecker;
+}
+
+export interface Context {
+  readonly graph: Graph;
+  readonly services: InterpretationServices;
+  readonly state: State;
+}
 
 export class Parser {
   readonly attributes: AttributeInfo;
@@ -30,22 +35,20 @@ export class Parser {
   readonly rules: IRuleChecker;
   readonly debugMode: boolean;
 
-  intentTokens = new Set<Symbol>([ADD_TO_ORDER, REMOVE_ITEM]);
+  // readonly productTokens = new Set<Symbol>([
+  //   // Product-related
+  //   ATTRIBUTE,
+  //   CONJUNCTION,
+  //   ENTITY,
+  //   OPTION,
+  //   OPTION_RECIPE,
+  //   NUMBERTOKEN,
+  //   // PRODUCT_RECIPE,
+  //   QUANTITY,
+  //   UNIT,
 
-  productTokens = new Set<Symbol>([
-    // Product-related
-    ATTRIBUTE,
-    CONJUNCTION,
-    ENTITY,
-    OPTION,
-    OPTION_RECIPE,
-    NUMBERTOKEN,
-    // PRODUCT_RECIPE,
-    QUANTITY,
-    UNIT,
-
-    UNKNOWNTOKEN,
-  ]);
+  //   UNKNOWNTOKEN,
+  // ]);
 
   // TODO: Parser shouldn't be coupled to LexicalAnalyzer. It should take an
   // interface to a graph manipulation class or perhaps that code could be

@@ -3,7 +3,10 @@
 * Top
   * NEW
     * Patterns
-      * More prologue to its own nop rule
+      * Parser.productTokens - where should this live?
+        * used by groupProductTokens
+      * Use pattern matching for groupProductTokens
+      * Move prologue to its own nop rule
       * Nested grammars
       * Rearchitect interpretation actions
       * Rename and document parseReplace1
@@ -12,6 +15,8 @@
       * Remove unused intents
       * Rename src/parser/interfaces.ts
       * Rename parser to Cart/Menu/Services
+      * Tool to associate rules with test cases.
+      * Deal with unreachable patterns/cases
     * Get clear on stemmer_confusion.ts and confusion_matrix.ts. Update docs.
     * Fix test_from_text.js. Doesn't generate carts.
     * Consider removing concept of WEAK_ADD

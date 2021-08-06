@@ -1,8 +1,5 @@
 import { State } from 'prix-fixe';
-
-import { Graph, Token } from 'token-flow';
-
-import { segmentLength } from './add';
+import { Token } from 'token-flow';
 
 import {
   createSpan,
@@ -12,6 +9,8 @@ import {
   PROLOGUE,
   Span,
 } from '../lexer';
+
+import { segmentLength } from './add';
 
 import {
   EntityBuilder,
@@ -33,7 +32,7 @@ import {
   SequenceToken,
 } from './interfaces';
 
-import { Parser } from './parser';
+import { Context, Parser } from './parser';
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
 import { productTargets } from './target';
 import { TokenSequence } from './token_sequence';
@@ -44,10 +43,8 @@ import { TokenSequence } from './token_sequence';
 // Assumes that `tokens` starts with:
 //     [PROLOGUE] MODIFY_ITEM (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
 export function processModify(
-  parser: Parser,
-  state: State,
-  tokens: TokenSequence<Token & Span>,
-  graph: Graph
+  context: Context,
+  tokens: TokenSequence<Token & Span>
 ): Interpretation {
   if (tokens.peek(0).type === PROLOGUE) {
     tokens.take(1);
@@ -92,9 +89,7 @@ export function processModify(
       // console.log(`with`);
       // console.log(`  ${modification.tokens.map(tokenToString).join('')}`);
       return parseAddToTarget(
-        parser,
-        state,
-        graph,
+        context,
         modification.tokens,
         target.tokens,
         false
@@ -103,25 +98,13 @@ export function processModify(
       // * (made,changed) [that] (into,to,with) [a] P0
       const modification = tokens.peek(1) as ProductToken0 & Span;
       tokens.take(2);
-      return parseAddToImplicit(
-        parser,
-        state,
-        graph,
-        modification.tokens,
-        false
-      );
+      return parseAddToImplicit(context, modification.tokens, false);
     } else if (tokens.startsWith([PRODUCT_PARTS_0])) {
       // Here all tokens to the left roll into the MODIFY_ITEM
       // * (made,changed) [that] P0
       const modification = tokens.peek(0) as ProductToken0 & Span;
       tokens.take(1);
-      return parseAddToImplicit(
-        parser,
-        state,
-        graph,
-        modification.tokens,
-        false
-      );
+      return parseAddToImplicit(context, modification.tokens, false);
     } else if (
       tokens.startsWith([PRODUCT_PARTS_1, PREPOSITION, PRODUCT_PARTS_1]) ||
       tokens.startsWith([
@@ -139,13 +122,7 @@ export function processModify(
       const target = tokens.peek(0) as ProductToken1 & Span;
       const replacement = tokens.peek(2) as ProductToken0 & Span;
       tokens.take(3);
-      return parseReplaceTarget(
-        parser,
-        state,
-        graph,
-        target.tokens,
-        replacement.tokens
-      );
+      return parseReplaceTarget(context, target.tokens, replacement.tokens);
     } else if (
       tokens.startsWith([PRODUCT_PARTS_N]) ||
       tokens.startsWith([PREPOSITION, PRODUCT_PARTS_N])
@@ -157,7 +134,7 @@ export function processModify(
       // * (made,changed,replaced) [the,that,your] (into,to,with) [a] P1
       const parts = tokens.peek(0) as ProductToken1 & Span;
       tokens.take(1);
-      return parseReplace1(parser, state, graph, parts.tokens);
+      return parseReplace1(context, parts.tokens);
     } else if (
       tokens.startsWith([PRODUCT_PARTS_1]) ||
       false
@@ -209,7 +186,7 @@ export function processModify(
       tokens.take(1);
       // console.log('CASE II: target and modifications adjacent');
       // console.log(`  ${parts.tokens.map(tokenToString).join('')}`);
-      return processModify1(parser, state, graph, parts.tokens);
+      return processModify1(context, parts.tokens);
     } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_1])) {
       // REMOVING this case introduces the following failures:
       // 63.1: OK => FAILED(4)    "change that to a tall iced latte"
@@ -218,7 +195,7 @@ export function processModify(
       // * (made,changed) [that] (into,to,with) [a] P1
       const modification = tokens.peek(1) as ProductToken1 & Span;
       tokens.take(2);
-      return parseReplaceImplicit(parser, state, graph, modification.tokens);
+      return parseReplaceImplicit(context, modification.tokens);
     } else {
       // Don't take the token here. The PROLOGUE and MODIFY_ITEM were
       // already taken at the beginning on the function.
@@ -230,9 +207,7 @@ export function processModify(
 }
 
 export function processModify1(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   productAndModification: Array<SequenceToken & Span>
 ): Interpretation {
   let best = nop;
@@ -246,9 +221,7 @@ export function processModify1(
     const modifiers = [...gaps[1]];
     while (modifiers.length > 0) {
       const interpretation = parseAddToTarget(
-        parser,
-        state,
-        graph,
+        context,
         modifiers,
         product,
         false
@@ -266,12 +239,11 @@ export function processModify1(
 }
 
 export function parseAddToImplicit(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   modification: Array<Token & Span>,
   combineQuantities: boolean
 ): Interpretation {
+  const cart = context.state.cart;
   // console.log(`Modifying`);
   // console.log(`  ${target.map(tokenToString).join('')}`);
   // console.log(`with`);
@@ -280,10 +252,10 @@ export function parseAddToImplicit(
   let best = nop;
 
   // Search in reverse order to favor more recently added items.
-  for (let i = state.cart.items.length - 1; i >= 0; --i) {
-    const item = state.cart.items[i];
+  for (let i = cart.items.length - 1; i >= 0; --i) {
+    const item = cart.items[i];
     const interpretation = parseAddToItem(
-      parser,
+      context,
       modification,
       {
         item,
@@ -300,9 +272,7 @@ export function parseAddToImplicit(
 }
 
 export function parseAddToTarget(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   modification: Array<Token & Span>,
   target: Array<Token & Span>,
   combineQuantities: boolean
@@ -314,9 +284,9 @@ export function parseAddToTarget(
 
   const span = createSpan(target);
   let best = nop;
-  for (const targetItem of productTargets(parser, state, graph, span)) {
+  for (const targetItem of productTargets(context, span)) {
     const interpretation = parseAddToItem(
-      parser,
+      context,
       modification,
       targetItem,
       combineQuantities
@@ -329,7 +299,7 @@ export function parseAddToTarget(
 }
 
 export function parseAddToItem(
-  parser: Parser,
+  context: Context,
   modification: Array<Token & Span>,
   targetItem: HypotheticalItem,
   combineQuantities: boolean
@@ -337,7 +307,7 @@ export function parseAddToItem(
   if (targetItem.item) {
     // console.log(`  target: ${targetItem.item.key} (uid=${targetItem.item!.uid})`);
     const builder = new ModificationBuilder(
-      parser,
+      context.services,
       targetItem.item,
       modification as GapToken[],
       combineQuantities
@@ -354,7 +324,10 @@ export function parseAddToItem(
       score,
       tokenCount: modification.length,
       action: (state: State): State => {
-        const cart = parser.cartOps.replaceInCart(state.cart, modified);
+        const cart = context.services.cartOps.replaceInCart(
+          context.state.cart,
+          modified
+        );
         return { ...state, cart };
       },
     };
@@ -364,9 +337,7 @@ export function parseAddToItem(
 }
 
 export function parseReplace1(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   partTokens: Array<Token & Span>
 ): Interpretation {
   // Break into sequence of gaps and the entities that separate them.
@@ -409,9 +380,7 @@ export function parseReplace1(
       ];
 
       const interpretation = parseReplaceTarget(
-        parser,
-        state,
-        graph,
+        context,
         // TODO: remove type assertion
         targetTokens as Array<Token & Span>,
         replacementTokens as Array<Token & Span>
@@ -426,19 +395,15 @@ export function parseReplace1(
 }
 
 export function parseReplaceTarget(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   targetTokens: Array<Token & Span>,
   replacementTokens: Array<Token & Span>
 ): Interpretation {
   let best = nop;
   const span = createSpan(targetTokens);
-  for (const targetItem of productTargets(parser, state, graph, span)) {
+  for (const targetItem of productTargets(context, span)) {
     const interpretation = parseReplaceItemWithTokens(
-      parser,
-      state,
-      graph,
+      context,
       targetItem,
       replacementTokens
     );
@@ -450,9 +415,7 @@ export function parseReplaceTarget(
 }
 
 function parseReplaceItemWithTokens(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   target: HypotheticalItem,
   replacementTokens: Array<Token & Span>
 ): Interpretation {
@@ -467,8 +430,12 @@ function parseReplaceItemWithTokens(
         right: gaps[1],
       };
 
-      const builder = new ReplacementBuilder(parser, target.item, segment);
-      return parseReplaceItem(parser, state, graph, target, {
+      const builder = new ReplacementBuilder(
+        context.services,
+        target.item,
+        segment
+      );
+      return parseReplaceItem(context, target, {
         item: builder.getItem(),
         score: builder.getScore(),
         tokenCount: target.tokenCount + replacementTokens.length,
@@ -480,9 +447,7 @@ function parseReplaceItemWithTokens(
 }
 
 function parseReplaceItem(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   target: HypotheticalItem,
   replacement: HypotheticalItem
 ): Interpretation {
@@ -498,7 +463,10 @@ function parseReplaceItem(
       children,
       uid: target.item.uid,
     };
-    const cart = parser.cartOps.replaceInCart(state.cart, item);
+    const cart = context.services.cartOps.replaceInCart(
+      context.state.cart,
+      item
+    );
     return {
       score: target.score + replacement.score,
       tokenCount: target.tokenCount + replacement.tokenCount,
@@ -512,20 +480,21 @@ function parseReplaceItem(
 }
 
 export function parseReplaceImplicit(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   replacementTokens: Array<SequenceToken & Span>
 ): Interpretation {
-  const items = state.cart.items;
+  const items = context.state.cart.items;
   if (items.length > 0) {
-    const replacement = parserBuildItemFromTokens(parser, replacementTokens);
+    const replacement = parserBuildItemFromTokens(
+      context.services,
+      replacementTokens
+    );
     const target: HypotheticalItem = {
       item: items[items.length - 1],
       score: 1,
       tokenCount: 0,
     };
-    return parseReplaceItem(parser, state, graph, target, replacement);
+    return parseReplaceItem(context, target, replacement);
   }
 
   return nop;

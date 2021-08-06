@@ -38,7 +38,7 @@ import {
   tokenToString,
 } from '../lexer';
 
-import { Parser, productTargets, HypotheticalItem } from '../parser';
+import { Context, Parser, productTargets, HypotheticalItem } from '../parser';
 
 export class ShortOrderReplExtension implements IReplExtension {
   world: World;
@@ -331,18 +331,18 @@ export class ShortOrderReplExtension implements IReplExtension {
           this.world.ruleChecker,
           false
         );
+        const context: Context = {
+          graph: filteredGraph,
+          services: parser,
+          state,
+        };
         const span: Span = {
           start: 0,
           length: terms.length,
         };
 
         const results = new Map<Key, HypotheticalItem>();
-        for (const hypothetical of productTargets(
-          parser,
-          state,
-          filteredGraph,
-          span
-        )) {
+        for (const hypothetical of productTargets(context, span)) {
           if (hypothetical.item) {
             const key = hypothetical.item.key;
             const existing = results.get(key);

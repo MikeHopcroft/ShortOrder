@@ -1,11 +1,4 @@
-import {
-  AttributeInfo,
-  Cart,
-  ICartOps,
-  ItemInstance,
-  OPTION,
-  State,
-} from 'prix-fixe';
+import { AttributeInfo, Cart, ICartOps, ItemInstance, OPTION } from 'prix-fixe';
 
 import {
   allTokenizations,
@@ -20,7 +13,7 @@ import { ATTRIBUTE, ENTITY, ILexicalAnalyzer, Span } from '../lexer';
 import { OptionTargetBuilder, TargetBuilder } from './entity_builder';
 
 import { HypotheticalItem, SequenceToken } from './interfaces';
-import { Parser } from './parser';
+import { Context } from './parser';
 import { splitOnEntities } from './parser_utilities';
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -143,15 +136,13 @@ function createSubgraph(
 // TODO: remove an attribute from an implicit entity - e.g. 'I removed the large` - doesn't make sense
 // Seems you can change/modify an attribute, but not remove it.
 export function* productTargets(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   span: Span
 ): IterableIterator<HypotheticalItem> {
-  const attributes: AttributeInfo = parser.attributes;
-  const cartOps: ICartOps = parser.cartOps;
-  const lexer: ILexicalAnalyzer = parser.lexer;
-  const cart = state.cart;
+  const attributes: AttributeInfo = context.services.attributes;
+  const cartOps: ICartOps = context.services.cartOps;
+  const lexer: ILexicalAnalyzer = context.services.lexer;
+  const cart = context.state.cart;
 
   if (span.length === 0) {
     return;
@@ -165,7 +156,7 @@ export function* productTargets(
     attributes,
     lexer,
     cart,
-    graph,
+    context.graph,
     span,
     true
   );
@@ -193,7 +184,7 @@ export function* productTargets(
       // };
 
       const builder = new TargetBuilder(
-        parser,
+        context.services,
         gaps[0],
         entities[0].pid,
         gaps[1]
@@ -211,7 +202,7 @@ export function* productTargets(
         // Need to know whether an attribute is default because it was omitted or
         // specified as the default value.
         // Perhaps EntityBuilder needs a wildcard mode.
-        for (const item of cartOps.findByKeyRegex(state.cart, target.key)) {
+        for (const item of cartOps.findByKeyRegex(cart, target.key)) {
           // console.log(`    yield key=${item.key}, score=${builder.getScore()}`);
           yield {
             item,
@@ -225,14 +216,14 @@ export function* productTargets(
 }
 
 export function* optionTargets(
-  parser: Parser,
+  context: Context,
   item: ItemInstance,
-  graph: Graph,
   span: Span
 ): IterableIterator<HypotheticalItem> {
-  const attributes: AttributeInfo = parser.attributes;
-  const cartOps: ICartOps = parser.cartOps;
-  const lexer: ILexicalAnalyzer = parser.lexer;
+  const attributes: AttributeInfo = context.services.attributes;
+  const cartOps: ICartOps = context.services.cartOps;
+  const graph: Graph = context.graph;
+  const lexer: ILexicalAnalyzer = context.services.lexer;
 
   if (span.length === 0) {
     return;
@@ -275,7 +266,7 @@ export function* optionTargets(
       //     right: gaps[1]
       // };
 
-      const builder = new OptionTargetBuilder(parser, gaps[0]);
+      const builder = new OptionTargetBuilder(context.services, gaps[0]);
       const target = builder.getOption();
 
       // console.log(`  score: ${builder.getScore()}`);

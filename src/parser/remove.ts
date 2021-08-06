@@ -1,5 +1,5 @@
 import { State } from 'prix-fixe';
-import { Graph, Token } from 'token-flow';
+import { Token } from 'token-flow';
 
 import { createSpan, PROLOGUE, REMOVE_ITEM, Span, PREPOSITION } from '../lexer';
 
@@ -12,7 +12,7 @@ import {
   PRODUCT_PARTS_0,
 } from './interfaces';
 
-import { Parser } from './parser';
+import { Context } from './parser';
 import { optionTargets, productTargets } from './target';
 import { TokenSequence } from './token_sequence';
 
@@ -22,10 +22,8 @@ import { TokenSequence } from './token_sequence';
 // Assumes that `tokens` starts with:
 //     [PROLOGUE] REMOVE_ITEM (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
 export function processRemove(
-  parser: Parser,
-  state: State,
-  tokens: TokenSequence<Token & Span>,
-  graph: Graph
+  context: Context,
+  tokens: TokenSequence<Token & Span>
 ): Interpretation {
   if (tokens.peek(0).type === PROLOGUE) {
     tokens.take(1);
@@ -40,7 +38,7 @@ export function processRemove(
       const parts = token as ProductToken & Span;
       tokens.take(1);
       const span = createSpan(parts.tokens);
-      return parseRemove(parser, state, graph, span);
+      return parseRemove(context, span);
     } else if (
       tokens.startsWith([
         // PREPOSITION,
@@ -53,12 +51,12 @@ export function processRemove(
       const option = tokens.peek(0) as ProductToken & Span;
       const target = tokens.peek(2) as ProductToken & Span;
       tokens.take(3);
-      return parseRemoveOptionFromTarget(parser, state, graph, option, target);
+      return parseRemoveOptionFromTarget(context, option, target);
     } else if (token.type === PRODUCT_PARTS_0) {
       // console.log('remove OPTION from IMPLICIT (1)');
       const parts = token as ProductToken & Span;
       tokens.take(1);
-      return parseRemoveOptionFromImplicit(parser, state, graph, parts);
+      return parseRemoveOptionFromImplicit(context, parts);
     } else if (token.type === PREPOSITION) {
       // TODO: add a test to exercise this case.
       // This is test 44: "remove that"
@@ -66,7 +64,7 @@ export function processRemove(
       // Does it ever happen? It may be that the REMOVE_ITEM
       // aliases always include a PREPOSITION.
       tokens.take(1);
-      return parseRemoveImplicit(parser, state);
+      return parseRemoveImplicit(context);
     }
     // } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
     //   // TODO: BUGBUG: can this case ever fire since the last case is for PREPOSITION?
@@ -80,22 +78,20 @@ export function processRemove(
   return nop;
 }
 
-export function parseRemove(
-  parser: Parser,
-  state: State,
-  graph: Graph,
-  span: Span
-): Interpretation {
+export function parseRemove(context: Context, span: Span): Interpretation {
   let interpretation: Interpretation = nop;
 
-  for (const target of productTargets(parser, state, graph, span)) {
+  for (const target of productTargets(context, span)) {
     if (target.score > interpretation.score) {
       const item = target.item!;
       interpretation = {
         score: target.score,
         tokenCount: span.length,
         action: (state: State): State => {
-          const cart = parser.cartOps.removeFromCart(state.cart, item.uid);
+          const cart = context.services.cartOps.removeFromCart(
+            context.state.cart,
+            item.uid
+          );
           return { ...state, cart };
         },
       };
@@ -105,11 +101,7 @@ export function parseRemove(
   return interpretation;
 }
 
-export function parseRemoveImplicit(
-  parser: Parser,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  state: State
-): Interpretation {
+export function parseRemoveImplicit(context: Context): Interpretation {
   return {
     score: 1,
     tokenCount: 0,
@@ -118,7 +110,7 @@ export function parseRemoveImplicit(
       const count = cart.items.length;
       if (count > 0) {
         const last = cart.items[count - 1];
-        cart = parser.cartOps.removeFromCart(cart, last.uid);
+        cart = context.services.cartOps.removeFromCart(cart, last.uid);
         return { ...state, cart };
       } else {
         return state;
@@ -128,22 +120,19 @@ export function parseRemoveImplicit(
 }
 
 export function parseRemoveOptionFromImplicit(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   parts: ProductToken & Span
 ): Interpretation {
   const optionSpan = createSpan(parts.tokens);
 
   // Walk through items in reverse order to favor more recent items.
   let interpretation: Interpretation = nop;
-  const items = state.cart.items;
+  const items = context.state.cart.items;
   for (let i = items.length - 1; i >= 0; --i) {
     const item = items[i];
     for (const optionInterpretation of optionTargets(
-      parser,
+      context,
       item,
-      graph,
       optionSpan
     )) {
       const score = optionInterpretation.score;
@@ -153,7 +142,7 @@ export function parseRemoveOptionFromImplicit(
           score,
           tokenCount,
           action: (state: State): State => {
-            const cart = parser.cartOps.removeFromCart(
+            const cart = context.services.cartOps.removeFromCart(
               state.cart,
               optionInterpretation.item!.uid
             );
@@ -168,9 +157,7 @@ export function parseRemoveOptionFromImplicit(
 }
 
 export function parseRemoveOptionFromTarget(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   optionTokens: ProductToken & Span,
   targetTokens: ProductToken & Span
 ): Interpretation {
@@ -182,12 +169,7 @@ export function parseRemoveOptionFromTarget(
   const targetSpan = createSpan(targetTokens.tokens);
   let interpretation: Interpretation = nop;
 
-  for (const targetInterpretation of productTargets(
-    parser,
-    state,
-    graph,
-    targetSpan
-  )) {
+  for (const targetInterpretation of productTargets(context, targetSpan)) {
     if (targetInterpretation.item) {
       // For this target, interpret the option tokens relative to
       // a cart with only the target.
@@ -196,9 +178,8 @@ export function parseRemoveOptionFromTarget(
       // TODO: need some way to get targets of options only.
       // TODO: need some way to build and return option targets.
       for (const optionInterpretation of optionTargets(
-        parser,
+        context,
         targetInterpretation.item,
-        graph,
         optionSpan
       )) {
         const score = targetInterpretation.score + optionInterpretation.score;
@@ -210,7 +191,7 @@ export function parseRemoveOptionFromTarget(
             score,
             tokenCount,
             action: (state: State): State => {
-              const cart = parser.cartOps.removeFromCart(
+              const cart = context.services.cartOps.removeFromCart(
                 state.cart,
                 optionInterpretation.item!.uid
               );

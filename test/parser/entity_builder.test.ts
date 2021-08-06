@@ -51,8 +51,8 @@ const parser: Parser = {
   // TODO: clean this up.
   // The following properties are never used by these test.
   // Just type-assert.
-  intentTokens: undefined!,
-  productTokens: undefined!,
+  // intentTokens: undefined!,
+  // productTokens: undefined!,
   lexer: undefined!,
 };
 

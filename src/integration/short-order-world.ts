@@ -9,7 +9,7 @@ import {
   StemmerFactory,
 } from '../lexer';
 
-import { Parser, processRoot } from '../parser';
+import { InterpretationServices, Parser, processRoot } from '../parser';
 
 export interface ShortOrderWorld extends World {
   lexer: ILexicalAnalyzer;
@@ -44,7 +44,10 @@ export function createShortOrderWorld(
   );
 
   const processor = async (text: string, state: State): Promise<State> => {
-    return processRoot(parser, state, text);
+    const services: InterpretationServices = {
+      ...parser,
+    };
+    return processRoot(services, state, text);
   };
 
   return { ...world, lexer, processor };

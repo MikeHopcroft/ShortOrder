@@ -1,5 +1,5 @@
 import { ItemInstance, State } from 'prix-fixe';
-import { Graph, Token } from 'token-flow';
+import { Token } from 'token-flow';
 
 import {
   ADD_TO_ORDER,
@@ -26,7 +26,7 @@ import {
 } from './interfaces';
 
 import { parseAddToTarget, parseAddToImplicit } from './modify';
-import { Parser } from './parser';
+import { Context, InterpretationServices, Parser } from './parser';
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
 import { TokenSequence } from './token_sequence';
 
@@ -39,9 +39,7 @@ import { TokenSequence } from './token_sequence';
 //     [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS_0 PREPOSITION PRODUCT_PARTS_1 [EPILOGUE]
 //     PROLOGUE WEAK_ORDER PRODUCT_PARTS_0 PREPOSITION PRODUCT_PARTS_1 [EPILOGUE]
 export function processAdd(
-  parser: Parser,
-  state: State,
-  graph: Graph,
+  context: Context,
   tokens: TokenSequence<Token & Span>
 ): Interpretation {
   if (tokens.peek(0).type === PROLOGUE) {
@@ -57,24 +55,17 @@ export function processAdd(
     const target = tokens.peek(2) as ProductToken1 & Span;
     const modification = tokens.peek(0) as ProductToken0 & Span;
     tokens.take(3);
-    return parseAddToTarget(
-      parser,
-      state,
-      graph,
-      modification.tokens,
-      target.tokens,
-      true
-    );
+    return parseAddToTarget(context, modification.tokens, target.tokens, true);
   } else if (tokens.startsWith([PRODUCT_PARTS_0, PREPOSITION])) {
     const modification = tokens.peek(0) as ProductToken0 & Span;
     tokens.take(2);
-    return parseAddToImplicit(parser, state, graph, modification.tokens, true);
+    return parseAddToImplicit(context, modification.tokens, true);
   } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
     // 60.2: OK => FAILED(1)    "i want that with a lid"
     // 1014: OK => FAILED(1)    "i'd like that warmed"
     const modification = tokens.peek(1) as ProductToken0 & Span;
     tokens.take(2);
-    return parseAddToImplicit(parser, state, graph, modification.tokens, true);
+    return parseAddToImplicit(context, modification.tokens, true);
   } else if (
     // We're adding new items to the cart.
     tokens.startsWith([PRODUCT_PARTS_1]) ||
@@ -82,12 +73,12 @@ export function processAdd(
   ) {
     const token = tokens.peek(0) as ProductToken & Span;
     tokens.take(1);
-    return parseAdd(parser, token.tokens);
+    return parseAdd(context.services, token.tokens);
   } else if (tokens.startsWith([PRODUCT_PARTS_0])) {
     // We're adding options to an implicit item already in the cart.
     const modification = tokens.peek(0) as ProductToken0 & Span;
     tokens.take(1);
-    return parseAddToImplicit(parser, state, graph, modification.tokens, true);
+    return parseAddToImplicit(context, modification.tokens, true);
   }
 
   return nop;
@@ -97,7 +88,7 @@ export function processAdd(
 // the addition of one or more products.
 // TODO: stop exporting this function - it is exported for unit testing.
 export function parseAdd(
-  parser: Parser,
+  services: InterpretationServices,
   tokens: Array<SequenceToken & Span>
 ): Interpretation {
   const interpretations: Interpretation[] = [];
@@ -129,7 +120,7 @@ export function parseAdd(
     // choice of split points.
     // TODO: BUGBUG: following line modifies segments[X].left, right
     // TODO: BUGBUG: TokenSequence shouldn't modifiy tokens[].
-    const interpretation = interpretSegmentArray(parser, segments);
+    const interpretation = interpretSegmentArray(services, segments);
 
     interpretations.push(interpretation);
   }
