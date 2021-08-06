@@ -10,7 +10,7 @@ import {
 import { Graph } from 'token-flow';
 import { ILexicalAnalyzer } from '../lexer';
 
-export interface InterpretationServices {
+export interface Services {
   readonly attributes: AttributeInfo;
   readonly cartOps: ICartOps;
   readonly catalog: ICatalog;
@@ -22,7 +22,7 @@ export interface InterpretationServices {
 
 export interface Context {
   readonly graph: Graph;
-  readonly services: InterpretationServices;
+  readonly services: Services;
   readonly state: State;
 }
 

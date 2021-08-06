@@ -39,7 +39,7 @@ import {
 
 import { processAllActiveRegions2 } from './interpretation';
 import { processModify } from './modify';
-import { Context, InterpretationServices, Parser } from './parser';
+import { Context, Services, Parser } from './parser';
 import { processRemove } from './remove';
 import { TokenSequence } from './token_sequence';
 
@@ -49,7 +49,7 @@ import { TokenSequence } from './token_sequence';
 //
 ///////////////////////////////////////////////////////////////////////////
 export function processRoot(
-  services: InterpretationServices,
+  services: Services,
   state: State,
   text: string
 ): State {
@@ -98,7 +98,7 @@ export function processRootOld(
 }
 
 function processRootInternal(
-  services: InterpretationServices,
+  services: Services,
   state: State,
   text: string
 ): State {

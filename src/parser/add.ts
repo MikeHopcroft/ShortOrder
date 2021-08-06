@@ -26,7 +26,7 @@ import {
 } from './interfaces';
 
 import { parseAddToTarget, parseAddToImplicit } from './modify';
-import { Context, InterpretationServices, Parser } from './parser';
+import { Context, Services, Parser } from './parser';
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
 import { TokenSequence } from './token_sequence';
 
@@ -88,7 +88,7 @@ export function processAdd(
 // the addition of one or more products.
 // TODO: stop exporting this function - it is exported for unit testing.
 export function parseAdd(
-  services: InterpretationServices,
+  services: Services,
   tokens: Array<SequenceToken & Span>
 ): Interpretation {
   const interpretations: Interpretation[] = [];
