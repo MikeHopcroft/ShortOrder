@@ -6,9 +6,9 @@ import { AttributeInfo, CartOps, State } from 'prix-fixe';
 import {
   Interpretation,
   parseAdd,
-  Parser,
   LexicalAnalyzer,
   SequenceToken,
+  Services,
   Span,
 } from '../../src';
 
@@ -91,15 +91,15 @@ describe('Parser2', () => {
     it('segment on quantifier', () => {
       // TODO: HACK: BUGBUG: Remove temporary code in following line.
       const lexer: LexicalAnalyzer = undefined!;
-      const parser = new Parser(
-        ops,
-        smallWorldCatalog,
-        smallWorldCookbook,
-        attributeInfo,
+      const services: Services = {
+        attributes: attributeInfo,
+        cartOps: ops,
+        catalog: smallWorldCatalog,
+        cookbook: smallWorldCookbook,
+        debugMode: false,
         lexer,
-        smallWorldRuleChecker,
-        false
-      );
+        rules: smallWorldRuleChecker,
+      };
       const tokens = [
         quantityOne,
         attributeSmall,
@@ -118,7 +118,7 @@ describe('Parser2', () => {
 
       // TODO: Remove type assertion.
       const interpretation = parseAdd(
-        parser,
+        services,
         tokens as Array<SequenceToken & Span>
       );
 
@@ -197,15 +197,15 @@ describe('Parser2', () => {
     it('segment ambiguous size based on options', () => {
       // TODO: HACK: BUGBUG: Remove temporary code in following line.
       const lexer: LexicalAnalyzer = undefined!;
-      const parser = new Parser(
-        ops,
-        smallWorldCatalog,
-        smallWorldCookbook,
-        attributeInfo,
+      const services: Services = {
+        attributes: attributeInfo,
+        cartOps: ops,
+        catalog: smallWorldCatalog,
+        cookbook: smallWorldCookbook,
+        debugMode: false,
         lexer,
-        smallWorldRuleChecker,
-        false
-      );
+        rules: smallWorldRuleChecker,
+      };
       const tokens = [
         productCoffee,
         attributeMedium,
@@ -224,7 +224,7 @@ describe('Parser2', () => {
 
       // TODO: Remove type assertion.
       const interpretation = parseAdd(
-        parser,
+        services,
         tokens as Array<SequenceToken & Span>
       );
 

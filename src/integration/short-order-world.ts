@@ -9,7 +9,7 @@ import {
   StemmerFactory,
 } from '../lexer';
 
-import { Services, Parser, processRoot } from '../parser';
+import { Services, processRoot } from '../parser';
 
 export interface ShortOrderWorld extends World {
   lexer: ILexicalAnalyzer;
@@ -33,20 +33,17 @@ export function createShortOrderWorld(
 
   const lexer = new LexicalAnalyzer(world, lexiconSpec, lexicon, debugMode);
 
-  const parser = new Parser(
-    world.cartOps,
-    world.catalog,
-    world.cookbook,
-    world.attributeInfo,
+  const services: Services = {
+    attributes: world.attributeInfo,
+    cartOps: world.cartOps,
+    catalog: world.catalog,
+    cookbook: world.cookbook,
+    debugMode,
     lexer,
-    world.ruleChecker,
-    debugMode
-  );
+    rules: world.ruleChecker,
+  };
 
   const processor = async (text: string, state: State): Promise<State> => {
-    const services: Services = {
-      ...parser,
-    };
     return processRoot(services, state, text);
   };
 

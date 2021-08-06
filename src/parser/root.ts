@@ -39,7 +39,7 @@ import {
 
 import { processAllActiveRegions2 } from './interpretation';
 import { processModify } from './modify';
-import { Context, Services, Parser } from './parser';
+import { Context, Services } from './context';
 import { processRemove } from './remove';
 import { TokenSequence } from './token_sequence';
 
@@ -58,7 +58,7 @@ export function processRoot(
 }
 
 export function processRootOld(
-  parser: Parser,
+  services: Services,
   state: State,
   text: string
 ): State {
@@ -72,7 +72,7 @@ export function processRootOld(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const start = (process.hrtime as any).bigint();
 
-  state = processRootInternal(parser, state, text);
+  state = processRootInternal(services, state, text);
 
   // TODO: figure out how to remove the type assertion to any.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,7 +80,7 @@ export function processRootOld(
   const delta = Number(end - start);
 
   // XXX
-  if (parser.debugMode) {
+  if (services.debugMode) {
     // console.log(`${counter} interpretations.`);
     console.log(`Time: ${delta / 1.0e6}`);
   }
@@ -210,14 +210,14 @@ function processRootInternal(
 // PROLOGUE WEAK_ORDER PRODUCT_PARTS [EPILOGUE]
 // [PROLOGUE] REMOVE_ITEM PRODUCT_PARTS [EPILOGUE]
 export function processAllActiveRegions(
-  parser: Parser,
+  services: Services,
   state: State,
   tokenization: Array<Token & Span>,
   baseGraph: Graph
 ): Interpretation {
   const context: Context = {
     graph: baseGraph,
-    services: parser,
+    services: services,
     state,
   };
 
@@ -283,7 +283,7 @@ const productTokens = new Set<Symbol>([
 ]);
 
 function groupProductTokens(
-  parser: Parser,
+  services: Services,
   tokens: Array<Token & Span>
 ): Array<Token & Span> {
   let productParts = new Array<SequenceToken & Span>();

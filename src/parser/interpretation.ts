@@ -38,7 +38,7 @@ import {
   processGrammar,
 } from './pattern_matcher';
 
-import { Context } from './parser';
+import { Context } from './context';
 
 import {
   parseRemove,

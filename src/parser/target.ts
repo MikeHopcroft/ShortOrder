@@ -13,7 +13,7 @@ import { ATTRIBUTE, ENTITY, ILexicalAnalyzer, Span } from '../lexer';
 import { OptionTargetBuilder, TargetBuilder } from './entity_builder';
 
 import { HypotheticalItem, SequenceToken } from './interfaces';
-import { Context } from './parser';
+import { Context } from './context';
 import { splitOnEntities } from './parser_utilities';
 
 ///////////////////////////////////////////////////////////////////////////////

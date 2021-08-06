@@ -12,7 +12,7 @@ import {
   PRODUCT_PARTS_0,
 } from './interfaces';
 
-import { Context } from './parser';
+import { Context } from './context';
 import { optionTargets, productTargets } from './target';
 import { TokenSequence } from './token_sequence';
 

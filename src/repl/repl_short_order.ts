@@ -38,7 +38,7 @@ import {
   tokenToString,
 } from '../lexer';
 
-import { Context, Parser, productTargets, HypotheticalItem } from '../parser';
+import { Context, HypotheticalItem, productTargets, Services } from '../parser';
 
 export class ShortOrderReplExtension implements IReplExtension {
   world: World;
@@ -322,18 +322,18 @@ export class ShortOrderReplExtension implements IReplExtension {
         const filteredGraph = rawGraph;
 
         const state = repl.getState();
-        const parser = new Parser(
-          this.world.cartOps,
-          this.world.catalog,
-          this.world.cookbook,
-          this.world.attributeInfo,
-          this.lexer,
-          this.world.ruleChecker,
-          false
-        );
+        const services: Services = {
+          attributes: this.world.attributeInfo,
+          cartOps: this.world.cartOps,
+          catalog: this.world.catalog,
+          cookbook: this.world.cookbook,
+          debugMode: false,
+          lexer: this.lexer,
+          rules: this.world.ruleChecker,
+        };
         const context: Context = {
           graph: filteredGraph,
-          services: parser,
+          services,
           state,
         };
         const span: Span = {

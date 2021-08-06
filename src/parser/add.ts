@@ -26,7 +26,7 @@ import {
 } from './interfaces';
 
 import { parseAddToTarget, parseAddToImplicit } from './modify';
-import { Context, Services, Parser } from './parser';
+import { Context, Services } from './context';
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
 import { TokenSequence } from './token_sequence';
 
@@ -145,14 +145,14 @@ export function parseAdd(
 }
 
 function interpretSegmentArray(
-  parser: Parser,
+  services: Services,
   segments: Segment[]
 ): Interpretation {
   let score = 0;
   let tokenCount = 0;
   const items: ItemInstance[] = [];
   for (const segment of segments) {
-    const x = interpretOneSegment(parser, segment);
+    const x = interpretOneSegment(services, segment);
     if (x.item !== undefined) {
       score += x.score;
       tokenCount += segmentLength(segment); // TODO: Why not x.tokenCount?
@@ -163,7 +163,7 @@ function interpretSegmentArray(
   const action = (state: State): State => {
     let updated = state.cart;
     for (const item of items) {
-      updated = parser.cartOps.addToCart(updated, item);
+      updated = services.cartOps.addToCart(updated, item);
     }
 
     return { ...state, cart: updated };
@@ -173,13 +173,13 @@ function interpretSegmentArray(
 }
 
 function interpretOneSegment(
-  parser: Parser,
+  services: Services,
   segment: Segment
 ): HypotheticalItem {
-  const builder = new EntityBuilder(parser, segment);
+  const builder = new EntityBuilder(services, segment);
 
   const item = builder.getItem();
-  if (parser.catalog.hasKey(item.key)) {
+  if (services.catalog.hasKey(item.key)) {
     return {
       score: builder.getScore(),
       tokenCount: segmentLength(segment),

@@ -32,7 +32,7 @@ import {
   SequenceToken,
 } from './interfaces';
 
-import { Context, Parser } from './parser';
+import { Context, Services } from './context';
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
 import { productTargets } from './target';
 import { TokenSequence } from './token_sequence';
@@ -501,7 +501,7 @@ export function parseReplaceImplicit(
 }
 
 function parserBuildItemFromTokens(
-  parser: Parser,
+  services: Services,
   tokens: Array<Token & Span>
 ): HypotheticalItem {
   const { entities, gaps } = splitOnEntities(
@@ -513,17 +513,17 @@ function parserBuildItemFromTokens(
       entity: entities[0].pid,
       right: gaps[1],
     };
-    return parserBuildItemFromSegment(parser, segment);
+    return parserBuildItemFromSegment(services, segment);
   }
 
   return { item: undefined, tokenCount: 0, score: 0 };
 }
 
 function parserBuildItemFromSegment(
-  parser: Parser,
+  services: Services,
   segment: Segment
 ): HypotheticalItem {
-  const builder = new EntityBuilder(parser, segment);
+  const builder = new EntityBuilder(services, segment);
   return {
     item: builder.getItem(),
     score: builder.getScore(),

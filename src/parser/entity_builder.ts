@@ -26,7 +26,7 @@ import {
 
 import { GapToken, Segment } from './interfaces';
 import { TokenSequence } from './token_sequence';
-import { Parser } from './parser';
+import { Services } from './context';
 
 export class EntityBuilderBase {
   protected readonly cartOps: ICartOps;
@@ -47,12 +47,12 @@ export class EntityBuilderBase {
   protected readonly options: ItemInstance[] = [];
   protected readonly optionTokenCounts: number[] = [];
 
-  constructor(parser: Parser, pid: PID, generateRegexOptions: boolean) {
-    this.cartOps = parser.cartOps;
-    this.catalog = parser.catalog;
-    this.cookbook = parser.cookbook;
-    this.info = parser.attributes;
-    this.rules = parser.rules;
+  constructor(services: Services, pid: PID, generateRegexOptions: boolean) {
+    this.cartOps = services.cartOps;
+    this.catalog = services.catalog;
+    this.cookbook = services.cookbook;
+    this.info = services.attributes;
+    this.rules = services.rules;
 
     this.generateRegexOptions = generateRegexOptions;
 
@@ -369,8 +369,8 @@ export class EntityBuilderBase {
 export class EntityBuilder extends EntityBuilderBase {
   private readonly item: ItemInstance;
 
-  constructor(parser: Parser, segment: Segment) {
-    super(parser, segment.entity, false);
+  constructor(services: Services, segment: Segment) {
+    super(services, segment.entity, false);
 
     // this.processLeft(new TokenSequence<GapToken>(segment.left), false);
     // This change enables scenarios that don't start with a quantity.
@@ -402,8 +402,13 @@ export class EntityBuilder extends EntityBuilderBase {
 export class TargetBuilder extends EntityBuilderBase {
   private readonly item: ItemInstance;
 
-  constructor(parser: Parser, left: GapToken[], pid: PID, right: GapToken[]) {
-    super(parser, pid, false);
+  constructor(
+    services: Services,
+    left: GapToken[],
+    pid: PID,
+    right: GapToken[]
+  ) {
+    super(services, pid, false);
 
     this.processRight(new TokenSequence<GapToken>(left));
     this.processRight(new TokenSequence<GapToken>(right));
@@ -429,9 +434,9 @@ export class TargetBuilder extends EntityBuilderBase {
 }
 
 export class OptionTargetBuilder extends EntityBuilderBase {
-  constructor(parser: Parser, tokens: GapToken[]) {
+  constructor(services: Services, tokens: GapToken[]) {
     const dummyPid: PID = 0;
-    super(parser, dummyPid, true);
+    super(services, dummyPid, true);
 
     this.processRight(new TokenSequence<GapToken>(tokens));
   }
@@ -449,13 +454,13 @@ export class ModificationBuilder extends EntityBuilderBase {
   private readonly item: ItemInstance;
 
   constructor(
-    parser: Parser,
+    services: Services,
     original: ItemInstance,
     modifications: GapToken[],
     combineQuantities: boolean
   ) {
     const pid: PID = AttributeInfo.pidFromKey(original.key);
-    super(parser, pid, false);
+    super(services, pid, false);
 
     this.processRight(new TokenSequence<GapToken>(modifications));
 
@@ -511,8 +516,8 @@ export class ModificationBuilder extends EntityBuilderBase {
 export class ReplacementBuilder extends EntityBuilderBase {
   private readonly item: ItemInstance;
 
-  constructor(parser: Parser, original: ItemInstance, segment: Segment) {
-    super(parser, segment.entity, false);
+  constructor(services: Services, original: ItemInstance, segment: Segment) {
+    super(services, segment.entity, false);
 
     // TODO: copy AIDs from original.
     // Need some way to take the last AID on a dimension.
