@@ -8,6 +8,7 @@ import {
   optional,
   processGrammar,
   RESULT_EXPRESSION,
+  star,
 } from '../../src/parser/pattern_matcher';
 import { Sequence } from '../../src/parser/sequence';
 import { createMock } from './mocks';
@@ -168,7 +169,7 @@ describe('Pattern matching', () => {
     }
   });
 
-  it('empty sequence', () => {
+  it('sequence - empty', () => {
     const { callback, matcher, params } = configure();
 
     // Match sequential pattern
@@ -191,6 +192,66 @@ describe('Pattern matching', () => {
       const callCount = callback.log().length - initialCalls;
       assert.equal(callCount, 1);
       assert.deepEqual(params(), [[], 0]);
+      assert.isTrue(input.atEOS());
+      assert.equal(input.stacksize(), 0);
+    }
+  });
+
+  it('star', () => {
+    const { callback, matcher, params } = configure(star(NUMBER, STRING));
+
+    // Match one instance of star pattern
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([5, 'hello', 6]);
+      assert.isTrue(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 1);
+      assert.deepEqual(params(), [[[[5, 'hello']]], 2]);
+      assert.equal(input.peek(), 6);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    // Match two instances of star pattern
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([5, 'hello', 6, 'world', 7]);
+      assert.isTrue(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 1);
+      assert.deepEqual(params(), [
+        [
+          [
+            [5, 'hello'],
+            [6, 'world'],
+          ],
+        ],
+        4,
+      ]);
+      assert.equal(input.peek(), 7);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    // Match zero instances of star pattern
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([true, 5, 'hello', 6]);
+      assert.isTrue(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 1);
+      assert.deepEqual(params(), [[[]], 0]);
+      assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    // Match zero instances of star pattern due to end of stream.
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([]);
+      assert.isTrue(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 1);
+      assert.deepEqual(params(), [[[]], 0]);
       assert.isTrue(input.atEOS());
       assert.equal(input.stacksize(), 0);
     }

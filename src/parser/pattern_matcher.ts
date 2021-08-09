@@ -78,11 +78,29 @@ export function choose<T extends {}[]>(...args: T): ChooseToken<T> {
   };
 }
 
+const STAR: unique symbol = Symbol();
+// export const CHOOSE: unique symbol = Symbol.for('CHOOSE');
+type STAR = typeof STAR;
+
+interface StarToken<T extends {}[]> {
+  type: STAR;
+  children: T;
+}
+
+export function star<T extends {}[]>(...args: T): StarToken<T> {
+  return {
+    type: STAR,
+    children: args,
+  };
+}
+
 type OperatorToken =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | ChooseToken<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | OptionalToken<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | ChooseToken<any>;
+  | StarToken<any>;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -93,6 +111,8 @@ type RESULT_ELEMENT<T> = T extends OptionalToken<infer A>
   ? RESULT_EXPRESSION<A> | undefined
   : T extends ChooseToken<infer B>
   ? RESULT_EXPRESSION<B>[number]
+  : T extends StarToken<infer C>
+  ? RESULT_EXPRESSION<C>[]
   : T;
 
 export type RESULT_EXPRESSION<T> = { [P in keyof T]: RESULT_ELEMENT<T[P]> };
@@ -154,6 +174,12 @@ export function createMatcher<ANYTOKEN, RESULT>(
         // because it is legal to match an OPTIONAL token to the
         // end of stream.
         const m = matchOptional(op.children, input);
+        result!.push(m);
+      } else if (op.type === STAR) {
+        // NOTE: perform check for STAR before input.atEOS()
+        // because it is legal to match a STAR token to the
+        // end of stream.
+        const m = matchStar(op.children, input);
         result!.push(m);
       } else if (input.atEOS()) {
         result = undefined;
@@ -218,6 +244,27 @@ export function createMatcher<ANYTOKEN, RESULT>(
       input.commit();
       return m;
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function matchStar<T extends any[]>(
+    pattern: T,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input: ISequence<any>
+  ): RESULT_EXPRESSION<T>[] {
+    const matches: RESULT_EXPRESSION<T>[] = [];
+    for (;;) {
+      input.mark();
+      const m = matchSequence(pattern, input);
+      if (m === undefined) {
+        input.restore();
+        break;
+      } else {
+        input.commit();
+        matches.push(m);
+      }
+    }
+    return matches;
   }
 }
 
