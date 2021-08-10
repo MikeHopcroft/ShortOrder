@@ -157,20 +157,13 @@ function processRootInternal(
     //     processAllActiveRegions(parser, state, grouped, rawGraph);
 
     // const interpretation = processAllActiveRegions(
-    //   parser,
+    //   context.services,
     //   state,
     //   grouped,
     //   filteredGraph
     // );
 
-    const interpretation = processAllActiveRegions2(
-      context,
-      grouped
-      // services,
-      // state,
-      // grouped,
-      // filteredGraph
-    );
+    const interpretation = processAllActiveRegions2(context, grouped);
 
     // Following causes stack overflow.
     // const interpreation = processAllActiveRegions(parser, state, grouped, rawGraph);
@@ -215,7 +208,7 @@ export function processAllActiveRegions(
   tokenization: Array<Token & Span>,
   baseGraph: Graph
 ): Interpretation {
-  const context: Context = {
+  let context: Context = {
     graph: baseGraph,
     services: services,
     state,
@@ -257,6 +250,7 @@ export function processAllActiveRegions(
       // We don't understand this token. Skip over it.
       tokens.take(1);
     }
+    context = { ...context, state };
   }
 
   return {

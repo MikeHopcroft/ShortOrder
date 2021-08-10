@@ -257,6 +257,22 @@ describe('Pattern matching', () => {
     }
   });
 
+  it('test', () => {
+    {
+      const input = new Sequence([true, 1, 'hello', 2]);
+      assert.isTrue(match(BOOL, NUMBER, STRING).test(input));
+      assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    {
+      const input = new Sequence([true, 1, 'hello', 2]);
+      assert.isFalse(match(NUMBER, STRING).test(input));
+      assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
+    }
+  });
+
   it('nested', () => {
     const { callback, matcher, params } = configure(
       BOOL,

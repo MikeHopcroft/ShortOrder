@@ -3,6 +3,11 @@
 * Top
   * NEW
     * Patterns
+      * Stopwatch - actually this goes in prix-fixe.
+      * Check for performacne regression with pattern matching
+      * x Pattern matching star operator
+      * x Pattern matching test/look ahead operator
+      * x EntityBuilder.processLeft() - is implicitQuantifiers parameter still needed?
       * Parser.productTokens - where should this live?
         * used by groupProductTokens
       * Use pattern matching for groupProductTokens

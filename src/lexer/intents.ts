@@ -19,6 +19,7 @@ export type CANCEL_ORDER = typeof CANCEL_ORDER;
 
 export const CONJUNCTION: unique symbol = Symbol.for('CONJUNCTION');
 export type CONJUNCTION = typeof CONJUNCTION;
+export const conjunction = { type: CONJUNCTION } as Token;
 
 export const END_OF_ORDER: unique symbol = Symbol.for('END_OF_ORDER');
 export type END_OF_ORDER = typeof END_OF_ORDER;

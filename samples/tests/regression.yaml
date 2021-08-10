@@ -3115,6 +3115,46 @@ tests:
                       name: extra butter
                       sku: '4'
                       children: []
+      - id: 1038
+        suites: 'extras'
+        comment: 'trailing modifier'
+        steps:
+          - turns:
+              - speaker: speaker
+                transcription: >-
+                  a grande mocha with whole milk split shot one two percent
+                  milk grande cappuccino and one medium caffe latte with whole
+                  milk that's all
+            cart:
+              items:
+                - quantity: 1
+                  name: grande mocha
+                  sku: '802'
+                  children:
+                    - quantity: 1
+                      name: whole milk
+                      sku: '3100'
+                      children: []
+                    - quantity: 1
+                      name: half caf
+                      sku: '2800'
+                      children: []
+                - quantity: 1
+                  name: grande cappuccino 402
+                  sku: '402'
+                  children:
+                    - quantity: 1
+                      name: two percent milk
+                      sku: '3200'
+                      children: []
+                - quantity: 1
+                  name: grande latte
+                  sku: '602'
+                  children:
+                    - quantity: 1
+                      name: whole milk
+                      sku: '3100'
+                      children: []
 
 # soy creamer and nonfat creamer should be mutually exclusive
 # 6/23/2020
@@ -3152,3 +3192,38 @@ tests:
 #   "I want an iced double double"
 # Removing a quantity of an item
 #   "Remove two of the lattes"
+
+
+
+# % two pump vanilla latte
+
+#   1 grande latte (602)                     302:0:2
+#     2 vanilla syrup (2502)                   609:2
+
+# % two vanilla latte
+
+#   1 grande latte (602)                     302:0:2
+#     2 vanilla syrup (2502)                   609:2
+#   2 grande latte (602)                     302:0:2
+#     1 vanilla syrup (2502)                   609:2
+
+# % three two vanilla latte
+
+#   1 grande latte (602)                     302:0:2
+#     2 vanilla syrup (2502)                   609:2
+#   2 grande latte (602)                     302:0:2
+#     1 vanilla syrup (2502)                   609:2
+#   3 grande latte (602)                     302:0:2
+#     2 vanilla syrup (2502)                   609:2
+
+# % three double vanilla latte <== Is double for vanilla or shots?
+
+#   1 grande latte (602)                     302:0:2
+#     2 vanilla syrup (2502)                   609:2
+#   2 grande latte (602)                     302:0:2
+#     1 vanilla syrup (2502)                   609:2
+#   3 grande latte (602)                     302:0:2
+#     2 vanilla syrup (2502)                   609:2
+#   3 grande latte (602)                     302:0:2
+#     2 espresso shot (6902)                  1206:2
+#     1 vanilla syrup (2502)                   609:2

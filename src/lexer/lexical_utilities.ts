@@ -12,10 +12,10 @@ import {
   itemMapFromYamlString,
   levenshtein,
   Matcher,
+  NUMBERTOKEN,
   NumberToken,
   Token,
   TokenPredicate,
-  NUMBERTOKEN,
 } from 'token-flow';
 
 import {

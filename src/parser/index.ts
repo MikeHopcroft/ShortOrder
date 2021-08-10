@@ -1,7 +1,8 @@
 export * from './add';
 export * from './context';
 export * from './interfaces';
-export * from './entity_builder';
+export * from './entity_builder_base_2';
+// export * from './entity_builder';
 export * from './modify';
 export * from './parser_utilities';
 export * from './remove';

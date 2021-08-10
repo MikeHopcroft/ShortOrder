@@ -3,6 +3,7 @@ import { Item, Token } from 'token-flow';
 
 export const UNIT: unique symbol = Symbol.for('UNIT');
 export type UNIT = typeof UNIT;
+export const unit = { type: UNIT } as UnitToken;
 
 export interface UnitToken extends Token {
   type: UNIT;

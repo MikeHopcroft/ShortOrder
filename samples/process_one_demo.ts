@@ -181,7 +181,12 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-  'skinny vanilla cinnamon latte please',
+  "we'll also have a short tall latte",
+  // 'how about a tall cappuccino',
+  // 'get me a latte',
+  // 'get me an espresso and remove the latte',
+  // "a large mocha with whole milk split shot one two percent milk large cappuccino and one medium caffe latte with whole milk that's all",
+  // 'skinny vanilla cinnamon latte please',
   ///////////////////////////////////////////////////////////////////////////
   // Allowing PRODUCT_0, PRODUCT_1, PRODUCT_N
   ///////////////////////////////////////////////////////////////////////////

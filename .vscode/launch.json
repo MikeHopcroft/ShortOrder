@@ -45,6 +45,7 @@
       "name": "AAA Process One Demo",
       "program": "${workspaceFolder}/build/samples/process_one_demo.js",
       "outputCapture": "std",
+      "args": ["-d=samples/menu"]
     },
     {
       "type": "node",

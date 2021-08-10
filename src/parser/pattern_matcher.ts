@@ -137,21 +137,46 @@ export function createMatcher<ANYTOKEN, RESULT>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function match<T extends any[]>(
     ...pattern: T
-  ): { bind: (processor: binding<T, RESULT>) => PatternMatcher<RESULT> } {
+  ): {
+    bind: (processor: binding<T, RESULT>) => PatternMatcher<RESULT>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    skip: (input: ISequence<any>) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    test: (input: ISequence<any>) => boolean;
+  } {
     return {
       bind:
         (processor: binding<T, RESULT>) =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (input: ISequence<any>): RESULT | undefined => {
+          let result: RESULT | undefined = undefined;
+          input.mark();
           const used0 = input.itemsUsed();
           const m = matchSequence(pattern, input);
           if (m !== undefined) {
             const size = input.itemsUsed() - used0;
-            return processor(m, size);
-          } else {
-            return undefined;
+            result = processor(m, size);
           }
+          if (result === undefined) {
+            input.restore();
+          } else {
+            input.commit();
+          }
+          return result;
         },
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      skip: (input: ISequence<any>) => {
+        matchSequence(pattern, input);
+      },
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      test: (input: ISequence<any>) => {
+        input.mark();
+        const m = matchSequence(pattern, input);
+        input.restore();
+        return m !== undefined;
+      },
     };
   }
 
