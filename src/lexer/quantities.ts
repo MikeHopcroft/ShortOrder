@@ -1,5 +1,7 @@
 import { Item, Token, NUMBERTOKEN, NumberToken } from 'token-flow';
 
+export const numberToken = { type: NUMBERTOKEN } as NumberToken;
+
 export const QUANTITY: unique symbol = Symbol('QUANTITY');
 export type QUANTITY = typeof QUANTITY;
 export const quantity = { type: QUANTITY } as QuantityToken;

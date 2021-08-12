@@ -3,21 +3,23 @@
 * Top
   * NEW
     * Patterns
-      * Stopwatch - actually this goes in prix-fixe.
+      * Use pattern matching for groupProductTokens
+      * Rename token symbols and instances/prototypes
+      * Rearchitect interpretation actions
+      * Move prologue to its own nop rule
+      * Preposition/pronoun cleanup
+      * Optimze choose() to use a Set? This would involve understanding the equality predicate.
+      * Remove unused intents
+      * x Stopwatch - actually this goes in prix-fixe.
       * Check for performacne regression with pattern matching
       * x Pattern matching star operator
       * x Pattern matching test/look ahead operator
       * x EntityBuilder.processLeft() - is implicitQuantifiers parameter still needed?
       * Parser.productTokens - where should this live?
         * used by groupProductTokens
-      * Use pattern matching for groupProductTokens
-      * Move prologue to its own nop rule
       * Nested grammars
-      * Rearchitect interpretation actions
       * Rename and document parseReplace1
       * Rename parseFoo methods (processFoo? doFoo?)
-      * Preposition/pronoun cleanup
-      * Remove unused intents
       * Rename src/parser/interfaces.ts
       * Rename parser to Cart/Menu/Services
       * Tool to associate rules with test cases.

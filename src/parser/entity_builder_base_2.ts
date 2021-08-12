@@ -10,15 +10,16 @@ import {
   ICookbook,
 } from 'prix-fixe';
 
-import { NumberToken, NUMBERTOKEN, Token } from 'token-flow';
+import { Token } from 'token-flow';
 
 import {
   attribute,
   conjunction,
+  numberToken,
+  option,
   optionRecipe,
   quantity,
   unit,
-  option,
 } from '../lexer';
 
 import { Services } from './context';
@@ -33,8 +34,6 @@ import {
 } from './pattern_matcher';
 
 import { Sequence } from './sequence';
-
-export const numberToken = { type: NUMBERTOKEN } as NumberToken;
 
 // Equality predicate for tokens.
 function equality(a: Token, b: Token): boolean {
@@ -55,15 +54,17 @@ class EntityBuilderBase {
 
   protected readonly generateRegexOptions: boolean;
 
-  private readonly didToAID = new Map<DID, AID>();
+  // Only used to see whether we have two attributes on a dimension.
+  // Could use a Set<DID> instead.
+  private readonly didToAID = new Map<DID, AID>(); // REQUIRED
 
   protected tokensUsed = 0;
 
-  protected quantity = 1;
+  protected quantity = 1; // REQUIRED
   protected readonly pid: PID;
-  protected readonly aids: AID[] = [];
-  protected readonly options: ItemInstance[] = [];
-  protected readonly optionTokenCounts: number[] = [];
+  protected readonly aids: AID[] = []; // REQUIRED
+  protected readonly options: ItemInstance[] = []; // REQUIRED
+  protected readonly optionTokenCounts: number[] = []; // REQUIRED
 
   constructor(services: Services, pid: PID, generateRegexOptions: boolean) {
     this.cartOps = services.cartOps;
@@ -93,6 +94,7 @@ class EntityBuilderBase {
     // TODO: Pull match, createMatcher, matcher definitions at least into constructor.
     // TODO: Equality should go somewhere else as well.
     const match = createMatcher<Token, boolean | undefined>(equality);
+    // TODO: skip star(conjunction)
     match(conjunction).skip(input);
     if (!match(numberToken, unit, attribute).test(input)) {
       match(choose(numberToken, quantity)).bind(([n]) => {

@@ -12,20 +12,27 @@ import {
 import {
   ADD_TO_ORDER,
   ATTRIBUTE,
+  attribute,
   CONJUNCTION,
+  conjunction,
   createSpan,
   ENTITY,
   MODIFY_ITEM,
+  numberToken,
   OPTION_RECIPE,
+  option,
   QUANTITY,
+  quantity,
   PROLOGUE,
   REMOVE_ITEM,
   Span,
   tokenToString,
   UNIT,
+  unit,
 } from '../lexer';
 
 import { processAdd } from './add';
+import { Context, Services } from './context';
 
 import {
   Interpretation,
@@ -39,8 +46,20 @@ import {
 
 import { processAllActiveRegions2 } from './interpretation';
 import { processModify } from './modify';
-import { Context, Services } from './context';
+
+import {
+  choose,
+  createMatcher,
+  dot,
+  Grammar,
+  optional,
+  plus,
+  processGrammar,
+  star,
+} from './pattern_matcher';
+
 import { processRemove } from './remove';
+import { Sequence } from './sequence';
 import { TokenSequence } from './token_sequence';
 
 ///////////////////////////////////////////////////////////////////////////
@@ -276,6 +295,42 @@ const productTokens = new Set<Symbol>([
   UNKNOWNTOKEN,
 ]);
 
+// Equality predicate for tokens.
+function equality(a: Token, b: Token): boolean {
+  return a.type === b.type;
+}
+
+// type WITH_SPAN<T extends Array<infer ELEMENT>> = Array<ELEMENT & Span>;
+type WITH_SPAN<T> = { [P in keyof T]: T[P] & Span };
+
+function groupProductTokens2(
+  services: Services,
+  tokens: Array<Token & Span>
+): Array<Token & Span> {
+  const input = new Sequence(tokens);
+  const grouped: Array<Token & Span> = [];
+
+  const match = createMatcher<Token & Span, boolean | undefined>(equality);
+
+  const grammar = [
+    match(plus(choose(attribute, conjunction, numberToken, option, unit))).bind(
+      ([group]) => {
+        const g = group[0] as WITH_SPAN<typeof group[0]>;
+        copyProductTokens(g, grouped);
+        return true;
+      }
+    ),
+    // (i: Sequence<Token & Span>) => {
+    match(dot).bind(([token]) => {
+      grouped.push(token);
+      return true;
+    }),
+  ];
+
+  processGrammar(grammar, input);
+  return grouped;
+}
+
 function groupProductTokens(
   services: Services,
   tokens: Array<Token & Span>
@@ -371,6 +426,7 @@ function copyProductTokens(
     grouped.push(product);
   } else {
     // This is not a sequence of product tokens.
+    // Could be a sequence of UNKNOWNTOKENs
     for (const token of productParts) {
       grouped.push(token);
     }

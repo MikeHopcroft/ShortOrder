@@ -78,6 +78,34 @@ export function choose<T extends {}[]>(...args: T): ChooseToken<T> {
   };
 }
 
+const DOT: unique symbol = Symbol();
+// export const CHOOSE: unique symbol = Symbol.for('CHOOSE');
+type DOT = typeof DOT;
+
+interface DotToken {
+  type: DOT;
+}
+
+export const dot: DotToken = {
+  type: DOT,
+};
+
+const PLUS: unique symbol = Symbol();
+// export const CHOOSE: unique symbol = Symbol.for('CHOOSE');
+type PLUS = typeof PLUS;
+
+interface PlusToken<T extends {}[]> {
+  type: PLUS;
+  children: T;
+}
+
+export function plus<T extends {}[]>(...args: T): PlusToken<T> {
+  return {
+    type: PLUS,
+    children: args,
+  };
+}
+
 const STAR: unique symbol = Symbol();
 // export const CHOOSE: unique symbol = Symbol.for('CHOOSE');
 type STAR = typeof STAR;
@@ -97,8 +125,11 @@ export function star<T extends {}[]>(...args: T): StarToken<T> {
 type OperatorToken =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ChooseToken<any>
+  | DotToken
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | OptionalToken<any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | PlusToken<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | StarToken<any>;
 
@@ -111,7 +142,10 @@ type RESULT_ELEMENT<T> = T extends OptionalToken<infer A>
   ? RESULT_EXPRESSION<A> | undefined
   : T extends ChooseToken<infer B>
   ? RESULT_EXPRESSION<B>[number]
-  : T extends StarToken<infer C>
+  : T extends DotToken
+  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any
+  : T extends PlusToken<infer C> | StarToken<infer C>
   ? RESULT_EXPRESSION<C>[]
   : T;
 
@@ -209,6 +243,18 @@ export function createMatcher<ANYTOKEN, RESULT>(
       } else if (input.atEOS()) {
         result = undefined;
         break;
+      } else if (op.type === PLUS) {
+        const m = matchPlus(op.children, input);
+        if (m !== undefined) {
+          result!.push(m);
+        } else {
+          result = undefined;
+          break;
+        }
+      } else if (op.type === DOT) {
+        const next = input.peek();
+        result!.push(next);
+        input.take();
       } else if (op.type === CHOOSE) {
         const m = matchChoose(op.children, input);
         if (m !== undefined) {
@@ -268,6 +314,34 @@ export function createMatcher<ANYTOKEN, RESULT>(
     } else {
       input.commit();
       return m;
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function matchPlus<T extends any[]>(
+    pattern: T,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input: ISequence<any>
+  ): RESULT_EXPRESSION<T>[] | undefined {
+    input.mark();
+    const matches: RESULT_EXPRESSION<T>[] = [];
+    for (;;) {
+      input.mark();
+      const m = matchSequence(pattern, input);
+      if (m === undefined) {
+        input.restore();
+        break;
+      } else {
+        input.commit();
+        matches.push(m);
+      }
+    }
+    if (matches.length > 0) {
+      input.commit();
+      return matches;
+    } else {
+      input.restore();
+      return undefined;
     }
   }
 

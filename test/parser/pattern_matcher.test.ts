@@ -3,9 +3,11 @@ import 'mocha';
 
 import {
   choose,
+  dot,
   createMatcher,
   Grammar,
   optional,
+  plus,
   processGrammar,
   RESULT_EXPRESSION,
   star,
@@ -80,6 +82,88 @@ describe('Pattern matching', () => {
     }
 
     // No match due to end of stream
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([]);
+      assert.isUndefined(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 0);
+      assert.isTrue(input.atEOS());
+      assert.equal(input.stacksize(), 0);
+    }
+  });
+
+  it('dot', () => {
+    const { callback, matcher, params } = configure(dot);
+
+    // Match a number
+    {
+      const input = new Sequence([5, 6]);
+      assert.isTrue(matcher(input));
+      assert.deepEqual(params(), [[5], 1]);
+      assert.equal(input.peek(), 6);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    // No match due to end of stream
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([]);
+      assert.isUndefined(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 0);
+      assert.isTrue(input.atEOS());
+      assert.equal(input.stacksize(), 0);
+    }
+  });
+
+  it('plus', () => {
+    const { callback, matcher, params } = configure(plus(NUMBER, STRING));
+
+    // Match one instance of plus pattern
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([5, 'hello', 6]);
+      assert.isTrue(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 1);
+      assert.deepEqual(params(), [[[[5, 'hello']]], 2]);
+      assert.equal(input.peek(), 6);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    // Match two instances of plus pattern
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([5, 'hello', 6, 'world', 7]);
+      assert.isTrue(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 1);
+      assert.deepEqual(params(), [
+        [
+          [
+            [5, 'hello'],
+            [6, 'world'],
+          ],
+        ],
+        4,
+      ]);
+      assert.equal(input.peek(), 7);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    // No match due to next token
+    {
+      const initialCalls = callback.log().length;
+      const input = new Sequence([true, 5, 'hello', 6]);
+      assert.isUndefined(matcher(input));
+      const callCount = callback.log().length - initialCalls;
+      assert.equal(callCount, 0);
+      assert.equal(input.peek(), true);
+      assert.equal(input.stacksize(), 0);
+    }
+
+    // No match due to end of stream.
     {
       const initialCalls = callback.log().length;
       const input = new Sequence([]);
