@@ -181,7 +181,8 @@ function printFrequencies(world: ShortOrderWorld, text: string) {
 // ]);
 
 go([
-  "we'll also have a short tall latte",
+  'add a tall iced latte',
+  // "we'll also have a short tall latte",
   // 'how about a tall cappuccino',
   // 'get me a latte',
   // 'get me an espresso and remove the latte',

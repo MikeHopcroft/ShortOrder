@@ -3,17 +3,14 @@ import { NumberToken, Token, UnknownToken } from 'token-flow';
 
 import {
   AttributeToken,
-  CONJUNCTION,
+  ConjunctionToken,
   EntityToken,
   OptionToken,
   OptionRecipeToken,
   Span,
   UnitToken,
+  QuantityToken,
 } from '../lexer';
-
-export interface ConjunctionToken extends Token {
-  type: CONJUNCTION;
-}
 
 // A seqeunce of SequenceToken that does not include any ENTITY tokens.
 export const PRODUCT_PARTS_0: unique symbol = Symbol('PRODUCT_PARTS_0');
@@ -52,6 +49,7 @@ export type SequenceToken =
   | OptionToken
   // ProductRecipeToken |
   | NumberToken
+  | QuantityToken
   | UnitToken
   | UnknownToken;
 
@@ -61,6 +59,7 @@ export type GapToken =
   | OptionToken
   | OptionRecipeToken
   | NumberToken
+  | QuantityToken
   | UnitToken
   | UnknownToken;
 

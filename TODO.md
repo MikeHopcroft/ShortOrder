@@ -3,6 +3,9 @@
 * Top
   * NEW
     * Patterns
+      * Goals
+        * User should be able to tweak matching by changing grammar file, instead of code.
+        * Grammar file should be smaller and more understandable than code.
       * Use pattern matching for groupProductTokens
       * Rename token symbols and instances/prototypes
       * Rearchitect interpretation actions

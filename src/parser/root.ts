@@ -3,10 +3,11 @@ import { OPTION, State } from 'prix-fixe';
 import {
   filterGraph,
   Graph,
+  maximalTokenizations,
   NUMBERTOKEN,
   Token,
   UNKNOWNTOKEN,
-  maximalTokenizations,
+  UnknownToken,
 } from 'token-flow';
 
 import {
@@ -17,18 +18,22 @@ import {
   conjunction,
   createSpan,
   ENTITY,
+  entity,
   MODIFY_ITEM,
   numberToken,
   OPTION_RECIPE,
+  optionRecipe,
   option,
   QUANTITY,
-  quantity,
   PROLOGUE,
   REMOVE_ITEM,
   Span,
   tokenToString,
   UNIT,
   unit,
+  quantity,
+  AttributeToken,
+  EntityToken,
 } from '../lexer';
 
 import { processAdd } from './add';
@@ -51,11 +56,8 @@ import {
   choose,
   createMatcher,
   dot,
-  Grammar,
-  optional,
   plus,
   processGrammar,
-  star,
 } from './pattern_matcher';
 
 import { processRemove } from './remove';
@@ -162,7 +164,7 @@ function processRootInternal(
       console.log(tokenization.map(tokenToString).join(''));
     }
 
-    const grouped = groupProductTokens(services, tokenization);
+    const grouped = groupProductTokens3(services, tokenization);
     // XXX
     if (services.debugMode) {
       console.log(grouped.map(tokenToString).join(''));
@@ -295,14 +297,105 @@ const productTokens = new Set<Symbol>([
   UNKNOWNTOKEN,
 ]);
 
+export const unknownToken = { type: UNKNOWNTOKEN } as UnknownToken;
+
 // Equality predicate for tokens.
 function equality(a: Token, b: Token): boolean {
   return a.type === b.type;
 }
 
-// type WITH_SPAN<T extends Array<infer ELEMENT>> = Array<ELEMENT & Span>;
-type WITH_SPAN<T> = { [P in keyof T]: T[P] & Span };
+function groupProductTokens3(
+  services: Services,
+  tokens: Array<Token & Span>
+): Array<Token & Span> {
+  const input = new Sequence(tokens);
+  const grouped: Array<Token & Span> = [];
 
+  while (!input.atEOS()) {
+    const product = tryGroupProductTokens(input);
+    if (product.length > 0) {
+      grouped.push(...product);
+    } else {
+      grouped.push(input.peek());
+      input.take();
+    }
+  }
+
+  return grouped;
+}
+
+function tryGroupProductTokens(
+  input: Sequence<Token & Span>
+): Array<Token & Span> {
+  const tokens: Array<SequenceToken & Span> = [];
+  // TODO: investigate type safe way to convert to SequenceToken & Span.
+  while (!input.atEOS() && productTokens.has(input.peek().type)) {
+    tokens.push(input.peek() as SequenceToken & Span);
+    input.take();
+  }
+  return createProductToken(tokens);
+}
+
+function createProductToken(
+  tokens: Array<SequenceToken & Span>
+): Array<Token & Span> {
+  let entityCount = 0;
+  let optionAttributeCount = 0;
+  for (const token of tokens) {
+    if (
+      token.type === ENTITY // ||
+      //  token.type === PRODUCT_RECIPE
+    ) {
+      ++entityCount;
+    } else if (
+      token.type === OPTION ||
+      token.type === OPTION_RECIPE ||
+      token.type === ATTRIBUTE
+    ) {
+      ++optionAttributeCount;
+    }
+  }
+
+  const span = createSpan(tokens);
+
+  if (entityCount === 0 && optionAttributeCount > 0) {
+    const product: ProductToken & Span = {
+      type: PRODUCT_PARTS_0,
+      tokens,
+      ...span,
+    };
+    return [product];
+  } else if (entityCount === 1) {
+    const product: ProductToken & Span = {
+      type: PRODUCT_PARTS_1,
+      tokens,
+      ...span,
+    };
+    return [product];
+  } else if (entityCount > 1) {
+    const product: ProductToken & Span = {
+      type: PRODUCT_PARTS_N,
+      tokens,
+      ...span,
+    };
+    return [product];
+  } else {
+    // This is not a sequence of product tokens.
+    // Could be a sequence of UNKNOWNTOKENs
+    return tokens;
+  }
+}
+
+// type WITH_SPAN<T> = { [P in keyof T]: T[P] & Span };
+
+// TODO: REVIEW: it is not clear that groupProductTokens2() is any better than
+// the function it replaces.
+//   Pros:
+//     * Consistency - uses same pattern matching system as the rest of the parser.
+//   Cons:
+//     * Still need to call copyProductTokens(), which is still symbol-based.
+//
+// Consider simplifying groupProductTokens() by implementing as recursive-descent parser.
 function groupProductTokens2(
   services: Services,
   tokens: Array<Token & Span>
@@ -313,21 +406,35 @@ function groupProductTokens2(
   const match = createMatcher<Token & Span, boolean | undefined>(equality);
 
   const grammar = [
-    match(plus(choose(attribute, conjunction, numberToken, option, unit))).bind(
-      ([group]) => {
-        const g = group[0] as WITH_SPAN<typeof group[0]>;
-        copyProductTokens(g, grouped);
-        return true;
-      }
-    ),
-    // (i: Sequence<Token & Span>) => {
+    match(
+      plus(
+        choose(
+          attribute,
+          conjunction,
+          entity,
+          option,
+          optionRecipe,
+          numberToken,
+          quantity,
+          unit
+        )
+      )
+    ).bind(([group]) => {
+      const g = group.map((x) => x[0] as typeof x[0] & Span);
+      copyProductTokens(g, grouped);
+      return true;
+    }),
+
     match(dot).bind(([token]) => {
       grouped.push(token);
       return true;
     }),
   ];
 
-  processGrammar(grammar, input);
+  while (!input.atEOS()) {
+    processGrammar(grammar, input);
+  }
+
   return grouped;
 }
 

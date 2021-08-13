@@ -325,7 +325,7 @@ export function createMatcher<ANYTOKEN, RESULT>(
   ): RESULT_EXPRESSION<T>[] | undefined {
     input.mark();
     const matches: RESULT_EXPRESSION<T>[] = [];
-    for (;;) {
+    while (!input.atEOS()) {
       input.mark();
       const m = matchSequence(pattern, input);
       if (m === undefined) {
