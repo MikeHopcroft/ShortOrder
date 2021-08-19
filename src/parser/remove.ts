@@ -1,82 +1,10 @@
 import { State } from 'prix-fixe';
-import { Token } from 'token-flow';
 
-import { createSpan, PROLOGUE, REMOVE_ITEM, Span, PREPOSITION } from '../lexer';
-
-import {
-  Interpretation,
-  nop,
-  PRODUCT_PARTS_1,
-  PRODUCT_PARTS_N,
-  ProductToken,
-  PRODUCT_PARTS_0,
-} from './interfaces';
+import { createSpan, Span } from '../lexer';
 
 import { Context } from './context';
+import { Interpretation, nop, ProductToken } from './interfaces';
 import { optionTargets, productTargets } from './target';
-import { TokenSequence } from './token_sequence';
-
-// Attempts to pull off and process a squence of tokens corresponding
-// to a product remove operation.
-//
-// Assumes that `tokens` starts with:
-//     [PROLOGUE] REMOVE_ITEM (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
-export function processRemove(
-  context: Context,
-  tokens: TokenSequence<Token & Span>
-): Interpretation {
-  if (tokens.peek(0).type === PROLOGUE) {
-    tokens.take(1);
-  }
-  if (tokens.peek(0).type === REMOVE_ITEM) {
-    tokens.take(1);
-  }
-
-  if (!tokens.atEOS()) {
-    const token = tokens.peek(0);
-    if (token.type === PRODUCT_PARTS_1 || token.type === PRODUCT_PARTS_N) {
-      const parts = token as ProductToken & Span;
-      tokens.take(1);
-      const span = createSpan(parts.tokens);
-      return parseRemove(context, span);
-    } else if (
-      tokens.startsWith([
-        // PREPOSITION,
-        PRODUCT_PARTS_0,
-        PREPOSITION,
-        PRODUCT_PARTS_1,
-      ])
-    ) {
-      // console.log('remove OPTION from TARGET');
-      const option = tokens.peek(0) as ProductToken & Span;
-      const target = tokens.peek(2) as ProductToken & Span;
-      tokens.take(3);
-      return parseRemoveOptionFromTarget(context, option, target);
-    } else if (token.type === PRODUCT_PARTS_0) {
-      // console.log('remove OPTION from IMPLICIT (1)');
-      const parts = token as ProductToken & Span;
-      tokens.take(1);
-      return parseRemoveOptionFromImplicit(context, parts);
-    } else if (token.type === PREPOSITION) {
-      // TODO: add a test to exercise this case.
-      // This is test 44: "remove that"
-      // "that" is a pronoun, not a preposition
-      // Does it ever happen? It may be that the REMOVE_ITEM
-      // aliases always include a PREPOSITION.
-      tokens.take(1);
-      return parseRemoveImplicit(context);
-    }
-    // } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
-    //   // TODO: BUGBUG: can this case ever fire since the last case is for PREPOSITION?
-    //   // console.log('remove OPTION from IMPLICIT (2)');
-    //   const parts = tokens.peek(1) as ProductToken & Span;
-    //   tokens.take(2);
-    //   return parseRemoveOptionFromImplicit(parser, state, graph, parts);
-    // }
-  }
-
-  return nop;
-}
 
 export function parseRemove(context: Context, span: Span): Interpretation {
   let interpretation: Interpretation = nop;
@@ -101,6 +29,9 @@ export function parseRemove(context: Context, span: Span): Interpretation {
   return interpretation;
 }
 
+// TODO: REVIEW:
+// This function seems to remove last product from cart.
+// What if intention was to remove last option added?
 export function parseRemoveImplicit(context: Context): Interpretation {
   return {
     score: 1,

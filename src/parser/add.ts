@@ -1,88 +1,19 @@
 import { ItemInstance, State } from 'prix-fixe';
-import { Token } from 'token-flow';
 
-import {
-  ADD_TO_ORDER,
-  EntityToken,
-  Span,
-  PREPOSITION,
-  PROLOGUE,
-} from '../lexer';
+import { EntityToken, Span } from '../lexer';
 
-import { EntityBuilder } from './entity_builder';
+import { Services } from './context';
+import { EntityBuilder } from './entity_builder_base_2';
 
 import {
   HypotheticalItem,
   Interpretation,
   nop,
-  PRODUCT_PARTS_0,
-  PRODUCT_PARTS_1,
-  PRODUCT_PARTS_N,
-  ProductToken,
-  ProductToken0,
-  ProductToken1,
   Segment,
   SequenceToken,
 } from './interfaces';
 
-import { parseAddToTarget, parseAddToImplicit } from './modify';
-import { Context, Services } from './context';
 import { enumerateSplits, splitOnEntities } from './parser_utilities';
-import { TokenSequence } from './token_sequence';
-
-// Attempts to pull off and process a squence of tokens corresponding
-// to a product add operation.
-//
-// Assumes that `tokens` starts with one of the following:
-//     [PROLOGUE] ADD_TO_ORDER (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
-//     PROLOGUE WEAK_ORDER (PRODUCT_PARTS_1|PRODUCT_PARTS_N) [EPILOGUE]
-//     [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS_0 PREPOSITION PRODUCT_PARTS_1 [EPILOGUE]
-//     PROLOGUE WEAK_ORDER PRODUCT_PARTS_0 PREPOSITION PRODUCT_PARTS_1 [EPILOGUE]
-export function processAdd(
-  context: Context,
-  tokens: TokenSequence<Token & Span>
-): Interpretation {
-  if (tokens.peek(0).type === PROLOGUE) {
-    tokens.take(1);
-  }
-
-  if (tokens.peek(0).type === ADD_TO_ORDER) {
-    tokens.take(1);
-  }
-
-  if (tokens.startsWith([PRODUCT_PARTS_0, PREPOSITION, PRODUCT_PARTS_1])) {
-    // We're adding modifications to an item that is already in the cart.
-    const target = tokens.peek(2) as ProductToken1 & Span;
-    const modification = tokens.peek(0) as ProductToken0 & Span;
-    tokens.take(3);
-    return parseAddToTarget(context, modification.tokens, target.tokens, true);
-  } else if (tokens.startsWith([PRODUCT_PARTS_0, PREPOSITION])) {
-    const modification = tokens.peek(0) as ProductToken0 & Span;
-    tokens.take(2);
-    return parseAddToImplicit(context, modification.tokens, true);
-  } else if (tokens.startsWith([PREPOSITION, PRODUCT_PARTS_0])) {
-    // 60.2: OK => FAILED(1)    "i want that with a lid"
-    // 1014: OK => FAILED(1)    "i'd like that warmed"
-    const modification = tokens.peek(1) as ProductToken0 & Span;
-    tokens.take(2);
-    return parseAddToImplicit(context, modification.tokens, true);
-  } else if (
-    // We're adding new items to the cart.
-    tokens.startsWith([PRODUCT_PARTS_1]) ||
-    tokens.startsWith([PRODUCT_PARTS_N])
-  ) {
-    const token = tokens.peek(0) as ProductToken & Span;
-    tokens.take(1);
-    return parseAdd(context.services, token.tokens);
-  } else if (tokens.startsWith([PRODUCT_PARTS_0])) {
-    // We're adding options to an implicit item already in the cart.
-    const modification = tokens.peek(0) as ProductToken0 & Span;
-    tokens.take(1);
-    return parseAddToImplicit(context, modification.tokens, true);
-  }
-
-  return nop;
-}
 
 // Find the best Interpretation for an array of SequenceTokens representing
 // the addition of one or more products.
@@ -194,6 +125,7 @@ function interpretOneSegment(
   }
 }
 
+// TODO: where does this function belong?
 export function segmentLength(segment: Segment): number {
   return segment.left.length + segment.right.length + 1;
 }

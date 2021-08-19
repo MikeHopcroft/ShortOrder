@@ -1,68 +1,9 @@
-import { OPTION, State } from 'prix-fixe';
+import { State } from 'prix-fixe';
+import { filterGraph, Graph, maximalTokenizations } from 'token-flow';
 
-import {
-  filterGraph,
-  Graph,
-  maximalTokenizations,
-  NUMBERTOKEN,
-  Token,
-  UNKNOWNTOKEN,
-  UnknownToken,
-} from 'token-flow';
-
-import {
-  ADD_TO_ORDER,
-  ATTRIBUTE,
-  attribute,
-  CONJUNCTION,
-  conjunction,
-  createSpan,
-  ENTITY,
-  entity,
-  MODIFY_ITEM,
-  numberToken,
-  OPTION_RECIPE,
-  optionRecipe,
-  option,
-  QUANTITY,
-  PROLOGUE,
-  REMOVE_ITEM,
-  Span,
-  tokenToString,
-  UNIT,
-  unit,
-  quantity,
-  AttributeToken,
-  EntityToken,
-} from '../lexer';
-
-import { processAdd } from './add';
 import { Context, Services } from './context';
-
-import {
-  Interpretation,
-  PRODUCT_PARTS_0,
-  PRODUCT_PARTS_1,
-  PRODUCT_PARTS_N,
-  ProductToken,
-  Segment,
-  SequenceToken,
-} from './interfaces';
-
-import { processAllActiveRegions2 } from './interpretation';
-import { processModify } from './modify';
-
-import {
-  choose,
-  createMatcher,
-  dot,
-  plus,
-  processGrammar,
-} from './pattern_matcher';
-
-import { processRemove } from './remove';
-import { Sequence } from './sequence';
-import { TokenSequence } from './token_sequence';
+import { Interpretation } from './interfaces';
+import { createInterpretation } from './interpretation';
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -78,57 +19,22 @@ export function processRoot(
   return state;
 }
 
-export function processRootOld(
-  services: Services,
-  state: State,
-  text: string
-): State {
-  // // XXX
-  // if (parser.debugMode) {
-  //     console.log(' ');
-  //     console.log(`Text: "${text}"`);
-  // }
-
-  // TODO: figure out how to remove the type assertion to any.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const start = (process.hrtime as any).bigint();
-
-  state = processRootInternal(services, state, text);
-
-  // TODO: figure out how to remove the type assertion to any.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const end = (process.hrtime as any).bigint();
-  const delta = Number(end - start);
-
-  // XXX
-  if (services.debugMode) {
-    // console.log(`${counter} interpretations.`);
-    console.log(`Time: ${delta / 1.0e6}`);
-  }
-
-  // TODO: eventually place the following code under debug mode.
-  if (delta / 1.0e6 > 65) {
-    // if (delta/1.0e6 > 1) {
-    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
-    console.log(`Time: ${delta / 1.0e6}ms`);
-    console.log(`  "${text}"`);
-    // parser.lexer.analyzePaths(text);
-  }
-
-  return state;
-}
-
 function processRootInternal(
   services: Services,
   state: State,
   text: string
 ): State {
-  // console.log(text);
+  // Create token-flow graph of tokens from input text.
   const rawGraph: Graph = services.lexer.createGraph(text);
 
+  // Filter out lower scoring duplicate edges and edges with a score less than 0.35.
   // TODO: REVIEW: MAGIC NUMBER
   // 0.35 is the score cutoff for the filtered graph.
   const filteredGraph: Graph = filterGraph(rawGraph, 0.35);
+
+  //
+  // Find the best interpretation from each maximal tokenization
+  //
 
   const context: Context = {
     services,
@@ -136,81 +42,24 @@ function processRootInternal(
     graph: filteredGraph,
   };
 
-  // console.log('Original graph:');
-  // for (const [i, edges] of rawGraph.edgeLists.entries()) {
-  //     console.log(`  vertex ${i}`);
-  //     for (const edge of edges) {
-  //         const token = tokenToString(parser.lexer.tokenizer.tokenFromEdge(edge));
-  //         console.log(`    length:${edge.length}, score:${edge.score}, token:${token}`);
-  //     }
-  // }
-  // console.log('Filtered graph:');
-  // for (const [i, edges] of filteredGraph.edgeLists.entries()) {
-  //     console.log(`  vertex ${i}`);
-  //     for (const edge of edges) {
-  //         const token = edge.token;
-  //         console.log(`    length:${edge.length}, score:${edge.score}, token:${tokenToString(token)}`);
-  //     }
-  // }
-
   let best: Interpretation | null = null;
-
   for (const tokenization of maximalTokenizations(filteredGraph.edgeLists)) {
-    // console.log('Tokenization');
-    // for (const tokenization of parser.lexer.tokenizationsFromGraph2(filteredGraph)) {
-    // XXX
-    if (services.debugMode) {
-      console.log(' ');
-      console.log(tokenization.map(tokenToString).join(''));
-    }
-
-    const grouped = groupProductTokens3(services, tokenization);
-    // XXX
-    if (services.debugMode) {
-      console.log(grouped.map(tokenToString).join(''));
-    }
-
-    // Before bringing in the token-flow maximalPaths() graph API
-    // the original code took baseGraph, as follows, instead of
-    // filtered graph. I suspect this was a bug. Probably want to
-    // use the filteredGraph.
-    // const interpretation =
-    //     processAllActiveRegions(parser, state, grouped, rawGraph);
-
-    // const interpretation = processAllActiveRegions(
-    //   context.services,
-    //   state,
-    //   grouped,
-    //   filteredGraph
-    // );
-
-    const interpretation = processAllActiveRegions2(context, grouped);
-
-    // Following causes stack overflow.
-    // const interpreation = processAllActiveRegions(parser, state, grouped, rawGraph);
+    const interpretation = createInterpretation(context, tokenization);
 
     // TODO: these counts don't include the intent token.
     interpretation.missed = tokenization.length - interpretation.score; // Missing intent
 
-    // console.log(`interpretation: score(${interpretation.score}), tokenCount(${interpretation.tokenCount2}), missed(${tokenization.length - interpretation.score})`);
-    // for (const token of tokenization) {
-    //     console.log(`  ${tokenToString(token)}`);
-    // }
-
     if (!best) {
-      // console.log("First interpretation");
       if (services.debugMode) {
         console.log('Kept first interpretation');
       }
       best = interpretation;
     } else if (preferFirstInterpretation(interpretation, best)) {
-      // console.log("Better interpretation");
       if (services.debugMode) {
         console.log('Found better interpretation');
       }
       best = interpretation;
     }
-    // console.log('');
   }
 
   if (best) {
@@ -218,339 +67,6 @@ function processRootInternal(
   }
 
   return state;
-}
-
-// [PROLOGUE] ADD_TO_ORDER PRODUCT_PARTS [EPILOGUE]
-// PROLOGUE WEAK_ORDER PRODUCT_PARTS [EPILOGUE]
-// [PROLOGUE] REMOVE_ITEM PRODUCT_PARTS [EPILOGUE]
-export function processAllActiveRegions(
-  services: Services,
-  state: State,
-  tokenization: Array<Token & Span>,
-  baseGraph: Graph
-): Interpretation {
-  let context: Context = {
-    graph: baseGraph,
-    services: services,
-    state,
-  };
-
-  const tokens = new TokenSequence<Token & Span>(tokenization);
-
-  let score = 0;
-  let tokenCount = 0;
-  while (!tokens.atEOS()) {
-    if (
-      tokens.startsWith([PROLOGUE, ADD_TO_ORDER]) ||
-      tokens.startsWith([ADD_TO_ORDER]) ||
-      tokens.startsWith([PRODUCT_PARTS_0]) ||
-      tokens.startsWith([PRODUCT_PARTS_1]) ||
-      tokens.startsWith([PRODUCT_PARTS_N])
-    ) {
-      const interpretation = processAdd(context, tokens);
-      score += interpretation.score;
-      tokenCount += interpretation.tokenCount;
-      state = interpretation.action(state);
-    } else if (
-      tokens.startsWith([PROLOGUE, REMOVE_ITEM]) ||
-      tokens.startsWith([REMOVE_ITEM])
-    ) {
-      const interpretation = processRemove(context, tokens);
-      score += interpretation.score;
-      tokenCount += interpretation.tokenCount;
-      state = interpretation.action(state);
-    } else if (
-      tokens.startsWith([PROLOGUE, MODIFY_ITEM]) ||
-      tokens.startsWith([MODIFY_ITEM])
-    ) {
-      const interpretation = processModify(context, tokens);
-      score += interpretation.score;
-      tokenCount += interpretation.tokenCount;
-      state = interpretation.action(state);
-    } else {
-      // We don't understand this token. Skip over it.
-      tokens.take(1);
-    }
-    context = { ...context, state };
-  }
-
-  return {
-    score,
-    tokenCount,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    action: (s: State): State => state,
-  };
-}
-
-const productTokens = new Set<Symbol>([
-  // Product-related
-  ATTRIBUTE,
-  CONJUNCTION,
-  ENTITY,
-  OPTION,
-  OPTION_RECIPE,
-  NUMBERTOKEN,
-  // PRODUCT_RECIPE,
-  QUANTITY,
-  UNIT,
-
-  UNKNOWNTOKEN,
-]);
-
-export const unknownToken = { type: UNKNOWNTOKEN } as UnknownToken;
-
-// Equality predicate for tokens.
-function equality(a: Token, b: Token): boolean {
-  return a.type === b.type;
-}
-
-function groupProductTokens3(
-  services: Services,
-  tokens: Array<Token & Span>
-): Array<Token & Span> {
-  const input = new Sequence(tokens);
-  const grouped: Array<Token & Span> = [];
-
-  while (!input.atEOS()) {
-    const product = tryGroupProductTokens(input);
-    if (product.length > 0) {
-      grouped.push(...product);
-    } else {
-      grouped.push(input.peek());
-      input.take();
-    }
-  }
-
-  return grouped;
-}
-
-function tryGroupProductTokens(
-  input: Sequence<Token & Span>
-): Array<Token & Span> {
-  const tokens: Array<SequenceToken & Span> = [];
-  // TODO: investigate type safe way to convert to SequenceToken & Span.
-  while (!input.atEOS() && productTokens.has(input.peek().type)) {
-    tokens.push(input.peek() as SequenceToken & Span);
-    input.take();
-  }
-  return createProductToken(tokens);
-}
-
-function createProductToken(
-  tokens: Array<SequenceToken & Span>
-): Array<Token & Span> {
-  let entityCount = 0;
-  let optionAttributeCount = 0;
-  for (const token of tokens) {
-    if (
-      token.type === ENTITY // ||
-      //  token.type === PRODUCT_RECIPE
-    ) {
-      ++entityCount;
-    } else if (
-      token.type === OPTION ||
-      token.type === OPTION_RECIPE ||
-      token.type === ATTRIBUTE
-    ) {
-      ++optionAttributeCount;
-    }
-  }
-
-  const span = createSpan(tokens);
-
-  if (entityCount === 0 && optionAttributeCount > 0) {
-    const product: ProductToken & Span = {
-      type: PRODUCT_PARTS_0,
-      tokens,
-      ...span,
-    };
-    return [product];
-  } else if (entityCount === 1) {
-    const product: ProductToken & Span = {
-      type: PRODUCT_PARTS_1,
-      tokens,
-      ...span,
-    };
-    return [product];
-  } else if (entityCount > 1) {
-    const product: ProductToken & Span = {
-      type: PRODUCT_PARTS_N,
-      tokens,
-      ...span,
-    };
-    return [product];
-  } else {
-    // This is not a sequence of product tokens.
-    // Could be a sequence of UNKNOWNTOKENs
-    return tokens;
-  }
-}
-
-// type WITH_SPAN<T> = { [P in keyof T]: T[P] & Span };
-
-// TODO: REVIEW: it is not clear that groupProductTokens2() is any better than
-// the function it replaces.
-//   Pros:
-//     * Consistency - uses same pattern matching system as the rest of the parser.
-//   Cons:
-//     * Still need to call copyProductTokens(), which is still symbol-based.
-//
-// Consider simplifying groupProductTokens() by implementing as recursive-descent parser.
-function groupProductTokens2(
-  services: Services,
-  tokens: Array<Token & Span>
-): Array<Token & Span> {
-  const input = new Sequence(tokens);
-  const grouped: Array<Token & Span> = [];
-
-  const match = createMatcher<Token & Span, boolean | undefined>(equality);
-
-  const grammar = [
-    match(
-      plus(
-        choose(
-          attribute,
-          conjunction,
-          entity,
-          option,
-          optionRecipe,
-          numberToken,
-          quantity,
-          unit
-        )
-      )
-    ).bind(([group]) => {
-      const g = group.map((x) => x[0] as typeof x[0] & Span);
-      copyProductTokens(g, grouped);
-      return true;
-    }),
-
-    match(dot).bind(([token]) => {
-      grouped.push(token);
-      return true;
-    }),
-  ];
-
-  while (!input.atEOS()) {
-    processGrammar(grammar, input);
-  }
-
-  return grouped;
-}
-
-function groupProductTokens(
-  services: Services,
-  tokens: Array<Token & Span>
-): Array<Token & Span> {
-  let productParts = new Array<SequenceToken & Span>();
-
-  const grouped = new Array<Token & Span>();
-  const input = new TokenSequence(tokens);
-
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    // if (input.atEOS() || parser.intentTokens.has(input.peek(0).type)) {
-    if (input.atEOS() || !productTokens.has(input.peek(0).type)) {
-      // When we reach the end of stream or encounter an intent token,
-      // dump and product parts we have been collecting.
-      if (productParts.length > 0) {
-        copyProductTokens(productParts, grouped);
-        productParts = [];
-      }
-
-      if (input.atEOS()) {
-        // If we're at the end of the stream, break out of the while loop.
-        break;
-      } else {
-        // Otherwise copy over the intent token and continue scanning.
-        grouped.push(input.peek(0));
-        input.take(1);
-      }
-    } else {
-      // Assuming anything not in parser.intentTokens must be a
-      // SequenceToken. Gather SeqeuenceTokens in productParts.
-      const token = input.peek(0);
-      if (
-        token.type === UNKNOWNTOKEN &&
-        productParts.length > 0 &&
-        productParts[productParts.length - 1].type === UNKNOWNTOKEN
-      ) {
-        copyProductTokens(productParts, grouped);
-        productParts = [];
-        grouped.push(input.peek(0));
-      } else {
-        productParts.push(input.peek(0) as SequenceToken & Span);
-      }
-      input.take(1);
-    }
-  }
-  return grouped;
-}
-
-function copyProductTokens(
-  productParts: Array<SequenceToken & Span>,
-  grouped: Array<Token & Span>
-): void {
-  let entityCount = 0;
-  let optionAttributeCount = 0;
-  for (const token of productParts) {
-    if (
-      token.type === ENTITY // ||
-      //  token.type === PRODUCT_RECIPE
-    ) {
-      ++entityCount;
-    } else if (
-      token.type === OPTION ||
-      token.type === OPTION_RECIPE ||
-      token.type === ATTRIBUTE
-    ) {
-      ++optionAttributeCount;
-    }
-  }
-
-  const span = createSpan(productParts);
-
-  if (entityCount === 0 && optionAttributeCount > 0) {
-    const product: ProductToken & Span = {
-      type: PRODUCT_PARTS_0,
-      tokens: productParts,
-      ...span,
-    };
-    grouped.push(product);
-  } else if (entityCount === 1) {
-    const product: ProductToken & Span = {
-      type: PRODUCT_PARTS_1,
-      tokens: productParts,
-      ...span,
-    };
-    grouped.push(product);
-  } else if (entityCount > 1) {
-    const product: ProductToken & Span = {
-      type: PRODUCT_PARTS_N,
-      tokens: productParts,
-      ...span,
-    };
-    grouped.push(product);
-  } else {
-    // This is not a sequence of product tokens.
-    // Could be a sequence of UNKNOWNTOKENs
-    for (const token of productParts) {
-      grouped.push(token);
-    }
-  }
-}
-
-// TODO: REVIEW: consider removing this dead code.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function printSegment(segment: Segment) {
-  const left = segment.left.map(tokenToString).join('');
-  const entity = `[Entity: pid=${segment.entity}]`;
-  const right = segment.right.map(tokenToString).join('');
-
-  console.log('  Segment');
-  console.log(`    left: ${left}`);
-  console.log(`    entity: ${entity}`);
-  console.log(`    right: ${right}`);
 }
 
 function preferFirstInterpretation(

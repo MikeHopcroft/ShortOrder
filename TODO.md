@@ -3,16 +3,18 @@
 * Top
   * NEW
     * Patterns
+      * Move prologue to its own nop rule
+      * Preposition/pronoun cleanup
+      * Remove unused intents
+      * Rearchitect interpretation actions
+      * Figure out where to create grammars
+      * Explore nearley.js
       * Goals
         * User should be able to tweak matching by changing grammar file, instead of code.
         * Grammar file should be smaller and more understandable than code.
-      * Use pattern matching for groupProductTokens
+      * x Use pattern matching for groupProductTokens
       * Rename token symbols and instances/prototypes
-      * Rearchitect interpretation actions
-      * Move prologue to its own nop rule
-      * Preposition/pronoun cleanup
       * Optimze choose() to use a Set? This would involve understanding the equality predicate.
-      * Remove unused intents
       * x Stopwatch - actually this goes in prix-fixe.
       * Check for performacne regression with pattern matching
       * x Pattern matching star operator
@@ -29,7 +31,7 @@
       * Deal with unreachable patterns/cases
     * Get clear on stemmer_confusion.ts and confusion_matrix.ts. Update docs.
     * Fix test_from_text.js. Doesn't generate carts.
-    * Consider removing concept of WEAK_ADD
+    * x Consider removing concept of WEAK_ADD
     * Investigate two test descriptions with name "parser2"
     * EntityBuilder case: NUMBER ATTRIBUTE OPTION - is this legal?
     * Make prix-fixe the source of regression tests

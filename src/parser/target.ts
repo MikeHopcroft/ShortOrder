@@ -10,8 +10,7 @@ import {
 
 import { ATTRIBUTE, ENTITY, ILexicalAnalyzer, Span } from '../lexer';
 
-import { OptionTargetBuilder, TargetBuilder } from './entity_builder';
-
+import { OptionTargetBuilder, TargetBuilder } from './entity_builder_base_2';
 import { HypotheticalItem, SequenceToken } from './interfaces';
 import { Context } from './context';
 import { splitOnEntities } from './parser_utilities';
