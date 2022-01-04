@@ -12,7 +12,7 @@ Much of the original code will be stored in the [archive](archive) folder until 
 
 ---
 
-**short-order** is an exerimental natural language conversational agent intended for domains with a fixed vocabulary of entities and a small number of intents. Uses might include ordering food from a restaurant or organizing your song collection.
+**short-order** is an experimental natural language conversational agent intended for domains with a fixed vocabulary of entities and a small number of intents. Uses might include ordering food from a restaurant or organizing your song collection.
 
 `short-order` is based on a pattern-driven tokenizer from the companion [token-flow project](https://github.com/MikeHopcroft/TokenFlow) and a menu library from [prix-fixe](https://github.com/MikeHopcroft/PrixFixe). For more information on configuring `short-order`, please see our [concepts explainer](documentation/concepts).
 
