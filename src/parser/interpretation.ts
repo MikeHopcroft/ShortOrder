@@ -217,6 +217,7 @@ export function processAllActiveRegions(
     //
     ///////////////////////////////////////////////////////////////////////////
 
+    // "Add vanilla syrup to the tall latte"
     match(optional(addToOrder), product0, preposition, product1).bind(
       ([, modification, , target]) => {
         return parseAddToTarget(
@@ -228,18 +229,22 @@ export function processAllActiveRegions(
       }
     ),
 
-    match(optional(addToOrder), product0, preposition).bind(
-      ([, modification]) => {
-        return parseAddToImplicit(context, modification.tokens, true);
-      }
-    ),
+    // TODO: make test case
+    // "Can I get foam with that?"
+    // match(optional(addToOrder), product0, preposition).bind(
+    //   ([, modification]) => {
+    //     return parseAddToImplicit(context, modification.tokens, true);
+    //   }
+    // ),
 
+    // "I'd like an apple bran muffin and a decaf latte"
     match(optional(addToOrder), choose(product1, productN)).bind(
       ([, product]) => {
         return parseAdd(context.services, product.tokens);
       }
     ),
 
+    // "Can you add a dash of cinnamon?"
     match(optional(addToOrder), product0).bind(([, modification]) => {
       return parseAddToImplicit(context, modification.tokens, true);
     }),
@@ -250,11 +255,13 @@ export function processAllActiveRegions(
     //
     ///////////////////////////////////////////////////////////////////////////
 
+    // "Remove that tall latte"
     match(removeItem, choose(product1, productN)).bind(([, product]) => {
       const span = createSpan(product.tokens);
       return parseRemove(context, span);
     }),
 
+    // "Take the vanilla from the latte"
     match(removeItem, product0, preposition, product1).bind(
       ([, option, , target]) => {
         return parseRemoveOptionFromTarget(
@@ -265,6 +272,7 @@ export function processAllActiveRegions(
       }
     ),
 
+    // "Lose the vanilla"
     match(removeItem, product0).bind(([, option]) => {
       return parseRemoveOptionFromImplicit(
         context,
@@ -273,6 +281,7 @@ export function processAllActiveRegions(
     }),
 
     // Test case 44.
+    // "Remove that"
     match(removeItem, preposition).bind(() => {
       return parseRemoveImplicit(context);
     }),
@@ -283,6 +292,7 @@ export function processAllActiveRegions(
     //
     ///////////////////////////////////////////////////////////////////////////
 
+    // "Make that tall latte with vanilla syrup"
     match(
       modifyItem,
       optional(preposition),
